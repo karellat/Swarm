@@ -3,4 +3,5 @@
 
 * 05.05.2017 - 
 	* refactoring old solutions
-	
+	* object design(IEntity was not created due to many abstract classes, no way to avoid virtual call)
+	* sensor -> child of entity & inherit ISensor interface

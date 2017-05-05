@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    class RobotEntity
+    public abstract class RobotEntity :CircleEntity
     {
     }
 }

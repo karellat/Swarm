@@ -44,6 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Entities\BorderEntity.cs" />
+    <Compile Include="Classes\Entities\CircleEntity.cs" />
+    <Compile Include="Classes\Entities\Entity.cs" />
+    <Compile Include="Classes\Entities\FuelEntity.cs" />
+    <Compile Include="Classes\Entities\LineEntity.cs" />
+    <Compile Include="Classes\Entities\LineSensor.cs" />
+    <Compile Include="Classes\Entities\RadioEntity.cs" />
+    <Compile Include="Classes\Entities\RobotEntity.cs" />
     <Compile Include="Classes\Map\Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,6 +15,7 @@ namespace SwarmSimFramework.Classes.Entities
             Middle = middle;
             Radius = radius;
             Name = "CircleEntity";
+            GetShape = Shape.Circle;
             if (orientation != 0)
                 throw new  NotImplementedException();
         }

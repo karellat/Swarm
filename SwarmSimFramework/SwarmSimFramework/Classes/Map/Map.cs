@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Data;
-using System.Linq.Expressions;
 using System.Numerics;
-using System.Threading;
-using System.Xml;
 using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimFramework.Classes.Map
@@ -13,7 +8,7 @@ namespace SwarmSimFramework.Classes.Map
     /// <summary>
     /// provides enviroment for robotic swarm, collision detection, refueling, radio broadcasting, mineral mining
     /// </summary>
-    class Map
+    public class Map
     {
 
         //PUBLIC METHODS
@@ -23,7 +18,7 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         public Map()
         {
-            throw new NotImplementedException();
+            
         }
         /// <summary>
         /// Transform map to the inicial set up 
@@ -65,7 +60,7 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public bool Collision(LineEntity entity)
+        public Vector2 Collision(LineEntity entity)
         {
             throw new NotImplementedException();
         }
@@ -94,11 +89,14 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public bool CollisionFuel(LineEntity entity)
+        public Vector2 CollisionFuel(LineEntity entity)
         {
             throw new NotImplementedException();
         }
         //PUBLIC MEMBERS
+        /// <summary>
+        /// Cycle simulation
+        /// </summary>
         public long Cycle { get; protected set; }
         /// <summary>
         /// Stores every actively moving entities on the map 

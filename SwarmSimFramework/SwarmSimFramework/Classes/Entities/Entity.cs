@@ -7,9 +7,26 @@ using System.Threading.Tasks;
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity
     {
-       
+        //MEMBERS 
+        /// <summary>
+        /// Enumarate of entity shape 
+        /// </summary>
+        public enum Shape
+        {
+            Circle,
+            Line, 
+            LineSegment
+        }
+        /// <summary>
+        /// Name of entity
+        /// </summary>
+        public string Name { get; protected set; } = "Entity";
+        /// <summary>
+        /// Return Shape of entity
+        /// </summary>
+        public Shape GetShape { get; protected set; }
         //METHODS
         /// <summary>
         /// Return clone of actual entity
