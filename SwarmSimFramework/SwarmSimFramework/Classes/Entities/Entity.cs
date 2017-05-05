@@ -17,7 +17,8 @@ namespace SwarmSimFramework.Classes.Entities
         {
             Circle,
             Line, 
-            LineSegment
+            LineSegment,
+            Abstract
         }
         /// <summary>
         /// Name of entity

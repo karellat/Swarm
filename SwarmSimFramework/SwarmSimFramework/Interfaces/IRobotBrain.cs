@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SwarmSimFramework.Interfaces
 {
-    public interface  IRobotBrain
+    public interface IRobotBrain
     {
         /// <summary>
         /// Decide based on sensor read values
@@ -38,7 +38,10 @@ namespace SwarmSimFramework.Interfaces
         /// Dimension of forwarding values
         /// </summary>
         int OutputDimension { get;  }
-
+        /// <summary>
+        /// Clean copy of robot brain 
+        /// </summary>
+        /// <returns></returns>
         IRobotBrain GetCleanCopy();
     }
 }

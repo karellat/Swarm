@@ -33,7 +33,7 @@ namespace SwarmSimFramework.Classes.Map
         public void MakeStep()
         {
             throw new NotImplementedException();
-        }
+        } 
         //COLISION AND MOVEMENTS 
         //COLLISION WITH OTHER ROBOTS OR PASSIVE ENTITY 
         /// <summary>
@@ -144,6 +144,6 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Initial position of fuel
         /// </summary>
-        private List<FuelEntity> modelFuelEntitiues;
+        private List<FuelEntity> modelFuelEntities;
     }
 }

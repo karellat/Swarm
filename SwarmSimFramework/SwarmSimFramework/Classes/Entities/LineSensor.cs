@@ -2,7 +2,7 @@
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    public class LineSensor : LineEntity
+    public class LineSensor : LineEntity,ISensor
     {
         public LineSensor(Vector2 a, Vector2 b, Vector2 rotationMiddle) : base(a, b, rotationMiddle)
         {
