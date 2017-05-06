@@ -58,6 +58,7 @@
     <Compile Include="Classes\Map\Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupportClasses\RandomNumber.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

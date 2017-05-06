@@ -12,5 +12,14 @@ namespace SwarmSimFramework.Classes.Entities
         {
             throw new System.NotImplementedException();
         }
+
+        public float[] Count(RobotEntity robot, Map.Map map)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Dimension { get; }
+        public float MaxOuputValue { get; }
+        public float MinOutputValue { get; }
     }
 }

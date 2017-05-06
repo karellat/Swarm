@@ -55,14 +55,20 @@ namespace SwarmSimFramework.Classes.Entities
         {
            
         }
-
+        /// <summary>
+        /// Prepare for movement
+        /// 1. read sensors
+        /// 2. let brain decide effectors setting
+        /// </summary>
+        public void PrepareMove(Map.Map map)
+        {
+            throw new NotImplementedException();
+        }
         //METHODS 
         /// <summary>
-        /// Make all steps of movement 
-        /// 1. ReadSensors 
-        /// 2. Forward read values to the brain 
-        /// 3. Give it to the effectors 
-        /// 4. Burn fuel
+        /// Make movement 
+        /// 1. Give it to the effectors 
+        /// 2. Burn fuel
         /// </summary>
         /// <param name="map"></param>
         public void Move(Map.Map map)

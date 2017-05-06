@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices.ComTypes;
 using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Map
 {
@@ -16,23 +19,78 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Creates new map with given set up of robots etc
         /// </summary>
-        public Map()
+        public Map(float height,float width,List<RobotEntity> robots,List<CircleEntity> pasiveEntities,List<FuelEntity> fuelEntities)
         {
-            
+            //Init characteristics of map 
+            this.MaxHeight = height;
+            this.MaxWidth = width;
+            Cycle = 0;
+            //Set border points
+            A = new Vector2(0,0);
+            B = new Vector2(MaxWidth,0);
+            C = new Vector2(0,MaxHeight);
+            D = new Vector2(MaxWidth,MaxHeight);
+
+            //Copy initial set up 
+            Robots = robots;
+            PasiveEntities = pasiveEntities;
+            FuelEntities = fuelEntities;
+            //No radio signals in the begining 
+            RadionEntities = new List<RadioEntity>();
+            //Mark down initial set up 
+            foreach (var r in robots)
+            {
+                modelRobotEntities.Add((RobotEntity)r.DeepClone());
+            }
+            foreach (var p in pasiveEntities)
+            {
+                modelPasiveEntities.Add((CircleEntity) p.DeepClone());
+            }
+            foreach (var f in fuelEntities)
+            {
+                modelFuelEntities.Add((FuelEntity)f.DeepClone());
+            }
         }
         /// <summary>
         /// Transform map to the inicial set up 
         /// </summary>
         public void Reset()
         {
-            throw new NotImplementedException();
+            //Borders vertices remain same 
+            Cycle = 0; 
+            //Clear old bodies
+            Robots.Clear();
+            RadionEntities.Clear();
+            FuelEntities.Clear();
+            //Copy models from set up lists
+            foreach (var r in modelRobotEntities)
+            {
+                Robots.Add((RobotEntity)r.DeepClone());
+            }
+            foreach (var f in modelFuelEntities)
+            {
+                FuelEntities.Add(f);
+            }
+            //No point of coping passive entities 
         }
         /// <summary>
         /// Make single step of simulation
         /// </summary>
         public void MakeStep()
         {
-            throw new NotImplementedException();
+            //Make all robots read situation & decide, no point of random iteration 
+            foreach (var r in Robots)
+            {
+                r.PrepareMove(this);
+            }
+            //Clean signals from map 
+            RadionEntities.Clear();
+            //Random iteration through list of robot
+            //Make movent, activate effectors
+            foreach (int i in Enumerable.Range(0,Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
+                Robots[i].Move(this);
+            //Cycle change 
+            Cycle++; 
         } 
         //COLISION AND MOVEMENTS 
         //COLLISION WITH OTHER ROBOTS OR PASSIVE ENTITY 
@@ -94,26 +152,7 @@ namespace SwarmSimFramework.Classes.Map
             throw new NotImplementedException();
         }
         //PUBLIC MEMBERS
-        /// <summary>
-        /// Cycle simulation
-        /// </summary>
-        public long Cycle { get; protected set; }
-        /// <summary>
-        /// Stores every actively moving entities on the map 
-        /// </summary>
-        public List<RobotEntity> Robots;
-        /// <summary>
-        /// Stores every pasive entity on the map, as minerals, obstacles etc
-        /// </summary>
-        public List<CircleEntity> PasiveEntities;
-        /// <summary>
-        /// Stores all radio broadcast in the scope 
-        /// </summary>
-        public List<RadioEntity> RadionEntities;
-        /// <summary>
-        /// Stores all fuel entities in the scope 
-        /// </summary>
-        public List<FuelEntity> FuelEntities;
+        //Characteristcs of map 
         //border vertices
         /// <summary>
         /// Upper right corner 
@@ -130,7 +169,36 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         ///  Lower right corner
         /// </summary>
-        public Vector2 D { get; protected set;  }
+        public Vector2 D { get; protected set; }
+        /// <summary>
+        /// Cycle simulation
+        /// </summary>
+        public long Cycle { get; protected set; }
+        /// <summary>
+        /// Maximum height of map
+        /// </summary>
+        public float MaxHeight { get; protected set; }
+        /// <summary>
+        /// Maximum width of map 
+        /// </summary>
+        public float MaxWidth { get; protected set;  }
+        /// <summary>
+        /// Stores every actively moving entities on the map 
+        /// </summary>
+        public List<RobotEntity> Robots;
+        /// <summary>
+        /// Stores every pasive entity on the map, as minerals, obstacles etc
+        /// </summary>
+        public List<CircleEntity> PasiveEntities;
+        /// <summary>
+        /// Stores all radio broadcast in the scope 
+        /// </summary>
+        public List<RadioEntity> RadionEntities;
+        /// <summary>
+        /// Stores all fuel entities in the scope 
+        /// </summary>
+        public List<FuelEntity> FuelEntities;
+
         //PRIVATE MEMBERS
         // Model of the initicial position 
         /// <summary>
