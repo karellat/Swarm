@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
@@ -89,6 +91,8 @@ namespace SwarmSimFramework.Classes.Map
             //Make movent, activate effectors
             foreach (int i in Enumerable.Range(0,Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
                 Robots[i].Move(this);
+            //Clean empty fuels 
+            FuelEntities.RemoveAll((x => x.Empty));
             //Cycle change 
             Cycle++; 
         } 
@@ -102,7 +106,12 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public bool Collision(CircleEntity entity, Vector2 newMiddle)
         {
-            throw new NotImplementedException();
+            //Collisions with borders: 
+
+            //Collision with other robots: 
+
+            //Collision with passive entities: 
+            throw new NotImplementedException(); 
         }
         /// <summary>
         /// Return true, if given entity collides with something of the enviroment
@@ -111,7 +120,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public bool Collision(CircleEntity entity)
         {
-            throw new NotImplementedException();
+            return Collision(entity, entity.Middle);
         }
         /// <summary>
         /// Collision between Line Entity & enviroment 
@@ -120,6 +129,11 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public Vector2 Collision(LineEntity entity)
         {
+            //Collisions with borders 
+
+            //Collisions with other robots
+
+            //Collision with passive entities 
             throw new NotImplementedException();
         }
         //COLISION WITH RADIO BROADCASTING
@@ -213,5 +227,166 @@ namespace SwarmSimFramework.Classes.Map
         /// Initial position of fuel
         /// </summary>
         private List<FuelEntity> modelFuelEntities;
+
+        // PRIVATE METHODS
+        // Intersection methods
+        /// <summary>
+        /// Return true if a, b circles intersects
+        /// </summary>
+        /// <param name="aMiddle"></param>
+        /// <param name="aRadius"></param>
+        /// <param name="bMiddle"></param>
+        /// <param name="bRadius"></param>
+        /// <returns></returns>
+        bool CircleCircleIntersection(Vector2 aMiddle, float aRadius, Vector2 bMiddle, float bRadius)
+        {
+            float squaredDistanceBetweenAB = (bMiddle - aMiddle).LengthSquared();
+
+            if (squaredDistanceBetweenAB <= ((aRadius + bRadius) * (aRadius + bRadius)))
+                return true;
+            return false;
+        }
+        /// <summary>
+        /// Return intersection point of Line a and b
+        /// </summary>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns> Return NaN vector if no intersection, Infity if one line is part of the second </returns>
+        Vector2 LineLineIntersection(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+        {
+            //Transform points to equation form 
+            //line a 
+            float A1 = a1.Y - a2.Y;
+            float B1 = a1.X - a2.X;
+            float C1 = A1 * a1.X + B1 * a1.Y;
+
+            //line b
+            float A2 = b1.Y - b2.Y;
+            float B2 = b1.X - b1.X;
+            float C2 = A2 * b1.X + B2 * b1.Y;
+
+            //assuming Ax + By = C form 
+            float delta = A1 * B2 - A2 * B1; 
+            //Check parallelity of lines 
+            if (delta == 0)
+            {
+                //Check equality of lines 
+                if(A2*b1.X + B2*b1.Y == C2)
+                    return new Vector2(float.PositiveInfinity,float.PositiveInfinity);
+
+                return new Vector2(float.NaN,float.NaN);
+            }
+            //If not parellel return point of intersection
+            return new Vector2((B2*C1 - B1*C2)/delta,(A1*C2 - A2*C1)/delta);
+
+
+        }
+        /// <summary>
+        /// Return intersection point of two line segment a & b 
+        /// </summary>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        Vector2 LinesegmentLinesegmentIntersection(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+        {
+            //If not line throw exception
+            Debug.Assert(a1-a2 == Vector2.Zero);
+            Debug.Assert(b1-b2 == Vector2.Zero);
+            //Find line & line intersection 
+            Vector2 i = LineLineIntersection(a1, a2, b1, b2);
+            //No intersection 
+            if (float.IsNaN(i.X))
+                return i;
+
+            if (!float.IsPositiveInfinity(i.X))
+            {
+                //Check line a contains intersection 
+                //if  perpendicular with axis 
+                if (a1.X == a2.X)
+                {
+                    if (!MyExtensions.Between(a1.X, a2.X, i.X))
+                        return new Vector2(float.NaN, float.NaN);
+                }
+                else
+                {
+                    if (!MyExtensions.Between(a1.Y, a2.Y, i.Y))
+                        return new Vector2(float.NaN, float.NaN);
+                }
+
+                //Check line b contains intersection 
+                if (b1.X == b2.X)
+                {
+                    if (!MyExtensions.Between(b1.X, b2.X, i.X))
+                        return new Vector2(float.NaN, float.NaN);
+                }
+                else
+                {
+                    if (!MyExtensions.Between(b1.Y, b2.Y, i.Y))
+                        return new Vector2(float.NaN, float.NaN);
+                }
+
+                return i;
+            }
+            //Same line 
+            else 
+            {
+                Vector2 aMiddle = Vector2.Divide((a1 + a2), 2.0f);
+                float aRadius = (a1 - aMiddle).Length();
+                Vector2 bMiddle = Vector2.Divide((b1 + b2), 2.0f);
+                float bRadius = (b1 - bMiddle).Length();
+
+                //if circle intersects 
+                if (CircleCircleIntersection(aMiddle, aRadius, bMiddle, bRadius))
+                {
+                    return i; 
+                }
+                else
+                {
+                    return new Vector2(float.NaN,float.NaN);
+                }
+
+            }
+        }
+        /// <summary>
+        /// Return all point of intersections of circle & line 
+        /// </summary>
+        /// <param name="aMiddle"></param>
+        /// <param name="aRadius"></param>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        Vector2 CircleLineIntersection(Vector2 aMiddle, float aRadius, Vector2 b1, Vector2 b2)
+        {
+            //check if any intersection exists, find intersection with perpedicular line
+            Vector2 p1 = aMiddle;
+            Vector2 directionB = b1 - b2;
+            //Create perpedicular vector to b
+            Vector2 perpedicularB = new Vector2(directionB.Y,(-1.0f*directionB.X));
+            Vector2 p2 = aMiddle + perpedicularB;
+            //Intersection with perpedicular line
+            Vector2 i = LinesegmentLinesegmentIntersection(p1, p2, b1, b2);
+            //If not in the segment 
+            if (float.IsNaN(i.X))
+                return i;
+
+        }
+        /// <summary>
+        /// Return all intersection points
+        /// </summary>
+        /// <param name="aMiddle"></param>
+        /// <param name="aRadius"></param>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        Vector2[] CircleLinesegmentIntersection(Vector2 aMiddle, float aRadius, Vector2 b1, Vector2 b2)
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 }
