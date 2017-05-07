@@ -16,3 +16,11 @@
 	* sensor -> child of entity & inherit ISensor interface
 	* use more asserts
 	* brain serializer/deserializer 
+* 06.05.2017 - 
+	* refactoring Map => Constructor, Reset, MakeStep 
+	* partial project Intersection2D 
+* 07.05.2017 
+	* Intersection2D finnished, tested 
+	* map implementation finnished 
+	* add new method MoveTo to Entity
+	* Circle Entity & Line Entity refactored prepared for testing 
