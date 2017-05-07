@@ -90,5 +90,14 @@ namespace SwarmSimFramework.Classes.Entities
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Consume fuel tank and make it empty
+        /// </summary>
+        /// <param name="fuelTank"></param>
+        public void ConsumeFuel(FuelEntity fuelTank)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

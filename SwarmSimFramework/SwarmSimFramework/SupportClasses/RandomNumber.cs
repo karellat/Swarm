@@ -52,5 +52,33 @@ namespace SwarmSimFramework.SupportClasses
                 return true;
             return false;
         }
+        public static bool QuadraticSolver(double A, double B, double C, out double[] x)
+        {
+            double D = B * B - 4 * A * C;
+            if (D < 0)
+            {
+                x = null;
+                return false;
+            }
+            else
+            {
+                double x_0 = (-B + Math.Sqrt(D)) / (2.0 * A);
+                double x_1 = (-B - Math.Sqrt(D)) / (2.0 * A);
+
+                if (D == 0)
+                {
+                    x = new double[1];
+                    x[0] = x_0;
+                    return true;
+                }
+                else
+                {
+                    x = new double[2];
+                    x[0] = x_0;
+                    x[1] = x_1;
+                    return true;
+                }
+            }
+        }
     }
 }
