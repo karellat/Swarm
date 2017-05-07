@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Intersection2D;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
@@ -25,8 +20,8 @@ namespace SwarmSimFramework.Classes.Map
         public Map(float height,float width,List<RobotEntity> robots,List<CircleEntity> pasiveEntities,List<FuelEntity> fuelEntities)
         {
             //Init characteristics of map 
-            this.MaxHeight = height;
-            this.MaxWidth = width;
+            MaxHeight = height;
+            MaxWidth = width;
             Cycle = 0;
             //Set border points
             A = new Vector2(0,0);

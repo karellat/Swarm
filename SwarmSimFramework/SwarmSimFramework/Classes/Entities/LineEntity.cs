@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -59,7 +54,7 @@ namespace SwarmSimFramework.Classes.Entities
             A = RotatePoint(angleInRadians, A, RotationMiddle);
             B = RotatePoint(angleInRadians, B, RotationMiddle);
             Orientation += angleInRadians;
-            Orientation = Orientation % PI2;
+            Orientation = Orientation % Pi2;
         }
         /// <summary>
         /// Change rotation middle to the new possition

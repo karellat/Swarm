@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -114,6 +110,6 @@ namespace SwarmSimFramework.Classes.Entities
         {
             return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(shiftVector));
         }
-        public const float PI2 = 2 * (float)Math.PI;
+        public const float Pi2 = 2 * (float)Math.PI;
     }
 }
