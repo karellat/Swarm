@@ -4,9 +4,7 @@ namespace SwarmSimFramework.Classes.Entities
 {
     public class LineSensor : LineEntity,ISensor
     {
-        public LineSensor(Vector2 a, Vector2 b, Vector2 rotationMiddle) : base(a, b, rotationMiddle)
-        {
-        }
+
 
         public override Entity DeepClone()
         {
@@ -21,5 +19,9 @@ namespace SwarmSimFramework.Classes.Entities
         public int Dimension { get; }
         public float MaxOuputValue { get; }
         public float MinOutputValue { get; }
+
+        public LineSensor(Vector2 a, Vector2 b, Vector2 rotationMiddle, string name, float orientation = 0) : base(a, b, rotationMiddle, name, orientation)
+        {
+        }
     }
 }

@@ -45,16 +45,7 @@ namespace SwarmSimFramework.Classes.Entities
         public int EffectorDimension { get; protected set;  }
 
         //CONSTRUCTOR 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="middle"></param>
-        /// <param name="radius"></param>
-        /// <param name="orientation"></param>
-        protected RobotEntity(Vector2 middle, float radius, float orientation = 0) : base(middle, radius, orientation)
-        {
-           
-        }
+
         /// <summary>
         /// Prepare for movement
         /// 1. read sensors
@@ -98,6 +89,10 @@ namespace SwarmSimFramework.Classes.Entities
         public void ConsumeFuel(FuelEntity fuelTank)
         {
             throw new NotImplementedException();
+        }
+
+        public RobotEntity(Vector2 middle, float radius, string name, float orientation = 0) : base(middle, radius, name, orientation)
+        {
         }
     }
 }

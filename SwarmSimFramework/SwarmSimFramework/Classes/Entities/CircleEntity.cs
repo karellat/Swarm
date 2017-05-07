@@ -10,14 +10,20 @@ namespace SwarmSimFramework.Classes.Entities
     public abstract class CircleEntity : Entity
     {
         //CONSTRUCTOR
-        protected CircleEntity(Vector2 middle, float radius,float orientation=0)
+        protected CircleEntity(Vector2 middle, float radius,string name, float orientation=0)
         {
             Middle = middle;
             Radius = radius;
-            Name = "CircleEntity";
+            Name = name;
             GetShape = Shape.Circle;
+            Orientation = orientation;
+            //Make front point pointing to the top of map 
+            FPoint = new Vector2(middle.X,Middle.Y-Radius);
+            //If no initial rotation 
             if (orientation != 0)
-                throw new  NotImplementedException();
+            {
+                FPoint = RotatePoint(orientation, FPoint, Middle);
+            }
         }
 
         //MEMBERS 
@@ -32,11 +38,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Head of circle
         /// </summary>
-        public Vector2 fPoint { get; protected set; }
-        /// <summary>
-        ///  Actual orientation in radians
-        /// </summary>
-        public float Orientation { get; protected set; }
+        public Vector2 FPoint { get; protected set; }
         
         //METHODS 
         /// <summary>
@@ -45,7 +47,18 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="angleInRadians"></param>
         public override void RotateRadians(float angleInRadians)
         {
-            throw new NotImplementedException();
+            //Rotate pointing point
+            FPoint = RotatePoint(angleInRadians, FPoint, Middle);
+        }
+        /// <summary>
+        /// Move middle and FPoint to newMiddle 
+        /// </summary>
+        /// <param name="newMiddle"></param>
+        public override void MoveTo(Vector2 newMiddle)
+        {
+            Vector2 shift = newMiddle - Middle;
+            Middle = MovePoint(Middle, shift);
+            FPoint = MovePoint(FPoint, shift);
         }
 
         /// <summary>

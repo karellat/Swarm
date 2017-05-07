@@ -28,6 +28,10 @@ namespace SwarmSimFramework.Classes.Entities
         /// Return Shape of entity
         /// </summary>
         public Shape GetShape { get; protected set; }
+        /// <summary>
+        ///  Actual orientation in radians
+        /// </summary>
+        public float Orientation { get; protected set; }
         //METHODS
         /// <summary>
         /// Return clone of actual entity
@@ -45,12 +49,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="angleInRadians"></param>
         public abstract void RotateRadians(float angleInRadians);
         /// <summary>
+        /// Move to the new possition
+        /// </summary>
+        /// <param name="newMiddle"></param>
+        public abstract void MoveTo(Vector2 newMiddle);
+        /// <summary>
         /// Convert degrees into radians and call virtual method on Entity
         /// </summary>
         /// <param name="angleInDegrees"></param>
         public virtual void RotateDegrees(float angleInDegrees)
         {
-            throw new NotImplementedException();
+            RotateRadians(DegreesToRadians(angleInDegrees));
         }
         /// <summary>
         /// Rotate point arounf rotationMiddle
@@ -63,5 +72,48 @@ namespace SwarmSimFramework.Classes.Entities
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Convert angle in deradians to degrees 
+        /// </summary>
+        /// <param name="degree"></param>
+        /// <returns></returns>
+        public static float DegreesToRadians(float degree)
+        {
+            degree = degree % 360.0f;
+            return (degree * (float) Math.PI) / 180.0f;
+        }
+        /// <summary>
+        /// Return rotated point around rotationMiddle for angleRadians
+        /// </summary>
+        /// <param name="angleRadians"></param>
+        /// <param name="point"></param>
+        /// <param name="rotationMiddle"></param>
+        /// <returns></returns>
+        public static Vector2 RotatePoint(float angleRadians, Vector2 point, Vector2 rotationMiddle)
+        {
+            return Vector2.Transform(point,Matrix3x2.CreateRotation(angleRadians,rotationMiddle));
+        }
+        /// <summary>
+        /// Move point to  new location
+        /// </summary>
+        /// <param name="fromPoint"></param>
+        /// <param name="toPoint"></param>
+        /// <param name="movingPoint"></param>
+        /// <returns></returns>
+        public static Vector2 MovePoint(Vector2 fromPoint, Vector2 toPoint, Vector2 movingPoint)
+        {
+            return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(toPoint - fromPoint));
+        }
+        /// <summary>
+        /// Move point for vector 
+        /// </summary>
+        /// <param name="movingPoint"></param>
+        /// <param name="shiftVector"></param>
+        /// <returns></returns>
+        public static Vector2 MovePoint(Vector2 movingPoint, Vector2 shiftVector)
+        {
+            return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(shiftVector));
+        }
+        public const float PI2 = 2 * (float)Math.PI;
     }
 }

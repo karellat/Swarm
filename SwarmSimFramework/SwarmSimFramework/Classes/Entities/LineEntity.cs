@@ -11,11 +11,18 @@ namespace SwarmSimFramework.Classes.Entities
     public abstract class LineEntity : Entity
     {
         //CONSTRUCTOR
-        protected LineEntity(Vector2 a, Vector2 b, Vector2 rotationMiddle)
+
+        protected LineEntity(Vector2 a, Vector2 b, Vector2 rotationMiddle, string name, float orientation = 0)
         {
+            Name = name; 
             GetShape = Shape.LineSegment;
-            throw new NotImplementedException();
+            A = a;
+            B = b;
+            RotationMiddle = rotationMiddle;
+            Orientation = orientation;
+            Length = Vector2.Distance(A, B);
         }
+
         //MEMBERS
         /// <summary>
         /// first of the LineSegment verteces 
@@ -49,7 +56,21 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="angleInRadians"></param>
         public override void RotateRadians(float angleInRadians)
         {
-            throw new NotImplementedException();
+            A = RotatePoint(angleInRadians, A, RotationMiddle);
+            B = RotatePoint(angleInRadians, B, RotationMiddle);
+            Orientation += angleInRadians;
+            Orientation = Orientation % PI2;
+        }
+        /// <summary>
+        /// Change rotation middle to the new possition
+        /// </summary>
+        /// <param name="newMiddle"></param>
+        public override void MoveTo(Vector2 newMiddle)
+        {
+            Vector2 shiftVector = newMiddle - RotationMiddle;
+            A = MovePoint(A, shiftVector);
+            B = MovePoint(B, shiftVector);
+            RotationMiddle = newMiddle;
         }
     }
 }

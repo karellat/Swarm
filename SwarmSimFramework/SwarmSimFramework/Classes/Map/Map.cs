@@ -41,6 +41,9 @@ namespace SwarmSimFramework.Classes.Map
             //No radio signals in the begining 
             RadionEntities = new List<RadioEntity>();
             //Mark down initial set up 
+            modelRobotEntities = new List<RobotEntity>(Robots.Count);
+            modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
+            modelPasiveEntities = new List<CircleEntity>(RadionEntities.Count);
             foreach (var r in robots)
             {
                 modelRobotEntities.Add((RobotEntity)r.DeepClone());
