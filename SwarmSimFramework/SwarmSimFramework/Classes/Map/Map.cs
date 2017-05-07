@@ -17,7 +17,6 @@ namespace SwarmSimFramework.Classes.Map
     /// </summary>
     public class Map
     {
-
         //PUBLIC METHODS
         //GLOBAL METHODS 
         /// <summary>
@@ -353,10 +352,5 @@ namespace SwarmSimFramework.Classes.Map
         /// Initial position of fuel
         /// </summary>
         private List<FuelEntity> modelFuelEntities;
-
-        // PRIVATE METHODS
-  
-
-        
     }
 }
