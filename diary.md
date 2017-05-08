@@ -23,4 +23,10 @@
 	* Intersection2D finnished, tested 
 	* map implementation finnished 
 	* add new method MoveTo to Entity
-	* Circle Entity & Line Entity refactored prepared for testing 
+	* Circle Entity & Line Entity refactored prepared for testing
+* 08.05.2017 
+	* LineEntity tests created
+	* LineEntity squashed bugs 
+	* CircleEntity tests created
+	* CircleEntity bug squashed
+	* added new method to Circle move entity for  given length
