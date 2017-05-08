@@ -8,7 +8,7 @@
 * How long should be GetString();
 ### Evolution: 
 * 
-
+### Days of actual sollution
 
 * 05.05.2017 - 
 	* refactoring old solutions
