@@ -54,6 +54,8 @@ namespace SwarmSimFramework.Classes.Entities
             A = RotatePoint(angleInRadians, A, RotationMiddle);
             B = RotatePoint(angleInRadians, B, RotationMiddle);
             Orientation += angleInRadians;
+           while (Orientation < 0)
+                Orientation += Pi2;
             Orientation = Orientation % Pi2;
         }
         /// <summary>

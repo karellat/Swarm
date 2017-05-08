@@ -13,7 +13,7 @@ namespace SwarmSimFramework.Classes.Entities
             GetShape = Shape.Circle;
             Orientation = orientation;
             //Make front point pointing to the top of map 
-            FPoint = new Vector2(middle.X,Middle.Y-Radius);
+            FPoint = new Vector2(middle.X,Middle.Y+Radius);
             //If no initial rotation 
             if (orientation != 0)
             {
@@ -44,6 +44,10 @@ namespace SwarmSimFramework.Classes.Entities
         {
             //Rotate pointing point
             FPoint = RotatePoint(angleInRadians, FPoint, Middle);
+            Orientation += angleInRadians;
+            while (Orientation < 0)
+                Orientation += Pi2;
+            Orientation = Orientation % Pi2;
         }
         /// <summary>
         /// Move middle and FPoint to newMiddle 
@@ -56,6 +60,19 @@ namespace SwarmSimFramework.Classes.Entities
             FPoint = MovePoint(FPoint, shift);
         }
 
+        /// <summary>
+        /// Move for given distance in the direction of FPoint
+        /// </summary>
+        /// <param name="distance"></param>
+        public void MoveTo(float distance)
+        {
+            Vector2 shift = FPoint - Middle; 
+            shift = Vector2.Normalize(shift);
+            shift *= distance;
+
+            Middle = MovePoint(Middle, shift);
+            FPoint = MovePoint(FPoint, shift);
+        }
         /// <summary>
         /// Return Middle as rotation middle
         /// </summary>
