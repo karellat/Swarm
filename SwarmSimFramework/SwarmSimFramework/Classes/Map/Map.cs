@@ -108,11 +108,11 @@ namespace SwarmSimFramework.Classes.Map
             //Collisions with borders: 
             if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, A, B).Length != 0)
                 return true;
-            if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, B, C).Length != 0)
+            if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, B, D).Length != 0)
                 return true;
             if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, C, D).Length != 0)
                 return true;
-            if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, D, A).Length != 0)
+            if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, A, C).Length != 0)
                 return true;
             //Collision with other robots: 
             foreach (var r in Robots)
@@ -164,7 +164,7 @@ namespace SwarmSimFramework.Classes.Map
             // |
             // | 
             // C 
-            intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, B, C);
+            intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, B, D);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
             if (testedDistance < theNearestDistance)
             {
@@ -183,7 +183,7 @@ namespace SwarmSimFramework.Classes.Map
             // |
             // | 
             // D 
-            intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, A, D);
+            intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, A, C);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
             if (testedDistance < theNearestDistance)
             {
@@ -300,11 +300,11 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         public Vector2 B { get; protected set; }
         /// <summary>
-        ///  Lower left corner
+        ///  Lower right corner
         /// </summary>
         public Vector2 C { get; protected set; }
         /// <summary>
-        ///  Lower right corner
+        ///  Lower left corner
         /// </summary>
         public Vector2 D { get; protected set; }
         /// <summary>

@@ -1,25 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SwarmSimFramework.Classes.Entities;
 using System.Numerics;
+using SwarmSimFramework.Classes.Map;
+
 namespace UnitTests
 {
+    internal class Circle : CircleEntity
+    {
+        public Circle(Vector2 middle, float radius, float orientation = 0) : base(middle, radius, "CIRCLE", orientation)
+        {
 
- 
+        }
+
+        public override Entity DeepClone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class Line : LineEntity
+    {
+        public Line(Vector2 a, Vector2 b, Vector2 rotationMiddle, float orientation = 0) : base(a, b, rotationMiddle, "LINE", orientation)
+        {
+        }
+
+        public override Entity DeepClone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     [TestClass]
     public class LineTests
     {
-        protected class Line : LineEntity
-        {
-            public Line(Vector2 a, Vector2 b, Vector2 rotationMiddle, float orientation = 0) : base(a, b, rotationMiddle, "LINE", orientation)
-            {
-            }
-
-            public override Entity DeepClone()
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
 
         [TestMethod]
         public void InitTest()
@@ -113,18 +129,7 @@ namespace UnitTests
     [TestClass]
     public class CircleTests
     {
-        protected class Circle : CircleEntity
-        {
-            public Circle(Vector2 middle, float radius, float orientation = 0) : base(middle, radius, "CIRCLE", orientation)
-            {
-
-            }
-
-            public override Entity DeepClone()
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
 
         [TestMethod]
         public void InitTest()
@@ -220,6 +225,167 @@ namespace UnitTests
             Assert.AreEqual(new Vector2(4, 1), c.Middle);
             Assert.AreEqual(new Vector2(4, 1), c.GetRotationMiddle());
             Assert.AreEqual(Entity.DegreesToRadians(90), c.Orientation);
+        }
+    }
+
+    [TestClass]
+    public class CircleCollisionMapTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map  map = new Map(400,600,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            //Borders assignment check
+            Assert.AreEqual(new Vector2(0,0),map.A );
+            Assert.AreEqual(new Vector2(600,0),map.B );
+            Assert.AreEqual(new Vector2(0,400),map.C);
+            Assert.AreEqual(new Vector2(600,400),map.D );
+            Assert.AreEqual(0, map.Cycle);
+            Assert.AreEqual(400,map.MaxHeight);
+            Assert.AreEqual(600, map.MaxWidth);
+            Assert.AreEqual(map.FuelEntities.Count,0);
+        }
+
+        [TestMethod]
+        public void CircleBordersCollisionTest()
+        {
+            Map  map = new Map(400,600,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            Assert.IsTrue(map.Collision(new Circle(new Vector2(1, 1), 1)));
+        }
+
+        [TestMethod]
+        public void CircleBorderCollision2Test()
+        {
+            Map map = new Map(100,100,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>() );
+            Assert.IsFalse(map.Collision(new Circle(new Vector2(2,2),1)));
+        }
+        [TestMethod]
+        public void CircleBorderCollision3Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            Assert.IsTrue(map.Collision(new Circle(new Vector2(99, 5), 2)));
+        }
+
+        [TestMethod]
+        public void CircleBorderCollison4Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            Assert.IsTrue(map.Collision(new Circle(new Vector2(5, 99), 1)));
+        }
+
+        [TestMethod]
+        public void CircleCircleCollision1Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(50,50),1));
+            Circle c = new Circle(new Vector2(45,45),2);
+            Assert.IsFalse(map.Collision(c));
+            Assert.IsTrue(map.Collision(c,new Vector2(48,48)));
+        }
+
+        [TestMethod]
+        public void CircleCircleCollision2Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(50, 50), 1));
+            Circle c = new Circle(new Vector2(45, 45), 2);
+            Assert.IsTrue(map.Collision(c, new Vector2(49, 49)));
+        }
+
+        [TestMethod]
+        public void CircleCircleCollision3Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(50, 50), 1));
+            Circle c = new Circle(new Vector2(48,48),1);
+            Assert.IsFalse(map.Collision(c));
+            c.MoveTo(new Vector2(49,49));
+            Assert.IsTrue(map.Collision(c));
+            
+
+
+        }
+    }
+
+    [TestClass]
+    public class LineCollisionMapTests
+    {
+        [TestMethod]
+        public void VectorPosInfTest()
+        {
+            Vector2 inf = new Vector2(float.PositiveInfinity,float.PositiveInfinity);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity,float.PositiveInfinity),inf);
+        }
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(150,150,new List<RobotEntity>(), new List<CircleEntity>(),new List<FuelEntity>());
+            Line l = new Line(new Vector2(60,60),new Vector2(50,60), new Vector2(40,60));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity,float.PositiveInfinity),map.Collision(l));
+        }
+
+        [TestMethod]
+        public void NoInterSection1Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            Line l = new Line(new Vector2(50,50),new Vector2(50,40), new Vector2(50,60));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            l.RotateDegrees(90);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity,float.PositiveInfinity),map.Collision(l));
+            l.RotateDegrees(180);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            l.MoveTo(new Vector2(40,40));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+        }
+
+        [TestMethod]
+        public void NoInterSection2Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(3,2),1));
+            Line l = new Line(new Vector2(3, 0.999f), new Vector2(3,0.5f), new Vector2(3, 0));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+        }
+
+        [TestMethod]
+        public void NoInterSection3Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(3, 2), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(6,2),1));
+            Line l = new Line(new Vector2(4.5f,1),new Vector2(4.5f,2), new Vector2(4.5f, 0));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity,float.PositiveInfinity),map.Collision(l));
+        }
+
+        [TestMethod]
+        public void InterSection1Test()
+        {
+            Map map = new Map(150,150,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(2,2),1));
+            Line l = new Line(new Vector2(2,4), new Vector2(2,3),new Vector2(2,4));
+            Assert.AreEqual(new Vector2(2,3),map.Collision(l));
+            l.MoveTo(new Vector2(2,3.5f));
+            Assert.AreEqual(new Vector2(2, 3), map.Collision(l));
+        }
+
+        [TestMethod]
+        public void InterSection2Test()
+        {
+            Map map = new Map(150, 150, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(2.5f, 1.5f), 0.5f));
+            map.PasiveEntities.Add(new Circle(new Vector2(3.5f, 0.5f), 0.5f));
+            Line l = new Line(new Vector2(1, 3), new Vector2(4, 0), new Vector2(1, 3));
+            Vector2 i = map.Collision(l);
+            Assert.IsTrue(i.X > 2 && i.X < 2.5f && i.Y > 1.5f && i.Y < 2.0);
+        }
+
+        [TestMethod]
+        public void InterSection3Test()
+        {
+            Map map = new Map(150, 150, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(2.5f,1.5f),0.5f));
+            Line l = new Line(new Vector2(1,1.5f),new Vector2(2,1.5f), new Vector2(1,1.5f));
+            Assert.AreEqual(new Vector2(2,1.5f),map.Collision(l));
         }
     }
 }

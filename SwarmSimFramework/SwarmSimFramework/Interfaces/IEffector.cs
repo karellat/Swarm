@@ -5,6 +5,11 @@ namespace SwarmSimFramework.Classes
     public interface IEffector
     {
         /// <summary>
+        /// Dimension of effector
+        /// </summary>
+        /// <returns></returns>
+        int Dimension { get; }
+        /// <summary>
         /// Effect the entity on the map with given settings
         /// </summary>
         /// <param name="settings"></param>
@@ -23,5 +28,10 @@ namespace SwarmSimFramework.Classes
         /// Get shape of representing entity
         /// </summary>
         Entity.Shape GetShape { get; }
+        /// <summary>
+        /// Create clone of the effector
+        /// </summary>
+        /// <returns></returns>
+        IEffector Clone();
     }
 }

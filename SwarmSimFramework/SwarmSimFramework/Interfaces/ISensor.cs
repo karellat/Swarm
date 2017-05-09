@@ -4,6 +4,7 @@ namespace SwarmSimFramework.Classes
 {
     public interface ISensor
     {
+
         /// <summary>
         /// Count values of the sensor
         /// </summary>
@@ -12,7 +13,7 @@ namespace SwarmSimFramework.Classes
         /// <returns></returns>
         float[] Count(RobotEntity robot, Map.Map map); 
         /// <summary>
-        /// Get dimension of sensors 
+        /// Get dimension of sensor
         /// </summary>
         int Dimension { get; }
         /// <summary>
@@ -26,8 +27,12 @@ namespace SwarmSimFramework.Classes
         /// <summary>
         /// Return shape of the sensor
         /// </summary>
-        Entity.Shape GetShape { get; } 
-
+        Entity.Shape GetShape { get; }
+        /// <summary>
+        /// Create clone of the sehsor
+        /// </summary>
+        /// <returns></returns>
+        ISensor Clone();
 
     }
 }
