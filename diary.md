@@ -30,3 +30,8 @@
 	* CircleEntity tests created
 	* CircleEntity bug squashed
 	* added new method to Circle move entity for  given length
+* 09.05.2017 
+	* Line & Circle collision in the map enviroment tested, fixed (wrong ordering of border points)
+	* Intersection2D CircleLinesegmentCollision() - Linesegment border check fixed 
+	* ISensor & IEffector - added new methods Clone, Connect(set same normalize values as robot)
+	* Robot - implementation refactored 
