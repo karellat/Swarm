@@ -34,4 +34,6 @@
 	* Line & Circle collision in the map enviroment tested, fixed (wrong ordering of border points)
 	* Intersection2D CircleLinesegmentCollision() - Linesegment border check fixed 
 	* ISensor & IEffector - added new methods Clone, Connect(set same normalize values as robot)
-	* Robot - implementation refactored 
+	* Robot - implementation refactored, not tested
+	* Fuel - entity added 
+	

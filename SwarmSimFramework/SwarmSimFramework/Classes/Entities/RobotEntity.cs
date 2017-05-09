@@ -193,7 +193,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="fuelTank"></param>
         public void ConsumeFuel(FuelEntity fuelTank)
         {
-            throw new NotImplementedException();
+           FuelAmount += fuelTank.Suck();
         }
 
  
