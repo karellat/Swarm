@@ -140,12 +140,14 @@ namespace SwarmSimFramework.Classes.Map
         {
             return Collision(entity, entity.Middle);
         }
+
         /// <summary>
         /// Collision between Line Entity & enviroment 
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="ignoredEntity"></param>
         /// <returns>The nearest point to the first point of Line entity </returns>
-        public Vector2 Collision(LineEntity entity)
+        public Vector2 Collision(LineEntity entity,Entity ignoredEntity = null)
         {
             Vector2 theNearestPoint = new Vector2(float.PositiveInfinity,float.PositiveInfinity);
             float theNearestDistance = float.PositiveInfinity;
@@ -194,6 +196,7 @@ namespace SwarmSimFramework.Classes.Map
             //Collisions with other robots
             foreach (var r in Robots)
             {
+                if(r == ignoredEntity) continue;
                 foreach (var i in Intersections.CircleLineSegmentIntersection(r.Middle,r.Radius,entity.A,entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);
@@ -207,6 +210,7 @@ namespace SwarmSimFramework.Classes.Map
             //Collision with passive entities 
             foreach (var p in PasiveEntities)
             {
+                if (p == ignoredEntity) continue; 
                 foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);

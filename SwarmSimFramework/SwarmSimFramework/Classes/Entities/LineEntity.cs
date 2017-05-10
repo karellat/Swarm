@@ -17,7 +17,8 @@ namespace SwarmSimFramework.Classes.Entities
             Orientation = orientation;
             Length = Vector2.Distance(A, B);
         }
-
+        protected LineEntity(string name) :this(Vector2.Zero, Vector2.Zero, Vector2.Zero,name)
+        { }
         //MEMBERS
         /// <summary>
         /// first of the LineSegment verteces 

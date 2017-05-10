@@ -9,6 +9,12 @@ namespace SwarmSimFramework.Classes
         /// </summary>
         /// <returns></returns>
         int Dimension { get; }
+
+        /// <summary>
+        /// Make initial connection methods, normalize inputs etc.
+        /// </summary>
+        /// <param name="robot"></param>
+        void ConnectToRobot(RobotEntity robot);
         /// <summary>
         /// Effect the entity on the map with given settings
         /// </summary>
@@ -33,5 +39,6 @@ namespace SwarmSimFramework.Classes
         /// </summary>
         /// <returns></returns>
         IEffector Clone();
+
     }
 }

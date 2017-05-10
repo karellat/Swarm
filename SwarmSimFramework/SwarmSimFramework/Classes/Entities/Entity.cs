@@ -111,5 +111,35 @@ namespace SwarmSimFramework.Classes.Entities
             return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(shiftVector));
         }
         public const float Pi2 = 2 * (float)Math.PI;
+
+        /// <summary>
+        /// Return rescaling constant from interval (from1,from2) to (to1,to2), continues 
+        /// </summary>
+        /// <param name="from1"></param>
+        /// <param name="from2"></param>
+        /// <param name="to1"></param>
+        /// <param name="to2"></param>
+        /// <returns></returns>
+        public static float RescaleInterval(float from1, float from2, float to1, float to2)
+        {
+            float sizeFrom = Math.Abs(from2 - from1);
+            float sizeTo = Math.Abs(to2 - to1);
+            return (sizeTo / sizeFrom); 
+        }
+        /// <summary>
+        /// Return shifting constant from interval (from1,from2) to (to1,to2)
+        /// </summary>
+        /// <param name="from1"></param>
+        /// <param name="from2"></param>
+        /// <param name="to1"></param>
+        /// <param name="to2"></param>
+        /// <returns></returns>
+        public static float ShiftInterval(float from1, float from2, float to1, float to2)
+        {
+            float rescale = RescaleInterval(from1, from2, to1, to2);
+            float min = from1 * rescale;
+            return to1 - min;
+        }
+
     }
 }

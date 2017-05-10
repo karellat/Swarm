@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Entities\BorderEntity.cs" />
     <Compile Include="Classes\Entities\CircleEntity.cs" />
     <Compile Include="Classes\Entities\Entity.cs" />
     <Compile Include="Classes\Entities\FuelEntity.cs" />

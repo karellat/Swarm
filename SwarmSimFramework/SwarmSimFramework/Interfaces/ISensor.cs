@@ -11,7 +11,12 @@ namespace SwarmSimFramework.Classes
         /// <param name="robot"></param>
         /// <param name="map"></param>
         /// <returns></returns>
-        float[] Count(RobotEntity robot, Map.Map map); 
+        float[] Count(RobotEntity robot, Map.Map map);
+        /// <summary>
+        /// Make initial connection methods, normalize inputs etc.
+        /// </summary>
+        /// <param name="robot"></param>
+        void ConnectToRobot(RobotEntity robot);
         /// <summary>
         /// Get dimension of sensor
         /// </summary>
