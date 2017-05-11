@@ -71,14 +71,14 @@ namespace SwarmSimFramework.Classes.Entities
         }
 
 
-        public float[] Count(RobotEntity robot, Map.Map map)
-        {
-            //Update possition 
-            if(robot.Middle != this.RotationMiddle)
-                this.MoveTo(robot.Middle);
-            if(Orientation != robot.Orientation + OrientationToRobotFPoint)
-                this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
-            //Count from the map 
+        public virtual float[] Count(RobotEntity robot, Map.Map map)
+            {
+                //Update possition 
+                if(robot.Middle != this.RotationMiddle)
+                    this.MoveTo(robot.Middle);
+                if(Orientation != robot.Orientation + OrientationToRobotFPoint)
+                    this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+                //Count from the map 
             float Distance = Vector2.DistanceSquared(map.Collision(this, robot),A);
             //Normalize output
             return new  [] {Distance * RescaleOutput + ShiftOutput};
