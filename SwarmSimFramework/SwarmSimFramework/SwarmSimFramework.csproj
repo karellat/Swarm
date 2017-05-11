@@ -55,6 +55,7 @@
     <Compile Include="Classes\Entities\LineSensor.cs" />
     <Compile Include="Classes\Entities\RadioEntity.cs" />
     <Compile Include="Classes\Entities\RobotEntity.cs" />
+    <Compile Include="Classes\Entities\TouchSensor.cs" />
     <Compile Include="Interfaces\IEffector.cs" />
     <Compile Include="Interfaces\IRobotBrain.cs" />
     <Compile Include="Interfaces\ISensor.cs" />

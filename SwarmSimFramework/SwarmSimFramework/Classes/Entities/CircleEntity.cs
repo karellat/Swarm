@@ -5,6 +5,14 @@ namespace SwarmSimFramework.Classes.Entities
     public abstract class CircleEntity : Entity
     {
         //CONSTRUCTOR
+        /// <summary>
+        /// Presumes manual inicialization 
+        /// </summary>
+        /// <param name="name"></param>
+        protected CircleEntity(string name) : this(Vector2.Zero, 0, name)
+        {
+            
+        }
         protected CircleEntity(Vector2 middle, float radius,string name, float orientation=0)
         {
             Middle = middle;
@@ -43,7 +51,9 @@ namespace SwarmSimFramework.Classes.Entities
         public override void RotateRadians(float angleInRadians)
         {
             //Rotate pointing point
-            FPoint = RotatePoint(angleInRadians, FPoint, Middle);
+            if (GetRotationMiddle() != Middle)
+                Middle = RotatePoint(angleInRadians, Middle, GetRotationMiddle());
+            FPoint = RotatePoint(angleInRadians, FPoint, GetRotationMiddle());
             Orientation += angleInRadians;
             while (Orientation < 0)
                 Orientation += Pi2;
@@ -55,7 +65,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="newMiddle"></param>
         public override void MoveTo(Vector2 newMiddle)
         {
-            Vector2 shift = newMiddle - Middle;
+            Vector2 shift = newMiddle - GetRotationMiddle(); 
             Middle = MovePoint(Middle, shift);
             FPoint = MovePoint(FPoint, shift);
         }

@@ -36,4 +36,11 @@
 	* ISensor & IEffector - added new methods Clone, Connect(set same normalize values as robot)
 	* Robot - implementation refactored, not tested
 	* Fuel - entity added 
-	
+* 10.05.2017 
+	* Line sensor added  
+	* Touch sesnsor added 
+* 11.05.2017
+	* Circle Entity MoveTo method = direction of move is set from RotationMiddle
+	* Circle Entity RotataRadians method = take GetRotation Middle when rotate
+	* Collision with types addded to map 
+	* TypeLineSensor added

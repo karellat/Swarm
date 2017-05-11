@@ -78,10 +78,6 @@ namespace SwarmSimFramework.Classes.Entities
                 this.MoveTo(robot.Middle);
             if(Orientation != robot.Orientation + OrientationToRobotFPoint)
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
-
-
-
-
             //Count from the map 
             float Distance = Vector2.DistanceSquared(map.Collision(this, robot),A);
             //Normalize output

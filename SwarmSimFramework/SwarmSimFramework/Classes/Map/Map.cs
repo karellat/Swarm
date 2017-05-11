@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Intersection2D;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
@@ -103,8 +104,10 @@ namespace SwarmSimFramework.Classes.Map
         /// <param name="entity"></param>
         /// <param name="newMiddle"></param>
         /// <returns></returns>
-        public bool Collision(CircleEntity entity, Vector2 newMiddle)
+        public bool Collision(CircleEntity entity, Vector2 newMiddle,Entity ignoredEntity = null)
         {
+            if (ignoredEntity == null)
+                ignoredEntity = entity;
             //Collisions with borders: 
             if (Intersections.CircleLineSegmentIntersection(newMiddle, entity.Radius, A, B).Length != 0)
                 return true;
@@ -118,7 +121,7 @@ namespace SwarmSimFramework.Classes.Map
             foreach (var r in Robots)
             {
                 //jump over the sameEntity
-                if(r == entity)
+                if(r == ignoredEntity)
                     continue;
                 if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, r.Middle, r.Radius))
                     return true;
@@ -126,6 +129,8 @@ namespace SwarmSimFramework.Classes.Map
             //Collision with passive entities: 
             foreach (var p in PasiveEntities)
             {
+                if(p == ignoredEntity)
+                    continue;
                 if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, p.Middle, p.Radius))
                     return true;
             }
@@ -138,9 +143,65 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public bool Collision(CircleEntity entity)
         {
-            return Collision(entity, entity.Middle);
+            return Collision(entity, entity.Middle,entity);
         }
+        /// <summary>
+        /// Return true, if given entity collides with something of the enviroment and ignore collision with ignoredEntity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="ignoredEntity"></param>
+        /// <returns></returns>
+        public bool Collision(CircleEntity entity, Entity ignoredEntity)
+        {
+            return Collision(entity, entity.Middle, ignoredEntity);
+        }
+        /// <summary>
+        /// Return the nearest colliding entity 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="ignoredEntity"></param>
+        /// <returns></returns>
+        public Entity CollisionEntity(LineEntity entity, Entity ignoredEntity = null)
+        {
+            Entity collidingEntity = null;
+            Vector2 theNearestPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+            float theNearestDistance = float.PositiveInfinity;
+            Vector2 intersection;
+            float testedDistance;
+            //Ignore the borders 
+            //Collisions with other robots
+            foreach (var r in Robots)
+            {
+                if (r == ignoredEntity) continue;
+                foreach (var i in Intersections.CircleLineSegmentIntersection(r.Middle, r.Radius, entity.A, entity.B))
+                {
+                    testedDistance = Vector2.DistanceSquared(i, entity.A);
+                    if (testedDistance < theNearestDistance)
+                    {
+                        theNearestDistance = testedDistance;
+                        theNearestPoint = i;
+                        collidingEntity = r;
+                    }
+                }
+            }
+            //Collision with passive entities 
+            foreach (var p in PasiveEntities)
+            {
+                if (p == ignoredEntity) continue;
+                foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
+                {
+                    testedDistance = Vector2.DistanceSquared(i, entity.A);
+                    if (testedDistance < theNearestDistance)
+                    {
+                        theNearestDistance = testedDistance;
+                        theNearestPoint = i;
+                        collidingEntity = p;
+                    }
+                }
+            }
 
+            return collidingEntity;
+        }
         /// <summary>
         /// Collision between Line Entity & enviroment 
         /// </summary>
