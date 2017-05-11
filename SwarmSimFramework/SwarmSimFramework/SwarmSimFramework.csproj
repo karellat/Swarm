@@ -52,6 +52,7 @@
     <Compile Include="Classes\Entities\Entity.cs" />
     <Compile Include="Classes\Entities\FuelEntity.cs" />
     <Compile Include="Classes\Entities\LineEntity.cs" />
+    <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\Sensors\LineSensor.cs" />
     <Compile Include="Classes\Entities\RadioEntity.cs" />
     <Compile Include="Classes\Entities\RobotEntity.cs" />

@@ -1,4 +1,6 @@
-﻿namespace SwarmSimFramework.Classes.Entities
+﻿using System;
+
+namespace SwarmSimFramework.Classes.Entities
 {
     public class TypeLineSensor : LineSensor
     {
@@ -15,7 +17,7 @@
             if (Orientation != robot.Orientation + OrientationToRobotFPoint)
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
             //Count from the map 
-
+            throw new NotImplementedException();
         }
     }
 }

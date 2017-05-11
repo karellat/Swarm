@@ -324,7 +324,8 @@ namespace UnitTests
         {
             Map map = new Map(150, 150, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             Line l = new Line(new Vector2(60, 60), new Vector2(50, 60), new Vector2(40, 60));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(map.Collision(l).CollidingEntity, null);
         }
 
         [TestMethod]
@@ -332,13 +333,13 @@ namespace UnitTests
         {
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             Line l = new Line(new Vector2(50, 50), new Vector2(50, 40), new Vector2(50, 60));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
             l.RotateDegrees(90);
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
             l.RotateDegrees(180);
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
             l.MoveTo(new Vector2(40, 40));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -347,7 +348,7 @@ namespace UnitTests
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             map.PasiveEntities.Add(new Circle(new Vector2(3, 2), 1));
             Line l = new Line(new Vector2(3, 0.999f), new Vector2(3, 0.5f), new Vector2(3, 0));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -357,7 +358,7 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(3, 2), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(6, 2), 1));
             Line l = new Line(new Vector2(4.5f, 1), new Vector2(4.5f, 2), new Vector2(4.5f, 0));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l));
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -366,9 +367,9 @@ namespace UnitTests
             Map map = new Map(150, 150, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             map.PasiveEntities.Add(new Circle(new Vector2(2, 2), 1));
             Line l = new Line(new Vector2(2, 4), new Vector2(2, 3), new Vector2(2, 4));
-            Assert.AreEqual(new Vector2(2, 3), map.Collision(l));
+            Assert.AreEqual(new Vector2(2, 3), map.Collision(l).IntersectionPoint);
             l.MoveTo(new Vector2(2, 3.5f));
-            Assert.AreEqual(new Vector2(2, 3), map.Collision(l));
+            Assert.AreEqual(new Vector2(2, 3), map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -378,7 +379,7 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(2.5f, 1.5f), 0.5f));
             map.PasiveEntities.Add(new Circle(new Vector2(3.5f, 0.5f), 0.5f));
             Line l = new Line(new Vector2(1, 3), new Vector2(4, 0), new Vector2(1, 3));
-            Vector2 i = map.Collision(l);
+            Vector2 i = map.Collision(l).IntersectionPoint;
             Assert.IsTrue(i.X > 2 && i.X < 2.5f && i.Y > 1.5f && i.Y < 2.0);
         }
 
@@ -388,7 +389,7 @@ namespace UnitTests
             Map map = new Map(150, 150, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             map.PasiveEntities.Add(new Circle(new Vector2(2.5f, 1.5f), 0.5f));
             Line l = new Line(new Vector2(1, 1.5f), new Vector2(2, 1.5f), new Vector2(1, 1.5f));
-            Assert.AreEqual(new Vector2(2, 1.5f), map.Collision(l));
+            Assert.AreEqual(new Vector2(2, 1.5f), map.Collision(l).IntersectionPoint);
         }
     }
 

@@ -156,72 +156,29 @@ namespace SwarmSimFramework.Classes.Map
             return Collision(entity, entity.Middle, ignoredEntity);
         }
         /// <summary>
-        /// Return the nearest colliding entity 
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="ignoredEntity"></param>
-        /// <returns></returns>
-        public Entity CollisionEntity(LineEntity entity, Entity ignoredEntity = null)
-        {
-            Entity collidingEntity = null;
-            Vector2 theNearestPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-            float theNearestDistance = float.PositiveInfinity;
-            Vector2 intersection;
-            float testedDistance;
-            //Ignore the borders 
-            //Collisions with other robots
-            foreach (var r in Robots)
-            {
-                if (r == ignoredEntity) continue;
-                foreach (var i in Intersections.CircleLineSegmentIntersection(r.Middle, r.Radius, entity.A, entity.B))
-                {
-                    testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < theNearestDistance)
-                    {
-                        theNearestDistance = testedDistance;
-                        theNearestPoint = i;
-                        collidingEntity = r;
-                    }
-                }
-            }
-            //Collision with passive entities 
-            foreach (var p in PasiveEntities)
-            {
-                if (p == ignoredEntity) continue;
-                foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
-                {
-                    testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < theNearestDistance)
-                    {
-                        theNearestDistance = testedDistance;
-                        theNearestPoint = i;
-                        collidingEntity = p;
-                    }
-                }
-            }
-
-            return collidingEntity;
-        }
-        /// <summary>
         /// Collision between Line Entity & enviroment 
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="ignoredEntity"></param>
         /// <returns>The nearest point to the first point of Line entity </returns>
-        public Vector2 Collision(LineEntity entity,Entity ignoredEntity = null)
+        public Intersection Collision(LineEntity entity,Entity ignoredEntity = null)
         {
-            Vector2 theNearestPoint = new Vector2(float.PositiveInfinity,float.PositiveInfinity);
-            float theNearestDistance = float.PositiveInfinity;
+            Intersection theNearestIntersection = new Intersection
+            {
+                CollidingEntity = null,
+                Distance = float.PositiveInfinity,
+                IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity)
+            };
             Vector2 intersection;
             float testedDistance;
             //Collisions with borders 
             // A -------- B 
             intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, A, B);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
-            if (testedDistance < theNearestDistance)
+            if (testedDistance < theNearestIntersection.Distance)
             {
-                theNearestDistance = testedDistance;
-                theNearestPoint = intersection;
+                theNearestIntersection.Distance = testedDistance;
+                theNearestIntersection.IntersectionPoint = intersection;
             }
             // B
             // |
@@ -229,18 +186,18 @@ namespace SwarmSimFramework.Classes.Map
             // C 
             intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, B, D);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
-            if (testedDistance < theNearestDistance)
+            if (testedDistance < theNearestIntersection.Distance)
             {
-                theNearestDistance = testedDistance;
-                theNearestPoint = intersection;
+                theNearestIntersection.Distance = testedDistance;
+                theNearestIntersection.IntersectionPoint = intersection;
             }
             //D ---------------C 
             intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, C, D);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
-            if (testedDistance < theNearestDistance)
+            if (testedDistance < theNearestIntersection.Distance)
             {
-                theNearestDistance = testedDistance;
-                theNearestPoint = intersection;
+                theNearestIntersection.Distance = testedDistance;
+                theNearestIntersection.IntersectionPoint = intersection;
             }
             // A
             // |
@@ -248,10 +205,10 @@ namespace SwarmSimFramework.Classes.Map
             // D 
             intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, A, C);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
-            if (testedDistance < theNearestDistance)
+            if (testedDistance < theNearestIntersection.Distance)
             {
-                theNearestDistance = testedDistance;
-                theNearestPoint = intersection;
+                theNearestIntersection.Distance = testedDistance;
+                theNearestIntersection.IntersectionPoint = intersection;
             }
 
             //Collisions with other robots
@@ -261,10 +218,11 @@ namespace SwarmSimFramework.Classes.Map
                 foreach (var i in Intersections.CircleLineSegmentIntersection(r.Middle,r.Radius,entity.A,entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < theNearestDistance)
+                    if (testedDistance < theNearestIntersection.Distance)
                     {
-                        theNearestDistance = testedDistance;
-                        theNearestPoint = i;
+                        theNearestIntersection.Distance = testedDistance;
+                        theNearestIntersection.IntersectionPoint = i;
+                        theNearestIntersection.CollidingEntity = r; 
                     }
                 }
             }
@@ -275,15 +233,16 @@ namespace SwarmSimFramework.Classes.Map
                 foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < theNearestDistance)
+                    if (testedDistance < theNearestIntersection.Distance)
                     {
-                        theNearestDistance = testedDistance;
-                        theNearestPoint = i;
+                        theNearestIntersection.Distance = testedDistance;
+                        theNearestIntersection.IntersectionPoint = i;
+                        theNearestIntersection.CollidingEntity = p;
                     }
                 }
             }
 
-            return theNearestPoint;
+            return theNearestIntersection;
         }
         //COLISION WITH RADIO BROADCASTING
         /// <summary>
