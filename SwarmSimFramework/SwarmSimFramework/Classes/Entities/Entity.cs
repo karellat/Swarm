@@ -3,8 +3,22 @@ using System.Numerics;
 
 namespace SwarmSimFramework.Classes.Entities
 {
+    
     public abstract class Entity
     {
+        //Enumerate entity type 
+        public enum EntityColor
+        {
+            EntityColor,
+            ScoutRobotColor, 
+            WorkerRobotColor, 
+            RefactorRobotColor, 
+            MineralColor, 
+            FuelColor, 
+            ObstacleColor
+        }
+
+        public static int EntityColorCount = Enum.GetNames(typeof(EntityColor)).Length;
         //MEMBERS 
         /// <summary>
         /// Enumarate of entity shape 
@@ -32,6 +46,10 @@ namespace SwarmSimFramework.Classes.Entities
         /// Middle of rotation 
         /// </summary>
         public Vector2 RotationMiddle { get; protected set; }
+        /// <summary>
+        /// Get color of entity
+        /// </summary>
+        public EntityColor Color { get; protected set; }
         //METHODS
         /// <summary>
         /// Return clone of actual entity
@@ -110,34 +128,35 @@ namespace SwarmSimFramework.Classes.Entities
             return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(shiftVector));
         }
         public const float Pi2 = 2 * (float)Math.PI;
-
+        //STATIC function
         /// <summary>
-        /// Return rescaling constant from interval (from1,from2) to (to1,to2), continues 
+        /// Make normalization from one interval to another
         /// </summary>
-        /// <param name="from1"></param>
-        /// <param name="from2"></param>
-        /// <param name="to1"></param>
-        /// <param name="to2"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
         /// <returns></returns>
-        public static float RescaleInterval(float from1, float from2, float to1, float to2)
+        public static NormalizeFunc MakeNormalizationFunc(Bounds from, Bounds to)
         {
-            float sizeFrom = Math.Abs(from2 - from1);
-            float sizeTo = Math.Abs(to2 - to1);
-            return (sizeTo / sizeFrom); 
+            float sizeFrom = Math.Abs(from.Max - from.Min);
+            float sizeTo = Math.Abs(to.Max - to.Min);
+            float rescale =  (sizeTo / sizeFrom);
+            float min = from.Min * rescale;
+            float shift =  to.Min - min;
+            return new NormalizeFunc() {Rescale = rescale, Shift = shift};
         }
         /// <summary>
-        /// Return shifting constant from interval (from1,from2) to (to1,to2)
+        /// Return normalization functions for given localBounds to outputBounds 
         /// </summary>
-        /// <param name="from1"></param>
-        /// <param name="from2"></param>
-        /// <param name="to1"></param>
-        /// <param name="to2"></param>
-        /// <returns></returns>
-        public static float ShiftInterval(float from1, float from2, float to1, float to2)
+        /// <param name="localBounds"></param>
+        /// <param name="outputBounds"></param>
+        public static NormalizeFunc[] MakeNormalizeFuncs(Bounds[] localBounds, Bounds outputBounds)
         {
-            float rescale = RescaleInterval(from1, from2, to1, to2);
-            float min = from1 * rescale;
-            return to1 - min;
+            var output = new NormalizeFunc[localBounds.Length];
+            for (int i = 0; i < localBounds.Length; i++)
+            {
+                output[i] = MakeNormalizationFunc(localBounds[i], outputBounds);
+            }
+            return output;
         }
 
     }

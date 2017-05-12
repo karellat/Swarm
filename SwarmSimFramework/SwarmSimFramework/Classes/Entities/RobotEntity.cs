@@ -45,13 +45,9 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         public int EffectorsDimension { get; protected set;  }
         /// <summary>
-        /// Maximum of communication values between Sensor => Brain && Brain => Effectors
+        /// Interval  of values  between sensor -> brain , brain -> effector
         /// </summary>
-        public float NormalizeMax { get; protected set;  }
-        /// <summary>
-        /// Minimum of communication values between Sensor => Brain && Brain => Effectors
-        /// </summary>
-        public float NormalizeMin { get; protected set; }
+        public Bounds NormalizedBound; 
         /// <summary>
         /// Actual map, where the robot moves 
         /// </summary>
@@ -81,8 +77,7 @@ namespace SwarmSimFramework.Classes.Entities
         protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
         {
             //Normalize values
-            NormalizeMax = normalizeMax;
-            NormalizeMin = normalizeMin;
+            NormalizedBound = new Bounds() {Max = normalizeMax, Min = normalizeMin};
             //Effectors & Sensors 
             Effectors = effectors;
             Sensors = sensors;

@@ -1,5 +1,8 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Numerics;
+using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -11,25 +14,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// Dimension of the ouput
         /// </summary>
         public int Dimension { get; protected set;  }
-        /// <summary>
-        /// Maximum value of intern values 
-        /// </summary>
-        public float MaxOuputValue { get; protected set; }
 
-        /// <summary>
-        /// Minimum value of intern values 
-        /// </summary>
-        public float MinOutputValue { get; protected set; }
-        //PRIVATE MEMBERS 
-        /// <summary>
-        /// Rescale of the output to the normalize value of robot body 
-        /// </summary>
-        protected float RescaleOutput;
-        /// <summary>
-        /// Shift of the output to the normalize value of the robot body
-        /// </summary>
-        protected float ShiftOutput;
+        public Bounds[] LocalBounds { get; protected set; }
+        public NormalizeFunc[] NormalizeFuncs { get; protected set; }
 
+        protected float ShiftTypeOutput; 
         /// <summary>
         /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
         /// </summary>
@@ -56,14 +45,16 @@ namespace SwarmSimFramework.Classes.Entities
             OrientationToFPointToRobotFPoint = orientationToFPoint;
             this.RotateRadians(orientationToFPoint+robot.Orientation);
 
-            //OutputSize, returning LengthSqrt 
-            MinOutputValue = 0;
-            MaxOuputValue = Length * Length;
-            Dimension = 1;
-            //TODO: Normalize OTHER TYPE VALUES 
+            //OutputSize, returning LengthSqrt & Type of colliding entity 
+            Dimension = 2; 
             //Normalize output
-            RescaleOutput = Entity.RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
-            ShiftOutput = Entity.RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
+            LocalBounds = new Bounds[Dimension];
+            // sqrt distance bounds 
+            LocalBounds[0] = new Bounds() {Min = 0, Max = lenght*lenght};
+            // amount of types
+            LocalBounds[1] = new Bounds() {Min = 0, Max = Entity.EntityColorCount - 1}; 
+            //Create normalization func to robot normal values
+            NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
 
 
@@ -75,12 +66,12 @@ namespace SwarmSimFramework.Classes.Entities
                 if(Orientation != robot.Orientation + OrientationToFPointToRobotFPoint)
                     this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
                 //Count from the map 
-            float Distance = map.Collision(this, robot).Distance;
-            
-            //TODO: Return type info: 
+                Intersection intersection = map.Collision(this, robot);
+
+                float[] output = new[] {intersection.Distance, (float) intersection.CollidingEntity.Color};
             //Normalize output
-            return new  [] {Distance * RescaleOutput + ShiftOutput};
-        }
+                return output.Normalize(NormalizeFuncs);
+            }
 
         public void ConnectToRobot(RobotEntity robot)
         {
@@ -88,10 +79,7 @@ namespace SwarmSimFramework.Classes.Entities
             this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
             this.MoveTo(robot.Middle);
             //Count normalization 
-            RescaleOutput = Entity.RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin,
-                robot.NormalizeMax);
-            ShiftOutput = Entity.ShiftInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin,
-                robot.NormalizeMax);
+            NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
 
         /// <summary>

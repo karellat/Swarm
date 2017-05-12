@@ -423,16 +423,12 @@ namespace UnitTests
     public class IntervalMapping
     {
         [TestMethod]
-        public void RescaleTest()
+        public void BoundsTest()
         {
-            Assert.AreEqual(100, Entity.RescaleInterval(-2, 0, -100, 100));
-        }
-
-   
-        [TestMethod]
-        public void ShiftTest()
-        {
-            Assert.AreEqual(100,Entity.ShiftInterval(-2,0,-100,100));
+            var b = Entity.MakeNormalizationFunc(new Bounds() {Max =2, Min = 0},
+                new Bounds() {Min = -100, Max = 100});
+            Assert.AreEqual(100, b.Rescale);
+            Assert.AreEqual(-100,b.Shift);
         }
     }
 

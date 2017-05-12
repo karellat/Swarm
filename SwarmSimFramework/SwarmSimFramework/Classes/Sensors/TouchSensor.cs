@@ -2,37 +2,29 @@
 using System.Diagnostics.Tracing;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    public class TouchSensor:CircleEntity,ISensor
+    public class TouchSensor : CircleEntity, ISensor
     {
-        //MEMBERs
-
+    //MEMBERs
         /// <summary>
         /// Dimension of touch  sensors 
         /// </summary>
         public int Dimension { get; }
         /// <summary>
+        /// Local maximum and minimum for given dimension 
+        /// </summary>
+        public Bounds[] LocalBounds { get; protected set; }
+        /// <summary>
+        /// Normalization functions for given robot.
+        /// </summary>
+        public NormalizeFunc[] NormalizeFuncs { get; protected set; }
+        /// <summary>
         /// Maxoutput of touch sensor 
         /// </summary>
-        public float MaxOuputValue { get; }
-        /// <summary>
-        /// Minoutput if touch sensor
-        /// </summary>
-        public float MinOutputValue { get; }
         //PRIVATE MEMBERs
-        /// <summary>
-        /// Rescale to normalized value of body 
-        /// </summary>
-        protected float RescaleOutput;
-        /// <summary>
-        /// Shift to normalized value of body 
-        /// </summary>
-        protected float ShiftOutput;
-        /// <summary>
-        /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
-        /// </summary>
         protected float OrientationToRobotFPoint;
         /// <summary>
         /// Constructor 
@@ -44,11 +36,13 @@ namespace SwarmSimFramework.Classes.Entities
         public TouchSensor(RobotEntity robot,float size, float orientationToFPoint) : base(Entity.RotatePoint(orientationToFPoint, robot.FPoint, robot.Middle),size, "TouchSensor",robot.Middle)
         {
             //ISensor values
-            MaxOuputValue = Radius;
-            MinOutputValue = 0;
             Dimension = 1; 
-            RescaleOutput = RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
-            ShiftOutput = ShiftInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
+            LocalBounds = new Bounds[Dimension];
+            //Make bounds of touch sensor 
+            LocalBounds[0] = new Bounds() {Max = 1, Min = 0};
+            NormalizeFuncs = Entity.MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound); 
+
+
         }
         /// <summary>
         /// 
@@ -70,9 +64,9 @@ namespace SwarmSimFramework.Classes.Entities
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
             //Count collision 
             if (map.Collision(this, robot))
-                return new[] {MaxOuputValue * RescaleOutput + ShiftOutput};
+                return (new[] {1.0f}).Normalize(NormalizeFuncs);
             else
-                return new[] {MinOutputValue * RescaleOutput + ShiftOutput}; 
+                return (new[] {0.0f}).Normalize(NormalizeFuncs);
         }
 
         public void ConnectToRobot(RobotEntity robot)
@@ -83,8 +77,7 @@ namespace SwarmSimFramework.Classes.Entities
             FPoint = Middle;
             Orientation = robot.Orientation;
             //Normalize
-            RescaleOutput = RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
-            ShiftOutput = ShiftInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
+            NormalizeFuncs = Entity.MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
 
         public ISensor Clone()
