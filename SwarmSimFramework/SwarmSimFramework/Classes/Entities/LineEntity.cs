@@ -28,24 +28,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// second of the LineSegment verteces
         /// </summary>
         public Vector2 B { get; protected set;  }
-
-        /// <summary>
-        /// Rotation middle of the segment
-        /// </summary>
-        protected Vector2 RotationMiddle;
         /// <summary>
         /// Distance between A & B 
         /// </summary>
         public float Length { get; protected set; }
         //METHODS 
-        /// <summary>
-        /// Return RotationMiddle as rotation middle
-        /// </summary>
-        /// <returns></returns>
-        public override Vector2 GetRotationMiddle()
-        {
-            return RotationMiddle;
-        }
         /// <summary>
         /// Rotate line segment around RotationMiddle for angleInRadians
         /// </summary>

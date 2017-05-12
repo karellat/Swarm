@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    public class LineSensor : LineEntity,ISensor
+    public class LineTypeSensor : LineEntity,ISensor
     {
         //PUBLIC MEMBERS 
 
@@ -31,11 +31,11 @@ namespace SwarmSimFramework.Classes.Entities
         protected float ShiftOutput;
 
         /// <summary>
-        /// Orientation to robot FPoint, adds to the robot orientation to rotate to correct possition 
+        /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
         /// </summary>
-        protected float OrientationToRobotFPoint;
+        protected float OrientationToFPointToRobotFPoint;
         /// <summary>
-        /// Return clone of this LineSensor
+        /// Return clone of this LineTypeSensor
         /// </summary>
         /// <returns></returns>
         public override Entity DeepClone()
@@ -50,21 +50,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="map"></param>
         /// <returns></returns>
         //CONSTRUCTOR 
-        public LineSensor(RobotEntity robot,float lenght,float orientation) : base("Line Sensors")
+        public LineTypeSensor(RobotEntity robot,float lenght,float orientationToFPoint) : base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght),robot.Middle, "Line Sensors")
         {
-            //Make sensor of give length 
-            this.RotationMiddle = robot.Middle;
-            this.A = robot.FPoint;
-            this.B = Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght);
-            this.Length = Vector2.Distance(A, B);
             //rotate sensor to its possition
-            OrientationToRobotFPoint = orientation;
-            this.RotateRadians(orientation+robot.Orientation);
+            OrientationToFPointToRobotFPoint = orientationToFPoint;
+            this.RotateRadians(orientationToFPoint+robot.Orientation);
 
             //OutputSize, returning LengthSqrt 
             MinOutputValue = 0;
             MaxOuputValue = Length * Length;
             Dimension = 1;
+            //TODO: Normalize OTHER TYPE VALUES 
             //Normalize output
             RescaleOutput = Entity.RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
             ShiftOutput = Entity.RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
@@ -76,10 +72,12 @@ namespace SwarmSimFramework.Classes.Entities
                 //Update possition 
                 if(robot.Middle != this.RotationMiddle)
                     this.MoveTo(robot.Middle);
-                if(Orientation != robot.Orientation + OrientationToRobotFPoint)
-                    this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+                if(Orientation != robot.Orientation + OrientationToFPointToRobotFPoint)
+                    this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
                 //Count from the map 
             float Distance = map.Collision(this, robot).Distance;
+            
+            //TODO: Return type info: 
             //Normalize output
             return new  [] {Distance * RescaleOutput + ShiftOutput};
         }
@@ -87,7 +85,7 @@ namespace SwarmSimFramework.Classes.Entities
         public void ConnectToRobot(RobotEntity robot)
         {
             //Connect to the middle of the robot
-            this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+            this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
             this.MoveTo(robot.Middle);
             //Count normalization 
             RescaleOutput = Entity.RescaleInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin,
@@ -102,8 +100,8 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public ISensor Clone()
         {
-            return (LineSensor) this.DeepClone();
+            return (LineTypeSensor) this.DeepClone();
         }
 
-            }
+      }
 }

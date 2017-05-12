@@ -28,17 +28,16 @@ namespace SwarmSimFramework.Classes.Entities
         ///  Actual orientation in radians
         /// </summary>
         public float Orientation { get; protected set; }
+        /// <summary>
+        /// Middle of rotation 
+        /// </summary>
+        public Vector2 RotationMiddle { get; protected set; }
         //METHODS
         /// <summary>
         /// Return clone of actual entity
         /// </summary>
         /// <returns></returns>
         public abstract Entity DeepClone();
-        /// <summary>
-        /// Return rotation middle
-        /// </summary>
-        /// <returns></returns>
-        public abstract Vector2 GetRotationMiddle();
         /// <summary>
         /// Rotate this for angleInRadians around rotation middle 
         /// </summary>

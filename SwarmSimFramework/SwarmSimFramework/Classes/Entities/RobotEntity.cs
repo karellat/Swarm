@@ -55,7 +55,6 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Actual map, where the robot moves 
         /// </summary>
-        public Map.Map Map; 
         //PRIVATE MEMBERS
         /// <summary>
         /// Last values from last invoke of PrepareMove
@@ -79,12 +78,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="normalizeMax"></param>
         /// <param name="normalizeMin"></param>
         /// <param name="orientation"></param>
-        protected RobotEntity(Vector2 middle, float radius, string name,Map.Map map, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
+        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
         {
             //Normalize values
             NormalizeMax = normalizeMax;
             NormalizeMin = normalizeMin;
-            Map = map;
             //Effectors & Sensors 
             Effectors = effectors;
             Sensors = sensors;
@@ -171,7 +169,6 @@ namespace SwarmSimFramework.Classes.Entities
             RobotEntity r = (RobotEntity) this.MemberwiseClone();
             r.Reset();
             r.Brain = null;
-            r.Map = null;
             r.Effectors = new IEffector[Effectors.Length];
             r.Sensors = new ISensor[Sensors.Length];
             for (int i = 0; i < Effectors.Length; i++)

@@ -8,10 +8,7 @@ namespace SwarmSimFramework.Classes.Entities
     public class TouchSensor:CircleEntity,ISensor
     {
         //MEMBERs
-        /// <summary>
-        /// Fixed point of the robot
-        /// </summary>
-        public Vector2 FixedMiddle;
+
         /// <summary>
         /// Dimension of touch  sensors 
         /// </summary>
@@ -34,7 +31,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         protected float ShiftOutput;
         /// <summary>
-        /// Orientation to robot FPoint, adds to the robot orientation to rotate to correct possition 
+        /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
         /// </summary>
         protected float OrientationToRobotFPoint;
         /// <summary>
@@ -43,17 +40,9 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="middle"></param>
         /// <param name="radius"></param>
         /// <param name="name"></param>
-        /// <param name="orientation"></param>
-        public TouchSensor(RobotEntity robot,float size, float orientation) : base("TouchSensor")
+        /// <param name="orientationToFPoint"></param>
+        public TouchSensor(RobotEntity robot,float size, float orientationToFPoint) : base(Entity.RotatePoint(orientationToFPoint, robot.FPoint, robot.Middle),size, "TouchSensor",robot.Middle)
         {
-            //find the location of beginning of touch sensor
-            Middle = Entity.RotatePoint(orientation, robot.FPoint, robot.Middle);
-            FixedMiddle = robot.Middle;
-            FPoint = Middle;
-            OrientationToRobotFPoint = orientation;
-            Orientation = robot.Orientation;
-            Radius = size; 
-
             //ISensor values
             MaxOuputValue = Radius;
             MinOutputValue = 0;
@@ -62,14 +51,9 @@ namespace SwarmSimFramework.Classes.Entities
             ShiftOutput = ShiftInterval(MinOutputValue, MaxOuputValue, robot.NormalizeMin, robot.NormalizeMax);
         }
         /// <summary>
-        /// Return rotation middle of the sensors, should be middle of robot
+        /// 
         /// </summary>
         /// <returns></returns>
-        public override Vector2 GetRotationMiddle()
-        {
-            return FixedMiddle;
-        }
-
         public override Entity DeepClone()
         {
             return (TouchSensor) this.MemberwiseClone();
@@ -78,10 +62,9 @@ namespace SwarmSimFramework.Classes.Entities
         public float[] Count(RobotEntity robot, Map.Map map)
         {
              //Update position
-            if (robot.Middle != GetRotationMiddle())
+            if (robot.Middle != RotationMiddle)
             {
                 this.MoveTo(robot.Middle);
-                FixedMiddle = robot.Middle;
             }
             if(Orientation != robot.Orientation + OrientationToRobotFPoint)
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
@@ -96,7 +79,7 @@ namespace SwarmSimFramework.Classes.Entities
         {
             //find the location of beginning of touch sensor
             Middle = Entity.RotatePoint(OrientationToRobotFPoint, robot.FPoint, robot.Middle);
-            FixedMiddle = robot.Middle;
+            RotationMiddle = robot.Middle;
             FPoint = Middle;
             Orientation = robot.Orientation;
             //Normalize
