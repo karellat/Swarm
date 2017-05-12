@@ -551,4 +551,10 @@ namespace UnitTests
             Assert.AreEqual(-100.0f, o[0]);
         }
     }
+
+    [TestClass]
+    public class LineTypeSensorTests
+    {
+        
+    }
 }
