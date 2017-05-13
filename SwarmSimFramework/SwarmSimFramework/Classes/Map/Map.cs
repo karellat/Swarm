@@ -13,6 +13,7 @@ namespace SwarmSimFramework.Classes.Map
     /// </summary>
     public class Map
     {
+        
         //PUBLIC METHODS
         //GLOBAL METHODS 
         /// <summary>
@@ -40,14 +41,17 @@ namespace SwarmSimFramework.Classes.Map
             modelRobotEntities = new List<RobotEntity>(Robots.Count);
             modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
             modelPasiveEntities = new List<CircleEntity>(RadionEntities.Count);
+
             foreach (var r in robots)
             {
                 modelRobotEntities.Add((RobotEntity)r.DeepClone());
             }
+
             foreach (var p in pasiveEntities)
             {
                 modelPasiveEntities.Add((CircleEntity) p.DeepClone());
             }
+
             foreach (var f in fuelEntities)
             {
                 modelFuelEntities.Add((FuelEntity)f.DeepClone());
