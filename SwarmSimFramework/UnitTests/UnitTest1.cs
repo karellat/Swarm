@@ -755,4 +755,88 @@ namespace UnitTests
             Assert.AreEqual(o[1], 50.0f);
         }
     }
+
+    [TestClass]
+    public class RadioSensorTests
+    {
+        public static float[] NonCollidingOutput = new [] {-100.0f,0,0,-100.0f,0,0};
+        [TestMethod]
+        public void InitTest()
+        {
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            Map map = new Map(100,100,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            RadioSensor rs = new RadioSensor(r,2);
+            Assert.AreEqual(new Vector2(3, 3), rs.Middle);
+            Assert.AreEqual(new Vector2(3, 3), rs.FPoint);
+            var o = rs.Count(r, map);
+            TestExtensions.AssertArrayEquality(o,NonCollidingOutput);
+
+        }
+
+        [TestMethod]
+        public void SingleIntersectionTest()
+        {
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            RadioSensor rs = new RadioSensor(r, 2);
+            map.RadionEntities.Add(new RadioEntity(new Vector2(3,5),0.1f,((int) RadioEntity.SignalValueBounds.Max)));
+            float[] predOutput = new[] {100.0f, 0, 2,-100.0f,0,0};
+            TestExtensions.AssertArrayEquality(predOutput,rs.Count(r,map));
+        }
+
+        [TestMethod]
+        public void DoubleIntersectionTest()
+        {
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            RadioSensor rs = new RadioSensor(r, 2);
+            map.RadionEntities.Add(new RadioEntity(new Vector2(3,5),0.1f,0));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(3,1),0.1f,100));
+            float[] predOutput = new[] {0, 0, 2.0f, 100.0f, 0, -2.0f};
+            TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
+        }
+
+        [TestMethod]
+        public void DoubleSameValueTest()
+        {
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            RadioSensor rs = new RadioSensor(r, 2);
+            map.RadionEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, 0));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(3, 1), 0.1f, 100));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(4,5),0.5f,0));
+
+            float[] predOutput = new[] { 0, 0.5f, 2.0f, 100.0f, 0, -2.0f };
+            TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
+        }
+
+        [TestMethod]
+        public void ManySignalsTest()
+        {
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            RadioSensor rs = new RadioSensor(r, 2);
+            map.RadionEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, 100));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(4, 5), 0.1f, 100));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
+            map.RadionEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 12));
+            float[] predOutput = new[] { 0, 1.0f, 2.0f, 100, 0, 2.0f };
+            TestExtensions.AssertArrayEquality(predOutput,rs.Count(r,map));
+        }
+
+    }
+
+    public static class TestExtensions
+    {
+        public static void AssertArrayEquality(float[] a, float[] b)
+        {
+            Assert.AreEqual(a.Length, b.Length);
+            for (int i = 0; i < a.Length; i++)
+            {
+                Assert.AreEqual(a[i], b[i]);
+            }
+        }
+    }
 }

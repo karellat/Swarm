@@ -246,34 +246,37 @@ namespace SwarmSimFramework.Classes.Map
         }
         //COLISION WITH RADIO BROADCASTING
         /// <summary>
-        /// true if colides with any radio signal except given signal
+        /// Return dictionary of colliding radioEntities with frequency and mean direction  
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public bool CollisionRadio(CircleEntity entity)
+        public Dictionary<int,RadioIntersection> CollisionRadio(CircleEntity entity)
         {
             var intersections = new Dictionary<int, RadioIntersection>();
             foreach (var r in RadionEntities)
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
                 {
+                    //Ignore local transmitting
+                    if(r.Middle == entity.Middle)
+                        continue;
                     var i = (RadioEntity) r; 
                     if(intersections.ContainsKey(r.ValueOfSignal))
                     {
-                        intersections[i.ValueOfSignal].SumOfDirections += i.Middle;
+                        intersections[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
                         intersections[i.ValueOfSignal].AmountOfSignal++;
                     }
                     else
                     {
                         var ir = new RadioIntersection(i.ValueOfSignal);
                         ir.AmountOfSignal++;
-                        ir.SumOfDirections += i.Middle;
+                        ir.SumOfDirections += i.Middle - entity.Middle;
                         intersections.Add(i.ValueOfSignal,ir);
                     }
                 }
             }
 
-            return false; 
+            return intersections;
         }
         //COLISION WITH FUEL 
         /// <summary>

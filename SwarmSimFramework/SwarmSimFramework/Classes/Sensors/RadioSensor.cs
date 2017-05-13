@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -28,7 +29,6 @@ namespace SwarmSimFramework.Classes.Entities
         /// Bounds of output 
         /// </summary>
         public static Bounds CoordinateBounds = new Bounds {Max = 100, Min = -100};
-
         /// <summary>
         /// Create new Sensor & connect it to Robot 
         /// </summary>
@@ -51,12 +51,14 @@ namespace SwarmSimFramework.Classes.Entities
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
 
         }
-
+        /// <summary>
+        /// Make clone of radiosensor 
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
             return (Entity) this.MemberwiseClone();
         }
-
         public float[] Count(RobotEntity robot, Map.Map map)
         {
             //Update location 
@@ -64,7 +66,7 @@ namespace SwarmSimFramework.Classes.Entities
                 this.MoveTo(robot.Middle);
            
            //Find intersections 
-           var intertesections = map.CollisionRadio(robot);
+           var intertesections = map.CollisionRadio(this);
 
            //Find two most frequent signals
             RadioIntersection max = null;
@@ -97,7 +99,7 @@ namespace SwarmSimFramework.Classes.Entities
             o[3] = max2 != null ? max2.ValueOfSignal : RadioEntity.SignalValueBounds.Min;
             o[4] = max2MeanDir.X;
             o[5] = max2MeanDir.Y;
-            return o;
+            return o.Normalize(NormalizeFuncs);
         }
         /// <summary>
         /// Set middle of 
@@ -109,8 +111,10 @@ namespace SwarmSimFramework.Classes.Entities
             this.FPoint = this.Middle;
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
-
-
+        /// <summary>
+        /// Make clone of current sensor 
+        /// </summary>
+        /// <returns></returns>
         public ISensor Clone()
         {
             return (ISensor) DeepClone();
