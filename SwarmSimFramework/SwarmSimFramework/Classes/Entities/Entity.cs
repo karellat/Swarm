@@ -15,7 +15,8 @@ namespace SwarmSimFramework.Classes.Entities
             RefactorRobotColor, 
             MineralColor, 
             FuelColor, 
-            ObstacleColor
+            ObstacleColor,
+            RadioSignalColor
         }
 
         public static int EntityColorCount = Enum.GetNames(typeof(EntityColor)).Length;
@@ -157,6 +158,24 @@ namespace SwarmSimFramework.Classes.Entities
                 output[i] = MakeNormalizationFunc(localBounds[i], outputBounds);
             }
             return output;
+        }
+        /// <summary>
+        /// Return Vector in given interval 
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static Vector2 KeepInBounds(Bounds b, Vector2 v)
+        {
+            if (v.X > b.Max)
+                v.X = b.Max;
+            if (v.X < b.Min)
+                v.X = b.Min;
+            if (v.Y > b.Max)
+                v.Y = b.Max;
+            if (v.Y < b.Min)
+                v.Y = b.Min;
+            return v;
         }
 
     }

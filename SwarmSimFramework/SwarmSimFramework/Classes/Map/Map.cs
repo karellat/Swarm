@@ -252,10 +252,25 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public bool CollisionRadio(CircleEntity entity)
         {
+            var intersections = new Dictionary<int, RadioIntersection>();
             foreach (var r in RadionEntities)
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
-                    return true;
+                {
+                    var i = (RadioEntity) r; 
+                    if(intersections.ContainsKey(r.ValueOfSignal))
+                    {
+                        intersections[i.ValueOfSignal].SumOfDirections += i.Middle;
+                        intersections[i.ValueOfSignal].AmountOfSignal++;
+                    }
+                    else
+                    {
+                        var ir = new RadioIntersection(i.ValueOfSignal);
+                        ir.AmountOfSignal++;
+                        ir.SumOfDirections += i.Middle;
+                        intersections.Add(i.ValueOfSignal,ir);
+                    }
+                }
             }
 
             return false; 

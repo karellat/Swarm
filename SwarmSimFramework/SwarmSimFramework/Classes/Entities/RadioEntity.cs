@@ -9,15 +9,29 @@ namespace SwarmSimFramework.Classes.Entities
 {
     public class RadioEntity : CircleEntity
     {
-
-
+        /// <summary>
+        /// Value of transmitting signal 
+        /// </summary>
+        public int ValueOfSignal;
+        /// <summary>
+        /// Create clone of radioEnity
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
-            throw new NotImplementedException();
+            return (Entity) this.MemberwiseClone();
+        }
+        /// <summary>
+        /// RadioSignal Entity
+        /// </summary>
+        /// <param name="middle"></param>
+        /// <param name="radius"></param>
+        /// <param name="valueOfSignal"></param>
+        public RadioEntity(Vector2 middle, float radius, int valueOfSignal) : base(middle, radius, "RadioSignalEntity")
+        {
+            ValueOfSignal = valueOfSignal;
         }
 
-        public RadioEntity(Vector2 middle, float radius, string name, float orientation = 0) : base(middle, radius, name, orientation)
-        {
-        }
+        public static Bounds SignalValueBounds = new Bounds() {Max = 100, Min = -100};
     }
 }

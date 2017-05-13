@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Numerics;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
@@ -50,9 +51,9 @@ namespace SwarmSimFramework.Classes.Entities
             //Normalize output
             LocalBounds = new Bounds[Dimension];
             // sqrt distance bounds 
-            LocalBounds[0] = new Bounds() {Min = 0, Max = lenght*lenght};
-            // amount of types
-            LocalBounds[1] = new Bounds() {Min = 0, Max = Entity.EntityColorCount - 1}; 
+            LocalBounds[0] = new Bounds() {Min = 0, Max = lenght};
+            // amount of types, colors  + 1 for null 
+            LocalBounds[1] = new Bounds() {Min = 0, Max = Entity.EntityColorCount}; 
             //Create normalization func to robot normal values
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
@@ -67,8 +68,11 @@ namespace SwarmSimFramework.Classes.Entities
                     this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
                 //Count from the map 
                 Intersection intersection = map.Collision(this, robot);
-
-                float[] output = new[] {intersection.Distance, (float) intersection.CollidingEntity.Color};
+                float[] output;
+                if (intersection.Distance == Double.PositiveInfinity)
+                    output = new[] {LocalBounds[0].Max, LocalBounds[1].Max};
+                else 
+                    output = new[] {(float) Math.Sqrt(intersection.Distance), (float) intersection.CollidingEntity.Color};
             //Normalize output
                 return output.Normalize(NormalizeFuncs);
             }
