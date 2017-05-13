@@ -828,6 +828,174 @@ namespace UnitTests
 
     }
 
+    [TestClass]
+    public class FuelLineSensorTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            FuelLineSensor l1 = new FuelLineSensor(r, 1, 0);
+            FuelLineSensor l2 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(90));
+            FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
+            FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
+
+            Assert.AreEqual(new Vector2(3, 4), l1.A);
+            Assert.AreEqual(new Vector2(3, 5), l1.B);
+            Assert.AreEqual(new Vector2(2, 3), l2.A);
+            Assert.AreEqual(new Vector2(1, 3), l2.B);
+            Assert.AreEqual(new Vector2(3, 2), l3.A);
+            Assert.AreEqual(new Vector2(3, 1), l3.B);
+            Assert.AreEqual(new Vector2(4, 3), l4.A);
+            Assert.AreEqual(new Vector2(5, 3), l4.B);
+        }
+
+        [TestMethod]
+        public void IntersectionTest()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            FuelLineSensor l1 = new FuelLineSensor(r, 1, 0);
+            FuelLineSensor l2 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(90));
+            FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
+            FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
+
+            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 6), 1,0));
+            float[] o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+        }
+
+        [TestMethod]
+        public void Intersection2Test()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            FuelLineSensor l1 = new FuelLineSensor(r, 1, 0);
+            FuelLineSensor l2 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(90));
+            FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
+            FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
+
+            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 5.5f), 1,0));
+            float[] o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 0.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+        }
+
+        [TestMethod]
+        public void RotationTest()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            FuelLineSensor l1 = new FuelLineSensor(r, 1, 0);
+            FuelLineSensor l2 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(90));
+            FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
+            FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
+            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 5.5f), 1, 0));
+
+            float[] o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 0.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            r.RotateDegrees(-90);
+            o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 0.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            r.RotateDegrees(-90);
+            o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 0.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            r.RotateDegrees(-90);
+            o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 0.0f);
+        }
+
+        [TestMethod]
+        public void MovingTest()
+        {
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
+            FuelLineSensor l1 = new FuelLineSensor(r, 1, 0);
+            FuelLineSensor l2 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(90));
+            FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
+            FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
+            map.FuelEntities.Add(new FuelEntity(new Vector2(7, 3), 1.5f,0));
+
+            float[] o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+
+            r.MoveTo(new Vector2(4, 3));
+
+
+
+            o = l1.Count(r, map);
+            Assert.AreEqual(new Vector2(4, 5), l1.B);
+            Assert.AreEqual(new Vector2(4, 4), l1.A);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(new Vector2(2, 3), l2.B);
+            Assert.AreEqual(new Vector2(3, 3), l2.A);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(new Vector2(4, 2), l3.A);
+            Assert.AreEqual(new Vector2(4, 1), l3.B);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+
+            Assert.AreEqual(new Vector2(5, 3), l4.A);
+            Assert.AreEqual(new Vector2(6, 3), l4.B);
+            Assert.AreEqual(o[0], 0.0f);
+
+            r.MoveTo(new Vector2(4.5f, 3));
+
+            o = l1.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l2.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l3.Count(r, map);
+            Assert.AreEqual(o[0], 100.0f);
+            o = l4.Count(r, map);
+            Assert.AreEqual(o[0], -100.0f);
+        }
+    }
+
     public static class TestExtensions
     {
         public static void AssertArrayEquality(float[] a, float[] b)

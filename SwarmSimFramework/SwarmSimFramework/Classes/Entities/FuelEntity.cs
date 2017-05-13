@@ -29,7 +29,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="name"></param>
         /// <param name="capacity"></param>
         /// <param name="orientation"></param>
-        public FuelEntity(Vector2 middle, float radius, string name, float capacity, float orientation = 0) : base(middle, radius, name, orientation)
+        public FuelEntity(Vector2 middle, float radius, float capacity, float orientation = 0) : base(middle, radius, "FuelEntity", orientation)
         {
             Capacity = capacity;
         }

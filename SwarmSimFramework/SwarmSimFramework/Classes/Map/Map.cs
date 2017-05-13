@@ -169,12 +169,10 @@ namespace SwarmSimFramework.Classes.Map
                 Distance = float.PositiveInfinity,
                 IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity)
             };
-            Vector2 intersection;
-            float testedDistance;
             //Collisions with borders 
             // A -------- B 
-            intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, A, B);
-            testedDistance = Vector2.DistanceSquared(intersection, entity.A);
+            var intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, A, B);
+            var testedDistance = Vector2.DistanceSquared(intersection, entity.A);
             if (testedDistance < theNearestIntersection.Distance)
             {
                 theNearestIntersection.Distance = testedDistance;
@@ -307,28 +305,35 @@ namespace SwarmSimFramework.Classes.Map
             return o; 
         }
         /// <summary>
-        /// True if colides with any fuel, do not interact with that 
+        /// Return Intersection of colliding fuel 
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public Vector2 CollisionFuel(LineEntity entity)
+        public Intersection CollisionFuel(LineEntity entity)
         {
-            Vector2 theNearestPoint = new Vector2(float.PositiveInfinity,float.PositiveInfinity);
-            float theNearestDistance = float.PositiveInfinity;
+            Intersection theNearestPoint = new Intersection()
+            {
+                CollidingEntity = null,
+                Distance = float.PositiveInfinity,
+                IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity)
+            }; 
+
             foreach (var f in FuelEntities)
             {
                 foreach (var i in Intersections.CircleLineSegmentIntersection(f.Middle, f.Radius, entity.A, entity.B))
                 {
                     float testedDistance = Vector2.DistanceSquared(entity.A,i);
-                    if (testedDistance < theNearestDistance)
+                    if (testedDistance < theNearestPoint.Distance)
                     {
-                        theNearestDistance = testedDistance;
-                        theNearestPoint = i;
+                        theNearestPoint.Distance = testedDistance;
+                        theNearestPoint.IntersectionPoint = i;
+                        theNearestPoint.CollidingEntity = f; 
                     }
                 }
             }
 
             return theNearestPoint;
+
         }
         //PUBLIC MEMBERS
         //Characteristcs of map 

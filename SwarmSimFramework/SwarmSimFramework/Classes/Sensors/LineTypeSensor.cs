@@ -18,8 +18,6 @@ namespace SwarmSimFramework.Classes.Entities
 
         public Bounds[] LocalBounds { get; protected set; }
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
-
-        protected float ShiftTypeOutput; 
         /// <summary>
         /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
         /// </summary>
