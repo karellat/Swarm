@@ -1,4 +1,5 @@
 ﻿using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes
 {
@@ -9,7 +10,6 @@ namespace SwarmSimFramework.Classes
         /// </summary>
         /// <returns></returns>
         int Dimension { get; }
-
         /// <summary>
         /// Make initial connection methods, normalize inputs etc.
         /// </summary>
@@ -23,13 +23,13 @@ namespace SwarmSimFramework.Classes
         /// <param name="map"></param>
         void Effect(float[] settings, RobotEntity robot, Map.Map map);
         /// <summary>
-        /// Get maximum possible value of receiving settings
+        /// Bounds for every dimension of effector intern settings 
         /// </summary>
-        float MaxInputValue { get; }
+        Bounds[] LocalBounds { get; }
         /// <summary>
-        /// Get minimum possible value of receiving settings
+        /// Normalization func from robot bounds to intern settings
         /// </summary>
-        float MinInputValue { get; }
+        NormalizeFunc[] NormalizeFuncs { get; }
         /// <summary>
         /// Get shape of representing entity
         /// </summary>

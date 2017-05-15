@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using SwarmSimFramework.Interfaces;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
 {
