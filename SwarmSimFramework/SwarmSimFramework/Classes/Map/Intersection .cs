@@ -42,12 +42,12 @@ namespace SwarmSimFramework.Classes.Map
     public class ColorIntersection
     {
         public Entity.EntityColor Color;
-        public int AmountOfSignal;
+        public int Amount;
 
         public ColorIntersection(Entity.EntityColor color)
         {
             Color = color;
-            AmountOfSignal = 1; 
+            Amount = 1; 
         }
     }
 }

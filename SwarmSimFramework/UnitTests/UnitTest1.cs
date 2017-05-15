@@ -555,6 +555,7 @@ namespace UnitTests
     [TestClass]
     public class LineTypeSensorTests
     {
+        public static float ObstacleColorCount = (float) Math.Round((float) Entity.EntityColor.ObstacleColor/(float) Entity.EntityColorCount * 200 -100,4);
         [TestMethod]
         public void InitTest()
         {
@@ -588,7 +589,7 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(3,6),1));
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0],100.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
             o = l2.Count(r, map);
             Assert.AreEqual(o[0],100.0f);
             Assert.AreEqual(o[1],100.0f);
@@ -613,7 +614,7 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(3, 5.5f), 1));
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0],0.0f);
-            Assert.AreEqual(o[1],50.0f);
+            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -638,7 +639,7 @@ namespace UnitTests
 
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -654,7 +655,7 @@ namespace UnitTests
             Assert.AreEqual(o[1], 100.0f);
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -670,7 +671,8 @@ namespace UnitTests
             Assert.AreEqual(o[1], 100.0f);
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -686,7 +688,7 @@ namespace UnitTests
             Assert.AreEqual(o[1], 100.0f);
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
         }
 
         [TestMethod]
@@ -737,7 +739,7 @@ namespace UnitTests
             Assert.AreEqual(new Vector2(5,3),l4.A );
             Assert.AreEqual(new Vector2(6, 3), l4.B);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
 
             r.MoveTo(new Vector2(4.5f,3));
 
@@ -752,7 +754,7 @@ namespace UnitTests
             Assert.AreEqual(o[1], 100.0f);
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], -100.0f);
-            Assert.AreEqual(o[1], 50.0f);
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
         }
     }
 
@@ -1046,6 +1048,48 @@ namespace UnitTests
             TestExtensions.AssertArrayEquality(new[] { 0.0f, 0.0f, 0.0f, 100.0f }, ls.Count(r, map));
             r.RotateDegrees(45);
             TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, -70.71068f,70.71068f},ls.Count(r,map));
+        }
+    }
+
+    [TestClass]
+    public class TypeCircleSensorTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(30,30),5);
+            TypeCircleSensor ts = new TypeCircleSensor(r,50);
+            TestExtensions.AssertArrayEquality(new [] {-100.0f,-100,-100},ts.Count(r,map));
+        }
+
+        [TestMethod]
+        public void IntersectionTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>()); 
+            EmptyRobot r = new EmptyRobot(new Vector2(20,20),5);
+            TypeCircleSensor ts = new TypeCircleSensor(r,50);
+            map.PasiveEntities.Add(new Circle(new Vector2(10,10),1));
+            map.PasiveEntities.Add(new Circle(new Vector2(13, 10), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(10, 13), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(13, 13), 1));
+            TestExtensions.AssertArrayEquality(new []{-100.0f,-92,-100},ts.Count(r,map));
+        }
+
+        [TestMethod]
+        public void Intersection2Test()
+        {
+            Map map = new Map(200,200,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(30,30),5);
+            TypeCircleSensor ts = new TypeCircleSensor(r,50);
+            map.PasiveEntities.Add(new Circle(new Vector2(10, 10), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(13, 10), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(10, 13), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(13, 13), 1));
+            map.PasiveEntities.Add(new Circle(new Vector2(140, 140), 1));
+            TestExtensions.AssertArrayEquality(new[] { -100.0f, -92, -100 }, ts.Count(r, map));
+            r.MoveTo(new Vector2(160,160));
+            TestExtensions.AssertArrayEquality(new[] {-100.0f, -98, -100}, ts.Count(r, map));
         }
     }
 

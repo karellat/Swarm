@@ -339,6 +339,46 @@ namespace SwarmSimFramework.Classes.Map
             return theNearestPoint;
 
         }
+        // COLISION THAT COUNTS COLOR 
+        public Dictionary<Entity.EntityColor, ColorIntersection> CollisionColor(CircleEntity entity)
+        {
+            Dictionary<Entity.EntityColor, ColorIntersection> o = new Dictionary<Entity.EntityColor, ColorIntersection>();
+            //Collision with other robots: 
+            foreach (var r in Robots)
+            {
+                if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
+                {
+                    if (o.ContainsKey(r.Color))
+                        o[r.Color].Amount++;
+                    else
+                        o.Add(r.Color,new ColorIntersection(r.Color));
+                }
+            }
+            //Collision with passive entities: 
+            foreach (var p in PasiveEntities)
+            {
+                if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, p.Middle, p.Radius))
+                {
+                    if (o.ContainsKey(p.Color))
+                        o[p.Color].Amount++;
+                    else
+                        o.Add(p.Color, new ColorIntersection(p.Color));
+                }
+            }
+            //Collision with fuel entities 
+            foreach (var f in FuelEntities)
+            {
+                if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, f.Middle, f.Radius))
+                {
+                    if (o.ContainsKey(f.Color))
+                        o[f.Color].Amount++;
+                    else
+                        o.Add(f.Color, new ColorIntersection(f.Color));
+                }
+            }
+
+            return o;
+        }
         //PUBLIC MEMBERS
         //Characteristcs of map 
         //border vertices

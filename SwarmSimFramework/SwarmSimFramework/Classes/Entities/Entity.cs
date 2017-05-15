@@ -14,7 +14,7 @@ namespace SwarmSimFramework.Classes.Entities
             WorkerRobotColor, 
             RefactorRobotColor, 
             MineralColor, 
-            FuelColor, 
+            FuelColor,
             ObstacleColor,
             RadioSignalColor
         }
