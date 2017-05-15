@@ -368,7 +368,7 @@ namespace SwarmSimFramework.Classes.Map
         public float MaxHeight { get; protected set; }
         /// <summary>
         /// Maximum width of map 
-        /// </summary>
+        /// </summary> 
         public float MaxWidth { get; protected set;  }
         /// <summary>
         /// Stores every actively moving entities on the map 

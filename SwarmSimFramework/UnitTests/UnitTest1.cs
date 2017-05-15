@@ -996,6 +996,59 @@ namespace UnitTests
         }
     }
 
+
+
+    [TestClass]
+    public class LocatorTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(200,200, new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+
+            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
+            LocatorSensor ls = new LocatorSensor(r);
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, 0.0f, 100.0f},ls.Count(r,map));
+
+        }
+
+        [TestMethod]
+        public void MoveTest()
+        {
+            Map map = new Map(400,400,new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(200, 200), 1);
+            LocatorSensor ls = new LocatorSensor(r);
+            TestExtensions.AssertArrayEquality(new [] {0.0f,0.0f,0.0f,100.0f},ls.Count(r,map));
+            r.MoveTo(new Vector2(200,201));
+            TestExtensions.AssertArrayEquality(new [] {0.0f,0.5f,0.0f,100.0f},ls.Count(r,map));
+            r.MoveTo(new Vector2(201,201));
+            TestExtensions.AssertArrayEquality(new[] {0.5f, 0.5f, 0.0f, 100.0f}, ls.Count(r, map));
+            r.MoveTo(new Vector2(198,198));
+            TestExtensions.AssertArrayEquality(new[] {-1, -1, 0, 100.0f}, ls.Count(r, map));
+            r.MoveTo(new Vector2(134,246));
+            TestExtensions.AssertArrayEquality(new [] {-33,23,0,100.0f},ls.Count(r,map));
+        }
+
+        [TestMethod]
+        public void RotationTest()
+        {
+            Map map = new Map(400,400,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>() );
+            EmptyRobot r = new EmptyRobot(new Vector2(200, 200), 1);
+            LocatorSensor ls = new LocatorSensor(r);
+            TestExtensions.AssertArrayEquality(new[] { 0.0f, 0.0f, 0.0f, 100.0f }, ls.Count(r, map));
+            r.RotateDegrees(90);
+            TestExtensions.AssertArrayEquality(new [] {0,0,-100.0f,0},ls.Count(r,map));
+            r.RotateDegrees(90);
+            TestExtensions.AssertArrayEquality(new [] {0,0,0,-100.0f},ls.Count(r,map));
+            r.RotateDegrees(90);
+            TestExtensions.AssertArrayEquality(new[] {0, 0, 100.0f, 0}, ls.Count(r, map));
+            r.RotateDegrees(90);
+            TestExtensions.AssertArrayEquality(new[] { 0.0f, 0.0f, 0.0f, 100.0f }, ls.Count(r, map));
+            r.RotateDegrees(45);
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, -70.71068f,70.71068f},ls.Count(r,map));
+        }
+    }
+
     public static class TestExtensions
     {
         public static void AssertArrayEquality(float[] a, float[] b)

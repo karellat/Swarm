@@ -36,4 +36,18 @@ namespace SwarmSimFramework.Classes.Map
             return new Vector2(SumOfDirections.X / AmountOfSignal, SumOfDirections.Y / AmountOfSignal);
         }
     }
+    /// <summary>
+    /// Represent intersection with colors
+    /// </summary>
+    public class ColorIntersection
+    {
+        public Entity.EntityColor Color;
+        public int AmountOfSignal;
+
+        public ColorIntersection(Entity.EntityColor color)
+        {
+            Color = color;
+            AmountOfSignal = 1; 
+        }
+    }
 }

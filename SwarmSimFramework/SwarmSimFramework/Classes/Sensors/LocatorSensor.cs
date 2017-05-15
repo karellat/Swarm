@@ -9,9 +9,17 @@ namespace SwarmSimFramework.Classes.Entities
     /// </summary>
     public class LocatorSensor : CircleEntity,ISensor
     {
-
+        /// <summary>
+        /// Dimension of the locator sensor
+        /// </summary>
         public int Dimension { get; }
+        /// <summary>
+        /// Intern value bounds
+        /// </summary>
         public Bounds[] LocalBounds { get; }
+        /// <summary>
+        /// Normalization functions to robot values
+        /// </summary>
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Locator sensor constructor
@@ -24,15 +32,23 @@ namespace SwarmSimFramework.Classes.Entities
             LocalBounds = new Bounds[4];
             LocalBounds[0] = new Bounds() { Max = 0, Min = 0 };
             LocalBounds[1] = new Bounds() { Max = 0, Min = 0 };
-            LocalBounds[2] = new Bounds() { Max = 0, Min = 0 };
-            LocalBounds[3] = new Bounds() { Max = 0, Min = 0 };
+            LocalBounds[2] = new Bounds() { Max = robot.Radius, Min = -robot.Radius };
+            LocalBounds[3] = new Bounds() { Max = robot.Radius, Min = -robot.Radius };
         }
-
+        /// <summary>
+        /// Make deep clone of sensor
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
             return (Entity) this.MemberwiseClone();
         }
-
+        /// <summary>
+        /// Count output from robot position, if map size change bounds and normalization fnc
+        /// </summary>
+        /// <param name="robot"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
         public float[] Count(RobotEntity robot, Map.Map map)
         {
             Middle = robot.Middle;
@@ -41,9 +57,7 @@ namespace SwarmSimFramework.Classes.Entities
             if (map.MaxWidth != LocalBounds[0].Max || map.MaxHeight != LocalBounds[1].Max)
             {
                 LocalBounds[0].Max = map.MaxWidth;
-                LocalBounds[2].Max = map.MaxWidth;
                 LocalBounds[1].Max = map.MaxHeight;
-                LocalBounds[3].Max = map.MaxHeight;
                 NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
             }
 
@@ -53,18 +67,23 @@ namespace SwarmSimFramework.Classes.Entities
             return o.Normalize(NormalizeFuncs);
 
         }
-
+        /// <summary>
+        /// Change to robot bounds
+        /// </summary>
+        /// <param name="robot"></param>
         public void ConnectToRobot(RobotEntity robot)
         {
             Middle = robot.Middle;
             FPoint = Middle;
             LocalBounds[0] = new Bounds() { Max = 0, Min = 0 };
             LocalBounds[1] = new Bounds() { Max = 0, Min = 0 };
-            LocalBounds[2] = new Bounds() { Max = 0, Min = 0 };
-            LocalBounds[3] = new Bounds() { Max = 0, Min = 0 };
+            LocalBounds[2] = new Bounds() { Max = robot.Radius, Min = -robot.Radius };
+            LocalBounds[3] = new Bounds() { Max = robot.Radius, Min = -robot.Radius };
         }
-
-
+        /// <summary>
+        /// Return clone of sensor
+        /// </summary>
+        /// <returns></returns>
         public ISensor Clone()
         {
             return (ISensor) DeepClone();

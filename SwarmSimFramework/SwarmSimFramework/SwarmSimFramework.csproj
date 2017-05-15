@@ -54,10 +54,10 @@
     <Compile Include="Classes\Entities\LineEntity.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
-    <Compile Include="Classes\Sensors\LineDistanceSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
     <Compile Include="Classes\Entities\RadioEntity.cs" />
     <Compile Include="Classes\Entities\RobotEntity.cs" />
+    <Compile Include="Classes\Sensors\LocatorSensor.cs" />
     <Compile Include="Classes\Sensors\RadioSensor.cs" />
     <Compile Include="Classes\Sensors\TouchSensor.cs" />
     <Compile Include="Classes\Sensors\TypeCircleSensor.cs" />
