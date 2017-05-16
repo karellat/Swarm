@@ -1309,7 +1309,6 @@ namespace UnitTests
             Assert.AreEqual(c.FPoint, fc);
 
         }
-
         [TestMethod]
         public void PickUpNothingTest()
         {
@@ -1317,6 +1316,64 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             Picker p = new Picker(r, 10, 0);
             Circle c = new Circle(new Vector2(150, 150), 3);
+            map.PasiveEntities.Add(c);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            p.Effect(new[] { 100.0f }, r, map);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.IsTrue(null == r.PopContainer());
+            Assert.AreEqual(1, r.InvalidOperationWithContainer);
+        }
+        [TestMethod]
+        public void PutNothingTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
+            Circle c = new Circle(new Vector2(150, 150), 3);
+            map.PasiveEntities.Add(c);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.InvalidOperationWithContainer);
+            p.Effect(new [] {-100.0f},r,map);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(1, r.InvalidOperationWithContainer);
+        }
+
+        [TestMethod]
+        public void PickUpBiggerEntity()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
+            Circle c = new Circle(new Vector2(100, 120), 11);
+            map.PasiveEntities.Add(c);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            p.Effect(new[] { 100.0f }, r, map);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(null, r.PeekContainer());
+            
+        }
+
+        [TestMethod]
+        public void PutDownCollidingEntity()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
+            Circle c = new Circle(new Vector2(100, 120), 15);
+            map.PasiveEntities.Add(c);
+            Circle c1 = new Circle(new Vector2(0,0),1);
+            r.PushContainer(c1);
+            p.Effect(new[] {-100.0f}, r, map);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(c1, r.PeekContainer());
+
         }
     }
 

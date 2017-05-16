@@ -3,11 +3,14 @@ cd # Diary of project
 
 ## TODO: 
 REFACTOR WHOLE PROJECT
+Add consuming fuel to effectors
 ## Q&A: 
 ### Implementation:  
 * How long should be GetString();
+* How to log? 
 ### Evolution: 
 * Radio sensor, what should it return?
+* Added memory, does it make sense? 
 ### Days of actual sollution
 
 * 05.05.2017 - 
@@ -50,7 +53,7 @@ REFACTOR WHOLE PROJECT
 	* bounds struct created 
 	* NormalizeFunc struct created
 	* TypeLineSensor implemented
-* 13.05.2017 
+* 13.05.2017
 	* LineTypeSensor tested
 	* Map RadioCollision refactor 
 	* RadioEntity implemented 
@@ -59,6 +62,18 @@ REFACTOR WHOLE PROJECT
 	* RadioSensor tested
 	* FuelLineSensor implemented 
 	* FuelLineSensor tested
+	* LocatorSensor implemented
+* 15.05.2017
+	* LocatorSensor tested 
+	* ColorIntersection definition
+	* ColorCollision added to Map
+	* TypeCircleSensor implemented & tested
+	* TwoWheelMotor implemented & tested, change dir. of rotation
+* 16.05.2017
+	* RadioTransmitter implemented & tested 
+	* Add container stack to RobotEntity
+	* Picker implemented & tested (3 modes, Pick Up,Put,Idle), pick up objects of max picker length 
+
 
 
 	
