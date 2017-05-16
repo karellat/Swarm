@@ -36,7 +36,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Amount of invalid pick up or put with container
         /// </summary>
-        public long InvalidOperationWithContainer; 
+        public long InvalidOperationWithContainer;
+        /// <summary>
+        /// Amount of invalid refactor operation
+        /// </summary>
+        public long InvalidOperationWithRefactor;
         /// <summary>
         /// Starting point of robot
         /// </summary>
@@ -165,9 +169,13 @@ namespace SwarmSimFramework.Classes.Entities
         public void Reset()
         {
             CollisionDetected = 0;
+            InvalidOperationWithContainer = 0;
+            InvalidOperationWithRefactor = 0;
             StartingPoint = Middle;
             LastReadValues = null;
             BrainDecidedValues = null;
+            Container.Clear();
+            ActualContainerSize = 0;
         }
         /// <summary>
         /// Deep clone of Robot entity, map & brain are null
