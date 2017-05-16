@@ -9,7 +9,9 @@ namespace SwarmSimFramework.Classes.Effectors
     /// </summary>
     public class MineralRefactor : CircleEntity,IEffector
     {
-
+        protected int CyclesToEnd;
+        protected float FuelToRefactor;
+        protected bool Refactoring;
         public Bounds[] LocalBounds { get; }
         public NormalizeFunc[] NormalizeFuncs { get; protected set;  }
         public int Dimension { get; }
@@ -42,7 +44,55 @@ namespace SwarmSimFramework.Classes.Effectors
             //Update position 
             this.MoveTo(robot.Middle);
 
-            var s = settings.Normalize(NormalizeFuncs);
+            var s = settings.Normalize(NormalizeFuncs)[0];
+            //Refactor
+            if (s >= 0 && s <= 1)
+            {
+                //refactor currently running 
+                if (Refactoring)
+                {
+                    if (CyclesToEnd == 0)
+                    {
+                        if (robot.ActualContainerSize < robot.ContainerMaxCapacity)
+                        {
+                            Refactoring = false;
+                            robot.PushContainer(new FuelEntity(Vector2.Zero, FuelEntity.FuelRadius, FuelToRefactor));
+                            FuelToRefactor = 0;
+                            return;
+                        }
+                        else
+                        {
+                            //Non empty container
+                            robot.InvalidOperationWithRefactor++;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        CyclesToEnd--;
+                        return;
+                    }
+                }
+                else
+                {
+                    if (robot.PeekContainer() == null || !(robot.PeekContainer() is MineralEntity))
+                    {
+                        robot.InvalidOperationWithRefactor++;
+                        return;
+                    }
+                    else
+                    {
+                        //Dismantle mineral
+                        var m = (MineralEntity) robot.PopContainer();
+                        Refactoring = true;
+                        CyclesToEnd = m.CycleToRefactor;
+                        FuelToRefactor = m.FuelToRefactor;
+                        return; 
+                    }
+                }
+
+            }
+            //ELSE Idle 
         }
 
 

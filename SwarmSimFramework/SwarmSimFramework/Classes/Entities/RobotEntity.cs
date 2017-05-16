@@ -184,6 +184,7 @@ namespace SwarmSimFramework.Classes.Entities
         public override Entity DeepClone()
         {
             RobotEntity r = (RobotEntity) this.MemberwiseClone();
+            r.Container = new Stack<CircleEntity>();
             r.Reset();
             r.Brain = null;
             r.Effectors = new IEffector[Effectors.Length];
@@ -198,7 +199,7 @@ namespace SwarmSimFramework.Classes.Entities
                 r.Sensors[i] = Sensors[i].Clone(); 
                 r.Sensors[i].ConnectToRobot(r);
             }
-
+            
             return r;
         }
         /// <summary>

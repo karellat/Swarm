@@ -5,6 +5,7 @@ namespace SwarmSimFramework.Classes.Entities
 {
     public class FuelEntity : CircleEntity
     {
+        public static float FuelRadius = 5.0f;
         /// <summary>
         /// True if the tank was consumed
         /// </summary>
