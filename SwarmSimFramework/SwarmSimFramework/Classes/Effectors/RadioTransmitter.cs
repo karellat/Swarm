@@ -62,7 +62,9 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <returns></returns>
         public override Entity DeepClone()
         {
-            return (Entity) this.MemberwiseClone();
+            var r = (RadioTransmitter) this.MemberwiseClone();
+            r.radioSignal = (RadioEntity) r.radioSignal.DeepClone();
+            return r;
         }
         /// <summary>
         /// Connect to robot

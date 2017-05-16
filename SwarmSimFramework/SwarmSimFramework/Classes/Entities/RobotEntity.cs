@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using SwarmSimFramework.Interfaces;
@@ -20,7 +21,6 @@ namespace SwarmSimFramework.Classes.Entities
         /// Sensors of robot
         /// </summary>
         public ISensor[] Sensors;
-
         /// <summary>
         /// Robot brains decide setting of effectors based on read sensors 
         /// </summary>
@@ -33,6 +33,10 @@ namespace SwarmSimFramework.Classes.Entities
         /// Detected collision from last reset
         /// </summary>
         public long CollisionDetected;
+        /// <summary>
+        /// Amount of invalid pick up or put with container
+        /// </summary>
+        public long InvalidOperationWithContainer; 
         /// <summary>
         /// Starting point of robot
         /// </summary>
@@ -48,10 +52,12 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Interval  of values  between sensor -> brain , brain -> effector
         /// </summary>
-        public Bounds NormalizedBound; 
+        public Bounds NormalizedBound;
         /// <summary>
-        /// Actual map, where the robot moves 
+        /// Max capacity of container
         /// </summary>
+        public int ContainerMaxCapacity { get; protected set; }
+        public int ActualContainerSize { get; protected set; }
         //PRIVATE MEMBERS
         /// <summary>
         /// Last values from last invoke of PrepareMove
@@ -61,6 +67,10 @@ namespace SwarmSimFramework.Classes.Entities
         /// Effector setting from Brain based on lastReadValues
         /// </summary>
         protected float[] BrainDecidedValues;
+        /// <summary>
+        /// Intern container for entities 
+        /// </summary>
+        protected Stack<CircleEntity> Container;
         //CONSTRUCTOR
         /// <summary>
         /// Create new entity with given sensors and effectors 
@@ -75,11 +85,14 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="normalizeMax"></param>
         /// <param name="normalizeMin"></param>
         /// <param name="orientation"></param>
-        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
+        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,int sizeOfContainer = 0,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
         {
             //Normalize values
             NormalizedBound = new Bounds() {Max = normalizeMax, Min = normalizeMin};
-            //Effectors & Sensors 
+            //Effectors & Sensors, container
+            Container = new Stack<CircleEntity>(sizeOfContainer);
+            ContainerMaxCapacity = sizeOfContainer;
+            ActualContainerSize = 0;
             Effectors = effectors;
             Sensors = sensors;
             //Count dimensions
@@ -187,6 +200,49 @@ namespace SwarmSimFramework.Classes.Entities
         public void ConsumeFuel(FuelEntity fuelTank)
         {
            FuelAmount += fuelTank.Suck();
+        }
+        //Container control
+        /// <summary>
+        /// Return true if adding was succesfull, return false if not,
+        /// Add the entityCargo to robotContainer
+        /// </summary>
+        /// <param name="entityCargo"></param>
+        /// <returns></returns>
+        public bool PushContainer(CircleEntity entityCargo)
+        {
+            if (ContainerMaxCapacity == ActualContainerSize)
+                return false;
+            else
+            { 
+                Container.Push(entityCargo);
+                ActualContainerSize++;
+                return true;
+            }
+        }
+        /// <summary>
+        /// Return from top of the container or null if empty 
+        /// </summary>
+        /// <returns></returns>
+        public CircleEntity PopContainer()
+        {
+            if (ActualContainerSize == 0)
+                return null;
+            else
+            {
+                ActualContainerSize--;
+                return Container.Pop();
+            }
+        }
+        /// <summary>
+        /// Peek the top of container, null if empty
+        /// </summary>
+        /// <returns></returns>
+        public CircleEntity PeekContainer()
+        {
+            if (ActualContainerSize == 0)
+                return null;
+            else
+                return Container.Peek();
         }
 
  

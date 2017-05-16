@@ -44,7 +44,7 @@ namespace UnitTests
 
     internal class EmptyRobot : RobotEntity
     {
-        public EmptyRobot(Vector2 middle, float radius) : base(middle,radius,"EmptyRobot",new  IEffector[0],new ISensor[0], 0)
+        public EmptyRobot(Vector2 middle, float radius,int containerSize = 0) : base(middle,radius,"EmptyRobot",new  IEffector[0],new ISensor[0],0,containerSize)
         {
         }
     }
@@ -1242,6 +1242,81 @@ namespace UnitTests
             Assert.AreEqual(10, map.RadioEntities[0].Radius);
             Assert.AreEqual((int)RadioEntity.SignalValueBounds.Min, map.RadioEntities[0].ValueOfSignal);
 
+        }
+    }
+
+    [TestClass]
+    public class PickerTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(200,200, new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1,1);
+            Picker p = new Picker(r,10,0);
+            Assert.AreEqual(p.RotationMiddle, r.Middle);
+            Assert.AreEqual(p.A,r.FPoint);
+            Assert.AreEqual(p.B, new Vector2(100, 111));
+            r.MoveTo(new Vector2(100,101));
+            p.Effect(new []{0.0f},r,map);
+            Assert.AreEqual(0,r.InvalidOperationWithContainer);
+            Assert.AreEqual(p.RotationMiddle, r.Middle);
+            Assert.AreEqual(p.A, r.FPoint);
+            Assert.AreEqual(p.B, new Vector2(100, 112));
+            r.MoveTo(new Vector2(100,100));
+            p.Effect(new[] { 0.0f }, r, map);
+            Assert.AreEqual(p.RotationMiddle, r.Middle);
+            Assert.AreEqual(p.A, r.FPoint);
+            Assert.AreEqual(p.B, new Vector2(100, 111));
+            r.RotateDegrees(-90);
+            p.Effect(new []{0.0f},r,map);
+            Assert.AreEqual(p.RotationMiddle, r.Middle);
+            Assert.AreEqual(p.A, r.FPoint);
+            Assert.AreEqual(p.B, new Vector2(111, 100));
+        }
+        [TestMethod]
+        public void PickUpTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
+            Circle c = new Circle(new Vector2(100,105),3);
+            map.PasiveEntities.Add(c);
+            Assert.AreEqual(1,map.PasiveEntities.Count);
+            Assert.AreEqual(0,r.ActualContainerSize);
+            p.Effect(new [] {100.0f},r,map);
+            Assert.AreEqual(0,map.PasiveEntities.Count);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(c,r.PeekContainer());
+        }
+        [TestMethod]
+        public void PutTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
+            Circle c = new Circle(new Vector2(100, 105), 3);
+            r.PushContainer(c);
+            Assert.AreEqual(0, map.PasiveEntities.Count);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(c, r.PeekContainer());
+            p.Effect(new[] {-100.0f}, r, map);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(p.B, c.Middle);
+            var fc = p.B;
+            fc.Y += c.Radius;
+            Assert.AreEqual(c.FPoint, fc);
+
+        }
+
+        [TestMethod]
+        public void PickUpNothingTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
+            Circle c = new Circle(new Vector2(150, 150), 3);
         }
     }
 
