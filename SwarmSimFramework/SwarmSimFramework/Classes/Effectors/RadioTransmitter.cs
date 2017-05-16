@@ -51,6 +51,7 @@ namespace SwarmSimFramework.Classes.Effectors
             //Create representation of radio signal 
             radioSignal = new RadioEntity(robot.Middle,radiusOfTransmitting,0);
             //Create localBounds and normalization fncs
+            Dimension = 1;
             LocalBounds = new Bounds[1];
             LocalBounds[0] = RadioEntity.SignalValueBounds;
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);

@@ -74,7 +74,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 //if empty return
                 if (robot.ActualContainerCount == 0)
                 {
-                    robot.InvalidOperationWithContainer++;
+                    robot.InvalidContainerOperation++;
                     return; 
                 }
                 var removingEntity = robot.PeekContainer();
@@ -83,7 +83,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 //Check collision
                 if (map.Collision(removingEntity))
                 {
-                    robot.InvalidOperationWithContainer++;
+                    robot.InvalidContainerOperation++;
                     return;
                 }
                 //Add to map
@@ -103,7 +103,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 //if no intersection
                 if (float.IsPositiveInfinity(intersections.Distance))
                 {
-                    robot.InvalidOperationWithContainer++;
+                    robot.InvalidContainerOperation++;
                     return;
                 }
                 //Check if entity is Circle & size is suitable for container
@@ -119,13 +119,13 @@ namespace SwarmSimFramework.Classes.Effectors
                     }
                     else
                     {
-                        robot.InvalidOperationWithContainer++;
+                        robot.InvalidContainerOperation++;
                         return;
                     }
                 }
                 else
                 {
-                    robot.InvalidOperationWithContainer++;
+                    robot.InvalidContainerOperation++;
                     return; 
                 }
 

@@ -48,11 +48,15 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Amount of invalid pick up or put with container
         /// </summary>
-        public long InvalidOperationWithContainer;
+        public long InvalidContainerOperation;
         /// <summary>
         /// Amount of invalid refactor operation
         /// </summary>
-        public long InvalidOperationWithRefactor;
+        public long InvalidRefactorOperation;
+        /// <summary>
+        /// Amount of invalid weapon operation
+        /// </summary>
+        public long InvalidWeaponOperation;
         /// <summary>
         /// Starting point of robot
         /// </summary>
@@ -195,8 +199,9 @@ namespace SwarmSimFramework.Classes.Entities
             Health = InitialHealth;
             Alive = Health > 0;
             CollisionDetected = 0;
-            InvalidOperationWithContainer = 0;
-            InvalidOperationWithRefactor = 0;
+            InvalidContainerOperation = 0;
+            InvalidRefactorOperation = 0;
+            InvalidWeaponOperation = 0;
             StartingPoint = Middle;
             LastReadValues = null;
             BrainDecidedValues = null;

@@ -1259,7 +1259,7 @@ namespace UnitTests
             Assert.AreEqual(p.B, new Vector2(100, 111));
             r.MoveTo(new Vector2(100,101));
             p.Effect(new []{0.0f},r,map);
-            Assert.AreEqual(0,r.InvalidOperationWithContainer);
+            Assert.AreEqual(0,r.InvalidContainerOperation);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 112));
@@ -1323,7 +1323,7 @@ namespace UnitTests
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.IsTrue(null == r.PopContainer());
-            Assert.AreEqual(1, r.InvalidOperationWithContainer);
+            Assert.AreEqual(1, r.InvalidContainerOperation);
         }
         [TestMethod]
         public void PutNothingTest()
@@ -1335,11 +1335,11 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            Assert.AreEqual(0, r.InvalidOperationWithContainer);
+            Assert.AreEqual(0, r.InvalidContainerOperation);
             p.Effect(new [] {-100.0f},r,map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            Assert.AreEqual(1, r.InvalidOperationWithContainer);
+            Assert.AreEqual(1, r.InvalidContainerOperation);
         }
 
         [TestMethod]
@@ -1388,17 +1388,17 @@ namespace UnitTests
             MineralRefactor mr = new MineralRefactor(r);
             Assert.AreEqual(r.Middle, mr.Middle);
             Assert.AreEqual(r.Middle, mr.FPoint);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             //Idle 
             mr.Effect(new [] {100.0f}, r,map);
             Assert.AreEqual(r.Middle, mr.Middle);
             Assert.AreEqual(r.Middle, mr.FPoint);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             r.MoveTo(new Vector2(150,150));
             mr.Effect(new[] { 100.0f }, r, map);
             Assert.AreEqual(r.Middle, mr.Middle);
             Assert.AreEqual(r.Middle, mr.FPoint);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
 
         }
 
@@ -1408,24 +1408,24 @@ namespace UnitTests
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             MineralRefactor mr = new MineralRefactor(r);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             mr.Effect(new []{-100.0f},r,map);
-            Assert.AreEqual(1, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(1, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0,mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(2, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(2, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(3, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(3, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(4, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(4, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
@@ -1439,26 +1439,26 @@ namespace UnitTests
             MineralRefactor mr = new MineralRefactor(r);
             r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(2, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(0,r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(0, r.ActualContainerCount);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(1, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(0, r.ActualContainerCount);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(1, r.ActualContainerCount);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
@@ -1473,32 +1473,32 @@ namespace UnitTests
             MineralRefactor mr = new MineralRefactor(r);
             r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(2, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(0, r.ActualContainerCount);
             r.PushContainer(new Circle(Vector2.Zero, 0));
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(1, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(1, r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(1, r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(1, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(1, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(1, r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(2, r.InvalidOperationWithRefactor);
+            Assert.AreEqual(2, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);

@@ -40,6 +40,7 @@ namespace SwarmSimFramework.Classes.Effectors
         public MineralRefactor(RobotEntity robot) : base(robot.Middle,0,"Mineral Refactor Effector")
         {
             //Create normalization fncs
+            Dimension = 1;
             LocalBounds = new Bounds[1];
             LocalBounds[0] = new Bounds() {Max = 2,Min=0};
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound,LocalBounds);
@@ -96,7 +97,7 @@ namespace SwarmSimFramework.Classes.Effectors
                         else
                         {
                             //Non empty container
-                            robot.InvalidOperationWithRefactor++;
+                            robot.InvalidRefactorOperation++;
                             return;
                         }
                     }
@@ -111,7 +112,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 {
                     if (robot.PeekContainer() == null || !(robot.PeekContainer() is MineralEntity))
                     {
-                        robot.InvalidOperationWithRefactor++;
+                        robot.InvalidRefactorOperation++;
                         return;
                     }
                     else
