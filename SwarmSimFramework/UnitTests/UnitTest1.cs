@@ -21,8 +21,9 @@ namespace UnitTests
         public Circle(Vector2 middle, float radius, Vector2 rotationMiddle, float orientation = 0) : base(middle,
             radius, "CIRCLE", rotationMiddle, orientation)
         {
-            
+
         }
+
         public override Entity DeepClone()
         {
             throw new NotImplementedException();
@@ -44,10 +45,12 @@ namespace UnitTests
 
     internal class EmptyRobot : RobotEntity
     {
-        public EmptyRobot(Vector2 middle, float radius,int containerSize = 0) : base(middle,radius,"EmptyRobot",new  IEffector[0],new ISensor[0],0,containerSize)
+        public EmptyRobot(Vector2 middle, float radius, int containerSize = 0) : base(middle, radius, "EmptyRobot",
+            new IEffector[0], new ISensor[0], 100, containerSize)
         {
         }
     }
+
     [TestClass]
     public class LineTests
     {
@@ -244,19 +247,19 @@ namespace UnitTests
         [TestMethod]
         public void DifferentRotationMiddle()
         {
-            CircleEntity c = new Circle(new Vector2(0, 3), 1, Vector2.Zero); 
+            CircleEntity c = new Circle(new Vector2(0, 3), 1, Vector2.Zero);
             c.RotateDegrees(90);
-            Assert.AreEqual(new Vector2(-3,0),c.Middle);
-            Assert.AreEqual(new Vector2(-4,0),c.FPoint);
+            Assert.AreEqual(new Vector2(-3, 0), c.Middle);
+            Assert.AreEqual(new Vector2(-4, 0), c.FPoint);
             c.RotateDegrees(90);
-            Assert.AreEqual(new Vector2(0,-3),c.Middle);
-            Assert.AreEqual(new Vector2(0,-4),c.FPoint);
+            Assert.AreEqual(new Vector2(0, -3), c.Middle);
+            Assert.AreEqual(new Vector2(0, -4), c.FPoint);
             c.RotateDegrees(90);
-            Assert.AreEqual(new Vector2(3,0),c.Middle);
-            Assert.AreEqual(new Vector2(4,0),c.FPoint);
+            Assert.AreEqual(new Vector2(3, 0), c.Middle);
+            Assert.AreEqual(new Vector2(4, 0), c.FPoint);
             c.RotateDegrees(90);
-            Assert.AreEqual(new Vector2(0,3),c.Middle);
-            Assert.AreEqual(new Vector2(0,4),c.FPoint);
+            Assert.AreEqual(new Vector2(0, 3), c.Middle);
+            Assert.AreEqual(new Vector2(0, 4), c.FPoint);
         }
     }
 
@@ -352,7 +355,8 @@ namespace UnitTests
         {
             Map map = new Map(150, 150, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             Line l = new Line(new Vector2(60, 60), new Vector2(50, 60), new Vector2(40, 60));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
             Assert.AreEqual(map.Collision(l).CollidingEntity, null);
         }
 
@@ -361,13 +365,17 @@ namespace UnitTests
         {
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             Line l = new Line(new Vector2(50, 50), new Vector2(50, 40), new Vector2(50, 60));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
             l.RotateDegrees(90);
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
             l.RotateDegrees(180);
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
             l.MoveTo(new Vector2(40, 40));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -376,7 +384,8 @@ namespace UnitTests
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             map.PasiveEntities.Add(new Circle(new Vector2(3, 2), 1));
             Line l = new Line(new Vector2(3, 0.999f), new Vector2(3, 0.5f), new Vector2(3, 0));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -386,7 +395,8 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(3, 2), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(6, 2), 1));
             Line l = new Line(new Vector2(4.5f, 1), new Vector2(4.5f, 2), new Vector2(4.5f, 0));
-            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity), map.Collision(l).IntersectionPoint);
+            Assert.AreEqual(new Vector2(float.PositiveInfinity, float.PositiveInfinity),
+                map.Collision(l).IntersectionPoint);
         }
 
         [TestMethod]
@@ -427,10 +437,10 @@ namespace UnitTests
         [TestMethod]
         public void BoundsTest()
         {
-            var b = Entity.MakeNormalizationFunc(new Bounds() {Max =2, Min = 0},
+            var b = Entity.MakeNormalizationFunc(new Bounds() {Max = 2, Min = 0},
                 new Bounds() {Min = -100, Max = 100});
             Assert.AreEqual(100, b.Rescale);
-            Assert.AreEqual(-100,b.Shift);
+            Assert.AreEqual(-100, b.Shift);
         }
     }
 
@@ -440,20 +450,20 @@ namespace UnitTests
         [TestMethod]
         public void InitTest1()
         {
-            EmptyRobot r = new EmptyRobot(new Vector2(2,0),1);
-            TouchSensor s1 = new TouchSensor(r,0.5f,0);
-            TouchSensor s2 = new TouchSensor(r,0.5f,Entity.DegreesToRadians(180));
-            Assert.AreEqual(s1.Middle,new Vector2(2,1));
-            Assert.AreEqual(s1.Radius,0.5f);
-            Assert.AreEqual(s1.FPoint,new Vector2(2,1.5f));
-            Assert.AreEqual(s2.Middle,new Vector2(2,-1));
-            Assert.AreEqual(s2.FPoint,new Vector2(2,-0.5f));
-            Assert.AreEqual(s2.Radius,0.5f);
-            TouchSensor s3 = new TouchSensor(r,0.5f,Entity.DegreesToRadians(90));
-            Assert.AreEqual(s3.Middle, new Vector2(1,0));
+            EmptyRobot r = new EmptyRobot(new Vector2(2, 0), 1);
+            TouchSensor s1 = new TouchSensor(r, 0.5f, 0);
+            TouchSensor s2 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(180));
+            Assert.AreEqual(s1.Middle, new Vector2(2, 1));
+            Assert.AreEqual(s1.Radius, 0.5f);
+            Assert.AreEqual(s1.FPoint, new Vector2(2, 1.5f));
+            Assert.AreEqual(s2.Middle, new Vector2(2, -1));
+            Assert.AreEqual(s2.FPoint, new Vector2(2, -0.5f));
+            Assert.AreEqual(s2.Radius, 0.5f);
+            TouchSensor s3 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(90));
+            Assert.AreEqual(s3.Middle, new Vector2(1, 0));
             Assert.AreEqual(s3.Radius, 0.5f);
             Assert.AreEqual(s3.FPoint, new Vector2(1, 0.5f));
-            TouchSensor s4 = new TouchSensor(r, 0.5f,Entity.DegreesToRadians(270));
+            TouchSensor s4 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(270));
             Assert.AreEqual(s4.Middle, new Vector2(3, 0));
             Assert.AreEqual(s4.Radius, 0.5f);
             Assert.AreEqual(s4.FPoint, new Vector2(3, 0.5f));
@@ -462,21 +472,21 @@ namespace UnitTests
         [TestMethod]
         public void Touch1Test()
         {
-            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>()); 
-            map.PasiveEntities.Add(new Circle(new Vector2(0.5f,2),0.2f ));
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            map.PasiveEntities.Add(new Circle(new Vector2(0.5f, 2), 0.2f));
             EmptyRobot r = new EmptyRobot(new Vector2(2, 2), 1);
             TouchSensor s1 = new TouchSensor(r, 0.5f, 0);
             TouchSensor s2 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(180));
             TouchSensor s3 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(90));
             TouchSensor s4 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(270));
-            var o = s1.Count(r, map); 
-            Assert.AreEqual(-100f,o[0]);
+            var o = s1.Count(r, map);
+            Assert.AreEqual(-100f, o[0]);
             o = s2.Count(r, map);
-            Assert.AreEqual(-100.0f,o[0]);
+            Assert.AreEqual(-100.0f, o[0]);
             o = s3.Count(r, map);
-            Assert.AreEqual( 100.0f,o[0]);
+            Assert.AreEqual(100.0f, o[0]);
             o = s4.Count(r, map);
-            Assert.AreEqual(-100.0f,o[0]);
+            Assert.AreEqual(-100.0f, o[0]);
         }
 
         [TestMethod]
@@ -490,7 +500,7 @@ namespace UnitTests
             TouchSensor s2 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(180));
             TouchSensor s3 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(90));
             TouchSensor s4 = new TouchSensor(r, 0.5f, Entity.DegreesToRadians(270));
-            r.MoveTo(new Vector2(2,2));
+            r.MoveTo(new Vector2(2, 2));
             var o = s1.Count(r, map);
             Assert.AreEqual(-100f, o[0]);
             o = s2.Count(r, map);
@@ -557,25 +567,28 @@ namespace UnitTests
     [TestClass]
     public class LineTypeSensorTests
     {
-        public static float ObstacleColorCount = (float) Math.Round((float) Entity.EntityColor.ObstacleColor/(float) Entity.EntityColorCount * 200 -100,4);
+        public static float ObstacleColorCount =
+            (float) Math.Round((float) Entity.EntityColor.ObstacleColor / (float) Entity.EntityColorCount * 200 - 100,
+                4);
+
         [TestMethod]
         public void InitTest()
         {
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
-            LineTypeSensor l1 = new LineTypeSensor(r,1,0);
-            LineTypeSensor l2 = new LineTypeSensor(r,1,Entity.DegreesToRadians(90));
-            LineTypeSensor l3 = new LineTypeSensor(r,1, Entity.DegreesToRadians(180));
-            LineTypeSensor l4 = new LineTypeSensor(r,1, Entity.DegreesToRadians(270));
+            LineTypeSensor l1 = new LineTypeSensor(r, 1, 0);
+            LineTypeSensor l2 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(90));
+            LineTypeSensor l3 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(180));
+            LineTypeSensor l4 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(270));
 
-            Assert.AreEqual(new Vector2(3,4),l1.A);
-            Assert.AreEqual(new Vector2(3,5),l1.B);
-            Assert.AreEqual(new Vector2(2,3),l2.A); 
-            Assert.AreEqual(new Vector2(1,3),l2.B);
-            Assert.AreEqual(new Vector2(3,2),l3.A);
-            Assert.AreEqual(new Vector2(3,1),l3.B);
-            Assert.AreEqual(new Vector2(4,3),l4.A);
-            Assert.AreEqual(new Vector2(5,3),l4.B);
+            Assert.AreEqual(new Vector2(3, 4), l1.A);
+            Assert.AreEqual(new Vector2(3, 5), l1.B);
+            Assert.AreEqual(new Vector2(2, 3), l2.A);
+            Assert.AreEqual(new Vector2(1, 3), l2.B);
+            Assert.AreEqual(new Vector2(3, 2), l3.A);
+            Assert.AreEqual(new Vector2(3, 1), l3.B);
+            Assert.AreEqual(new Vector2(4, 3), l4.A);
+            Assert.AreEqual(new Vector2(5, 3), l4.B);
         }
 
         [TestMethod]
@@ -588,13 +601,13 @@ namespace UnitTests
             LineTypeSensor l3 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(180));
             LineTypeSensor l4 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(270));
 
-            map.PasiveEntities.Add(new Circle(new Vector2(3,6),1));
+            map.PasiveEntities.Add(new Circle(new Vector2(3, 6), 1));
             float[] o = l1.Count(r, map);
-            Assert.AreEqual(o[0],100.0f);
-            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
+            Assert.AreEqual(o[0], 100.0f);
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
             o = l2.Count(r, map);
-            Assert.AreEqual(o[0],100.0f);
-            Assert.AreEqual(o[1],100.0f);
+            Assert.AreEqual(o[0], 100.0f);
+            Assert.AreEqual(o[1], 100.0f);
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -615,8 +628,8 @@ namespace UnitTests
 
             map.PasiveEntities.Add(new Circle(new Vector2(3, 5.5f), 1));
             float[] o = l1.Count(r, map);
-            Assert.AreEqual(o[0],0.0f);
-            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
+            Assert.AreEqual(o[0], 0.0f);
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -637,11 +650,11 @@ namespace UnitTests
             LineTypeSensor l2 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(90));
             LineTypeSensor l3 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(180));
             LineTypeSensor l4 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(270));
-            map.PasiveEntities.Add(new Circle(new Vector2(3,5.5f),1));
+            map.PasiveEntities.Add(new Circle(new Vector2(3, 5.5f), 1));
 
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
@@ -702,7 +715,7 @@ namespace UnitTests
             LineTypeSensor l2 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(90));
             LineTypeSensor l3 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(180));
             LineTypeSensor l4 = new LineTypeSensor(r, 1, Entity.DegreesToRadians(270));
-            map.PasiveEntities.Add(new Circle(new Vector2(7,3),1.5f));
+            map.PasiveEntities.Add(new Circle(new Vector2(7, 3), 1.5f));
 
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
@@ -717,13 +730,13 @@ namespace UnitTests
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
 
-            r.MoveTo(new Vector2(4,3));
+            r.MoveTo(new Vector2(4, 3));
 
 
 
             o = l1.Count(r, map);
-            Assert.AreEqual(new Vector2(4,5), l1.B);
-            Assert.AreEqual(new Vector2(4,4),l1.A);
+            Assert.AreEqual(new Vector2(4, 5), l1.B);
+            Assert.AreEqual(new Vector2(4, 4), l1.A);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
             o = l2.Count(r, map);
@@ -732,18 +745,18 @@ namespace UnitTests
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
             o = l3.Count(r, map);
-            Assert.AreEqual(new Vector2(4,2),l3.A);
-            Assert.AreEqual(new Vector2(4, 1), l3.B); 
+            Assert.AreEqual(new Vector2(4, 2), l3.A);
+            Assert.AreEqual(new Vector2(4, 1), l3.B);
             Assert.AreEqual(o[0], 100.0f);
             Assert.AreEqual(o[1], 100.0f);
             o = l4.Count(r, map);
 
-            Assert.AreEqual(new Vector2(5,3),l4.A );
+            Assert.AreEqual(new Vector2(5, 3), l4.A);
             Assert.AreEqual(new Vector2(6, 3), l4.B);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1],4),Math.Round(ObstacleColorCount,4));
+            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
 
-            r.MoveTo(new Vector2(4.5f,3));
+            r.MoveTo(new Vector2(4.5f, 3));
 
             o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
@@ -763,17 +776,18 @@ namespace UnitTests
     [TestClass]
     public class RadioSensorTests
     {
-        public static float[] NonCollidingOutput = new [] {-100.0f,0,0,-100.0f,0,0};
+        public static float[] NonCollidingOutput = new[] {-100.0f, 0, 0, -100.0f, 0, 0};
+
         [TestMethod]
         public void InitTest()
         {
             EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
-            Map map = new Map(100,100,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
-            RadioSensor rs = new RadioSensor(r,2);
+            Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            RadioSensor rs = new RadioSensor(r, 2);
             Assert.AreEqual(new Vector2(3, 3), rs.Middle);
             Assert.AreEqual(new Vector2(3, 3), rs.FPoint);
             var o = rs.Count(r, map);
-            TestExtensions.AssertArrayEquality(o,NonCollidingOutput);
+            TestExtensions.AssertArrayEquality(o, NonCollidingOutput);
 
         }
 
@@ -783,9 +797,9 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             RadioSensor rs = new RadioSensor(r, 2);
-            map.RadioEntities.Add(new RadioEntity(new Vector2(3,5),0.1f,((int) RadioEntity.SignalValueBounds.Max)));
-            float[] predOutput = new[] {100.0f, 0, 2,-100.0f,0,0};
-            TestExtensions.AssertArrayEquality(predOutput,rs.Count(r,map));
+            map.RadioEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, ((int) RadioEntity.SignalValueBounds.Max)));
+            float[] predOutput = new[] {100.0f, 0, 2, -100.0f, 0, 0};
+            TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 
         [TestMethod]
@@ -794,8 +808,8 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(3, 3), 1);
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             RadioSensor rs = new RadioSensor(r, 2);
-            map.RadioEntities.Add(new RadioEntity(new Vector2(3,5),0.1f,0));
-            map.RadioEntities.Add(new RadioEntity(new Vector2(3,1),0.1f,100));
+            map.RadioEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, 0));
+            map.RadioEntities.Add(new RadioEntity(new Vector2(3, 1), 0.1f, 100));
             float[] predOutput = new[] {0, 0, 2.0f, 100.0f, 0, -2.0f};
             TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
@@ -808,9 +822,9 @@ namespace UnitTests
             RadioSensor rs = new RadioSensor(r, 2);
             map.RadioEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, 0));
             map.RadioEntities.Add(new RadioEntity(new Vector2(3, 1), 0.1f, 100));
-            map.RadioEntities.Add(new RadioEntity(new Vector2(4,5),0.5f,0));
+            map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
 
-            float[] predOutput = new[] { 0, 0.5f, 2.0f, 100.0f, 0, -2.0f };
+            float[] predOutput = new[] {0, 0.5f, 2.0f, 100.0f, 0, -2.0f};
             TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 
@@ -826,8 +840,8 @@ namespace UnitTests
             map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
             map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
             map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 12));
-            float[] predOutput = new[] { 0, 1.0f, 2.0f, 100, 0, 2.0f };
-            TestExtensions.AssertArrayEquality(predOutput,rs.Count(r,map));
+            float[] predOutput = new[] {0, 1.0f, 2.0f, 100, 0, 2.0f};
+            TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 
     }
@@ -865,7 +879,7 @@ namespace UnitTests
             FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
             FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
 
-            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 6), 1,0));
+            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 6), 1, 0));
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
             o = l2.Count(r, map);
@@ -886,7 +900,7 @@ namespace UnitTests
             FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
             FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
 
-            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 5.5f), 1,0));
+            map.FuelEntities.Add(new FuelEntity(new Vector2(3, 5.5f), 1, 0));
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
             o = l2.Count(r, map);
@@ -954,7 +968,7 @@ namespace UnitTests
             FuelLineSensor l2 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(90));
             FuelLineSensor l3 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(180));
             FuelLineSensor l4 = new FuelLineSensor(r, 1, Entity.DegreesToRadians(270));
-            map.FuelEntities.Add(new FuelEntity(new Vector2(7, 3), 1.5f,0));
+            map.FuelEntities.Add(new FuelEntity(new Vector2(7, 3), 1.5f, 0));
 
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
@@ -999,54 +1013,55 @@ namespace UnitTests
             Assert.AreEqual(o[0], -100.0f);
         }
     }
+
     [TestClass]
     public class LocatorTests
     {
         [TestMethod]
         public void InitTest()
         {
-            Map map = new Map(200,200, new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
 
-            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
             LocatorSensor ls = new LocatorSensor(r);
-            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, 0.0f, 100.0f},ls.Count(r,map));
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, 0.0f, 100.0f}, ls.Count(r, map));
 
         }
 
         [TestMethod]
         public void MoveTest()
         {
-            Map map = new Map(400,400,new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            Map map = new Map(400, 400, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(200, 200), 1);
             LocatorSensor ls = new LocatorSensor(r);
-            TestExtensions.AssertArrayEquality(new [] {0.0f,0.0f,0.0f,100.0f},ls.Count(r,map));
-            r.MoveTo(new Vector2(200,201));
-            TestExtensions.AssertArrayEquality(new [] {0.0f,0.5f,0.0f,100.0f},ls.Count(r,map));
-            r.MoveTo(new Vector2(201,201));
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, 0.0f, 100.0f}, ls.Count(r, map));
+            r.MoveTo(new Vector2(200, 201));
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.5f, 0.0f, 100.0f}, ls.Count(r, map));
+            r.MoveTo(new Vector2(201, 201));
             TestExtensions.AssertArrayEquality(new[] {0.5f, 0.5f, 0.0f, 100.0f}, ls.Count(r, map));
-            r.MoveTo(new Vector2(198,198));
+            r.MoveTo(new Vector2(198, 198));
             TestExtensions.AssertArrayEquality(new[] {-1, -1, 0, 100.0f}, ls.Count(r, map));
-            r.MoveTo(new Vector2(134,246));
-            TestExtensions.AssertArrayEquality(new [] {-33,23,0,100.0f},ls.Count(r,map));
+            r.MoveTo(new Vector2(134, 246));
+            TestExtensions.AssertArrayEquality(new[] {-33, 23, 0, 100.0f}, ls.Count(r, map));
         }
 
         [TestMethod]
         public void RotationTest()
         {
-            Map map = new Map(400,400,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>() );
+            Map map = new Map(400, 400, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(200, 200), 1);
             LocatorSensor ls = new LocatorSensor(r);
-            TestExtensions.AssertArrayEquality(new[] { 0.0f, 0.0f, 0.0f, 100.0f }, ls.Count(r, map));
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, 0.0f, 100.0f}, ls.Count(r, map));
             r.RotateDegrees(90);
-            TestExtensions.AssertArrayEquality(new [] {0,0,-100.0f,0},ls.Count(r,map));
+            TestExtensions.AssertArrayEquality(new[] {0, 0, -100.0f, 0}, ls.Count(r, map));
             r.RotateDegrees(90);
-            TestExtensions.AssertArrayEquality(new [] {0,0,0,-100.0f},ls.Count(r,map));
+            TestExtensions.AssertArrayEquality(new[] {0, 0, 0, -100.0f}, ls.Count(r, map));
             r.RotateDegrees(90);
             TestExtensions.AssertArrayEquality(new[] {0, 0, 100.0f, 0}, ls.Count(r, map));
             r.RotateDegrees(90);
-            TestExtensions.AssertArrayEquality(new[] { 0.0f, 0.0f, 0.0f, 100.0f }, ls.Count(r, map));
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, 0.0f, 100.0f}, ls.Count(r, map));
             r.RotateDegrees(45);
-            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, -70.71068f,70.71068f},ls.Count(r,map));
+            TestExtensions.AssertArrayEquality(new[] {0.0f, 0.0f, -70.71068f, 70.71068f}, ls.Count(r, map));
         }
     }
 
@@ -1057,37 +1072,37 @@ namespace UnitTests
         public void InitTest()
         {
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
-            EmptyRobot r = new EmptyRobot(new Vector2(30,30),5);
-            TypeCircleSensor ts = new TypeCircleSensor(r,50);
-            TestExtensions.AssertArrayEquality(new [] {-100.0f,-100,-100},ts.Count(r,map));
+            EmptyRobot r = new EmptyRobot(new Vector2(30, 30), 5);
+            TypeCircleSensor ts = new TypeCircleSensor(r, 50);
+            TestExtensions.AssertArrayEquality(new[] {-100.0f, -100, -100}, ts.Count(r, map));
         }
 
         [TestMethod]
         public void IntersectionTest()
         {
-            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>()); 
-            EmptyRobot r = new EmptyRobot(new Vector2(20,20),5);
-            TypeCircleSensor ts = new TypeCircleSensor(r,50);
-            map.PasiveEntities.Add(new Circle(new Vector2(10,10),1));
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(20, 20), 5);
+            TypeCircleSensor ts = new TypeCircleSensor(r, 50);
+            map.PasiveEntities.Add(new Circle(new Vector2(10, 10), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(13, 10), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(10, 13), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(13, 13), 1));
-            TestExtensions.AssertArrayEquality(new []{-100.0f,-92,-100},ts.Count(r,map));
+            TestExtensions.AssertArrayEquality(new[] {-100.0f, -92, -100}, ts.Count(r, map));
         }
 
         [TestMethod]
         public void Intersection2Test()
         {
-            Map map = new Map(200,200,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
-            EmptyRobot r = new EmptyRobot(new Vector2(30,30),5);
-            TypeCircleSensor ts = new TypeCircleSensor(r,50);
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(30, 30), 5);
+            TypeCircleSensor ts = new TypeCircleSensor(r, 50);
             map.PasiveEntities.Add(new Circle(new Vector2(10, 10), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(13, 10), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(10, 13), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(13, 13), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(140, 140), 1));
-            TestExtensions.AssertArrayEquality(new[] { -100.0f, -92, -100 }, ts.Count(r, map));
-            r.MoveTo(new Vector2(160,160));
+            TestExtensions.AssertArrayEquality(new[] {-100.0f, -92, -100}, ts.Count(r, map));
+            r.MoveTo(new Vector2(160, 160));
             TestExtensions.AssertArrayEquality(new[] {-100.0f, -98, -100}, ts.Count(r, map));
         }
     }
@@ -1099,19 +1114,19 @@ namespace UnitTests
         public void InitTest()
         {
             TwoWheelMotor.MaxVelocityChange = 2.0f;
-            Map map = new Map(200,200, new List<RobotEntity>(), new List<CircleEntity>(),new List<FuelEntity>());
-            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
-            TwoWheelMotor tm = new TwoWheelMotor(r,1);
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
+            TwoWheelMotor tm = new TwoWheelMotor(r, 1);
             for (int i = 0; i < 98; i++)
             {
                 Vector2 m = r.Middle;
                 m.Y++;
-                tm.Effect(new[] {100.0f,100}, r,map);
-                Assert.AreEqual(m,tm.Middle);
-                Assert.AreEqual(m,r.Middle);
+                tm.Effect(new[] {100.0f, 100}, r, map);
+                Assert.AreEqual(m, tm.Middle);
+                Assert.AreEqual(m, r.Middle);
             }
             Vector2 m2 = r.Middle;
-            tm.Effect(new[] { 100.0f, 100 }, r, map);
+            tm.Effect(new[] {100.0f, 100}, r, map);
             Assert.AreEqual(m2, tm.Middle);
             Assert.AreEqual(m2, r.Middle);
             Assert.AreEqual(1, r.CollisionDetected);
@@ -1120,11 +1135,11 @@ namespace UnitTests
                 Vector2 m = r.Middle;
                 m.Y--;
                 tm.Effect(new[] {-100.0f, -100.0f}, r, map);
-                Assert.AreEqual(m,tm.Middle);
+                Assert.AreEqual(m, tm.Middle);
                 Assert.AreEqual(m, r.Middle);
             }
             m2 = r.Middle;
-            tm.Effect(new [] {-100.0f,-100.0f},r,map);
+            tm.Effect(new[] {-100.0f, -100.0f}, r, map);
             Assert.AreEqual(m2, tm.Middle);
             Assert.AreEqual(m2, r.Middle);
             Assert.AreEqual(2, r.CollisionDetected);
@@ -1136,32 +1151,32 @@ namespace UnitTests
         public void RotationTest()
         {
             TwoWheelMotor.MaxVelocityChange = 300;
-            Map map = new Map(200,200,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
-            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
-            TwoWheelMotor twm = new TwoWheelMotor(r,(float)Math.PI/2.0f);
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
+            TwoWheelMotor twm = new TwoWheelMotor(r, (float) Math.PI / 2.0f);
             Vector2 m = r.Middle;
-            
-            twm.Effect(new[] {-100.0f,100.0f},r,map);
-            Assert.AreEqual(m,r.Middle);
+
+            twm.Effect(new[] {-100.0f, 100.0f}, r, map);
+            Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
-            Assert.AreEqual(new Vector2(101,100),r.FPoint);
+            Assert.AreEqual(new Vector2(101, 100), r.FPoint);
             Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
-            twm.Effect(new [] {-100.0f,100.0f},r,map);
+            twm.Effect(new[] {-100.0f, 100.0f}, r, map);
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(100, 99), r.FPoint);
             Assert.AreEqual(new Vector2(100, 99), twm.FPoint);
-            twm.Effect(new [] {-100.0f,100.0f},r,map);
+            twm.Effect(new[] {-100.0f, 100.0f}, r, map);
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(99, 100), r.FPoint);
             Assert.AreEqual(new Vector2(99, 100), twm.FPoint);
-            twm.Effect(new[] { -100.0f, 100.0f }, r, map);
+            twm.Effect(new[] {-100.0f, 100.0f}, r, map);
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(100, 101), r.FPoint);
             Assert.AreEqual(new Vector2(100, 101), twm.FPoint);
-            twm.Effect(new[] { -100.0f, 100.0f }, r, map);
+            twm.Effect(new[] {-100.0f, 100.0f}, r, map);
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(101, 100), r.FPoint);
@@ -1182,13 +1197,13 @@ namespace UnitTests
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(101, 100), r.FPoint);
             Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
-            twm.Effect(new [] {1.0f,1.0f},r,map);
+            twm.Effect(new[] {1.0f, 1.0f}, r, map);
             m.X++;
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(102, 100), r.FPoint);
             Assert.AreEqual(new Vector2(102, 100), twm.FPoint);
-            twm.Effect(new [] {1.0f,1.0f},r,map);
+            twm.Effect(new[] {1.0f, 1.0f}, r, map);
             m.X++;
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
@@ -1199,7 +1214,7 @@ namespace UnitTests
             Assert.AreEqual(m, twm.Middle);
             Assert.AreEqual(new Vector2(101, 100), r.FPoint);
             Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
-            twm.Effect(new [] {1.0f,1.0f},r,map);
+            twm.Effect(new[] {1.0f, 1.0f}, r, map);
             m.X--;
             Assert.AreEqual(m, r.Middle);
             Assert.AreEqual(m, twm.Middle);
@@ -1214,15 +1229,15 @@ namespace UnitTests
         [TestMethod]
         public void InitTest()
         {
-            Map map = new Map(200,200,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
-            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
-            RadioTransmitter rt = new RadioTransmitter(r,10);
-            rt.Effect(new []{100.0f},r,map);
-            Assert.AreEqual(new Vector2(100,100),map.RadioEntities[0].Middle);
-            Assert.AreEqual(10,map.RadioEntities[0].Radius);
-            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Max,map.RadioEntities[0].ValueOfSignal);
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
+            RadioTransmitter rt = new RadioTransmitter(r, 10);
+            rt.Effect(new[] {100.0f}, r, map);
+            Assert.AreEqual(new Vector2(100, 100), map.RadioEntities[0].Middle);
+            Assert.AreEqual(10, map.RadioEntities[0].Radius);
+            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Max, map.RadioEntities[0].ValueOfSignal);
             map.MakeStep();
-            Assert.AreEqual(0,map.RadioEntities.Count);
+            Assert.AreEqual(0, map.RadioEntities.Count);
         }
 
         [TestMethod]
@@ -1231,16 +1246,16 @@ namespace UnitTests
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
             RadioTransmitter rt = new RadioTransmitter(r, 10);
-            rt.Effect(new[] { 100.0f }, r, map);
+            rt.Effect(new[] {100.0f}, r, map);
             Assert.AreEqual(new Vector2(100, 100), map.RadioEntities[0].Middle);
             Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual((int)RadioEntity.SignalValueBounds.Max, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Max, map.RadioEntities[0].ValueOfSignal);
             map.MakeStep();
             r.MoveTo(new Vector2(10, 10));
-            rt.Effect(new [] {-100.0f},r,map);
+            rt.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(new Vector2(10, 10), map.RadioEntities[0].Middle);
             Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual((int)RadioEntity.SignalValueBounds.Min, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Min, map.RadioEntities[0].ValueOfSignal);
 
         }
     }
@@ -1251,44 +1266,46 @@ namespace UnitTests
         [TestMethod]
         public void InitTest()
         {
-            Map map = new Map(200,200, new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
-            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1,1);
-            Picker p = new Picker(r,10,0);
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            Picker p = new Picker(r, 10, 0);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
-            Assert.AreEqual(p.A,r.FPoint);
+            Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 111));
-            r.MoveTo(new Vector2(100,101));
-            p.Effect(new []{0.0f},r,map);
-            Assert.AreEqual(0,r.InvalidContainerOperation);
+            r.MoveTo(new Vector2(100, 101));
+            p.Effect(new[] {0.0f}, r, map);
+            Assert.AreEqual(0, r.InvalidContainerOperation);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 112));
-            r.MoveTo(new Vector2(100,100));
-            p.Effect(new[] { 0.0f }, r, map);
+            r.MoveTo(new Vector2(100, 100));
+            p.Effect(new[] {0.0f}, r, map);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 111));
             r.RotateDegrees(-90);
-            p.Effect(new []{0.0f},r,map);
+            p.Effect(new[] {0.0f}, r, map);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(111, 100));
         }
+
         [TestMethod]
         public void PickUpTest()
         {
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             Picker p = new Picker(r, 10, 0);
-            Circle c = new Circle(new Vector2(100,105),3);
+            Circle c = new Circle(new Vector2(100, 105), 3);
             map.PasiveEntities.Add(c);
-            Assert.AreEqual(1,map.PasiveEntities.Count);
-            Assert.AreEqual(0,r.ActualContainerCount);
-            p.Effect(new [] {100.0f},r,map);
-            Assert.AreEqual(0,map.PasiveEntities.Count);
+            Assert.AreEqual(1, map.PasiveEntities.Count);
+            Assert.AreEqual(0, r.ActualContainerCount);
+            p.Effect(new[] {100.0f}, r, map);
+            Assert.AreEqual(0, map.PasiveEntities.Count);
             Assert.AreEqual(1, r.ActualContainerCount);
-            Assert.AreEqual(c,r.PeekContainer());
+            Assert.AreEqual(c, r.PeekContainer());
         }
+
         [TestMethod]
         public void PutTest()
         {
@@ -1309,6 +1326,7 @@ namespace UnitTests
             Assert.AreEqual(c.FPoint, fc);
 
         }
+
         [TestMethod]
         public void PickUpNothingTest()
         {
@@ -1319,12 +1337,13 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            p.Effect(new[] { 100.0f }, r, map);
+            p.Effect(new[] {100.0f}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.IsTrue(null == r.PopContainer());
             Assert.AreEqual(1, r.InvalidContainerOperation);
         }
+
         [TestMethod]
         public void PutNothingTest()
         {
@@ -1336,7 +1355,7 @@ namespace UnitTests
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidContainerOperation);
-            p.Effect(new [] {-100.0f},r,map);
+            p.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(1, r.InvalidContainerOperation);
@@ -1352,11 +1371,11 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            p.Effect(new[] { 100.0f }, r, map);
+            p.Effect(new[] {100.0f}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(null, r.PeekContainer());
-            
+
         }
 
         [TestMethod]
@@ -1367,7 +1386,7 @@ namespace UnitTests
             Picker p = new Picker(r, 10, 0);
             Circle c = new Circle(new Vector2(100, 120), 15);
             map.PasiveEntities.Add(c);
-            Circle c1 = new Circle(new Vector2(0,0),1);
+            Circle c1 = new Circle(new Vector2(0, 0), 1);
             r.PushContainer(c1);
             p.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
@@ -1390,12 +1409,12 @@ namespace UnitTests
             Assert.AreEqual(r.Middle, mr.FPoint);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             //Idle 
-            mr.Effect(new [] {100.0f}, r,map);
+            mr.Effect(new[] {100.0f}, r, map);
             Assert.AreEqual(r.Middle, mr.Middle);
             Assert.AreEqual(r.Middle, mr.FPoint);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
-            r.MoveTo(new Vector2(150,150));
-            mr.Effect(new[] { 100.0f }, r, map);
+            r.MoveTo(new Vector2(150, 150));
+            mr.Effect(new[] {100.0f}, r, map);
             Assert.AreEqual(r.Middle, mr.Middle);
             Assert.AreEqual(r.Middle, mr.FPoint);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
@@ -1409,22 +1428,22 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             MineralRefactor mr = new MineralRefactor(r);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
-            mr.Effect(new []{-100.0f},r,map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
-            Assert.AreEqual(0,mr.CyclesToEnd);
+            Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(2, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(3, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(0, mr.FuelToRefactor);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(4, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
@@ -1438,25 +1457,25 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             MineralRefactor mr = new MineralRefactor(r);
             r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(2, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(0,r.ActualContainerCount);
-            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.ActualContainerCount);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(1, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsFalse(mr.Refactoring);
@@ -1472,32 +1491,32 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             MineralRefactor mr = new MineralRefactor(r);
             r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(2, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(0, r.ActualContainerCount);
             r.PushContainer(new Circle(Vector2.Zero, 0));
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(1, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(1, r.ActualContainerCount);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(1, r.ActualContainerCount);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             Assert.AreEqual(1, r.ActualContainerCount);
-            mr.Effect(new[] { -100.0f }, r, map);
+            mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(2, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
@@ -1505,6 +1524,141 @@ namespace UnitTests
             Assert.AreEqual(1, r.ActualContainerCount);
         }
     }
+
+    [TestClass]
+    public class WeaponTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(100, 100);
+            EmptyRobot er = new EmptyRobot(new Vector2(50, 50), 1);
+            Weapon w = new Weapon(er, 10, 20, 0);
+            Assert.AreEqual(er.FPoint, w.A);
+            var v = er.FPoint;
+            v.Y += 10;
+            Assert.AreEqual(v, w.B);
+            w.Effect(new[] {0.0f}, er, map);
+            Assert.AreEqual(0, er.InvalidWeaponOperation);
+            er.MoveTo(new Vector2(30, 30));
+            w.Effect(new[] {0.0f}, er, map);
+            Assert.AreEqual(er.FPoint, w.A);
+            v = er.FPoint;
+            v.Y += 10;
+            Assert.AreEqual(v, w.B);
+        }
+
+        [TestMethod]
+        public void NoRobotAttack()
+        {
+            Map map = new Map(100, 100);
+            EmptyRobot er = new EmptyRobot(new Vector2(50, 50), 1);
+            Weapon w = new Weapon(er, 10, 20, 0);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(2, er.InvalidWeaponOperation);
+        }
+
+        [TestMethod]
+        public void AttackFriend()
+        {
+            Map map = new Map(100, 100);
+            EmptyRobot er = new EmptyRobot(new Vector2(50, 50), 1);
+            Weapon w = new Weapon(er, 10, 20, 0);
+            EmptyRobot fr = new EmptyRobot(new Vector2(50, 55), 1);
+            map.Robots.Add(fr);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(100, fr.Health);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(80, fr.Health);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(60, fr.Health);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(40, fr.Health);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(20, fr.Health);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(0, fr.Health);
+            Assert.IsFalse(fr.Alive);
+            Assert.AreEqual(1, map.Robots.Count);
+            Assert.IsFalse(map.Robots[0].Alive);
+            Assert.AreEqual(1, map.FuelEntities.Count);
+            Assert.AreEqual(100, map.FuelEntities[0].Capacity);
+            int j = 1;
+            for (int i = 0; i < 100; i++)
+            {
+                j++;
+                w.Effect(new[] {-100.0f}, er, map);
+                Assert.AreEqual(j, er.InvalidWeaponOperation);
+                j++;
+                w.Effect(new[] {100.0f}, er, map);
+                Assert.AreEqual(j, er.InvalidWeaponOperation);
+            }
+        }
+
+        [TestMethod]
+        public void AttackEnemy()
+        {
+            Map map = new Map(100, 100);
+            EmptyRobot er = new EmptyRobot(new Vector2(50, 50), 1);
+            Weapon w = new Weapon(er, 10, 20, 0);
+            EnemyRobot e = new EnemyRobot(new Vector2(50, 55), 1);
+            map.Robots.Add(e);
+            w.Effect(new[] {-100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(100, e.Health);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(80, e.Health);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(60, e.Health);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(40, e.Health);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(20, e.Health);
+            w.Effect(new[] {100.0f}, er, map);
+            Assert.AreEqual(1, er.InvalidWeaponOperation);
+            Assert.AreEqual(0, e.Health);
+            Assert.IsFalse(e.Alive);
+            Assert.AreEqual(1, map.Robots.Count);
+            Assert.IsFalse(map.Robots[0].Alive);
+            Assert.AreEqual(1, map.FuelEntities.Count);
+            Assert.AreEqual(100, map.FuelEntities[0].Capacity);
+            int j = 1;
+            for (int i = 0; i < 100; i++)
+            {
+                j++;
+                w.Effect(new[] {-100.0f}, er, map);
+                Assert.AreEqual(j, er.InvalidWeaponOperation);
+                j++;
+                w.Effect(new[] {100.0f}, er, map);
+                Assert.AreEqual(j, er.InvalidWeaponOperation);
+            }
+        }
+
+        class EnemyRobot : RobotEntity
+        {
+            public EnemyRobot(Vector2 middle, float radius, float amountOfFuel = 100, int sizeOfContainer = 0,
+                int teamNumber = 2, float health = 100, float normalizeMax = 100, float normalizeMin = -100,
+                float orientation = 0) : base(middle, radius, "Enemy Robot", new IEffector[0], new ISensor[0],
+                amountOfFuel, sizeOfContainer, teamNumber, health, normalizeMax, normalizeMin, orientation)
+            {
+            }
+        }
+    }
+
+
+
 
     public static class TestExtensions
     {

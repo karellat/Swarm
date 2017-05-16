@@ -60,7 +60,6 @@ namespace SwarmSimFramework.Classes.Effectors
         {
             return (Entity) this.MemberwiseClone();
         }
-
         /// <summary>
         /// Connect to robot
         /// </summary>

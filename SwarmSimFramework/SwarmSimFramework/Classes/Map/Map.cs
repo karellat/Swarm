@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography;
 using Intersection2D;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
@@ -19,7 +20,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Creates new map with given set up of robots etc
         /// </summary>
-        public Map(float height,float width,List<RobotEntity> robots,List<CircleEntity> pasiveEntities,List<FuelEntity> fuelEntities)
+        public Map(float height,float width,List<RobotEntity> robots = null,List<CircleEntity> pasiveEntities = null,List<FuelEntity> fuelEntities = null)
         {
             //Init characteristics of map 
             MaxHeight = height;
@@ -30,11 +31,11 @@ namespace SwarmSimFramework.Classes.Map
             B = new Vector2(MaxWidth,0);
             C = new Vector2(0,MaxHeight);
             D = new Vector2(MaxWidth,MaxHeight);
-
+            
             //Copy initial set up 
-            Robots = robots;
-            PasiveEntities = pasiveEntities;
-            FuelEntities = fuelEntities;
+            Robots = robots ?? new List<RobotEntity>();
+            PasiveEntities = pasiveEntities ?? new List<CircleEntity>();
+            FuelEntities = fuelEntities ?? new List<FuelEntity>();
             //No radio signals in the begining 
             RadioEntities = new List<RadioEntity>();
             //Mark down initial set up 
@@ -42,17 +43,17 @@ namespace SwarmSimFramework.Classes.Map
             modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
             modelPasiveEntities = new List<CircleEntity>(RadioEntities.Count);
 
-            foreach (var r in robots)
+            foreach (var r in Robots)
             {
                 modelRobotEntities.Add((RobotEntity)r.DeepClone());
             }
 
-            foreach (var p in pasiveEntities)
+            foreach (var p in PasiveEntities)
             {
                 modelPasiveEntities.Add((CircleEntity) p.DeepClone());
             }
 
-            foreach (var f in fuelEntities)
+            foreach (var f in FuelEntities)
             {
                 modelFuelEntities.Add((FuelEntity)f.DeepClone());
             }

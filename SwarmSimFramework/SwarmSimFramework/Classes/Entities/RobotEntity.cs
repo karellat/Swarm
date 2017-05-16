@@ -112,7 +112,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="normalizeMax"></param>
         /// <param name="normalizeMin"></param>
         /// <param name="orientation"></param>
-        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,int teamNumber = 1,float health = 100,int sizeOfContainer = 0,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
+        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,int sizeOfContainer = 0, int teamNumber = 1, float health = 100, float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
         {
             //Normalize values
             NormalizedBound = new Bounds() {Max = normalizeMax, Min = normalizeMin};

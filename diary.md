@@ -78,6 +78,8 @@ Add consuming fuel to effectors
 	* Mineral Refactor tested
 	* mortality and health of RobotEntity
 	* map have to check Alive of robot
+	* WeaponEffector implemented & tested
+	
 
 
 
