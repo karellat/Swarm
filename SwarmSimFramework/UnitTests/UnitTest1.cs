@@ -1377,6 +1377,135 @@ namespace UnitTests
         }
     }
 
+    [TestClass]
+    public class RefactorTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            MineralRefactor mr = new MineralRefactor(r);
+            Assert.AreEqual(r.Middle, mr.Middle);
+            Assert.AreEqual(r.Middle, mr.FPoint);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            //Idle 
+            mr.Effect(new [] {100.0f}, r,map);
+            Assert.AreEqual(r.Middle, mr.Middle);
+            Assert.AreEqual(r.Middle, mr.FPoint);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            r.MoveTo(new Vector2(150,150));
+            mr.Effect(new[] { 100.0f }, r, map);
+            Assert.AreEqual(r.Middle, mr.Middle);
+            Assert.AreEqual(r.Middle, mr.FPoint);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+
+        }
+
+        [TestMethod]
+        public void EmptyContainer()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            MineralRefactor mr = new MineralRefactor(r);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            mr.Effect(new []{-100.0f},r,map);
+            Assert.AreEqual(1, r.InvalidOperationWithRefactor);
+            Assert.IsFalse(mr.Refactoring);
+            Assert.AreEqual(0,mr.CyclesToEnd);
+            Assert.AreEqual(0, mr.FuelToRefactor);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(2, r.InvalidOperationWithRefactor);
+            Assert.IsFalse(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(0, mr.FuelToRefactor);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(3, r.InvalidOperationWithRefactor);
+            Assert.IsFalse(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(0, mr.FuelToRefactor);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(4, r.InvalidOperationWithRefactor);
+            Assert.IsFalse(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(0, mr.FuelToRefactor);
+        }
+
+        [TestMethod]
+        public void RefactoringMineralTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            MineralRefactor mr = new MineralRefactor(r);
+            r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(2, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            Assert.AreEqual(0,r.ActualContainerSize);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(1, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsFalse(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(0, mr.FuelToRefactor);
+            Assert.IsTrue(r.PeekContainer() is FuelEntity);
+        }
+
+        [TestMethod]
+        public void RefactoringMineralFullStackTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
+            MineralRefactor mr = new MineralRefactor(r);
+            r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(2, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            Assert.AreEqual(0, r.ActualContainerSize);
+            r.PushContainer(new Circle(Vector2.Zero, 0));
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(1, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(0, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(1, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            Assert.AreEqual(1, r.ActualContainerSize);
+            mr.Effect(new[] { -100.0f }, r, map);
+            Assert.AreEqual(2, r.InvalidOperationWithRefactor);
+            Assert.IsTrue(mr.Refactoring);
+            Assert.AreEqual(0, mr.CyclesToEnd);
+            Assert.AreEqual(100, mr.FuelToRefactor);
+            Assert.AreEqual(1, r.ActualContainerSize);
+        }
+    }
+
     public static class TestExtensions
     {
         public static void AssertArrayEquality(float[] a, float[] b)

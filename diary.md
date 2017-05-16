@@ -72,7 +72,10 @@ Add consuming fuel to effectors
 * 16.05.2017
 	* RadioTransmitter implemented & tested 
 	* Add container stack to RobotEntity
-	* Picker implemented & tested (3 modes, Pick Up,Put,Idle), pick up objects of max picker length 
+	* Picker implemented & tested (3 modes, Pick Up,Put,Idle), pick up objects of max picker length
+	* Mineral Refactor implemented
+	* Mineral Entity (with capacity of created Fuel, and cycles to refactor)
+	* Mineral Refactor tested
 
 
 

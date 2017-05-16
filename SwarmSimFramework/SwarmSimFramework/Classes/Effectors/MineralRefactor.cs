@@ -12,15 +12,15 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Cycles left to complete refactor from mineral to fuel 
         /// </summary>
-        protected int CyclesToEnd;
+        public int CyclesToEnd { get; protected set; }
         /// <summary>
         /// Amount of fuel created by refactor 
         /// </summary>
-        protected float FuelToRefactor;
+        public float FuelToRefactor { get; protected set; }
         /// <summary>
         /// curently refactoring mineral or waiting for empty stack 
         /// </summary>
-        protected bool Refactoring;
+        public bool Refactoring { get; protected set; }
         /// <summary>
         /// Local bounds of setting refactor
         /// </summary>
