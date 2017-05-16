@@ -36,11 +36,11 @@ namespace SwarmSimFramework.Classes.Map
             PasiveEntities = pasiveEntities;
             FuelEntities = fuelEntities;
             //No radio signals in the begining 
-            RadionEntities = new List<RadioEntity>();
+            RadioEntities = new List<RadioEntity>();
             //Mark down initial set up 
             modelRobotEntities = new List<RobotEntity>(Robots.Count);
             modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
-            modelPasiveEntities = new List<CircleEntity>(RadionEntities.Count);
+            modelPasiveEntities = new List<CircleEntity>(RadioEntities.Count);
 
             foreach (var r in robots)
             {
@@ -66,7 +66,7 @@ namespace SwarmSimFramework.Classes.Map
             Cycle = 0; 
             //Clear old bodies
             Robots.Clear();
-            RadionEntities.Clear();
+            RadioEntities.Clear();
             FuelEntities.Clear();
             //Copy models from set up lists
             foreach (var r in modelRobotEntities)
@@ -90,7 +90,7 @@ namespace SwarmSimFramework.Classes.Map
                 r.PrepareMove(this);
             }
             //Clean signals from map 
-            RadionEntities.Clear();
+            RadioEntities.Clear();
             //Random iteration through list of robot
             //Make movent, activate effectors
             foreach (int i in Enumerable.Range(0,Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
@@ -255,7 +255,7 @@ namespace SwarmSimFramework.Classes.Map
         public Dictionary<int,RadioIntersection> CollisionRadio(CircleEntity entity)
         {
             var intersections = new Dictionary<int, RadioIntersection>();
-            foreach (var r in RadionEntities)
+            foreach (var r in RadioEntities)
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
                 {
@@ -421,7 +421,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Stores all radio broadcast in the scope 
         /// </summary>
-        public List<RadioEntity> RadionEntities;
+        public List<RadioEntity> RadioEntities;
         /// <summary>
         /// Stores all fuel entities in the scope 
         /// </summary>
