@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Numerics;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
@@ -15,7 +16,7 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// maximal change of speed 
         /// </summary>
-        protected static float MaxVelocityChange = 0.5f;
+        public static float MaxVelocityChange = 1.0f;
         /// <summary>
         /// Dimension of effector
         /// </summary>
@@ -81,17 +82,55 @@ namespace SwarmSimFramework.Classes.Effectors
             RightVelocity = 0;
             LeftVelocity = 0;
         }
-
+       /// <summary>
+       /// Make effect on Robot and the enviroment
+       /// </summary>
+       /// <param name="settings"></param>
+       /// <param name="robot"></param>
+       /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
-        {
-            throw new System.NotImplementedException();
-        }
-
+       {
+           //Check position 
+           if (this.Middle != robot.Middle)
+               throw new ArgumentException("Unknown situation");
+           float[] normalizeSettings = settings.Normalize(NormalizeFuncs);
+            //Set speeds
+            //Check speed change bound 
+            RightVelocity = (Math.Abs(RightVelocity - normalizeSettings[0])) < MaxVelocityChange
+                ? normalizeSettings[0]
+                : Math.Sign(normalizeSettings[0] - RightVelocity) * MaxVelocityChange + RightVelocity;
+            LeftVelocity = (Math.Abs(LeftVelocity - normalizeSettings[1])) < MaxVelocityChange
+                ? normalizeSettings[1]
+                : Math.Sign(settings[1] - LeftVelocity) * MaxVelocityChange + LeftVelocity;
+           // Count, speed, rotation and make move if not collide
+           float s = (RightVelocity + LeftVelocity) / 2.0f;
+           float o = ((RightVelocity - LeftVelocity) / WheelDistance);
+           robot.RotateRadians(o);
+           this.RotateRadians(o);
+           Vector2 newPos = new Vector2(s * (float) Math.Sin(Pi2 - Orientation) + Middle.X, s * (float) Math.Cos(Pi2 -Orientation) + Middle.Y);
+            //Make move if not collide, if colide mark collision
+            if (!map.Collision(robot, newPos))
+           {
+               robot.MoveTo(newPos);
+               this.MoveTo(newPos);
+           }
+           else
+           {
+               robot.CollisionDetected++;
+           }
+       }
+        /// <summary>
+        /// Make a clone of effector entity 
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
             return (Entity) this.MemberwiseClone();
         }
-
+        /// <summary>
+        /// Make a clone of effector 
+        /// </summary>
+        /// <returns></returns>
         public IEffector Clone()
         {
             return (IEffector) DeepClone();

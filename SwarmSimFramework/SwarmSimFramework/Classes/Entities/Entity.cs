@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Numerics;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    
+
     public abstract class Entity
     {
         //Enumerate entity type 
         public enum EntityColor
         {
             EntityColor,
-            ScoutRobotColor, 
-            WorkerRobotColor, 
-            RefactorRobotColor, 
-            MineralColor, 
+            ScoutRobotColor,
+            WorkerRobotColor,
+            RefactorRobotColor,
+            MineralColor,
             FuelColor,
             ObstacleColor,
             RadioSignalColor
         }
 
         public static int EntityColorCount = Enum.GetNames(typeof(EntityColor)).Length;
+
         //MEMBERS 
         /// <summary>
         /// Enumarate of entity shape 
@@ -27,46 +29,55 @@ namespace SwarmSimFramework.Classes.Entities
         public enum Shape
         {
             Circle,
-            Line, 
+            Line,
             LineSegment,
             Abstract
         }
+
         /// <summary>
         /// Name of entity
         /// </summary>
         public string Name { get; protected set; } = "Entity";
+
         /// <summary>
         /// Return Shape of entity
         /// </summary>
         public Shape GetShape { get; protected set; }
+
         /// <summary>
         ///  Actual orientation in radians
         /// </summary>
         public float Orientation { get; protected set; }
+
         /// <summary>
         /// Middle of rotation 
         /// </summary>
         public Vector2 RotationMiddle { get; protected set; }
+
         /// <summary>
         /// Get color of entity
         /// </summary>
         public EntityColor Color { get; protected set; }
+
         //METHODS
         /// <summary>
         /// Return clone of actual entity
         /// </summary>
         /// <returns></returns>
         public abstract Entity DeepClone();
+
         /// <summary>
         /// Rotate this for angleInRadians around rotation middle 
         /// </summary>
         /// <param name="angleInRadians"></param>
         public abstract void RotateRadians(float angleInRadians);
+
         /// <summary>
         /// Move to the new possition
         /// </summary>
         /// <param name="newMiddle"></param>
         public abstract void MoveTo(Vector2 newMiddle);
+
         /// <summary>
         /// Convert degrees into radians and call virtual method on Entity
         /// </summary>
@@ -75,6 +86,7 @@ namespace SwarmSimFramework.Classes.Entities
         {
             RotateRadians(DegreesToRadians(angleInDegrees));
         }
+
         /// <summary>
         /// Rotate point arounf rotationMiddle
         /// </summary>
@@ -86,6 +98,7 @@ namespace SwarmSimFramework.Classes.Entities
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// Convert angle in deradians to degrees 
         /// </summary>
@@ -96,6 +109,7 @@ namespace SwarmSimFramework.Classes.Entities
             degree = degree % 360.0f;
             return (degree * (float) Math.PI) / 180.0f;
         }
+
         /// <summary>
         /// Return rotated point around rotationMiddle for angleRadians
         /// </summary>
@@ -105,8 +119,9 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public static Vector2 RotatePoint(float angleRadians, Vector2 point, Vector2 rotationMiddle)
         {
-            return Vector2.Transform(point,Matrix3x2.CreateRotation(angleRadians,rotationMiddle));
+            return Vector2.Transform(point, Matrix3x2.CreateRotation(angleRadians, rotationMiddle));
         }
+
         /// <summary>
         /// Move point to  new location
         /// </summary>
@@ -116,8 +131,9 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public static Vector2 MovePoint(Vector2 fromPoint, Vector2 toPoint, Vector2 movingPoint)
         {
-            return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(toPoint - fromPoint));
+            return Vector2.Transform(movingPoint, Matrix3x2.CreateTranslation(toPoint - fromPoint));
         }
+
         /// <summary>
         /// Move point for vector 
         /// </summary>
@@ -126,9 +142,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public static Vector2 MovePoint(Vector2 movingPoint, Vector2 shiftVector)
         {
-            return Vector2.Transform(movingPoint,Matrix3x2.CreateTranslation(shiftVector));
+            return Vector2.Transform(movingPoint, Matrix3x2.CreateTranslation(shiftVector));
         }
-        public const float Pi2 = 2 * (float)Math.PI;
+
+        public const float Pi2 = 2 * (float) Math.PI;
+
         //STATIC function
         /// <summary>
         /// Make normalization from one interval to another
@@ -140,11 +158,12 @@ namespace SwarmSimFramework.Classes.Entities
         {
             float sizeFrom = Math.Abs(from.Max - from.Min);
             float sizeTo = Math.Abs(to.Max - to.Min);
-            float rescale =  (sizeTo / sizeFrom);
+            float rescale = (sizeTo / sizeFrom);
             float min = from.Min * rescale;
-            float shift =  to.Min - min;
+            float shift = to.Min - min;
             return new NormalizeFunc() {Rescale = rescale, Shift = shift};
         }
+
         /// <summary>
         /// Return normalization functions for given localBounds to outputBounds 
         /// </summary>
@@ -159,6 +178,22 @@ namespace SwarmSimFramework.Classes.Entities
             }
             return output;
         }
+        /// <summary>
+        /// Make normalization functions from normalized values to localBounds
+        /// </summary>
+        /// <param name="fromBounds"></param>
+        /// <param name="toBounds"></param>
+        /// <returns></returns>
+        public static NormalizeFunc[] MakeNormalizeFuncs(Bounds fromBounds, Bounds[] toBounds)
+        {
+            var output = new NormalizeFunc[toBounds.Length];
+            for (int i = 0; i < toBounds.Length; i++)
+            {
+                output[i] = MakeNormalizationFunc(fromBounds, toBounds[i]);
+            }
+            return output;
+        }
+
         /// <summary>
         /// Return Vector in given interval 
         /// </summary>
@@ -177,6 +212,6 @@ namespace SwarmSimFramework.Classes.Entities
                 v.Y = b.Min;
             return v;
         }
-
     }
 }
+

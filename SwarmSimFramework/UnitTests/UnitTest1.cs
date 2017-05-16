@@ -5,7 +5,9 @@ using SwarmSimFramework.Classes.Entities;
 using System.Numerics;
 using System.Security.Cryptography;
 using SwarmSimFramework.Classes;
+using SwarmSimFramework.Classes.Effectors;
 using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.SupportClasses;
 
 namespace UnitTests
 {
@@ -997,9 +999,6 @@ namespace UnitTests
             Assert.AreEqual(o[0], -100.0f);
         }
     }
-
-
-
     [TestClass]
     public class LocatorTests
     {
@@ -1090,6 +1089,123 @@ namespace UnitTests
             TestExtensions.AssertArrayEquality(new[] { -100.0f, -92, -100 }, ts.Count(r, map));
             r.MoveTo(new Vector2(160,160));
             TestExtensions.AssertArrayEquality(new[] {-100.0f, -98, -100}, ts.Count(r, map));
+        }
+    }
+
+    [TestClass]
+    public class TwoWheelMotorTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            TwoWheelMotor.MaxVelocityChange = 2.0f;
+            Map map = new Map(200,200, new List<RobotEntity>(), new List<CircleEntity>(),new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
+            TwoWheelMotor tm = new TwoWheelMotor(r,1);
+            for (int i = 0; i < 98; i++)
+            {
+                Vector2 m = r.Middle;
+                m.Y++;
+                tm.Effect(new[] {100.0f,100}, r,map);
+                Assert.AreEqual(m,tm.Middle);
+                Assert.AreEqual(m,r.Middle);
+            }
+            Vector2 m2 = r.Middle;
+            tm.Effect(new[] { 100.0f, 100 }, r, map);
+            Assert.AreEqual(m2, tm.Middle);
+            Assert.AreEqual(m2, r.Middle);
+            Assert.AreEqual(1, r.CollisionDetected);
+            for (int i = 0; i < 196; i++)
+            {
+                Vector2 m = r.Middle;
+                m.Y--;
+                tm.Effect(new[] {-100.0f, -100.0f}, r, map);
+                Assert.AreEqual(m,tm.Middle);
+                Assert.AreEqual(m, r.Middle);
+            }
+            m2 = r.Middle;
+            tm.Effect(new [] {-100.0f,-100.0f},r,map);
+            Assert.AreEqual(m2, tm.Middle);
+            Assert.AreEqual(m2, r.Middle);
+            Assert.AreEqual(2, r.CollisionDetected);
+
+
+        }
+
+        [TestMethod]
+        public void RotationTest()
+        {
+            TwoWheelMotor.MaxVelocityChange = 300;
+            Map map = new Map(200,200,new List<RobotEntity>(),new List<CircleEntity>(),new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100,100),1);
+            TwoWheelMotor twm = new TwoWheelMotor(r,(float)Math.PI/2.0f);
+            Vector2 m = r.Middle;
+            
+            twm.Effect(new[] {-100.0f,100.0f},r,map);
+            Assert.AreEqual(m,r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(101,100),r.FPoint);
+            Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
+            twm.Effect(new [] {-100.0f,100.0f},r,map);
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(100, 99), r.FPoint);
+            Assert.AreEqual(new Vector2(100, 99), twm.FPoint);
+            twm.Effect(new [] {-100.0f,100.0f},r,map);
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(99, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(99, 100), twm.FPoint);
+            twm.Effect(new[] { -100.0f, 100.0f }, r, map);
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(100, 101), r.FPoint);
+            Assert.AreEqual(new Vector2(100, 101), twm.FPoint);
+            twm.Effect(new[] { -100.0f, 100.0f }, r, map);
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(101, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
+        }
+
+        [TestMethod]
+        public void MovementAndRotationTest()
+        {
+            TwoWheelMotor.MaxVelocityChange = 300;
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
+            TwoWheelMotor twm = new TwoWheelMotor(r, 100.0f);
+            Vector2 m = r.Middle;
+
+            twm.Effect(new[] {(float) -Math.PI / 2.0f, (float) Math.PI / 2.0f}, r, map);
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(101, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
+            twm.Effect(new [] {1.0f,1.0f},r,map);
+            m.X++;
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(102, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(102, 100), twm.FPoint);
+            twm.Effect(new [] {1.0f,1.0f},r,map);
+            m.X++;
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(103, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(103, 100), twm.FPoint);
+            twm.Effect(new[] {(float) -Math.PI, (float) Math.PI}, r, map);
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(101, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(101, 100), twm.FPoint);
+            twm.Effect(new [] {1.0f,1.0f},r,map);
+            m.X--;
+            Assert.AreEqual(m, r.Middle);
+            Assert.AreEqual(m, twm.Middle);
+            Assert.AreEqual(new Vector2(100, 100), r.FPoint);
+            Assert.AreEqual(new Vector2(100, 100), twm.FPoint);
+
         }
     }
 

@@ -68,7 +68,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="newMiddle"></param>
         public override void MoveTo(Vector2 newMiddle)
         {
-            Vector2 shift = newMiddle - RotationMiddle;
+             Vector2 shift = newMiddle - RotationMiddle;
             RotationMiddle = MovePoint(RotationMiddle, shift);
             Middle = MovePoint(Middle, shift);
             FPoint = MovePoint(FPoint, shift);
