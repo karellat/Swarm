@@ -1,13 +1,13 @@
-# Diary of project
+cd # Diary of project
 # FrameWork for: Evolutionary Algorithms for the Control of Heterogeneous Robotic Swarm
 
 ## TODO: 
-
+REFACTOR WHOLE PROJECT
 ## Q&A: 
 ### Implementation:  
 * How long should be GetString();
 ### Evolution: 
-* 
+* Radio sensor, what should it return?
 ### Days of actual sollution
 
 * 05.05.2017 - 
@@ -44,3 +44,21 @@
 	* Circle Entity RotataRadians method = take GetRotation Middle when rotate
 	* Collision with types addded to map 
 	* TypeLineSensor added
+	* Entity rotationMiddle added to the Entity
+* 12.05.2017 
+	* Touch Sensor tested
+	* bounds struct created 
+	* NormalizeFunc struct created
+	* TypeLineSensor implemented
+* 13.05.2017 
+	* LineTypeSensor tested
+	* Map RadioCollision refactor 
+	* RadioEntity implemented 
+	* static variable(RadioEntity) set bounds of used signal values (-100,100)
+	* RadioSensor implemented 
+	* RadioSensor tested
+	* FuelLineSensor implemented 
+	* FuelLineSensor tested
+
+
+	
