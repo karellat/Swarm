@@ -76,6 +76,8 @@ Add consuming fuel to effectors
 	* Mineral Refactor implemented
 	* Mineral Entity (with capacity of created Fuel, and cycles to refactor)
 	* Mineral Refactor tested
+	* mortality and health of RobotEntity
+	* map have to check Alive of robot
 
 
 
