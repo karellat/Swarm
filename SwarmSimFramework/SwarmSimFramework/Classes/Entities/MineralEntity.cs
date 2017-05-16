@@ -4,23 +4,34 @@ namespace SwarmSimFramework.Classes.Entities
 {
     public class MineralEntity:CircleEntity
     {
+        /// <summary>
+        /// Amount of cycles to refactor to fuel 
+        /// </summary>
         public int CycleToRefactor { get; }
+        /// <summary>
+        /// Amount fuel created by refactoring 
+        /// </summary>
         public float FuelToRefactor { get; }
-        public MineralEntity(string name) : base(name)
+        /// <summary>
+        /// Create new mineral entity
+        /// </summary>
+        /// <param name="middle"></param>
+        /// <param name="radius"></param>
+        /// <param name="fuelToRefactor"></param>
+        /// <param name="cycleRefactor"></param>
+        public MineralEntity(Vector2 middle, float radius, float fuelToRefactor, int cycleRefactor) : base(middle,radius,"Mineral Entity")
         {
-        }
+            CycleToRefactor = cycleRefactor;
+            FuelToRefactor = fuelToRefactor;
 
-        public MineralEntity(Vector2 middle, float radius, string name, float orientation = 0) : base(middle, radius, name, orientation)
-        {
         }
-
-        public MineralEntity(Vector2 middle, float radius, string name, Vector2 rotationMiddle, float orientation = 0) : base(middle, radius, name, rotationMiddle, orientation)
-        {
-        }
-
+        /// <summary>
+        /// Make Clone of Mineral Entity 
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
-            throw new System.NotImplementedException();
+           return (Entity) this.MemberwiseClone();
         }
     }
 }

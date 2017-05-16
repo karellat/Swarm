@@ -50,13 +50,14 @@
   <ItemGroup>
     <Compile Include="Classes\Effectors\Picker.cs" />
     <Compile Include="Classes\Effectors\RadioTransmitter.cs" />
-    <Compile Include="Classes\Effectors\Refactor.cs" />
+    <Compile Include="Classes\Effectors\MineralRefactor.cs" />
     <Compile Include="Classes\Effectors\TwoWheelMotor.cs" />
     <Compile Include="Classes\Effectors\Weapon.cs" />
     <Compile Include="Classes\Entities\CircleEntity.cs" />
     <Compile Include="Classes\Entities\Entity.cs" />
     <Compile Include="Classes\Entities\FuelEntity.cs" />
     <Compile Include="Classes\Entities\LineEntity.cs" />
+    <Compile Include="Classes\Entities\MineralEntity.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />

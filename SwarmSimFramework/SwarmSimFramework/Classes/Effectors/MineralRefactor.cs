@@ -8,12 +8,30 @@ namespace SwarmSimFramework.Classes.Effectors
     /// Refactor entity on top of container, if mineral entity
     /// </summary>
     public class MineralRefactor : CircleEntity,IEffector
-    {
+    { 
+        /// <summary>
+        /// Cycles left to complete refactor from mineral to fuel 
+        /// </summary>
         protected int CyclesToEnd;
+        /// <summary>
+        /// Amount of fuel created by refactor 
+        /// </summary>
         protected float FuelToRefactor;
+        /// <summary>
+        /// curently refactoring mineral or waiting for empty stack 
+        /// </summary>
         protected bool Refactoring;
+        /// <summary>
+        /// Local bounds of setting refactor
+        /// </summary>
         public Bounds[] LocalBounds { get; }
+        /// <summary>
+        /// Normalization funcs from robot values to local bounds
+        /// </summary>
         public NormalizeFunc[] NormalizeFuncs { get; protected set;  }
+        /// <summary>
+        /// Dimension of setting
+        /// </summary>
         public int Dimension { get; }
         /// <summary>
         /// Create new Mineral Refactor 
@@ -26,19 +44,34 @@ namespace SwarmSimFramework.Classes.Effectors
             LocalBounds[0] = new Bounds() {Max = 2,Min=0};
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound,LocalBounds);
         }
-
+        /// <summary>
+        /// Create clone of refactor 
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
-            return (Entity) this.MemberwiseClone();
+            var r =  (MineralRefactor) this.MemberwiseClone();
+            r.Refactoring = false;
+            FuelToRefactor = 0;
+            CyclesToEnd = 0;
+            return r;
         }
-
-
+        /// <summary>
+        /// Connect to robot
+        /// </summary>
+        /// <param name="robot"></param>
         public void ConnectToRobot(RobotEntity robot)
         {
             this.MoveTo(robot.Middle);
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
         }
-
+        /// <summary>
+        /// Make refactor step if (0,1) - take Mineral Entity from stack or make refactor cycle if currently refactoring
+        /// if 1,2 idle
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="robot"></param>
+        /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
         {
             //Update position 
@@ -69,6 +102,7 @@ namespace SwarmSimFramework.Classes.Effectors
                     }
                     else
                     {
+                        //Refactoring
                         CyclesToEnd--;
                         return;
                     }
@@ -94,8 +128,10 @@ namespace SwarmSimFramework.Classes.Effectors
             }
             //ELSE Idle 
         }
-
-
+        /// <summary>
+        /// Clone of effector 
+        /// </summary>
+        /// <returns></returns>
         public IEffector Clone()
         {
             return (IEffector) DeepClone();
