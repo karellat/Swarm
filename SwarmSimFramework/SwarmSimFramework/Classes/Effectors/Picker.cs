@@ -72,7 +72,7 @@ namespace SwarmSimFramework.Classes.Effectors
             if (s>= 0 && s < 1)
             {
                 //if empty return
-                if (robot.ActualContainerSize == 0)
+                if (robot.ActualContainerCount == 0)
                 {
                     robot.InvalidOperationWithContainer++;
                     return; 

@@ -86,7 +86,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 {
                     if (CyclesToEnd == 0)
                     {
-                        if (robot.ActualContainerSize < robot.ContainerMaxCapacity)
+                        if (robot.ActualContainerCount < robot.ContainerMaxCapacity)
                         {
                             Refactoring = false;
                             robot.PushContainer(new FuelEntity(Vector2.Zero, FuelEntity.FuelRadius, FuelToRefactor));

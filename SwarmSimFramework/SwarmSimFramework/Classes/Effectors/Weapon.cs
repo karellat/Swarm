@@ -4,6 +4,12 @@ using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Effectors
 {
+    /// <summary>
+    /// Weapon effector cause damage to friendly Robots or to enemy Robots
+    /// [0,1) => attack friend
+    /// [1,2] => idle
+    /// (2,3] => attack enemy 
+    /// </summary>
     public class Weapon : LineEntity,IEffector
     {
         protected float OrientationToRobotFPoint; 

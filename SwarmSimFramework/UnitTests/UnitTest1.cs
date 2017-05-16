@@ -1283,10 +1283,10 @@ namespace UnitTests
             Circle c = new Circle(new Vector2(100,105),3);
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1,map.PasiveEntities.Count);
-            Assert.AreEqual(0,r.ActualContainerSize);
+            Assert.AreEqual(0,r.ActualContainerCount);
             p.Effect(new [] {100.0f},r,map);
             Assert.AreEqual(0,map.PasiveEntities.Count);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(c,r.PeekContainer());
         }
         [TestMethod]
@@ -1298,11 +1298,11 @@ namespace UnitTests
             Circle c = new Circle(new Vector2(100, 105), 3);
             r.PushContainer(c);
             Assert.AreEqual(0, map.PasiveEntities.Count);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(c, r.PeekContainer());
             p.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(p.B, c.Middle);
             var fc = p.B;
             fc.Y += c.Radius;
@@ -1318,10 +1318,10 @@ namespace UnitTests
             Circle c = new Circle(new Vector2(150, 150), 3);
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             p.Effect(new[] { 100.0f }, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.IsTrue(null == r.PopContainer());
             Assert.AreEqual(1, r.InvalidOperationWithContainer);
         }
@@ -1334,11 +1334,11 @@ namespace UnitTests
             Circle c = new Circle(new Vector2(150, 150), 3);
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidOperationWithContainer);
             p.Effect(new [] {-100.0f},r,map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(1, r.InvalidOperationWithContainer);
         }
 
@@ -1351,10 +1351,10 @@ namespace UnitTests
             Circle c = new Circle(new Vector2(100, 120), 11);
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             p.Effect(new[] { 100.0f }, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(null, r.PeekContainer());
             
         }
@@ -1371,7 +1371,7 @@ namespace UnitTests
             r.PushContainer(c1);
             p.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(c1, r.PeekContainer());
 
         }
@@ -1443,21 +1443,21 @@ namespace UnitTests
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(2, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(0,r.ActualContainerSize);
+            Assert.AreEqual(0,r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidOperationWithRefactor);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(1, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidOperationWithRefactor);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
             mr.Effect(new[] { -100.0f }, r, map);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidOperationWithRefactor);
             Assert.IsFalse(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
@@ -1477,32 +1477,32 @@ namespace UnitTests
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(2, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(0, r.ActualContainerSize);
+            Assert.AreEqual(0, r.ActualContainerCount);
             r.PushContainer(new Circle(Vector2.Zero, 0));
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(0, r.InvalidOperationWithRefactor);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(1, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(0, r.InvalidOperationWithRefactor);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(1, r.InvalidOperationWithRefactor);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
             mr.Effect(new[] { -100.0f }, r, map);
             Assert.AreEqual(2, r.InvalidOperationWithRefactor);
             Assert.IsTrue(mr.Refactoring);
             Assert.AreEqual(0, mr.CyclesToEnd);
             Assert.AreEqual(100, mr.FuelToRefactor);
-            Assert.AreEqual(1, r.ActualContainerSize);
+            Assert.AreEqual(1, r.ActualContainerCount);
         }
     }
 
