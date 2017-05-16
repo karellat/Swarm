@@ -12,7 +12,19 @@ namespace SwarmSimFramework.Classes.Entities
 {
     public abstract class RobotEntity :CircleEntity
     {
-        //MEMBERS
+        //MEMBERs
+        /// <summary>
+        /// If entity has enough fuel & health integrity
+        /// </summary>
+        public bool Alive { get; protected set; }
+        /// <summary>
+        /// number of friendly team  
+        /// </summary>
+        public int TeamNumber { get; protected set; }
+        /// <summary>
+        /// Actual health of robot 
+        /// </summary>
+        public float Health { get; protected set; }
         /// <summary>
         /// Effectors of robot
         /// </summary>
@@ -61,8 +73,15 @@ namespace SwarmSimFramework.Classes.Entities
         /// Max capacity of container
         /// </summary>
         public int ContainerMaxCapacity { get; protected set; }
-        public int ActualContainerSize { get; protected set; }
+        /// <summary>
+        /// Actual amount of entities in container
+        /// </summary>
+        public int ActualContainerCount { get; protected set; }
         //PRIVATE MEMBERS
+        /// <summary>
+        /// Health after creation
+        /// </summary>
+        protected float InitialHealth;
         /// <summary>
         /// Last values from last invoke of PrepareMove
         /// </summary>
@@ -89,16 +108,21 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="normalizeMax"></param>
         /// <param name="normalizeMin"></param>
         /// <param name="orientation"></param>
-        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,int sizeOfContainer = 0,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
+        protected RobotEntity(Vector2 middle, float radius, string name, IEffector[] effectors,ISensor[] sensors, float amountOfFuel,int teamNumber = 1,float health = 100,int sizeOfContainer = 0,float normalizeMax =100,float normalizeMin = -100, float orientation = 0) : base(middle, radius, name, orientation)
         {
             //Normalize values
             NormalizedBound = new Bounds() {Max = normalizeMax, Min = normalizeMin};
             //Effectors & Sensors, container
             Container = new Stack<CircleEntity>(sizeOfContainer);
             ContainerMaxCapacity = sizeOfContainer;
-            ActualContainerSize = 0;
+            ActualContainerCount = 0;
             Effectors = effectors;
             Sensors = sensors;
+            //Health settings 
+            InitialHealth = health;
+            Health = health;
+            Alive = health > 0;
+            TeamNumber = teamNumber;
             //Count dimensions
             EffectorsDimension = 0;
             SensorsDimension = 0; 
@@ -168,6 +192,8 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         public void Reset()
         {
+            Health = InitialHealth;
+            Alive = Health > 0;
             CollisionDetected = 0;
             InvalidOperationWithContainer = 0;
             InvalidOperationWithRefactor = 0;
@@ -175,7 +201,7 @@ namespace SwarmSimFramework.Classes.Entities
             LastReadValues = null;
             BrainDecidedValues = null;
             Container.Clear();
-            ActualContainerSize = 0;
+            ActualContainerCount = 0;
         }
         /// <summary>
         /// Deep clone of Robot entity, map & brain are null
@@ -219,12 +245,12 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public bool PushContainer(CircleEntity entityCargo)
         {
-            if (ContainerMaxCapacity == ActualContainerSize)
+            if (ContainerMaxCapacity == ActualContainerCount)
                 return false;
             else
             { 
                 Container.Push(entityCargo);
-                ActualContainerSize++;
+                ActualContainerCount++;
                 return true;
             }
         }
@@ -234,11 +260,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public CircleEntity PopContainer()
         {
-            if (ActualContainerSize == 0)
+            if (ActualContainerCount == 0)
                 return null;
             else
             {
-                ActualContainerSize--;
+                ActualContainerCount--;
                 return Container.Pop();
             }
         }
@@ -248,12 +274,29 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public CircleEntity PeekContainer()
         {
-            if (ActualContainerSize == 0)
+            if (ActualContainerCount == 0)
                 return null;
             else
                 return Container.Peek();
         }
-
+        /// <summary>
+        /// Deal damage to robot, if not any health integrity,die and return remaining fuel
+        /// </summary>
+        public void AcceptDamage(float amountOfDamage, Map.Map map)
+        {
+            Health -= amountOfDamage;
+            if (Health <= 0)
+            {
+                Alive = false;
+                //Return remaining fuel
+                var remainingFuel = FuelAmount;
+                FuelAmount = 0;
+                map.FuelEntities.Add(new FuelEntity(this.Middle,FuelEntity.FuelRadius,remainingFuel));
+                //Clear storage 
+                Container.Clear();
+                ActualContainerCount = 0;
+            }
+        }
  
     }
 }

@@ -19,9 +19,9 @@ namespace SwarmSimFramework.Classes.Entities
         public Bounds[] LocalBounds { get; protected set; }
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
-        /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
+        /// Orientation to robot FPoint, adds to the robot orientationToRobotFPoint to rotate to correct possition 
         /// </summary>
-        protected float OrientationToFPointToRobotFPoint;
+        protected float OrientationToRobotFPoint;
         /// <summary>
         /// Return clone of this LineTypeSensor
         /// </summary>
@@ -38,11 +38,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="map"></param>
         /// <returns></returns>
         //CONSTRUCTOR 
-        public LineTypeSensor(RobotEntity robot,float lenght,float orientationToFPoint) : base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght),robot.Middle, "Line Sensors")
+        public LineTypeSensor(RobotEntity robot,float lenght,float orientationToRobotFPoint) : base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght),robot.Middle, "Line Sensors")
         {
             //rotate sensor to its possition
-            OrientationToFPointToRobotFPoint = orientationToFPoint;
-            this.RotateRadians(orientationToFPoint+robot.Orientation);
+            OrientationToRobotFPoint = orientationToRobotFPoint;
+            this.RotateRadians(orientationToRobotFPoint+robot.Orientation);
 
             //OutputSize, returning LengthSqrt & Type of colliding entity 
             Dimension = 2; 
@@ -62,8 +62,8 @@ namespace SwarmSimFramework.Classes.Entities
                 //Update possition 
                 if(robot.Middle != this.RotationMiddle)
                     this.MoveTo(robot.Middle);
-                if(Orientation != robot.Orientation + OrientationToFPointToRobotFPoint)
-                    this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
+                if(Orientation != robot.Orientation + OrientationToRobotFPoint)
+                    this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
                 //Count from the map 
                 Intersection intersection = map.Collision(this, robot);
                 float[] output;
@@ -78,7 +78,7 @@ namespace SwarmSimFramework.Classes.Entities
         public void ConnectToRobot(RobotEntity robot)
         {
             //Connect to the middle of the robot
-            this.RotateRadians((robot.Orientation + OrientationToFPointToRobotFPoint) - Orientation);
+            this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
             this.MoveTo(robot.Middle);
             //Count normalization 
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);

@@ -87,14 +87,18 @@ namespace SwarmSimFramework.Classes.Map
             //Make all robots read situation & decide, no point of random iteration 
             foreach (var r in Robots)
             {
-                r.PrepareMove(this);
+                if(r.Alive)
+                    r.PrepareMove(this);
             }
             //Clean signals from map 
             RadioEntities.Clear();
             //Random iteration through list of robot
             //Make movent, activate effectors
-            foreach (int i in Enumerable.Range(0,Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
-                Robots[i].Move(this);
+            foreach (int i in Enumerable.Range(0, Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
+            {
+                if(Robots[i].Alive)
+                 Robots[i].Move(this);
+            }
             //Clean empty fuels 
             FuelEntities.RemoveAll((x => x.Empty));
             //Cycle change 
@@ -125,7 +129,7 @@ namespace SwarmSimFramework.Classes.Map
             foreach (var r in Robots)
             {
                 //jump over the sameEntity
-                if(r == ignoredEntity)
+                if(!r.Alive || r == ignoredEntity)
                     continue;
                 if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, r.Middle, r.Radius))
                     return true;
@@ -216,7 +220,7 @@ namespace SwarmSimFramework.Classes.Map
             //Collisions with other robots
             foreach (var r in Robots)
             {
-                if(r == ignoredEntity) continue;
+                if(!r.Alive || r == ignoredEntity) continue;
                 foreach (var i in Intersections.CircleLineSegmentIntersection(r.Middle,r.Radius,entity.A,entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);
@@ -346,6 +350,8 @@ namespace SwarmSimFramework.Classes.Map
             //Collision with other robots: 
             foreach (var r in Robots)
             {
+                if(!r.Alive) continue;
+                
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
                 {
                     if (o.ContainsKey(r.Color))
