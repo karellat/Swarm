@@ -22,7 +22,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Normalize Funcs 
         /// </summary>
-        public NormalizeFunc[][] NormalizeFuncs { get; protected set; }
+        public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Orientation to robot FPoint, adds to the robot orientationToRobotFPoint to rotate to correct possition 
         /// </summary>

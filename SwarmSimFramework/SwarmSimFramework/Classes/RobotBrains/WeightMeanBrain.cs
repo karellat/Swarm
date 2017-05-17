@@ -37,9 +37,6 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// Normalization funcs to normalize output
         /// </summary>
         public NormalizeFunc[] NormalizeFuncs { get; }
-        /// <summary>
-        /// Specific weights [outputDim][inputDim] 
-        /// </summary>
         protected float[][] Weights;
         //Constructor
         /// <summary>
