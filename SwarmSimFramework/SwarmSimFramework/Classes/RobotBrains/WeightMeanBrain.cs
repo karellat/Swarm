@@ -46,6 +46,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// Create new WeightMeanBrain with given brains
         /// </summary>
         /// <param name="robot"></param>
+        /// <param name="inOutBounds"></param>
         /// <param name="inputDimension"></param>
         /// <param name="outputDimension"></param>
         /// <param name="weights"></param>
@@ -113,17 +114,17 @@ namespace SwarmSimFramework.Classes.RobotBrains
         {
             return (IRobotBrain) this.MemberwiseClone();
         }
-
+        //Static Methods 
         /// <summary>
         /// Generate new WeightMeanBrain
         /// </summary>
         /// <returns></returns>
-        public static WeightMeanBrain GenerateRandomWeightMeanBrain(RobotEntity robot)
+        public static WeightMeanBrain GenerateRandomWeightMeanBrain(Bounds inOutBounds, int inputDimension, int outputDimension)
         {
-             float[][] weights = new float[robot.EffectorsDimension][];
+             float[][] weights = new float[outputDimension][];
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = new float[robot.SensorsDimension];
+                weights[i] = new float[inputDimension];
                 for (int j = 0; j < weights[i].Length; j++)
                 {
                     //Make random values 
@@ -131,11 +132,10 @@ namespace SwarmSimFramework.Classes.RobotBrains
                         RandomNumber.GetRandomInt((int) WeightedBounds.Max));
                 }
             }
-            return new WeightMeanBrain(robot,robot.EffectorsDimension,robot.SensorsDimension,weights);
+            return new WeightMeanBrain(inOutBounds,inputDimension,outputDimension,weights);
         }
-
         /// <summary>
-        /// 
+        /// Return new brain with mutated weights 
         /// </summary>
         /// <param name="mutatingBrain"></param>
         /// <param name="permileOfMutation"></param>

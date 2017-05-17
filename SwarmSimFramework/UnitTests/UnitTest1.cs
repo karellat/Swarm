@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using SwarmSimFramework.Classes;
 using SwarmSimFramework.Classes.Effectors;
 using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.SupportClasses;
 
 namespace UnitTests
@@ -1657,6 +1658,17 @@ namespace UnitTests
         }
     }
 
+    [TestClass]
+    public class WeightMeanBrainTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            WeightMeanBrain w = new WeightMeanBrain(new Bounds(){Min = -100,Max = 100},2,2,new []{ new []{2.0f,2.0f},new []{3.0f,3.0f}});
+
+
+        }
+    }
 
 
 

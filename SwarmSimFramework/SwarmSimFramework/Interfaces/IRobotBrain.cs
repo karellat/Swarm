@@ -23,7 +23,7 @@ namespace SwarmSimFramework.Interfaces
         /// <summary>
         /// Local bounds of intern values
         /// </summary>
-        Bounds LocalBounds[] { get;  }
+        Bounds[] LocalBounds { get;  }
         /// <summary>
         /// Dimension of input values 
         /// </summary>
