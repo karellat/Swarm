@@ -59,6 +59,7 @@
     <Compile Include="Classes\Entities\LineEntity.cs" />
     <Compile Include="Classes\Entities\MineralEntity.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
+    <Compile Include="Classes\RobotBrains\WeightMeanBrain.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
     <Compile Include="Classes\Entities\RadioEntity.cs" />
@@ -79,8 +80,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classes\RobotBrains\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

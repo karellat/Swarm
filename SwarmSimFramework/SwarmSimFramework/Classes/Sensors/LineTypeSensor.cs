@@ -15,9 +15,14 @@ namespace SwarmSimFramework.Classes.Entities
         /// Dimension of the ouput
         /// </summary>
         public int Dimension { get; protected set;  }
-
+        /// <summary>
+        /// Local bounds 
+        /// </summary>
         public Bounds[] LocalBounds { get; protected set; }
-        public NormalizeFunc[] NormalizeFuncs { get; protected set; }
+        /// <summary>
+        /// Normalize Funcs 
+        /// </summary>
+        public NormalizeFunc[][] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Orientation to robot FPoint, adds to the robot orientationToRobotFPoint to rotate to correct possition 
         /// </summary>

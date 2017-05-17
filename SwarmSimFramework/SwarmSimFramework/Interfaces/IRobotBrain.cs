@@ -3,35 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Interfaces
 {
+    /// <summary>
+    /// Decition maker of robot
+    /// </summary>
     public interface IRobotBrain
     {
         /// <summary>
-        /// Decide based on sensor read values
+        /// get or set fitness of brain 
         /// </summary>
-        /// <param name="readValues"></param>
-        /// <returns></returns>
-       float[] Decide(float[] readValues);
+        double Fitness { get; set; }
         /// <summary>
-        /// Minimum possible value of forwarding values
+        /// Bounds for communication with brain, input and output bounds
         /// </summary>
-        float MinOutputValue { get; }
+        Bounds InOutBounds { get; }
         /// <summary>
-        /// Maximum possible value of forwarding values
+        /// Local bounds of intern values
         /// </summary>
-        float MaxOutputValue { get;  }
+        Bounds LocalBounds[] { get;  }
         /// <summary>
-        /// Minimum possible value of receiving values 
-        /// </summary>
-        float MinInputValue { get;  }
-        /// <summary>
-        /// Maximum possible value of receiving values 
-        /// </summary>
-        float MaxInputValue { get;  }
-        /// <summary>
-        /// Dimension of recieving values
+        /// Dimension of input values 
         /// </summary>
         int InputDimension { get;  }
         /// <summary>
@@ -39,9 +33,20 @@ namespace SwarmSimFramework.Interfaces
         /// </summary>
         int OutputDimension { get;  }
         /// <summary>
+        /// Normalization fncs 
+        /// </summary>
+        NormalizeFunc[] NormalizeFuncs { get; }
+        /// <summary>
+        /// Decide based on sensor read values
+        /// </summary>
+        /// <param name="readValues"></param>
+        /// <returns></returns>
+        float[] Decide(float[] readValues);
+        /// <summary>
         /// Clean copy of robot brain 
         /// </summary>
         /// <returns></returns>
         IRobotBrain GetCleanCopy();
+ 
     }
 }
