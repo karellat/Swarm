@@ -28,7 +28,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Bounds of output 
         /// </summary>
-        public static Bounds CoordinateBounds = new Bounds {Max = 100, Min = -100};
+        public static Bounds CoordinateBounds = new Bounds {Max = 1, Min = -1};
         /// <summary>
         /// Create new Sensor & connect it to Robot 
         /// </summary>
@@ -40,7 +40,7 @@ namespace SwarmSimFramework.Classes.Entities
             FPoint = Middle;
             //Set bounds 
             Dimension = 9;
-            LocalBounds = new Bounds[6];
+            LocalBounds = new Bounds[Dimension];
             LocalBounds[0] = new Bounds() {Min = 0, Max = 1};
             LocalBounds[1] = CoordinateBounds;
             LocalBounds[2] = CoordinateBounds;
@@ -72,8 +72,25 @@ namespace SwarmSimFramework.Classes.Entities
             var intertesections = map.CollisionRadio(this);
             //Prepare ouput
             float[] o = new float[Dimension];
-            //
-            o[0] = 
+            //find if any intersection with radio signals 
+            for (int i = 0; i < (int) RadioEntity.SignalValueBounds.Max; i++)
+            {
+                if (intertesections.ContainsKey(i))
+                {
+                    o[i * 3] = 1;
+                    //Vector direction 
+                    Vector2 dir = intertesections[i].MeanDirection();
+                    o[i * 3 + 1] = dir.X;
+                    o[i * 3 + 2] = dir.Y;
+                }
+                else
+                {
+                    o[i * 3] = 0;
+                    o[i * 3 + 1] = 0;
+                    o[i * 3 + 2] = 0; 
+
+                }
+            }
             return o.Normalize(NormalizeFuncs);
         }
         /// <summary>

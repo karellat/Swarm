@@ -33,7 +33,7 @@ namespace SwarmSimFramework.Classes.Map
         {
             if(AmountOfSignal == 0)
                 return Vector2.Zero;
-            return new Vector2(SumOfDirections.X / AmountOfSignal, SumOfDirections.Y / AmountOfSignal);
+            return Vector2.Normalize(new Vector2(SumOfDirections.X / AmountOfSignal, SumOfDirections.Y / AmountOfSignal));
         }
     }
     /// <summary>
