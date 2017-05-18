@@ -2,7 +2,7 @@
 
 namespace SwarmSimFramework.Classes.Entities
 {
-    public class MineralEntity:CircleEntity
+    public class RawMaterialEntity:CircleEntity
     {
         /// <summary>
         /// Amount of cycles to refactor to fuel 
@@ -11,18 +11,18 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Amount fuel created by refactoring 
         /// </summary>
-        public float FuelToRefactor { get; }
+        public float MaterialToRefactor { get; }
         /// <summary>
         /// Create new mineral entity
         /// </summary>
         /// <param name="middle"></param>
         /// <param name="radius"></param>
-        /// <param name="fuelToRefactor"></param>
+        /// <param name="materialToRefactor"></param>
         /// <param name="cycleRefactor"></param>
-        public MineralEntity(Vector2 middle, float radius, float fuelToRefactor, int cycleRefactor) : base(middle,radius,"Mineral Entity")
+        public RawMaterialEntity(Vector2 middle, float radius, float materialToRefactor, int cycleRefactor) : base(middle,radius,"Mineral Entity")
         {
             CycleToRefactor = cycleRefactor;
-            FuelToRefactor = fuelToRefactor;
+            MaterialToRefactor = materialToRefactor;
 
         }
         /// <summary>

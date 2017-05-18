@@ -110,7 +110,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 }
                 else
                 {
-                    if (robot.PeekContainer() == null || !(robot.PeekContainer() is MineralEntity))
+                    if (robot.PeekContainer() == null || !(robot.PeekContainer() is RawMaterialEntity))
                     {
                         robot.InvalidRefactorOperation++;
                         return;
@@ -118,10 +118,10 @@ namespace SwarmSimFramework.Classes.Effectors
                     else
                     {
                         //Dismantle mineral
-                        var m = (MineralEntity) robot.PopContainer();
+                        var m = (RawMaterialEntity) robot.PopContainer();
                         Refactoring = true;
                         CyclesToEnd = m.CycleToRefactor;
-                        FuelToRefactor = m.FuelToRefactor;
+                        FuelToRefactor = m.MaterialToRefactor;
                         return; 
                     }
                 }

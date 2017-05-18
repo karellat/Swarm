@@ -5,40 +5,110 @@ using SwarmSimFramework.SupportClasses;
 namespace SwarmSimFramework.Classes.Effectors
 {
     /// <summary>
-    /// Two state 
+    /// Two state effector implemented as  line, if  coliding with RawMaterialEntity refactor to wood 
+    /// if more than zero try to refactor 
     /// </summary>
     public class WoodRefactor: LineEntity, IEffector
-
     {
-        public WoodRefactor(Vector2 a, Vector2 b, Vector2 rotationMiddle, string name, float orientation = 0) : base(a, b, rotationMiddle, name, orientation)
+        /// <summary>
+        /// Orientation to robot FPoint
+        /// </summary>
+        public float OrientationToRobotFPoint { get; protected set; }
+        /// <summary>
+        /// Intern values bounds
+        /// </summary>
+        public Bounds[] LocalBounds { get; }
+        /// <summary>
+        /// Normalization fncs 
+        /// </summary>
+        public NormalizeFunc[] NormalizeFuncs { get; protected set; }
+        /// <summary>
+        /// Dimension of effector 
+        /// </summary>
+        public int Dimension { get; }
+        /// <summary>
+        /// Create wood refactor 
+        /// </summary>
+        /// <param name="robot"></param>
+        /// <param name="length"></param>
+        /// <param name="orientation"></param>
+        public WoodRefactor(RobotEntity robot, float length, float orientation) :
+            base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * length),
+                robot.Middle, "Wood refactor")
         {
-        }
+            //Rotate sensor to its possition
+            OrientationToRobotFPoint = orientation;
+            this.RotateRadians(OrientationToRobotFPoint + robot.Orientation);
 
-        public WoodRefactor(string name) : base(name)
-        {
-        }
+            Dimension = 1; 
+            LocalBounds = new [] {new Bounds(){Min=-1,Max = 1}, };
 
+            NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound,LocalBounds);
+        }
+        /// <summary>
+        /// Make clone woodrefactor 
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
-            throw new System.NotImplementedException();
+            return (Entity) this.MemberwiseClone();
         }
 
-        public int Dimension { get; }
+        /// <summary>
+        /// Connect to  robot
+        /// </summary>
+        /// <param name="robot"></param>
         public void ConnectToRobot(RobotEntity robot)
         {
-            throw new System.NotImplementedException();
+            //Connect to the middle of the robot
+            this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+            this.MoveTo(robot.Middle);
+            //Count normalization 
+            NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
-
+        /// <summary>
+        /// [0] - if more than zero make refactor wood if posible
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="robot"></param>
+        /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
         {
-            throw new System.NotImplementedException();
+            var s = settings.Normalize(NormalizeFuncs)[0];
+            //Update possition 
+            if (robot.Middle != this.RotationMiddle)
+                this.MoveTo(robot.Middle);
+            if (Orientation != robot.Orientation + OrientationToRobotFPoint)
+                this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+
+            //Decide if refactor 
+            if (settings[0] > 0)
+            {
+                var intersection = map.Collision(this, robot);
+                //if material to refactor 
+                if (intersection.CollidingEntity.Color == EntityColor.RawMaterialColor)
+                {
+                    var c = (RawMaterialEntity) intersection.CollidingEntity;
+                    map.PasiveEntities.Remove(c);
+                    map.PasiveEntities.Add(new WoodEntity(c.Middle,c.Radius,c.MaterialToRefactor));
+                }
+                else
+                {
+                    robot.InvalidRefactorOperation++;
+                    return;
+                }
+            }
+            else
+            {
+                //IDLE 
+            }
         }
 
-        public Bounds[] LocalBounds { get; }
-        public NormalizeFunc[] NormalizeFuncs { get; }
+
         public IEffector Clone()
         {
-            throw new System.NotImplementedException();
+            return (IEffector) DeepClone();
+            
         }
     }
 }

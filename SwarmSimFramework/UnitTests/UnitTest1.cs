@@ -1575,7 +1575,7 @@ namespace UnitTests
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             MineralRefactor mr = new MineralRefactor(r);
-            r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
+            r.PushContainer(new RawMaterialEntity(Vector2.Zero, 1, 100, 2));
             mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
@@ -1609,7 +1609,7 @@ namespace UnitTests
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1, 1);
             MineralRefactor mr = new MineralRefactor(r);
-            r.PushContainer(new MineralEntity(Vector2.Zero, 1, 100, 2));
+            r.PushContainer(new RawMaterialEntity(Vector2.Zero, 1, 100, 2));
             mr.Effect(new[] {-100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidRefactorOperation);
             Assert.IsTrue(mr.Refactoring);
