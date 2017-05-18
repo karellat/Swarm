@@ -58,6 +58,7 @@
     <Compile Include="Classes\Entities\Entity.cs" />
     <Compile Include="Classes\Entities\FuelEntity.cs" />
     <Compile Include="Classes\Entities\LineEntity.cs" />
+    <Compile Include="Classes\Entities\ObstacleEntity.cs" />
     <Compile Include="Classes\Entities\RawMaterialEntity.cs" />
     <Compile Include="Classes\Entities\TreeEnity.cs" />
     <Compile Include="Classes\Entities\WoodEntity.cs" />
