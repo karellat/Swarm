@@ -6,6 +6,9 @@ using System;
 
 namespace SwarmSimFramework.Classes.Effectors
 {
+    /// <summary>
+    /// State control sensor to create signals
+    /// </summary>
     public class RadioTransmitter : CircleEntity,IEffector
     {
         /// <summary>
@@ -27,9 +30,19 @@ namespace SwarmSimFramework.Classes.Effectors
             //Update position
             this.MoveTo(robot.Middle);
             radioSignal.MoveTo(robot.Middle);
-            float signalValue = settings.Normalize(NormalizeFuncs)[0];
+
+            float max = settings[0];
+            int index = 0;
+            for (int i = 1; i < settings.Length; i++)
+            {
+                if (settings[i] > max)
+                {
+                    index = i;
+                    max = settings[i];
+                }
+            }
             //Change signal value & added it to the map 
-            radioSignal.ValueOfSignal = (int) Math.Ceiling(signalValue);
+            radioSignal.ValueOfSignal = index;
             map.RadioEntities.Add(radioSignal); 
         }
         /// <summary>
@@ -51,9 +64,12 @@ namespace SwarmSimFramework.Classes.Effectors
             //Create representation of radio signal 
             radioSignal = new RadioEntity(robot.Middle,radiusOfTransmitting,0);
             //Create localBounds and normalization fncs
-            Dimension = 1;
-            LocalBounds = new Bounds[1];
-            LocalBounds[0] = RadioEntity.SignalValueBounds;
+            Dimension = 3;
+            LocalBounds = new Bounds[Dimension];
+            for (int i = 0; i < Dimension; i++)
+            {
+                LocalBounds[i] = new Bounds() {Min = -100, Max = 100};
+            }
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
 
         }

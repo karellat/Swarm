@@ -1351,10 +1351,10 @@ namespace UnitTests
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
             RadioTransmitter rt = new RadioTransmitter(r, 10);
-            rt.Effect(new[] {100.0f}, r, map);
+            rt.Effect(new[] {0,0,1.0f}, r, map);
             Assert.AreEqual(new Vector2(100, 100), map.RadioEntities[0].Middle);
             Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Max, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual(2, map.RadioEntities[0].ValueOfSignal);
             map.MakeStep();
             Assert.AreEqual(0, map.RadioEntities.Count);
         }
@@ -1365,16 +1365,16 @@ namespace UnitTests
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
             RadioTransmitter rt = new RadioTransmitter(r, 10);
-            rt.Effect(new[] {100.0f}, r, map);
+            rt.Effect(new[] {100.0f,0,0}, r, map);
             Assert.AreEqual(new Vector2(100, 100), map.RadioEntities[0].Middle);
             Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Max, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual(0, map.RadioEntities[0].ValueOfSignal);
             map.MakeStep();
             r.MoveTo(new Vector2(10, 10));
-            rt.Effect(new[] {-100.0f}, r, map);
+            rt.Effect(new[] {0,1.0f,0}, r, map);
             Assert.AreEqual(new Vector2(10, 10), map.RadioEntities[0].Middle);
             Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual((int) RadioEntity.SignalValueBounds.Min, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual(1, map.RadioEntities[0].ValueOfSignal);
 
         }
     }
