@@ -53,11 +53,14 @@
     <Compile Include="Classes\Effectors\MineralRefactor.cs" />
     <Compile Include="Classes\Effectors\TwoWheelMotor.cs" />
     <Compile Include="Classes\Effectors\Weapon.cs" />
+    <Compile Include="Classes\Effectors\WoodRefactor.cs" />
     <Compile Include="Classes\Entities\CircleEntity.cs" />
     <Compile Include="Classes\Entities\Entity.cs" />
     <Compile Include="Classes\Entities\FuelEntity.cs" />
     <Compile Include="Classes\Entities\LineEntity.cs" />
     <Compile Include="Classes\Entities\MineralEntity.cs" />
+    <Compile Include="Classes\Entities\TreeEnity.cs" />
+    <Compile Include="Classes\Entities\WoodEntity.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\RobotBrains\WeightMeanBrain.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />

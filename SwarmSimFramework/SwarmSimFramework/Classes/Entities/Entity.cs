@@ -11,7 +11,7 @@ namespace SwarmSimFramework.Classes.Entities
         public enum EntityColor
         {
             ObstacleColor,
-            MineralColor, 
+            RawMaterialColor, 
             FuelColor, 
             RobotColor,
             WoodColor,

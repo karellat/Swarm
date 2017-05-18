@@ -62,7 +62,7 @@ namespace SwarmSimFramework.Classes.Entities
 
             Dictionary<EntityColor, ColorIntersection> dic = map.CollisionColor(this);
 
-            o[0] = dic.ContainsKey(EntityColor.MineralColor) ? dic[EntityColor.MineralColor].Amount : 0;
+            o[0] = dic.ContainsKey(EntityColor.RawMaterialColor) ? dic[EntityColor.RawMaterialColor].Amount : 0;
             o[1] = dic.ContainsKey(EntityColor.ObstacleColor) ? dic[EntityColor.ObstacleColor].Amount : 0;
             o[2] = dic.ContainsKey(EntityColor.FuelColor) ? dic[EntityColor.FuelColor].Amount : 0;
 
