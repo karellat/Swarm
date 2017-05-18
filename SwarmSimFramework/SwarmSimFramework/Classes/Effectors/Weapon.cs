@@ -6,9 +6,10 @@ namespace SwarmSimFramework.Classes.Effectors
 {
     /// <summary>
     /// Weapon effector cause damage to friendly Robots or to enemy Robots
-    /// [0,1) => attack friend
-    /// [1,2] => idle
-    /// (2,3] => attack enemy 
+    /// need of: 
+    /// [0]  => attack friend
+    /// [1] => idle
+    /// [2] => attack enemy 
     /// </summary>
     public class Weapon : LineEntity,IEffector
     {
@@ -48,8 +49,9 @@ namespace SwarmSimFramework.Classes.Effectors
             this.RotateRadians(orientationToFPoint + robot.Orientation);
 
             Damage = damage;
-            Dimension = 1;
-            LocalBounds = new [] {new Bounds(){Max=3, Min=0} };
+            Dimension = 3;
+
+            LocalBounds = new [] {new Bounds(){Max=1, Min=0}, new Bounds() { Max = 1, Min = 0 }, new Bounds() { Max = 1, Min = 0 } };
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
         }
         /// <summary>
@@ -85,9 +87,9 @@ namespace SwarmSimFramework.Classes.Effectors
             if (Orientation != robot.Orientation + OrientationToRobotFPoint)
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
 
-            var s = settings.Normalize(NormalizeFuncs)[0];
+
             //Attack friend if possible 
-            if (s >= 0 && s < 1)
+            if (settings[0] >= settings[1] && settings[0] >= settings[2])
             {
                 var i = map.Collision(this, robot);
                 if (i.CollidingEntity is RobotEntity)
@@ -103,8 +105,8 @@ namespace SwarmSimFramework.Classes.Effectors
                 return;
             }
             //Attack enemy if possible
-            else if(s > 2 && s <= 3)
-            {
+            else  if (settings[2] >= settings[0] && settings[2] >= settings[1])
+                {
                 var i = map.Collision(this, robot);
                 if (i.CollidingEntity is RobotEntity)
                 {

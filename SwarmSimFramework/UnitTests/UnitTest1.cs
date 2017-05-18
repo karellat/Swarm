@@ -1657,10 +1657,10 @@ namespace UnitTests
             var v = er.FPoint;
             v.Y += 10;
             Assert.AreEqual(v, w.B);
-            w.Effect(new[] {0.0f}, er, map);
+            w.Effect(new[] {0.0f,1.0f,0.0f}, er, map);
             Assert.AreEqual(0, er.InvalidWeaponOperation);
             er.MoveTo(new Vector2(30, 30));
-            w.Effect(new[] {0.0f}, er, map);
+            w.Effect(new[] {0.0f,1,0}, er, map);
             Assert.AreEqual(er.FPoint, w.A);
             v = er.FPoint;
             v.Y += 10;
@@ -1673,9 +1673,9 @@ namespace UnitTests
             Map map = new Map(100, 100);
             EmptyRobot er = new EmptyRobot(new Vector2(50, 50), 1);
             Weapon w = new Weapon(er, 10, 20, 0);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] {1.0f,0,0}, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] {0,0,1.0f}, er, map);
             Assert.AreEqual(2, er.InvalidWeaponOperation);
         }
 
@@ -1687,22 +1687,22 @@ namespace UnitTests
             Weapon w = new Weapon(er, 10, 20, 0);
             EmptyRobot fr = new EmptyRobot(new Vector2(50, 55), 1);
             map.Robots.Add(fr);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] {0,0,100.0f}, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(100, fr.Health);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] {100.0f,0,0}, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(80, fr.Health);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] { 100.0f, 0, 0 }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(60, fr.Health);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] { 100.0f, 0, 0 }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(40, fr.Health);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] { 100.0f, 0, 0 }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(20, fr.Health);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] { 100.0f, 0, 0 }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(0, fr.Health);
             Assert.IsFalse(fr.Alive);
@@ -1714,10 +1714,10 @@ namespace UnitTests
             for (int i = 0; i < 100; i++)
             {
                 j++;
-                w.Effect(new[] {-100.0f}, er, map);
+                w.Effect(new[] { 100.0f, 0, 0 }, er, map);
                 Assert.AreEqual(j, er.InvalidWeaponOperation);
                 j++;
-                w.Effect(new[] {100.0f}, er, map);
+                w.Effect(new[] { 0, 0, 100.0f }, er, map);
                 Assert.AreEqual(j, er.InvalidWeaponOperation);
             }
         }
@@ -1730,22 +1730,22 @@ namespace UnitTests
             Weapon w = new Weapon(er, 10, 20, 0);
             EnemyRobot e = new EnemyRobot(new Vector2(50, 55), 1);
             map.Robots.Add(e);
-            w.Effect(new[] {-100.0f}, er, map);
+            w.Effect(new[] { 100.0f, 0, 0 }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(100, e.Health);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] { 0, 0, 100.0f }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(80, e.Health);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] { 0, 0, 100.0f }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(60, e.Health);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] { 0, 0, 100.0f }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(40, e.Health);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] { 0, 0, 100.0f }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(20, e.Health);
-            w.Effect(new[] {100.0f}, er, map);
+            w.Effect(new[] { 0, 0, 100.0f }, er, map);
             Assert.AreEqual(1, er.InvalidWeaponOperation);
             Assert.AreEqual(0, e.Health);
             Assert.IsFalse(e.Alive);
@@ -1757,10 +1757,10 @@ namespace UnitTests
             for (int i = 0; i < 100; i++)
             {
                 j++;
-                w.Effect(new[] {-100.0f}, er, map);
+                w.Effect(new[] { 100.0f, 0, 0 }, er, map);
                 Assert.AreEqual(j, er.InvalidWeaponOperation);
                 j++;
-                w.Effect(new[] {100.0f}, er, map);
+                w.Effect(new[] { 0, 0, 100.0f }, er, map);
                 Assert.AreEqual(j, er.InvalidWeaponOperation);
             }
         }
