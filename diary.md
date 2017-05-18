@@ -1,17 +1,25 @@
-cd # Diary of project
+# Diary of project
 # FrameWork for: Evolutionary Algorithms for the Control of Heterogeneous Robotic Swarm
 
 ## TODO: 
 REFACTOR WHOLE PROJECT
 Add consuming fuel to effectors
+Omezit signály na pevný počet(3) tzn. upravit sensor na čtení tří signálů
+Barvičky udělat vracení jednotlivých proměnných
+Memory - Effector, Sensor
+Hyperbolický tangens,ReLU,PReLU, lineární lomená fce
+- váhy float - (-0.1,0.1) náhodně
+- mutace, gausovské mutace z normálního rozdělení, málo..., max. 10 vah 
+%1,%0.5 z vah a mutace časté, 
+Evoluční stragii, Diferenciální evoluce  
+
 ## Q&A: 
 ### Implementation:  
 * How long should be GetString();
 * How to log? 
 ### Evolution: 
-* Radio sensor, what should it return?
-* Added memory, does it make sense? 
-## Scenary 
+*
+## Scenario
 ### Mineral refactoring
 * Scout Robot
 	* container size: 0
@@ -74,7 +82,6 @@ Add consuming fuel to effectors
 	* 3xFuelLineSensor
 	* 3xLineTypeeSensor
 	* LocatorSensor
-	* TypeCircleSensor
 	* 3x TouchSensor
 	* TwoWheelMotor
 	* RadioTransmitter
