@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SwarmSimFramework.Classes.Entities;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Security.Cryptography;
 using SwarmSimFramework.Classes;
@@ -1814,6 +1815,68 @@ namespace UnitTests
         }
     }
 
+    [TestClass]
+    public class WoodRefactorTests
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(150,150);
+            EmptyRobot er = new EmptyRobot(new Vector2(30,30),5,0);
+            WoodRefactor wr = new WoodRefactor(er,10,0);
+            Assert.AreEqual(new Vector2(30,35),wr.A);
+            Assert.AreEqual(new Vector2(30,45),wr.B);
+            Assert.AreEqual(0, er.Orientation);
+            wr.Effect(new []{-100.0f},er,map);
+            Assert.AreEqual(new Vector2(30, 35), wr.A);
+            Assert.AreEqual(new Vector2(30, 45), wr.B);
+            Assert.AreEqual(0,er.InvalidRefactorOperation);
+            wr.Effect(new[] { 100.0f }, er, map);
+            Assert.AreEqual(new Vector2(30, 35), wr.A);
+            Assert.AreEqual(new Vector2(30, 45), wr.B);
+            Assert.AreEqual(1, er.InvalidRefactorOperation);
+        }
+
+        [TestMethod]
+        public void CutTree()
+        {
+            Map map = new Map(150, 150);
+            EmptyRobot er = new EmptyRobot(new Vector2(30, 30), 5, 0);
+            WoodRefactor wr = new WoodRefactor(er, 10, 0);
+            Assert.AreEqual(new Vector2(30, 35), wr.A);
+            Assert.AreEqual(new Vector2(30, 45), wr.B);
+            Assert.AreEqual(0, er.Orientation);
+            wr.Effect(new[] { 100.0f }, er, map);
+            Assert.AreEqual(1, er.InvalidRefactorOperation);
+            RawMaterialEntity rme = new RawMaterialEntity(new Vector2(30,40),2,10,0);
+            map.PasiveEntities.Add(rme);
+            Assert.AreEqual(1,map.PasiveEntities.Count);
+            Assert.AreEqual(Entity.EntityColor.RawMaterialColor,map.PasiveEntities[0].Color);
+            wr.Effect(new []{100.0f},er,map);
+            Assert.AreEqual(Entity.EntityColor.WoodColor,map.PasiveEntities[0].Color);
+        }
+
+        [TestMethod]
+        public void MovingCutTest()
+        {
+            Map map = new Map(150, 150);
+            EmptyRobot er = new EmptyRobot(new Vector2(30, 30), 5, 0);
+            WoodRefactor wr = new WoodRefactor(er, 10, 0);
+            map.PasiveEntities.Add(new RawMaterialEntity(new Vector2(30, 146), 1, 20, 0));
+            for (int i = 0; i < 100; i++)
+            {
+                wr.Effect(new [] {100.0f},er,map);
+                Assert.AreEqual(i+1,er.InvalidRefactorOperation);
+                Assert.AreEqual(new Vector2(30, 35 +i), wr.A);
+                Assert.AreEqual(new Vector2(30, 45 +i), wr.B);
+                Assert.AreEqual(i+1, er.InvalidRefactorOperation);
+                Assert.AreEqual(Entity.EntityColor.RawMaterialColor, map.PasiveEntities[0].Color);
+                er.MoveTo(er.Middle + new Vector2(0,1));
+            }
+            wr.Effect(new[] { 100.0f }, er, map);
+            Assert.AreEqual(Entity.EntityColor.WoodColor, map.PasiveEntities[0].Color);
+        }
+    }
 
 
     public static class TestExtensions

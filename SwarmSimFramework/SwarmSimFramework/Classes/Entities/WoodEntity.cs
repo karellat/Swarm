@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Claims;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -15,6 +16,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="amountOfWood"></param>
         public WoodEntity(Vector2 middle, float radius, float amountOfWood) : base(middle, radius,"Wood entity" , middle, 0)
         {
+            Color = EntityColor.WoodColor;
             AmountOfWood = amountOfWood;
         }
         /// <summary>

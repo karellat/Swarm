@@ -21,6 +21,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="cycleRefactor"></param>
         public RawMaterialEntity(Vector2 middle, float radius, float materialToRefactor, int cycleRefactor) : base(middle,radius,"Mineral Entity")
         {
+            Color = EntityColor.RawMaterialColor;
             CycleToRefactor = cycleRefactor;
             MaterialToRefactor = materialToRefactor;
 

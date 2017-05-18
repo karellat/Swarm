@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Data.SqlTypes;
+using System.Numerics;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -86,7 +87,7 @@ namespace SwarmSimFramework.Classes.Effectors
             {
                 var intersection = map.Collision(this, robot);
                 //if material to refactor 
-                if (intersection.CollidingEntity.Color == EntityColor.RawMaterialColor)
+                if (!float.IsPositiveInfinity(intersection.Distance) && intersection.CollidingEntity.Color == EntityColor.RawMaterialColor)
                 {
                     var c = (RawMaterialEntity) intersection.CollidingEntity;
                     map.PasiveEntities.Remove(c);
