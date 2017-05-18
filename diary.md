@@ -11,7 +11,89 @@ Add consuming fuel to effectors
 ### Evolution: 
 * Radio sensor, what should it return?
 * Added memory, does it make sense? 
-### Days of actual sollution
+## Scenary 
+### Mineral refactoring
+* Scout Robot
+	* container size: 0
+	* 3x FuelLineSensor
+	* 3x LineTypeeSensor
+	* LocatorSensor
+	* TypeCircleSensor
+	* 3x TouchSensor
+	* TwoWheelMotor
+	* RadioTransmitter
+	* RadioSensor
+
+* Worker Robot
+	* container size: 5
+	* TwoWheelMotor
+	* Picker
+	* 3x FuelLineSensor
+	* 3x LineTypeSensor
+	* TouchSensor 
+	* LocatorSensor
+	* RadioSensor
+	* RadioTransmiter
+
+* Refactor Robot
+	* container size: 10 
+	* 1 LineTypeSensor
+	* 1 FuelLineSensor 
+	* 3 TouchSensor
+	* Picker
+	* MineralRefactor 
+	* RadioSensor
+
+### Wood Cutting 
+* Scout Cutter 
+	* container size: 0
+	* 3x FuelLineSensor
+	* 3x LineTypeeSensor
+	* LocatorSensor
+	* TypeCircleSensor
+	* 3x TouchSensor
+	* TwoWheelMotor
+	* RadioTransmitter
+	* RadioSensor
+	* WoodRefactor 
+
+* Worker Robot
+	* container size: 5
+	* TwoWheelMotor
+	* Picker
+	* 3x FuelLineSensor
+	* 3x LineTypeSensor
+	* 3x TouchSensor 
+	* LocatorSensor
+	* RadioSensor
+	* RadioTransmiter
+
+### Competetive
+* Light scout unit  
+	* container size: 0
+	* 3xFuelLineSensor
+	* 3xLineTypeeSensor
+	* LocatorSensor
+	* TypeCircleSensor
+	* 3x TouchSensor
+	* TwoWheelMotor
+	* RadioTransmitter
+	* RadioSensor
+	* 1x Weapon
+
+* Heavy robot unit
+	* container size: 5
+	* TwoWheelMotor
+	* 3xFuelLineSensor
+	* 3xLineTypeSensor
+	* 3x TouchSensor 
+	* LocatorSensor
+	* RadioSensor
+	* RadioTransmiter
+	* 3 Weapon high damage
+
+
+## Days of actual sollution
 
 * 05.05.2017 - 
 	* refactoring old solutions
@@ -79,6 +161,11 @@ Add consuming fuel to effectors
 	* mortality and health of RobotEntity
 	* map have to check Alive of robot
 	* WeaponEffector implemented & tested
+
+* 17.05.2017
+	* IRobotBrain interface declared
+	* WeightMeanBrain added
+	* WeightMeanBrain tested
 	
 
 
