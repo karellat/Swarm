@@ -39,14 +39,17 @@ namespace SwarmSimFramework.Classes.Entities
             //No need for orientation
             FPoint = Middle;
             //Set bounds 
-            Dimension = 6;
+            Dimension = 9;
             LocalBounds = new Bounds[6];
-            LocalBounds[0] = RadioEntity.SignalValueBounds;
+            LocalBounds[0] = new Bounds() {Min = 0, Max = 1};
             LocalBounds[1] = CoordinateBounds;
             LocalBounds[2] = CoordinateBounds;
-            LocalBounds[3] = RadioEntity.SignalValueBounds;
+            LocalBounds[3] = new Bounds() { Min = 0, Max = 1 };
             LocalBounds[4] = CoordinateBounds;
             LocalBounds[5] = CoordinateBounds;
+            LocalBounds[6] = new Bounds() { Min = 0, Max = 1 };
+            LocalBounds[7] = CoordinateBounds;
+            LocalBounds[8] = CoordinateBounds;
             //Create normalization funcs
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
 
@@ -65,40 +68,12 @@ namespace SwarmSimFramework.Classes.Entities
             if(robot.Middle != Middle)
                 this.MoveTo(robot.Middle);
            
-           //Find intersections 
-           var intertesections = map.CollisionRadio(this);
-
-           //Find two most frequent signals
-            RadioIntersection max = null;
-            RadioIntersection max2 = null;
-            foreach (var i in intertesections)
-            {
-                if (max == null || max.AmountOfSignal < i.Value.AmountOfSignal)
-                {
-                    max2 = max;
-                    max = i.Value; 
-                }
-                else
-                {
-                    if (max2 == null || max2.AmountOfSignal < i.Value.AmountOfSignal)
-                    {
-                        max2 = i.Value;
-                    }
-                }
-                
-            }
+            //Find intersections 
+            var intertesections = map.CollisionRadio(this);
+            //Prepare ouput
             float[] o = new float[Dimension];
-            var maxMeanDir = max != null ? KeepInBounds(CoordinateBounds,max.MeanDirection()) : Vector2.Zero;
-            Vector2 max2MeanDir = max2 != null ? KeepInBounds(CoordinateBounds,max2.MeanDirection()) : Vector2.Zero;
-            //check overflow 
-            //value of the most frequent signal; 
-            o[0] = max != null ? max.ValueOfSignal : RadioEntity.SignalValueBounds.Min;
-            o[1] = maxMeanDir.X;
-            o[2] = maxMeanDir.Y;
-
-            o[3] = max2 != null ? max2.ValueOfSignal : RadioEntity.SignalValueBounds.Min;
-            o[4] = max2MeanDir.X;
-            o[5] = max2MeanDir.Y;
+            //
+            o[0] = 
             return o.Normalize(NormalizeFuncs);
         }
         /// <summary>

@@ -35,6 +35,6 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Interval of used values 
         /// </summary>
-        public static Bounds SignalValueBounds = new Bounds() {Max = 100, Min = -100};
+        public static Bounds SignalValueBounds = new Bounds() {Max = 3, Min = 0};
     }
 }
