@@ -1392,18 +1392,18 @@ namespace UnitTests
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 111));
             r.MoveTo(new Vector2(100, 101));
-            p.Effect(new[] {0.0f}, r, map);
+            p.Effect(new[] {0.0f,0.0f,100.0f}, r, map);
             Assert.AreEqual(0, r.InvalidContainerOperation);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 112));
             r.MoveTo(new Vector2(100, 100));
-            p.Effect(new[] {0.0f}, r, map);
+            p.Effect(new[] {0.0f,0.0f,100f}, r, map);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(100, 111));
             r.RotateDegrees(-90);
-            p.Effect(new[] {0.0f}, r, map);
+            p.Effect(new[] {0.0f,0.0f,100.0f}, r, map);
             Assert.AreEqual(p.RotationMiddle, r.Middle);
             Assert.AreEqual(p.A, r.FPoint);
             Assert.AreEqual(p.B, new Vector2(111, 100));
@@ -1419,7 +1419,7 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            p.Effect(new[] {100.0f}, r, map);
+            p.Effect(new[] {0,100.0f,0}, r, map);
             Assert.AreEqual(0, map.PasiveEntities.Count);
             Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(c, r.PeekContainer());
@@ -1436,7 +1436,7 @@ namespace UnitTests
             Assert.AreEqual(0, map.PasiveEntities.Count);
             Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(c, r.PeekContainer());
-            p.Effect(new[] {-100.0f}, r, map);
+            p.Effect(new[] {100.0f,0,0}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(p.B, c.Middle);
@@ -1456,7 +1456,7 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            p.Effect(new[] {100.0f}, r, map);
+            p.Effect(new[] {0,100.0f,0}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.IsTrue(null == r.PopContainer());
@@ -1474,7 +1474,7 @@ namespace UnitTests
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(0, r.InvalidContainerOperation);
-            p.Effect(new[] {-100.0f}, r, map);
+            p.Effect(new[] {100.0f,0,0}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(1, r.InvalidContainerOperation);
@@ -1490,7 +1490,7 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
-            p.Effect(new[] {100.0f}, r, map);
+            p.Effect(new[] {0,100.0f,0}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(0, r.ActualContainerCount);
             Assert.AreEqual(null, r.PeekContainer());
@@ -1507,7 +1507,7 @@ namespace UnitTests
             map.PasiveEntities.Add(c);
             Circle c1 = new Circle(new Vector2(0, 0), 1);
             r.PushContainer(c1);
-            p.Effect(new[] {-100.0f}, r, map);
+            p.Effect(new[] {100.0f,0,0}, r, map);
             Assert.AreEqual(1, map.PasiveEntities.Count);
             Assert.AreEqual(1, r.ActualContainerCount);
             Assert.AreEqual(c1, r.PeekContainer());

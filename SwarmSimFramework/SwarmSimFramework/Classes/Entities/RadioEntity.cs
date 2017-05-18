@@ -30,7 +30,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="valueOfSignal"></param>
         public RadioEntity(Vector2 middle, float radius, int valueOfSignal) : base(middle, radius, "RadioSignalEntity")
         {
-            if(valueOfSignal > SignalValueBounds.Min && valueOfSignal < SignalValueBounds.Max)
+            if(valueOfSignal >= SignalValueBounds.Min && valueOfSignal < SignalValueBounds.Max)
                 ValueOfSignal = valueOfSignal;
             else
                 throw new ArgumentException("Unsupported value of signal.");        

@@ -5,6 +5,12 @@ using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Effectors
 {
+    /// <summary>
+    /// Effector implementing picking up from map
+    /// Three state control
+    /// need of action
+    /// [0] - PUT [1] - Pick up [2] - IDle
+    /// </summary>
     public class Picker : LineEntity,IEffector
     {
         /// <summary>
@@ -38,19 +44,27 @@ namespace SwarmSimFramework.Classes.Effectors
             this.RotateRadians(OrientationToRobotFPoint + robot.Orientation);
             
             //Dimension
-            Dimension = 1;
-            LocalBounds = new Bounds[1];
-            LocalBounds[0] = new Bounds() {Max = 3, Min = 0};
+            Dimension = 3;
+            LocalBounds = new Bounds[Dimension];
+            for (int i = 0; i < 3; i++)
+            {
+                LocalBounds[i] = new Bounds() {Max = 1, Min = 0};
+            }
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
-
-
         }
+        /// <summary>
+        /// Make deep clone of effector 
+        /// </summary>
+        /// <returns></returns>
         public override Entity DeepClone()
         {
             return (Entity) this.MemberwiseClone();
         }
 
-
+        /// <summary>
+        /// Set up normalization fncs 
+        /// </summary>
+        /// <param name="robot"></param>
         public void ConnectToRobot(RobotEntity robot)
         {
             //Connect to the middle of the robot
@@ -60,6 +74,12 @@ namespace SwarmSimFramework.Classes.Effectors
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
 
+        /// <summary>
+        /// Based on settings pick up entity or put down from container
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="robot"></param>
+        /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
         {
             //Update possition 
@@ -67,9 +87,8 @@ namespace SwarmSimFramework.Classes.Effectors
                 this.MoveTo(robot.Middle);
             if (Orientation != robot.Orientation + OrientationToRobotFPoint)
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
-            var s = settings.Normalize(NormalizeFuncs)[0];
             //put entity from container
-            if (s>= 0 && s < 1)
+            if (settings[0] >= settings[1] && settings[0] >= settings[2])
             {
                 //if empty return
                 if (robot.ActualContainerCount == 0)
@@ -96,8 +115,8 @@ namespace SwarmSimFramework.Classes.Effectors
                 }
             }
             //pick from map
-            else if (s <= 3 && s > 2)
-            {
+            else if (settings[1] >= settings[0] && settings[1] >= settings[2])
+                {
                 //Check, if picker collides with anything
                 var intersections = map.Collision(this, robot);
                 //if no intersection
