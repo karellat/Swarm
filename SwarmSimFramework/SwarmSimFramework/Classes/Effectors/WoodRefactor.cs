@@ -104,7 +104,10 @@ namespace SwarmSimFramework.Classes.Effectors
             }
         }
 
-
+        /// <summary>
+        /// Created clone of effector
+        /// </summary>
+        /// <returns></returns>
         public IEffector Clone()
         {
             return (IEffector) DeepClone();
