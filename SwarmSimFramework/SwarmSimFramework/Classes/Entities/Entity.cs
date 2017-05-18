@@ -10,14 +10,11 @@ namespace SwarmSimFramework.Classes.Entities
         //Enumerate entity type 
         public enum EntityColor
         {
-            EntityColor,
-            ScoutRobotColor,
-            WorkerRobotColor,
-            RefactorRobotColor,
-            MineralColor,
-            FuelColor,
             ObstacleColor,
-            RadioSignalColor
+            MineralColor, 
+            FuelColor, 
+            RobotColor,
+            WoodColor,
         }
 
         public static int EntityColorCount = Enum.GetNames(typeof(EntityColor)).Length;

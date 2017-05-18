@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SwarmSimFramework.Classes.Entities;
 using System.Numerics;
+using System.Runtime.ExceptionServices;
 using System.Security.Cryptography;
 using SwarmSimFramework.Classes;
 using SwarmSimFramework.Classes.Effectors;
@@ -605,16 +606,29 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(3, 6), 1));
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i],-100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
         }
 
         [TestMethod]
@@ -630,16 +644,29 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(3, 5.5f), 1));
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
         }
 
         [TestMethod]
@@ -655,56 +682,108 @@ namespace UnitTests
 
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             r.RotateDegrees(-90);
             o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             r.RotateDegrees(-90);
             o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
 
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             r.RotateDegrees(-90);
             o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
         }
 
         [TestMethod]
@@ -720,16 +799,28 @@ namespace UnitTests
 
             float[] o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
 
             r.MoveTo(new Vector2(4, 3));
 
@@ -739,38 +830,64 @@ namespace UnitTests
             Assert.AreEqual(new Vector2(4, 5), l1.B);
             Assert.AreEqual(new Vector2(4, 4), l1.A);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(new Vector2(2, 3), l2.B);
             Assert.AreEqual(new Vector2(3, 3), l2.A);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(new Vector2(4, 2), l3.A);
             Assert.AreEqual(new Vector2(4, 1), l3.B);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
 
             Assert.AreEqual(new Vector2(5, 3), l4.A);
             Assert.AreEqual(new Vector2(6, 3), l4.B);
             Assert.AreEqual(o[0], 0.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
 
             r.MoveTo(new Vector2(4.5f, 3));
 
             o = l1.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l2.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l3.Count(r, map);
             Assert.AreEqual(o[0], 100.0f);
-            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 1; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
             o = l4.Count(r, map);
             Assert.AreEqual(o[0], -100.0f);
-            Assert.AreEqual(Math.Round(o[1], 4), Math.Round(ObstacleColorCount, 4));
+            Assert.AreEqual(o[1], 100.0f);
+            for (int i = 2; i <= Entity.EntityColorCount; i++)
+            {
+                Assert.AreEqual(o[i], -100.0f);
+            }
         }
     }
 

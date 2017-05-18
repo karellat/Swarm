@@ -13,6 +13,14 @@ Hyperbolický tangens,ReLU,PReLU, lineární lomená fce
 %1,%0.5 z vah a mutace časté, 
 Evoluční stragii, Diferenciální evoluce  
 
+- TEXT: 
+vyplnit sablonu
+Uvod - 2-3 stranky, 
+Povidani obecne - NEAT, Neuronky, Evoluce
+Related work - bakalarky,Fillipi, Papery 4-5, jak to delal nekdo jinej
+Scenare, experimenty - fungovani frameworky, fungovani experimentu, mozky robotu 
+Zaver - uvod v minulym case, shrnuti, jak zlepsit
+
 ## Q&A: 
 ### Implementation:  
 * How long should be GetString();

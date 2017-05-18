@@ -50,13 +50,16 @@ namespace SwarmSimFramework.Classes.Entities
             this.RotateRadians(orientationToRobotFPoint+robot.Orientation);
 
             //OutputSize, returning LengthSqrt & Type of colliding entity 
-            Dimension = 2; 
+            Dimension = 1 + EntityColorCount;
             //Normalize output
             LocalBounds = new Bounds[Dimension];
             // sqrt distance bounds 
             LocalBounds[0] = new Bounds() {Min = 0, Max = lenght};
-            // amount of types, colors  + 1 for null 
-            LocalBounds[1] = new Bounds() {Min = 0, Max = Entity.EntityColorCount}; 
+            // amount of types, 1- for given type 0 for none
+            for (int i = 0; i < EntityColorCount; i++)
+            {
+                LocalBounds[i+1] = new Bounds() {Min=0,Max=1};
+            }
             //Create normalization func to robot normal values
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
@@ -71,11 +74,17 @@ namespace SwarmSimFramework.Classes.Entities
                     this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
                 //Count from the map 
                 Intersection intersection = map.Collision(this, robot);
-                float[] output;
+                float[] output = new float[Dimension];
                 if (intersection.Distance == Double.PositiveInfinity)
-                    output = new[] {LocalBounds[0].Max, LocalBounds[1].Max};
-                else 
-                    output = new[] {(float) Math.Sqrt(intersection.Distance), (float) intersection.CollidingEntity.Color};
+                {
+                    output[0] = LocalBounds[0].Max;
+                }
+                else
+                {
+                    output[0] = (float) Math.Sqrt(intersection.Distance);
+                    output[(int) intersection.CollidingEntity.Color + 1] =
+                        LocalBounds[(int) intersection.CollidingEntity.Color + 1].Max;
+                }
             //Normalize output
                 return output.Normalize(NormalizeFuncs);
             }

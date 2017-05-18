@@ -69,6 +69,7 @@
     <Compile Include="Classes\Sensors\TouchSensor.cs" />
     <Compile Include="Classes\Sensors\TypeCircleSensor.cs" />
     <Compile Include="Interfaces\IEffector.cs" />
+    <Compile Include="Interfaces\IExperiment.cs" />
     <Compile Include="Interfaces\IRobotBrain.cs" />
     <Compile Include="Interfaces\ISensor.cs" />
     <Compile Include="Classes\Map\Map.cs" />
