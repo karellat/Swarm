@@ -82,7 +82,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// <summary>
         /// Generate random perceptron with given expected value & variance and give ActivationFncs 
         /// </summary>
-        public static Perceptron GenerateRandom(float[] weights,float expectedValue, float variance,Func<float,float> activationFunc, IODimension dim, Bounds inOutBounds)
+        public static Perceptron GenerateRandom(float expectedValue, float variance,Func<float,float> activationFunc, IODimension dim, Bounds inOutBounds)
         {
             if(dim.Output != 1)
                 throw new ArgumentException("Not suitable size of output for perceptron");
@@ -106,10 +106,10 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// <summary>
         /// Generate random perceptron with given expected value & variance and give ActivationFncs  and standard bounds
         /// </summary>
-        public static Perceptron GenerateRandom(float[] weights, float expectedValue, float variance,
+        public static Perceptron GenerateRandom(float expectedValue, float variance,
             Func<float, float> activationFunc, IODimension dim)
         {
-           return  GenerateRandom(weights, expectedValue, variance, activationFunc, dim, StandartBounds);
+           return  GenerateRandom(expectedValue, variance, activationFunc, dim, StandartBounds);
         }
 
         /// <summary>
