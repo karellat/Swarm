@@ -181,6 +181,17 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* IRobotBrain interface declared
 	* WeightMeanBrain added
 	* WeightMeanBrain tested
+
+* 18.05.2017
+	* consulation
+	* StateEffector remade interface
+	* added WoodRefactor
+	* added WoodEntity
+* 20.05.2017
+	* activation function added (Tanh, PReLu)
+	* Percepton simple implementationa added (Generating new brains, Mutate this brains)
+	* Math.Net Numerics library added to project due to Normal Distributed random values
+
 	
 
 

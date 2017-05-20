@@ -25,4 +25,13 @@
             return (x * Rescale) + Shift;
         }
     }
+
+    /// <summary>
+    /// Input output dimension
+    /// </summary>
+    public struct IODimension
+    {
+        public int Input;
+        public int Output;
+    }
 }
