@@ -27,16 +27,18 @@ namespace SwarmSimVisu
     {
         //Actual drawing objects
         protected List<Circle> Circles;
+
         protected List<Line> Lines;
 
         //Cached objects of following frame 
         protected object AddingLock = new object();
+
         protected object DrawingLock = new object();
         protected List<Circle> CirclesCache;
         protected List<Line> LinesCache;
         protected bool ReadyToChangeFrame;
 
-        protected RawColor4 BackgroundColor = new RawColor4(0,0,1.0f,0.5f);
+        protected RawColor4 BackgroundColor = new RawColor4(0, 0, 1.0f, 0.5f);
 
 
         public MapCanvas()
@@ -47,9 +49,24 @@ namespace SwarmSimVisu
             LinesCache = new List<Line>();
             CirclesCache = new List<Circle>();
             //Prepare color:
-
+            resCache.Add("SIGNAL1", t => new SolidColorBrush(t, new RawColor4(1.0f, 0, 0, 0.5f)) {Opacity = 0.25f});
+            resCache.Add("SIGNAL2", t => new SolidColorBrush(t, new RawColor4(0, 1.0f, 0, 0.5f)) {Opacity = 0.25f});
+            resCache.Add("SIGNAL3", t => new SolidColorBrush(t, new RawColor4(0, 0, 0.5f, 0.5f)) {Opacity = 0.25f});
+            resCache.Add("ObstacleColor", t => new SolidColorBrush(t, new RawColor4(0.827f, 0.827f, 0.827f, 1.0f)));
+            resCache.Add("FuelColor", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 0.000f, 1.0f)));
+            resCache.Add("RawMaterialColor", t => new SolidColorBrush(t, new RawColor4(0.58f, 0.0f, 0.827f, 1.0f)));
+            resCache.Add("WoodColor", t => new SolidColorBrush(t, new RawColor4(0.545f, 0.271f, 0.075f, 1.0f)));
+            resCache.Add("ROBOT1", t => new SolidColorBrush(t, new RawColor4(0.000f, 1.00f, 0.000f, 0.0f)));
+            resCache.Add("ROBOT2", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 1.000f, 1.00f)));
+            resCache.Add("HEAD", t => new SolidColorBrush(t, new RawColor4(1.000f, 0.000f, 1.000f, 1.0f)));
+            resCache.Add("LINESENSOR", t => new SolidColorBrush(t, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f)));
+            resCache.Add("LINEEFECTOR", t => new SolidColorBrush(t, new RawColor4(0.184f, 0.310f, 0.310f, 1.0f)));
+            resCache.Add("CIRCLEEFFECTOR", t => new SolidColorBrush(t, new RawColor4(1.000f, 1.000f, 0.00f, 1.0f)));
+            resCache.Add("CIRCLESENSOR",t=> new SolidColorBrush(t,new RawColor4(0.961f, 0.871f, 0.702f,1.0f)));
         }
-        /// <summary>
+    
+
+    /// <summary>
         /// Render actual scene
         /// </summary>
         /// <param name="target"></param>
@@ -58,6 +75,9 @@ namespace SwarmSimVisu
             lock (DrawingLock)
             {
                 target.Clear(BackgroundColor);
+                Brush b = new SolidColorBrush(target, new RawColor4(1.0f, 0, 0, 1.0f));
+                b.Opacity = 0.24f;
+                target.FillEllipse(new Ellipse(new RawVector2() {X=100,Y=100},50,50),b );
                foreach (var c in Circles)
                     target.FillEllipse(c.Ellipse,resCache[c.ColorKey] as Brush);
                 foreach (var l in Lines)

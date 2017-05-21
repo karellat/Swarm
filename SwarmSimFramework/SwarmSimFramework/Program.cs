@@ -16,7 +16,7 @@ namespace SwarmSimFramework
             
 
             var r = new ScoutRobot(Vector2.Zero, 3,4);
-            
+            Console.WriteLine(Entity.EntityColor.ObstacleColor.ToString());
         }
     }
 }

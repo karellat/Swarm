@@ -16,6 +16,7 @@ using SharpDX.Direct3D9;
 using SwarmSimFramework.Classes.Experiments;
 using SwarmSimFramework.Interfaces;
 using System.Threading;
+using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimVisu
 {
@@ -28,7 +29,7 @@ namespace SwarmSimVisu
         {
             InitializeComponent();
             //ComoBox for choosing experiment
-            ExperimentComboBox.SelectedIndex = 0;
+            ExperimentComboBox.SelectedIndex = 1;
             ExperimentComboBox.Items.Add("None");
             ExperimentComboBox.Items.Add("TestingExperiment");
 
@@ -202,22 +203,51 @@ namespace SwarmSimVisu
             //Draw radio signals
             foreach (var radio in RunningExperiment.Map.RadioEntities)
             {
-                
+                DrawCanvas.AddCircle(radio.Middle,radio.Radius,"SIGNAL" + radio.ValueOfSignal);
             }
             //Draw map passive entities
             foreach (var passive in RunningExperiment.Map.PasiveEntities)
             {
-                
+                DrawCanvas.AddCircle(passive.Middle,passive.Radius,passive.Color.ToString());   
             }
             //Draw fuel
             foreach (var fuel in RunningExperiment.Map.FuelEntities)
             {
-                
+                DrawCanvas.AddCircle(fuel.Middle,fuel.Radius,fuel.Color.ToString());
             }
             //Draw robots 
             foreach (var robot in RunningExperiment.Map.Robots)
             {
-                
+                DrawCanvas.AddCircle(robot.Middle,robot.Radius,"ROBOT" + robot.TeamNumber);
+                DrawCanvas.AddLine(robot.Middle,robot.FPoint,"HEAD",3);
+                foreach (var s in robot.Sensors)
+                {
+                    if (s is LineEntity)
+                    {
+                        var l = (LineEntity) s;
+                        DrawCanvas.AddLine(l.A,l.B,"LINESENSOR",1);
+                    }
+                   else if (s is CircleEntity)
+                    {
+                        var c = (CircleEntity) s;
+                        DrawCanvas.AddCircle(c.Middle,c.Radius,"CIRCLESENSOR");
+                    }
+                }
+
+                foreach (var e in robot.Effectors)
+                {
+                    if (e is LineEntity)
+                    {
+                        var l = (LineEntity)e;
+                        DrawCanvas.AddLine(l.A, l.B, "LINEEFFECTOR", 1);
+                    }
+                    else if (e is CircleEntity)
+                    {
+                        var c = (CircleEntity)e;
+                        DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLEEFFECTOR");
+                    }
+                }
+
             }
         }
 
