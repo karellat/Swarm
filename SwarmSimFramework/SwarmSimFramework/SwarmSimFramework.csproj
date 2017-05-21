@@ -65,6 +65,7 @@
     <Compile Include="Classes\Entities\RawMaterialEntity.cs" />
     <Compile Include="Classes\Entities\TreeEnity.cs" />
     <Compile Include="Classes\Entities\WoodEntity.cs" />
+    <Compile Include="Classes\Experiments\TestingExperiment.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
     <Compile Include="Classes\RobotBrains\SingleLayerNeuronNetwork.cs" />

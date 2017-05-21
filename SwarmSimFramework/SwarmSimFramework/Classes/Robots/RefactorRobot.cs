@@ -18,7 +18,9 @@ namespace SwarmSimFramework.Classes.Robots
             sensors[3] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
             sensors[4] = new TouchSensor(this, 0.1f, DegreesToRadians(270));
 
-            sensors[5] = new RadioSensor(this, 100); 
+            sensors[5] = new RadioSensor(this, 100);
+
+            this.Sensors = sensors;
 
             IEffector[] effectors = new IEffector[3];
             effectors[0] = new RadioTransmitter(this,200);
@@ -27,6 +29,11 @@ namespace SwarmSimFramework.Classes.Robots
             effectors[3] = new Picker(this,20,DegreesToRadians(90));
             effectors[4] = new Picker(this, 20, DegreesToRadians(180));
             effectors[5] = new Picker(this, 20, DegreesToRadians(270));
+
+            this.Effectors = effectors; 
+
+            this.CountDimension();
+            
         }
     }
 }
