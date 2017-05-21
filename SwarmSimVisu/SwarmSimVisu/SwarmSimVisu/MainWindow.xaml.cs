@@ -67,7 +67,7 @@ namespace SwarmSimVisu
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void InitExperimentClick(object sender, RoutedEventArgs e)
+        private void InitExperimentClick(object sender, RoutedEventArgs e)
         {
             //Experiment selection
             switch (ExperimentComboBox.SelectedIndex)
@@ -103,8 +103,12 @@ namespace SwarmSimVisu
             Paused = false;
             Pausing = false;
         }
-
-        public bool PrepareExperiment(IExperiment experiment)
+        /// <summary>
+        /// Prepare Experiment Drawing stuff
+        /// </summary>
+        /// <param name="experiment"></param>
+        /// <returns></returns>
+        private bool PrepareExperiment(IExperiment experiment)
         {
             var HeightMargin = MainGrid.ActualHeight - experiment.Map.MaxHeight;
             var WidthMargin = MainGrid.ActualWidth - experiment.Map.MaxWidth;
@@ -195,7 +199,26 @@ namespace SwarmSimVisu
         /// </summary>
         private void DrawExperiment()
         {
-            
+            //Draw radio signals
+            foreach (var radio in RunningExperiment.Map.RadioEntities)
+            {
+                
+            }
+            //Draw map passive entities
+            foreach (var passive in RunningExperiment.Map.PasiveEntities)
+            {
+                
+            }
+            //Draw fuel
+            foreach (var fuel in RunningExperiment.Map.FuelEntities)
+            {
+                
+            }
+            //Draw robots 
+            foreach (var robot in RunningExperiment.Map.Robots)
+            {
+                
+            }
         }
 
         //CLICK CONTROL: 
