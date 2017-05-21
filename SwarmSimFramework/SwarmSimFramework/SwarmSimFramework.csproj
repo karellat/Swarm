@@ -68,7 +68,9 @@
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
     <Compile Include="Classes\RobotBrains\SingleLayerNeuronNetwork.cs" />
+    <Compile Include="Classes\Robots\RefactorRobot.cs" />
     <Compile Include="Classes\Robots\ScoutRobot.cs" />
+    <Compile Include="Classes\Robots\WorkerRobot.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
     <Compile Include="Classes\Entities\RadioEntity.cs" />
