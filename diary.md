@@ -31,25 +31,30 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 ### Mineral refactoring
 * Scout Robot
 	* container size: 0
+	
 	* 3x FuelLineSensor
 	* 3x LineTypeeSensor
 	* LocatorSensor
 	* TypeCircleSensor
 	* 3x TouchSensor
+	* RadioSensor
+    
 	* TwoWheelMotor
 	* RadioTransmitter
-	* RadioSensor
 
 * Worker Robot
 	* container size: 5
-	* TwoWheelMotor
-	* Picker
+
+
 	* 3x FuelLineSensor
 	* 3x LineTypeSensor
-	* TouchSensor 
+	* 3x TouchSensor 
 	* LocatorSensor
 	* RadioSensor
+	
 	* RadioTransmiter
+	* TwoWheelMotor
+	* Picker
 
 * Refactor Robot
 	* container size: 10 

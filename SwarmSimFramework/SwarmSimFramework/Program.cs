@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using SwarmSimFramework.Classes.Robots;
 
 namespace SwarmSimFramework
 {
@@ -11,7 +13,10 @@ namespace SwarmSimFramework
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Entity.EntityColorCount);
+            
+
+            var r = new ScoutRobot(Vector2.Zero, 3,4);
+            
         }
     }
 }

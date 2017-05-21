@@ -131,17 +131,19 @@ namespace SwarmSimFramework.Classes.Entities
             TeamNumber = teamNumber;
             //Count dimensions
             EffectorsDimension = 0;
-            SensorsDimension = 0; 
-            foreach (var e in Effectors)
+            SensorsDimension = 0;
+            if(effectors != null)
+            { foreach (var e in Effectors)
             { 
                 EffectorsDimension += e.Dimension;
                 e.ConnectToRobot(this);
-            }
-            foreach (var s in Sensors)
+            }}
+            if(sensors != null)
+            { foreach (var s in Sensors)
             {
                 SensorsDimension += s.Dimension;
                 s.ConnectToRobot(this);
-            }
+            }}
             StartingPoint = middle;
             FuelAmount = amountOfFuel;
             CollisionDetected = 0; 
@@ -304,6 +306,29 @@ namespace SwarmSimFramework.Classes.Entities
                 ActualContainerCount = 0;
             }
         }
- 
+        /// <summary>
+        /// Recount dimensions of effectors and sensors
+        /// </summary>
+        public void CountDimension()
+        {
+            EffectorsDimension = 0;
+            SensorsDimension = 0;
+            if (Effectors != null)
+            {
+                foreach (var e in Effectors)
+                {
+                    EffectorsDimension += e.Dimension;
+                    e.ConnectToRobot(this);
+                }
+            }
+            if (Sensors != null)
+            {
+                foreach (var s in Sensors)
+                {
+                    SensorsDimension += s.Dimension;
+                    s.ConnectToRobot(this);
+                }
+            }
+        }
     }
 }
