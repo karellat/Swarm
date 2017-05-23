@@ -75,9 +75,6 @@ namespace SwarmSimVisu
             lock (DrawingLock)
             {
                 target.Clear(BackgroundColor);
-                Brush b = new SolidColorBrush(target, new RawColor4(1.0f, 0, 0, 1.0f));
-                b.Opacity = 0.24f;
-                target.FillEllipse(new Ellipse(new RawVector2() {X=100,Y=100},50,50),b );
                foreach (var c in Circles)
                     target.FillEllipse(c.Ellipse,resCache[c.ColorKey] as Brush);
                 foreach (var l in Lines)

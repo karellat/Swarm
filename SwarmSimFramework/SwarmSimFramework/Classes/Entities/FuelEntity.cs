@@ -32,6 +32,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="orientation"></param>
         public FuelEntity(Vector2 middle, float radius, float capacity, float orientation = 0) : base(middle, radius, "FuelEntity", orientation)
         {
+            Color = EntityColor.FuelColor;
             Capacity = capacity;
         }
         /// <summary>

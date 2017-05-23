@@ -58,12 +58,16 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 
 * Refactor Robot
 	* container size: 10 
+
 	* 1 LineTypeSensor
 	* 1 FuelLineSensor 
 	* 3 TouchSensor
-	* Picker
+	* RadioSensor
+	
+	* 4x Picker
 	* MineralRefactor 
 	* RadioSensor
+	* RadioTransmitter
 
 ### Wood Cutting 
 * Scout Cutter 

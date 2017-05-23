@@ -15,7 +15,13 @@ namespace SwarmSimFramework.Classes.Experiments
         public void Init()
         {
             //List<RobotEntity> robotList = new List<RobotEntity> {(RobotEntity) r.DeepClone()};
-            Map = new Map.Map(400,400);
+            List<CircleEntity> circles = new List<CircleEntity>();
+            List<FuelEntity> fuels = new List<FuelEntity>();
+            circles.Add(new ObstacleEntity(new Vector2(40,40),5));
+            fuels.Add(new FuelEntity(new Vector2(95,50),3,50));
+            circles.Add(new WoodEntity(new Vector2(60,60),5,59));
+            circles.Add(new RawMaterialEntity(new Vector2(100,100),5,50,10));
+            Map = new Map.Map(400,400,null, circles,fuels);
             Finnished = false;
         }
 

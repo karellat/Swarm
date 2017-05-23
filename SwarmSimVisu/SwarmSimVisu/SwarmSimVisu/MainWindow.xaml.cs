@@ -249,6 +249,9 @@ namespace SwarmSimVisu
                 }
 
             }
+
+            //Finish frame
+            DrawCanvas.CompleteFrame();
         }
 
         //CLICK CONTROL: 
