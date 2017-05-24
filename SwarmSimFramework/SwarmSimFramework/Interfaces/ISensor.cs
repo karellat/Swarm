@@ -1,4 +1,5 @@
-﻿using SwarmSimFramework.Classes.Entities;
+﻿using System.Text;
+using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -43,6 +44,10 @@ namespace SwarmSimFramework.Classes
         /// </summary>
         /// <returns></returns>
         ISensor Clone();
-
+        /// <summary>
+        /// Log current object
+        /// </summary>
+        /// <returns></returns>
+        StringBuilder Log();
     }
 }

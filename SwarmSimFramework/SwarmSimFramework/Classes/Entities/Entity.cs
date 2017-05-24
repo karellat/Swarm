@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -83,7 +84,13 @@ namespace SwarmSimFramework.Classes.Entities
         {
             RotateRadians(DegreesToRadians(angleInDegrees));
         }
+        /// <summary>
+        /// Log current entity, info about position, state
+        /// </summary>
+        /// <returns></returns>
+        public abstract StringBuilder Log();
 
+        //STATIC function
         /// <summary>
         /// Rotate point arounf rotationMiddle
         /// </summary>
@@ -144,7 +151,6 @@ namespace SwarmSimFramework.Classes.Entities
 
         public const float Pi2 = 2 * (float) Math.PI;
 
-        //STATIC function
         /// <summary>
         /// Make normalization from one interval to another
         /// </summary>
@@ -209,6 +215,8 @@ namespace SwarmSimFramework.Classes.Entities
                 v.Y = b.Min;
             return v;
         }
+
+       
     }
 }
 

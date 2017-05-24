@@ -49,9 +49,9 @@ namespace SwarmSimVisu
             LinesCache = new List<Line>();
             CirclesCache = new List<Circle>();
             //Prepare color:
-            resCache.Add("SIGNAL1", t => new SolidColorBrush(t, new RawColor4(1.0f, 0, 0, 0.5f)) {Opacity = 0.25f});
-            resCache.Add("SIGNAL2", t => new SolidColorBrush(t, new RawColor4(0, 1.0f, 0, 0.5f)) {Opacity = 0.25f});
-            resCache.Add("SIGNAL3", t => new SolidColorBrush(t, new RawColor4(0, 0, 0.5f, 0.5f)) {Opacity = 0.25f});
+            resCache.Add("SIGNAL0", t => new SolidColorBrush(t, new RawColor4(1.0f, 0, 0, 0.5f)) {Opacity = 0.25f});
+            resCache.Add("SIGNAL1", t => new SolidColorBrush(t, new RawColor4(0, 1.0f, 0, 0.5f)) {Opacity = 0.25f});
+            resCache.Add("SIGNAL2", t => new SolidColorBrush(t, new RawColor4(0, 0, 0.5f, 0.5f)) {Opacity = 0.25f});
             resCache.Add("ObstacleColor", t => new SolidColorBrush(t, new RawColor4(0.827f, 0.827f, 0.827f, 1.0f)));
             resCache.Add("FuelColor", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 0.000f, 1.0f)));
             resCache.Add("RawMaterialColor", t => new SolidColorBrush(t, new RawColor4(0.58f, 0.0f, 0.827f, 1.0f)));
@@ -61,8 +61,8 @@ namespace SwarmSimVisu
             resCache.Add("HEAD", t => new SolidColorBrush(t, new RawColor4(1.000f, 0.000f, 1.000f, 1.0f)));
             resCache.Add("LINESENSOR", t => new SolidColorBrush(t, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f)));
             resCache.Add("LINEEFECTOR", t => new SolidColorBrush(t, new RawColor4(0.184f, 0.310f, 0.310f, 1.0f)));
-            resCache.Add("CIRCLEEFFECTOR", t => new SolidColorBrush(t, new RawColor4(1.000f, 1.000f, 0.00f, 1.0f)));
-            resCache.Add("CIRCLESENSOR",t=> new SolidColorBrush(t,new RawColor4(0.961f, 0.871f, 0.702f,1.0f)));
+            resCache.Add("CIRCLEEFFECTOR", t => new SolidColorBrush(t, new RawColor4(1.000f, 1.000f, 0.00f, 1.0f)) { Opacity = 0.25f });
+            resCache.Add("CIRCLESENSOR",t=> new SolidColorBrush(t,new RawColor4(0.961f, 0.871f, 0.702f,1.0f)) { Opacity = 0.25f });
         }
     
 

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -56,6 +57,15 @@ namespace SwarmSimFramework.Classes.Entities
             A = MovePoint(A, shiftVector);
             B = MovePoint(B, shiftVector);
             RotationMiddle = newMiddle;
+        }
+        /// <summary>
+        /// Log Line Entity 
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            return new StringBuilder("Line: A = " + A.ToString() + " B = " + B.ToString());
+
         }
     }
 }

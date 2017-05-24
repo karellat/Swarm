@@ -2,26 +2,47 @@
 using System.Net;
 using System.Numerics;
 using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Experiments
 {
     public class TestingExperiment : IExperiment
     {
-        public static RobotEntity r = new ScoutRobot(new Vector2(100,100),100,0);
+        public static RobotEntity r = new ScoutRobot(new Vector2(200,200),100);
         public static Map.Map map;
         public Map.Map Map { get; protected set; }
         public void Init()
         {
-            //List<RobotEntity> robotList = new List<RobotEntity> {(RobotEntity) r.DeepClone()};
+            List<RobotEntity> robotList = new List<RobotEntity> {(RobotEntity) r.DeepClone()};
+            var robot = robotList[0];
+            var brain =  new FixedBrain(new IODimension() { Input = r.SensorsDimension, Output = r.EffectorsDimension }, r.NormalizedBound);
+
+            robot.Brain = brain;
+            brain.output[0] = 20;
+            brain.output[1] = -20;
+            brain.output[2] = -20;
+            brain.output[3] = 20;
+            brain.output[4] = -20;
+
             List<CircleEntity> circles = new List<CircleEntity>();
             List<FuelEntity> fuels = new List<FuelEntity>();
-            circles.Add(new ObstacleEntity(new Vector2(40,40),5));
-            fuels.Add(new FuelEntity(new Vector2(95,50),3,50));
-            circles.Add(new WoodEntity(new Vector2(60,60),5,59));
-            circles.Add(new RawMaterialEntity(new Vector2(100,100),5,50,10));
-            Map = new Map.Map(400,400,null, circles,fuels);
+
+            float nx = 100;
+            float ny = 100;
+            for (int i = 0; i < 11; i++)
+            {
+               
+                for (int j = 0; j < 11; j++)
+                {
+                    if(i == j && i == 5) continue;
+                    
+                    circles.Add(new ObstacleEntity(new Vector2(nx  + i* 20, ny +j * 20), 5));
+                }
+            }
+            Map = new Map.Map(400,400,robotList, circles,fuels);
             Finnished = false;
         }
 

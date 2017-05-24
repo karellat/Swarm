@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -106,6 +107,14 @@ namespace SwarmSimFramework.Classes.Entities
         {
             return (LineTypeSensor) this.DeepClone();
         }
-
-      }
+        /// <summary>
+        /// Log current sensor
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("LineTypeSensor :");
+            s.AppendLine(base.Log())
+        }
+    }
 }

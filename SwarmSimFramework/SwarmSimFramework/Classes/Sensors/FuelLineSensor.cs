@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -64,7 +65,8 @@ namespace SwarmSimFramework.Classes.Entities
                 output = new[] { LocalBounds[0].Max};
             else
                 output = new[] { (float)Math.Sqrt(intersection.Distance)};
-            //Normalize output
+            //log & return normalized output 
+            lastReadValues = output;
             return output.Normalize(NormalizeFuncs);
         }
         /// <summary>
@@ -84,6 +86,28 @@ namespace SwarmSimFramework.Classes.Entities
         public ISensor Clone()
         {
             return (ISensor) DeepClone();
+        }
+        /// <summary>
+        /// Cached last read values for Log method 
+        /// </summary>
+        private float[] lastReadValues;
+        /// <summary>
+        /// Log current state 
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("FuelLineSensor : ");
+            s.AppendLine("\t" + base.Log());
+            if (lastReadValues[0] == LocalBounds[0].Max)
+                s.AppendLine("\tMaximum read value; ");
+            else
+            {
+                s.AppendLine("\t"+ lastReadValues[0].ToString("##.###") + " to nearest fuel");
+            }
+
+            return s;
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -87,6 +88,14 @@ namespace SwarmSimFramework.Classes.Entities
             RotationMiddle = MovePoint(RotationMiddle, shift);
             Middle = MovePoint(Middle, shift);
             FPoint = MovePoint(FPoint, shift);
+        }
+        /// <summary>
+        /// Log current entity
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            return new StringBuilder("Circle:  M = " + Middle + " r = " + Radius);
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using SwarmSimFramework.Classes.Entities;
+﻿using System.Text;
+using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes
 {
     public interface IEffector
     {
+
         /// <summary>
         /// Dimension of effector
         /// </summary>
@@ -39,6 +41,10 @@ namespace SwarmSimFramework.Classes
         /// </summary>
         /// <returns></returns>
         IEffector Clone();
-
+        /// <summary>
+        /// Make log of current effector
+        /// </summary>
+        /// <returns></returns>
+        StringBuilder Log();
     }
 }
