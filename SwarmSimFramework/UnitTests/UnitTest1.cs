@@ -1777,44 +1777,6 @@ namespace UnitTests
         }
     }
 
-    //[TestClass]
-    //public class WeightMeanBrainTests
-    //{
-    //    [TestMethod]
-    //    public void InitTest()
-    //    {
-    //        WeightMeanBrain w = new WeightMeanBrain(new Bounds(){Min = -100,Max = 100},2,2,new []{ new []{2.0f,3.0f},new []{4.0f,5.0f}});
-    //        var o = w.Decide(new[] {100.0f, 100.0f}); 
-    //        TestExtensions.AssertArrayEquality(new [] {100.0f,100.0f},o);
-    //    }
-
-    //    [TestMethod]
-    //    public void MinTest()
-    //    {
-    //        WeightMeanBrain w = new WeightMeanBrain(new Bounds(){Min = -100,Max = 100},2,2, new[] { new[] { 2.0f, 3.0f }, new[] { 4.0f, 5.0f } });
-    //        var o = w.Decide(new []{-100.0f,-100.0f}); 
-    //        TestExtensions.AssertArrayEquality(new []{-100.0f,-100.0f},o);
-    //    }
-
-    //    [TestMethod]
-    //    public void HalfTest()
-    //    {
-    //        WeightMeanBrain w = new WeightMeanBrain(new Bounds() {Min = -100, Max = 100}, 2, 2,
-    //            new[] {new[] {2.0f, 2.0f}, new[] {5.0f, 5.0f}});
-    //        var o = w.Decide(new[] {100.0f, -100.0f});
-    //        TestExtensions.AssertArrayEquality(new []{0.0f,0.0f},o);
-    //    }
-
-    //    [TestMethod]
-    //    public void HalfTest2()
-    //    {
-    //        WeightMeanBrain w = new WeightMeanBrain(new Bounds() { Min = -100, Max = 100 }, 2, 2,
-    //            new[] { new[] { 1.0f, 3.0f }, new[] { 9.0f, 1.0f } });
-    //        var o = w.Decide(new[] {-100.0f, 100.0f});
-    //        TestExtensions.AssertArrayEquality(new []{50.0f,-80.0f},o);
-    //    }
-    //}
-
     [TestClass]
     public class WoodRefactorTests
     {
@@ -1878,6 +1840,22 @@ namespace UnitTests
         }
     }
 
+    [TestClass]
+    public class MemeryTest
+    {
+        [TestMethod]
+        public void InitTest()
+        {
+            Map map = new Map(150, 150);
+            EmptyRobot er = new EmptyRobot(new Vector2(30, 30), 5, 0);
+            MemoryStick ms = new MemoryStick(4,er);
+            var f = new[] {0.0f, -20.0f, 40, -99};
+            ms.Effect(f,er,map);
+
+            TestExtensions.AssertArrayEquality(f,ms.Count(er,map));
+
+        }
+    }
 
     public static class TestExtensions
     {

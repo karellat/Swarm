@@ -13,7 +13,10 @@ Add consuming fuel to effectors
 - [x] váhy float - (-0.1,0.1) náhodně
 - [x] mutace, gausovské mutace z normálního rozdělení, málo..., max. 10 vah 
 - [x] %1,%0.5 z vah a mutace časté, 
-- [ ] Evoluční stragii, Diferenciální evoluce  
+- [ ] Evoluční stragii, Diferenciální evoluce, f=0.8 
+- [ ] LineTypeSensor
+- na o málo tisicina 
+
 
 - TEXT: 
 vyplnit sablonu
@@ -208,7 +211,10 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 * 23.05.2017
 	* Testing sensors & effectors 
 	* GUI & logging	
-
+* 25.05.2017
+	* Sensor, Effector logging
+	* Memory effector/sensor added
+	
 	
 
 

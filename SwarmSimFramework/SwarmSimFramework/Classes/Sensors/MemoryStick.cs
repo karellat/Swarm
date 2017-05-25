@@ -110,7 +110,10 @@ namespace SwarmSimFramework.Classes.Entities
         /// Intern implementation of memory
         /// </summary>
         public float[] Memory;
-
+        /// <summary>
+        /// Log actual memory stick
+        /// </summary>
+        /// <returns></returns>
         public override StringBuilder Log()
         {
             StringBuilder s = new StringBuilder("Memory: ");
@@ -121,11 +124,18 @@ namespace SwarmSimFramework.Classes.Entities
             }
             return s;
         }
+        /// <summary>
+        /// Clone memory
+        /// </summary>
+        /// <returns></returns>
         IEffector IEffector.Clone()
         {
             return (IEffector) DeepClone();
         }
-
+        /// <summary>
+        /// Clone memory
+        /// </summary>
+        /// <returns></returns>
         ISensor ISensor.Clone()
         {
             return (ISensor) DeepClone();
