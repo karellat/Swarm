@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Numerics;
+using System.Text;
+using System.Threading;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
@@ -90,6 +92,7 @@ namespace SwarmSimFramework.Classes.Effectors
        /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
        {
+           lastSettings = settings;
            //Check position 
            if (this.Middle != robot.Middle)
                throw new ArgumentException("Unknown situation");
@@ -134,6 +137,22 @@ namespace SwarmSimFramework.Classes.Effectors
         public IEffector Clone()
         {
             return (IEffector) DeepClone();
+        }
+        /// <summary>
+        /// Last settings 
+        /// </summary>
+        public float[] lastSettings = new float[2];
+        /// <summary>
+        /// Log two wheel motor 
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("TwoWheelMotor: ");
+            s.AppendLine("\t " + base.Log());
+            s.AppendLine("Right speed: " + RightVelocity + " Left speed: " + LeftVelocity + " WheelDistance: " + WheelDistance);
+            s.AppendLine("RightSettings: " + lastSettings[0] + " LeftSettings: " + lastSettings[1]);
+            return s;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Security.Policy;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 using System;
+using System.Text;
 
 namespace SwarmSimFramework.Classes.Effectors
 {
@@ -31,6 +32,7 @@ namespace SwarmSimFramework.Classes.Effectors
             this.MoveTo(robot.Middle);
             radioSignal.MoveTo(robot.Middle);
 
+            lastSettings = settings;
             float max = settings[0];
             int index = 0;
             for (int i = 1; i < settings.Length; i++)
@@ -103,6 +105,26 @@ namespace SwarmSimFramework.Classes.Effectors
         public IEffector Clone()
         {
             return (IEffector)DeepClone();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public float[] lastSettings = new float[4];
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("RadioTransmitter: ");
+            s.AppendLine("\t" + base.Log());
+            s.Append("\t "); 
+            for (int i = 0; i < lastSettings.Length; i++)
+            {
+                s.Append(i + ": " + lastSettings[i] + "; ");
+            }
+            s.AppendLine();
+            return s;
         }
     }
 }

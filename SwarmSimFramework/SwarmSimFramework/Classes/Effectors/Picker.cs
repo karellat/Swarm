@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Runtime.Serialization.Formatters;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -82,6 +84,7 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
         {
+            lastSettings = settings;
             //Update possition 
             if (robot.Middle != this.RotationMiddle)
                 this.MoveTo(robot.Middle);
@@ -156,10 +159,24 @@ namespace SwarmSimFramework.Classes.Effectors
             }
         }
 
-
+        /// <summary>
+        /// Make Clone of Picker
+        /// </summary>
+        /// <returns></returns>
         public IEffector Clone()
         {
             return (IEffector) DeepClone();
+        }
+        /// <summary>
+        /// Last settings 
+        /// </summary>
+        public float[] lastSettings = new float[3];
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("Picker: ");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("Put: " +  lastSettings[0]  + ",Pick up: " + lastSettings[1] + ",Idle: " + lastSettings[2]);
+            return s;
         }
     }
 }

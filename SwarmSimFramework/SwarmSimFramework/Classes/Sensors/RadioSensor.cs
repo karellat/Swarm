@@ -1,6 +1,8 @@
-﻿using System.Numerics;
+﻿using System.CodeDom;
+using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
@@ -91,6 +93,7 @@ namespace SwarmSimFramework.Classes.Entities
 
                 }
             }
+            LastReadValues = o;
             return o.Normalize(NormalizeFuncs);
         }
         /// <summary>
@@ -110,6 +113,27 @@ namespace SwarmSimFramework.Classes.Entities
         public ISensor Clone()
         {
             return (ISensor) DeepClone();
+        }
+        /// <summary>
+        /// Last read values 
+        /// </summary>
+        public float[] LastReadValues = new float[9];
+        /// <summary>
+        /// Log local info
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s =new StringBuilder("Radio Sensor: ");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("Radio signal 0: " + LastReadValues[0] + " Mean Vector:(" + LastReadValues[1] + "," +
+                         LastReadValues[2] + ")");
+            s.AppendLine("Radio signal 1: " + LastReadValues[3] + " Mean Vector:(" + LastReadValues[4] + "," +
+                         LastReadValues[5] + ")");
+            s.AppendLine("Radio signal 2: " + LastReadValues[6] + " Mean Vector:(" + LastReadValues[7] + "," +
+                         LastReadValues[8]);
+
+            return s; 
         }
     }
 }

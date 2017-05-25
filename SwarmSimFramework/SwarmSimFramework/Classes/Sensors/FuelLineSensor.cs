@@ -90,7 +90,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Cached last read values for Log method 
         /// </summary>
-        private float[] lastReadValues;
+        private float[] lastReadValues = new float[1];
         /// <summary>
         /// Log current state 
         /// </summary>

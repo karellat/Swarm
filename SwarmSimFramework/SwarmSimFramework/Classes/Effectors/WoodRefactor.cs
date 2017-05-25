@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlTypes;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -113,6 +114,19 @@ namespace SwarmSimFramework.Classes.Effectors
         {
             return (IEffector) DeepClone();
             
+        }
+
+        public float[] lastSettings = new float[1];
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+           StringBuilder s = new StringBuilder("WoodRefactor: ");
+            s.AppendLine("\t " + base.Log());
+            s.AppendLine("Refactor settings: " + lastSettings[0]);
+            return s;
         }
     }
 }

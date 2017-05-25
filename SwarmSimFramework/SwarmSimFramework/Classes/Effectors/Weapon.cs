@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -126,6 +127,23 @@ namespace SwarmSimFramework.Classes.Effectors
         public IEffector Clone()
         {
             return (IEffector) DeepClone();
+        }
+        /// <summary>
+        /// Last settings of weapon
+        /// </summary>
+        public float[] lastSettings = new float[3];
+        /// <summary>
+        /// Log weapon
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("Weapon: ");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("Attack friend: " + lastSettings[0] + " Idle: " + lastSettings[1] + "Attack enemy: " +
+                         lastSettings[2]);
+
+            return base.Log();
         }
     }
 }

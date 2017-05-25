@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -77,7 +79,7 @@ namespace SwarmSimFramework.Classes.Effectors
         {
             //Update position 
             this.MoveTo(robot.Middle);
-
+            lastSettigs = settings;
             var s = settings.Normalize(NormalizeFuncs)[0];
             //Refactor
             if (s >= 0 && s <= 1)
@@ -136,6 +138,24 @@ namespace SwarmSimFramework.Classes.Effectors
         public IEffector Clone()
         {
             return (IEffector) DeepClone();
+        }
+        /// <summary>
+        /// Last settings of refactor
+        /// </summary>
+        public float[] lastSettigs = new float[1];
+
+        /// <summary>
+        /// Log Mineral refactor
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("Mineral refactor: ");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("\t Refactoring: " + this.Refactoring.ToString() + " Cycles to go: " + this.CyclesToEnd +
+                         " Fuel to refactor: " + this.FuelToRefactor);
+            s.AppendLine("\t Last settings: " + lastSettigs[0]);
+            return s;
         }
     }
 }

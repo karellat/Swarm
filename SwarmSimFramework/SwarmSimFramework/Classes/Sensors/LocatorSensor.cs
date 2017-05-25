@@ -66,6 +66,7 @@ namespace SwarmSimFramework.Classes.Entities
             Vector2 dirV = Vector2.Normalize(robot.FPoint - robot.Middle);
 
             float[] o = new[] {robot.Middle.X, robot.Middle.Y, dirV.X, dirV.Y};
+            LastReadValues = o;
             return o.Normalize(NormalizeFuncs);
 
         }
@@ -93,7 +94,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Last read values
         /// </summary>
-        public float[] LastReadValues;
+        public float[] LastReadValues = new float[4];
         /// <summary>
         /// Log locator
         /// </summary>
