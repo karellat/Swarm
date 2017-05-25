@@ -4,14 +4,16 @@
 ## TODO: 
 REFACTOR WHOLE PROJECT
 Add consuming fuel to effectors
-Omezit signály na pevný počet(3) tzn. upravit sensor na čtení tří signálů
-Barvičky udělat vracení jednotlivých proměnných
-Memory - Effector, Sensor
-Hyperbolický tangens,ReLU,PReLU, lineární lomená fce
-- váhy float - (-0.1,0.1) náhodně
-- mutace, gausovské mutace z normálního rozdělení, málo..., max. 10 vah 
-%1,%0.5 z vah a mutace časté, 
-Evoluční stragii, Diferenciální evoluce  
+- [x] Omezit signály na pevný počet(3) tzn. upravit sensor na čtení tří signálů
+- [x] Barvičky udělat vracení jednotlivých proměnných
+- [ ]  Memory - Effector, Sensor
+- [ ] Hyperbolický tangens
+- [x] ReLU,PReLU
+- [ ] lineární lomená fce
+- [x] váhy float - (-0.1,0.1) náhodně
+- [x] mutace, gausovské mutace z normálního rozdělení, málo..., max. 10 vah 
+- [x] %1,%0.5 z vah a mutace časté, 
+- [ ] Evoluční stragii, Diferenciální evoluce  
 
 - TEXT: 
 vyplnit sablonu
@@ -200,6 +202,12 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* activation function added (Tanh, PReLu)
 	* Percepton simple implementationa added (Generating new brains, Mutate this brains)
 	* Math.Net Numerics library added to project due to Normal Distributed random values
+* 21.05.2017
+	* GUI refactoring
+	* IExperiment interface prepared 
+* 23.05.2017
+	* Testing sensors & effectors 
+	* GUI & logging	
 
 	
 

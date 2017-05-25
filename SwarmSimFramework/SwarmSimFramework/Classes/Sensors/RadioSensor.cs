@@ -8,7 +8,7 @@ using SwarmSimFramework.SupportClasses;
 namespace SwarmSimFramework.Classes.Entities
 {
     /// <summary>
-    /// Implement radio sensor, return two most frequent signals and mean direction to them (
+    /// Implement radio sensor,return if signals and mean direction to them (
     /// </summary>
     public class RadioSensor : CircleEntity, ISensor
     {

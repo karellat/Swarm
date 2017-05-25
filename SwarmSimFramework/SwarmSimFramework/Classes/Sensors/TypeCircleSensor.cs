@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -66,6 +67,7 @@ namespace SwarmSimFramework.Classes.Entities
             o[1] = dic.ContainsKey(EntityColor.ObstacleColor) ? dic[EntityColor.ObstacleColor].Amount : 0;
             o[2] = dic.ContainsKey(EntityColor.FuelColor) ? dic[EntityColor.FuelColor].Amount : 0;
 
+            LastReadValues = o;
             return o.Normalize(NormalizeFuncs);
         }
         /// <summary>
@@ -91,6 +93,22 @@ namespace SwarmSimFramework.Classes.Entities
         public ISensor Clone()
         {
             return (ISensor) DeepClone();
+        }
+        /// <summary>
+        /// Last read values 
+        /// </summary>
+        public float[] LastReadValues = new float[3];
+        /// <summary>
+        /// Log type TypeCircleSensor
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("TypeCircleSensor: ");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("Amount of RawMaterial: " + LastReadValues[0] + " Obstacle: " + LastReadValues[1] + " Fuel: " +
+                         LastReadValues[2]);
+            return s;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Diagnostics.Tracing;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -62,11 +63,14 @@ namespace SwarmSimFramework.Classes.Entities
             }
             if(Orientation != robot.Orientation + OrientationToRobotFPoint)
                 this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+            float[] output;
             //Count collision 
             if (map.Collision(this, robot))
-                return (new[] {1.0f}).Normalize(NormalizeFuncs);
+                output = (new[] {1.0f});
             else
-                return (new[] {0.0f}).Normalize(NormalizeFuncs);
+                output = (new[] {0.0f});
+            LastReadValue = output;
+            return output.Normalize(NormalizeFuncs);
         }
 
         public void ConnectToRobot(RobotEntity robot)
@@ -79,10 +83,21 @@ namespace SwarmSimFramework.Classes.Entities
             //Normalize
             NormalizeFuncs = Entity.MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
-
+        public float[] LastReadValue = new float[1];
         public ISensor Clone()
         {
             return (ISensor) this.DeepClone(); 
+        }
+        /// <summary>
+        /// Log current TouchSensor 
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("TouchSensor ");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("\t Last read value:" + LastReadValue[0]);
+            return base.Log();
         }
     }
 }

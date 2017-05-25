@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System.Linq.Expressions;
+using System.Numerics;
+using System.Text;
 using System.Xml.Schema;
 using SwarmSimFramework.SupportClasses;
 
@@ -87,6 +89,22 @@ namespace SwarmSimFramework.Classes.Entities
         public ISensor Clone()
         {
             return (ISensor) DeepClone();
+        }
+        /// <summary>
+        /// Last read values
+        /// </summary>
+        public float[] LastReadValues;
+        /// <summary>
+        /// Log locator
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("LocatorSensor :");
+            s.AppendLine("\t" + base.Log());
+            s.AppendLine("Last located middle X = " + LastReadValues[0] + ", Y = " + LastReadValues[1] +
+                         ", Direction : X = " + LastReadValues[2] + " Y = " + LastReadValues[3]);
+            return base.Log();
         }
     }
 }

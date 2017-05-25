@@ -86,7 +86,8 @@ namespace SwarmSimFramework.Classes.Entities
                     output[(int) intersection.CollidingEntity.Color + 1] =
                         LocalBounds[(int) intersection.CollidingEntity.Color + 1].Max;
                 }
-            //Normalize output
+            //Normalize output & mark old values 
+                LastReadValues = output;
                 return output.Normalize(NormalizeFuncs);
             }
 
@@ -108,13 +109,19 @@ namespace SwarmSimFramework.Classes.Entities
             return (LineTypeSensor) this.DeepClone();
         }
         /// <summary>
+        /// Last read values 
+        /// </summary>
+        public float[] LastReadValues; 
+        /// <summary>
         /// Log current sensor
         /// </summary>
         /// <returns></returns>
         public override StringBuilder Log()
         {
             StringBuilder s = new StringBuilder("LineTypeSensor :");
-            s.AppendLine(base.Log())
+            s.AppendLine( "\t" + base.Log());
+            s.AppendLine();
+            return s;
         }
     }
 }
