@@ -52,6 +52,7 @@ namespace SwarmSimFramework.Classes.Entities
 
             //OutputSize, returning LengthSqrt & Type of colliding entity 
             Dimension = 1 + EntityColorCount;
+            LastReadValues = new float[Dimension];
             //Normalize output
             LocalBounds = new Bounds[Dimension];
             // sqrt distance bounds 
@@ -120,7 +121,13 @@ namespace SwarmSimFramework.Classes.Entities
         {
             StringBuilder s = new StringBuilder("LineTypeSensor :");
             s.AppendLine( "\t" + base.Log());
-            s.AppendLine();
+            s.AppendLine("\t Length: " + LastReadValues[0]);
+            for (int i = 0; i < EntityColorCount; i++)
+            {
+                EntityColor e = 0;
+                e += i;
+                s.AppendLine("\t " + e + " : "  + LastReadValues[i+1] );
+            }
             return s;
         }
     }
