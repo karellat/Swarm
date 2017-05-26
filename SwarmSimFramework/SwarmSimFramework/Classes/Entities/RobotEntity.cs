@@ -15,6 +15,7 @@ namespace SwarmSimFramework.Classes.Entities
         //STANDART VALUES
         public static Bounds StandardBounds = new Bounds() {Max = 100, Min = -100};
         //MEMBERs
+            //Characteristics
         /// <summary>
         /// If entity has enough fuel & health integrity
         /// </summary>
@@ -28,6 +29,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         public float Health { get; protected set; }
         /// <summary>
+        /// Amount of fuel
+        /// </summary>
+        public float FuelAmount;
+            //Controls
+        /// <summary>
         /// Effectors of robot
         /// </summary>
         public IEffector[] Effectors;
@@ -40,9 +46,14 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         public IRobotBrain Brain;
         /// <summary>
-        /// Amount of fuel
+        /// Sensor dimension
         /// </summary>
-        public float FuelAmount;
+        public int SensorsDimension { get; protected set; }
+        /// <summary>
+        /// Effector dimension 
+        /// </summary>
+        public int EffectorsDimension { get; protected set; }
+            //Info 
         /// <summary>
         /// Detected collision from last reset
         /// </summary>
@@ -59,18 +70,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// Amount of invalid weapon operation
         /// </summary>
         public long InvalidWeaponOperation;
+
         /// <summary>
         /// Starting point of robot
         /// </summary>
         public Vector2 StartingPoint;
-        /// <summary>
-        /// Sensor dimension
-        /// </summary>
-        public int SensorsDimension { get; protected set; }
-        /// <summary>
-        /// Effector dimension 
-        /// </summary>
-        public int EffectorsDimension { get; protected set;  }
         /// <summary>
         /// Interval  of values  between sensor -> brain , brain -> effector
         /// </summary>
@@ -329,6 +333,43 @@ namespace SwarmSimFramework.Classes.Entities
                     s.ConnectToRobot(this);
                 }
             }
+        }
+        /// <summary>
+        /// Robot info
+        /// </summary>
+        /// <returns></returns>
+        public override StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder("Robot: " + this.GetType().ToString() + "\n");
+            s.AppendLine("\t Location info: " + base.Log());
+            s.AppendLine("\t Starting Point: " + StartingPoint);
+            s.AppendLine("\t Health: " + Health + " Alive: " + Alive);
+            s.AppendLine("\t TeamNumber: " + TeamNumber + " Fuel: " + FuelAmount);
+            s.AppendLine("\t SensorDimension : " + SensorsDimension + " EffectoDimension: " + EffectorsDimension);
+            s.AppendLine("\t Infos: ");
+            s.AppendLine("\t\t Collision detected: " + CollisionDetected + " Invalid container operation: " +
+                         InvalidContainerOperation);
+            s.AppendLine("\t\t Invalid weapon operations: " + InvalidWeaponOperation +
+                         " Invalid refactor operations: " + InvalidRefactorOperation);
+            if (Brain != null)
+                s.AppendLine("\t" + Brain.Log());
+            s.AppendLine("\t Sensors: ");
+            foreach (var sensor in Sensors)
+            {
+                s.AppendLine("\t\t " + sensor.Log());
+            }
+            s.AppendLine("\t Effectors: ");
+            foreach (var effector in Effectors)
+            {
+                s.AppendLine("\t\t " + effector.Log());
+            }
+
+            s.AppendLine("\t Container info: ");
+            s.AppendLine("\t\t Max size of container: " + ContainerMaxCapacity + " Actual size of container: " +
+                         ActualContainerCount);
+            if (ActualContainerCount > 0)
+                s.AppendLine("\t\t Top of container: " + Container.Peek().GetType());
+            return s;
         }
     }
 }

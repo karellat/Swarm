@@ -40,6 +40,10 @@ namespace SwarmSimFramework.Interfaces
         /// </summary>
         /// <returns></returns>
         IRobotBrain GetCleanCopy();
- 
+        /// <summary>
+        /// Log current brain 
+        /// </summary>
+        /// <returns></returns>
+        StringBuilder Log();
     }
 }

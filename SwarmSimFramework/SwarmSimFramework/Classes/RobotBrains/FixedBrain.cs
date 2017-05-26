@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
 
@@ -13,23 +14,28 @@ namespace SwarmSimFramework.Classes.RobotBrains
         {
             IoDimension = dimensions;
             InOutBounds = inOutBounds;
-            output = new float[dimensions.Output];
-            for (int i = 0; i < output.Length; i++)
-                output[i] = InOutBounds.Max;
+            Output = new float[dimensions.Output];
+            for (int i = 0; i < Output.Length; i++)
+                Output[i] = InOutBounds.Max;
         }
         public double Fitness { get; set; }
         public Func<float, float> ActivationFnc { get; }
         public IODimension IoDimension { get; }
         public Bounds InOutBounds { get; }
-        public float[] output { get; set; }
+        public float[] Output { get; set; }
         public float[] Decide(float[] readValues)
         {
-            return output;
+            return Output;
         }
 
         public IRobotBrain GetCleanCopy()
         {
             return (IRobotBrain) this.MemberwiseClone();
+        }
+
+        public StringBuilder Log()
+        {
+            return new StringBuilder("Fixed brain");
         }
     }
 }

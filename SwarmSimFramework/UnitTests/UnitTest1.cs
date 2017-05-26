@@ -1841,7 +1841,7 @@ namespace UnitTests
     }
 
     [TestClass]
-    public class MemeryTest
+    public class MemeTest
     {
         [TestMethod]
         public void InitTest()

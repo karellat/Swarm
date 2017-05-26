@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
@@ -80,6 +81,12 @@ namespace SwarmSimFramework.Classes.RobotBrains
             return nn;
 
         }
+
+        public StringBuilder Log()
+        {
+            return new StringBuilder("SingleLayredNeuronNetwork");
+        }
+
         /// <summary>
         /// Mutate every percepton 
         /// </summary>

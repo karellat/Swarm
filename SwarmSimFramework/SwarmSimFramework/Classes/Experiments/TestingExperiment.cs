@@ -21,11 +21,11 @@ namespace SwarmSimFramework.Classes.Experiments
             var brain =  new FixedBrain(new IODimension() { Input = r.SensorsDimension, Output = r.EffectorsDimension }, r.NormalizedBound);
 
             robot.Brain = brain;
-            brain.output[0] = 20;
-            brain.output[1] = -20;
-            brain.output[2] = -20;
-            brain.output[3] = 20;
-            brain.output[4] = -20;
+            brain.Output[0] = 20;
+            brain.Output[1] = -20;
+            brain.Output[2] = -20;
+            brain.Output[3] = 20;
+            brain.Output[4] = -20;
 
             List<CircleEntity> circles = new List<CircleEntity>();
             List<FuelEntity> fuels = new List<FuelEntity>();

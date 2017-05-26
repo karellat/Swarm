@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 using MathNet.Numerics.Distributions;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
@@ -54,6 +55,12 @@ namespace SwarmSimFramework.Classes.RobotBrains
             r.Fitness = 0;
             return r; 
         }
+
+        public StringBuilder Log()
+        {
+            return new StringBuilder("Perceptron");
+        }
+
         /// <summary>
         /// Decide actual input
         /// </summary>
