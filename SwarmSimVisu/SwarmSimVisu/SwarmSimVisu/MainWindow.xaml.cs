@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -47,7 +48,14 @@ namespace SwarmSimVisu
         /// D2DControl graphics accelerated control for drawing
         /// </summary>
         public MapCanvas DrawCanvas;
-
+        /// <summary>
+        /// All info windows of current  WPF Control
+        /// </summary>
+        public List<InfoWindow> infoWindows = new List<InfoWindow>();
+        /// <summary>
+        /// Info lock 
+        /// </summary>
+        public object infoLock = new object();
         //STATES of simulation
         public bool Running;
         public bool Pausing;
@@ -61,11 +69,11 @@ namespace SwarmSimVisu
         /// <summary>
         /// Infos about specific points 
         /// </summary>
-        private List<MetaInfo> metaInfos = new List<MetaInfo>();
+        private static List<MetaInfo> metaInfos = new List<MetaInfo>();
         /// <summary>
         /// Control of experiment
         /// </summary>
-        private Thread ExperimentThread;
+        private static Thread ExperimentThread;
 
         /// <summary>
         /// Init selected Experiment
@@ -279,8 +287,13 @@ namespace SwarmSimVisu
                 {
                     if (i.Contains(v))
                     {
-                        MessageBox.Show(i.Info.ToString());
-                        return;
+                        lock (infoLock)
+                        {
+                            var w = new InfoWindow(i.Info.ToString(), this);
+                            infoWindows.Add(w);
+                            w.Show();
+                            return;
+                        }
                     }
                 }
 
@@ -354,6 +367,49 @@ namespace SwarmSimVisu
             }
             
         }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            lock (ControlsLock)
+            {
+                if (!Stopping)
+                {
+                    if (MessageBox.Show(this, "Cancel Experiment", "Are you sure?", MessageBoxButton.YesNo) ==
+                        MessageBoxResult.Yes)
+                    {
+                        Stopping = true;
+                        if (!Running)
+                            Monitor.PulseAll(ControlsLock);
+                    }
+                }
+            }
+            lock (infoLock)
+            {
+                Stack<InfoWindow> copy = new Stack<InfoWindow>(infoWindows.Count);
+                foreach (var i in infoWindows)
+                {
+                    copy.Push(i);
+                }
+
+                while (copy.Count != 0)
+                {
+                    copy.Pop().Close();
+                }
+            }
+            Thread.Sleep(300);
+            base.OnClosing(e);
+        }
+        /// <summary>
+        /// Close infoWindow with  metainfo clear from the list 
+        /// </summary>
+        /// <param name="info"></param>
+        public void RemoveInfo(InfoWindow info)
+        {
+            lock (infoLock)
+            {
+                infoWindows.Remove(info);
+            }
+        }
     }
     /// <summary>
     /// Meta info about point
@@ -371,4 +427,6 @@ namespace SwarmSimVisu
             return false;
         }
     }
+
+    
 }

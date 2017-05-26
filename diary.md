@@ -6,15 +6,18 @@ REFACTOR WHOLE PROJECT
 Add consuming fuel to effectors
 - [x] Omezit signály na pevný počet(3) tzn. upravit sensor na čtení tří signálů
 - [x] Barvičky udělat vracení jednotlivých proměnných
-- [ ]  Memory - Effector, Sensor
-- [ ] Hyperbolický tangens
+- [x]  Memory - Effector, Sensor
+- [x] Hyperbolický tangens
 - [x] ReLU,PReLU
-- [ ] lineární lomená fce
+- [x] lineární lomená fce
 - [x] váhy float - (-0.1,0.1) náhodně
 - [x] mutace, gausovské mutace z normálního rozdělení, málo..., max. 10 vah 
 - [x] %1,%0.5 z vah a mutace časté, 
 - [ ] Evoluční stragii, Diferenciální evoluce, f=0.8 
-- [ ] LineTypeSensor
+- [ ] Testování sensorů v GUI 
+- [ ] Kreslení grafů
+- [ ] Jednoduchý experiment na chození
+- [x] LineTypeSensor
 - na o málo tisicina 
 
 
@@ -215,6 +218,7 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* Sensor, Effector logging
 	* Memory effector/sensor added
 	* Add metainfos to Visualisation
+	* fix closing method 
 	
 
 

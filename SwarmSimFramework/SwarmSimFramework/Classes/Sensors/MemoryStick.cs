@@ -21,6 +21,7 @@ namespace SwarmSimFramework.Classes.Entities
             FPoint = Middle;
             //Set bounds 
             Dimension = sizeOFMemory;
+            Memory = new float[sizeOFMemory];
             LocalBounds = new Bounds[Dimension];
             for (int i = 0; i < Dimension; i++)
             {
