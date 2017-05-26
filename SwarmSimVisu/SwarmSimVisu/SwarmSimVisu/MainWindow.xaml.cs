@@ -209,6 +209,10 @@ namespace SwarmSimVisu
             metaInfos.Clear();
             foreach (var r in RunningExperiment.Map.Robots)
                 metaInfos.Add(new MetaInfo() {Info = r.Log(), Middle = r.Middle, Radius = r.Radius});
+            foreach (var p in RunningExperiment.Map.PasiveEntities)
+                metaInfos.Add(new MetaInfo() {Info = p.Log(),Middle =p.Middle,Radius = p.Radius});
+            foreach (var f in RunningExperiment.Map.FuelEntities)
+                metaInfos.Add(new MetaInfo() {Info = f.Log(), Middle = f.Middle,Radius = f.Radius});
         }
         /// <summary>
         /// Draw Map & print experiment info
@@ -396,7 +400,7 @@ namespace SwarmSimVisu
                     copy.Pop().Close();
                 }
             }
-            Thread.Sleep(300);
+            Thread.Sleep(600);
             base.OnClosing(e);
         }
         /// <summary>
