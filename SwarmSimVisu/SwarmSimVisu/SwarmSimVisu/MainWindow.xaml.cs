@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -57,7 +58,10 @@ namespace SwarmSimVisu
         /// Loc of the controls 
         /// </summary>
         private object ControlsLock = new object();
-
+        /// <summary>
+        /// Infos about specific points 
+        /// </summary>
+        private List<MetaInfo> metaInfos = new List<MetaInfo>();
         /// <summary>
         /// Control of experiment
         /// </summary>
@@ -164,6 +168,7 @@ namespace SwarmSimVisu
                     RunningExperiment.MakeStep();
                     //Draw experiment
                     DrawExperiment();
+                    Thread.Sleep(500);
                 }
             }
             MainGrid.Dispatcher.Invoke(StopExperiment);
@@ -193,7 +198,9 @@ namespace SwarmSimVisu
         /// </summary>
         private void MarkMetaInfos()
         {
-            
+            metaInfos.Clear();
+            foreach (var r in RunningExperiment.Map.Robots)
+                metaInfos.Add(new MetaInfo() {Info = r.Log(), Middle = r.Middle, Radius = r.Radius});
         }
         /// <summary>
         /// Draw Map & print experiment info
@@ -266,6 +273,17 @@ namespace SwarmSimVisu
             {
                 if (!Paused) return;
                 Point clickPoint = e.GetPosition(DrawGrid);
+                Vector2 v = new Vector2((float) clickPoint.X,(float) clickPoint.Y);
+     
+                foreach (var i in metaInfos)
+                {
+                    if (i.Contains(v))
+                    {
+                        MessageBox.Show(i.Info.ToString());
+                        return;
+                    }
+                }
+
                 MessageBox.Show("Actual position of click X = " + clickPoint.X + ", Y = " + clickPoint.Y);
             }
         }
@@ -335,6 +353,22 @@ namespace SwarmSimVisu
 
             }
             
+        }
+    }
+    /// <summary>
+    /// Meta info about point
+    /// </summary>
+    public struct MetaInfo
+    {
+        public Vector2 Middle;
+        public float Radius;
+        public StringBuilder Info;
+
+        public bool Contains(Vector2 point)
+        {
+            if (Vector2.DistanceSquared(point, Middle) <= Radius * Radius)
+                return true;
+            return false;
         }
     }
 }

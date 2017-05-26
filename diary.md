@@ -214,7 +214,7 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 * 25.05.2017
 	* Sensor, Effector logging
 	* Memory effector/sensor added
-	
+	* Add metainfos to Visualisation
 	
 
 
