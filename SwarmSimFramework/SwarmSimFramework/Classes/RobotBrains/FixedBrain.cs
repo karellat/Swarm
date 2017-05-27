@@ -35,7 +35,9 @@ namespace SwarmSimFramework.Classes.RobotBrains
 
         public StringBuilder Log()
         {
-            return new StringBuilder("Fixed brain");
+            var s = new StringBuilder("Fixed brain\n");
+            s.AppendLine("\t"+Output.ToStringList() + "\n");
+            return s;
         }
     }
 }

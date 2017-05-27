@@ -121,12 +121,12 @@ namespace SwarmSimFramework.Classes.Entities
         {
             StringBuilder s = new StringBuilder("LineTypeSensor :");
             s.AppendLine( "\t" + base.Log());
-            s.AppendLine("\t Length: " + LastReadValues[0]);
+            s.AppendLine("\t Length: " + LastReadValues[0].ToString("##.###"));
             for (int i = 0; i < EntityColorCount; i++)
             {
                 EntityColor e = 0;
                 e += i;
-                s.AppendLine("\t " + e + " : "  + LastReadValues[i+1] );
+                s.AppendLine("\t " + e + " : "  + LastReadValues[i+1].ToString("##.###") );
             }
             return s;
         }

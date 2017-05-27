@@ -137,6 +137,7 @@ namespace SwarmSimVisu
                 BorderThickness = new Thickness(2),
                 BorderBrush = Brushes.Black
             };
+            
             DrawGrid.Children.Add(b);
             DrawCanvas = new MapCanvas();
             DrawGrid.Children.Add(DrawCanvas);
@@ -272,7 +273,7 @@ namespace SwarmSimVisu
             //Finish frame
             DrawCanvas.CompleteFrame();
         }
-
+        
         //CLICK CONTROL: 
         /// <summary>
         /// Show metainfo about nearest object
@@ -414,6 +415,8 @@ namespace SwarmSimVisu
                 infoWindows.Remove(info);
             }
         }
+
+        
     }
     /// <summary>
     /// Meta info about point

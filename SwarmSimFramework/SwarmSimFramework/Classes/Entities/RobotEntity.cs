@@ -193,7 +193,7 @@ namespace SwarmSimFramework.Classes.Entities
                 float[] set = new float[e.Dimension];
                 for (int i = 0; i < e.Dimension; i++)
                 {
-                    set[i] = LastReadValues[index];
+                    set[i] = BrainDecidedValues[index];
                     index++;
                 }
                 e.Effect(set,this,map);
@@ -351,8 +351,11 @@ namespace SwarmSimFramework.Classes.Entities
                          InvalidContainerOperation);
             s.AppendLine("\t\t Invalid weapon operations: " + InvalidWeaponOperation +
                          " Invalid refactor operations: " + InvalidRefactorOperation);
+            s.Append("\t Brain: ");
             if (Brain != null)
                 s.AppendLine("\t" + Brain.Log());
+            else
+                s.AppendLine("\t\t no brain");
             s.AppendLine("\t Sensors: ");
             foreach (var sensor in Sensors)
             {

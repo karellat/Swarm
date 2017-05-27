@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using SwarmSimFramework.Classes;
 
 namespace SwarmSimFramework.SupportClasses
@@ -39,6 +40,24 @@ namespace SwarmSimFramework.SupportClasses
                 value[i] = normalizeFuncs[i].Normalize(value[i]);
             }
             return value;
+        }
+        /// <summary>
+        /// Return string of float values (2.0,2.5....)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToStringList(this float[] values)
+        {
+            StringBuilder s = new StringBuilder("(");
+            for (int i = 0; i < values.Length-1; i++)
+            {
+                s.Append(values[i] + ", ");
+            }
+            if (values.Length >= 1)
+                s.Append(values[values.Length - 1]);
+            s.Append(")");
+            return s.ToString();
+
         }
 
     }
