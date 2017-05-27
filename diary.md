@@ -219,6 +219,11 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* Memory effector/sensor added
 	* Add metainfos to Visualisation
 	* fix closing method 
+
+* 27.05.2017 
+	* Robot decition function fixed(Decition base on read values !)
+	* RobotBrain serialization 
+	
 	
 
 

@@ -87,6 +87,16 @@ namespace SwarmSimFramework.Classes.RobotBrains
             return new StringBuilder("SingleLayredNeuronNetwork");
         }
 
+        public IRobotBrain DeserializeBrain(string jsonString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string SerializeBrain()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Mutate every percepton 
         /// </summary>

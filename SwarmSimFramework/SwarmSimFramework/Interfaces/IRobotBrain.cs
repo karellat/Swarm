@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.SupportClasses;
 
@@ -45,5 +46,35 @@ namespace SwarmSimFramework.Interfaces
         /// </summary>
         /// <returns></returns>
         StringBuilder Log();
+        /// <summary>
+        /// Deserialize brain 
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <returns></returns>
+        IRobotBrain DeserializeBrain(string jsonString);
+        /// <summary>
+        /// Serialize this brain
+        /// </summary>
+        /// <returns></returns>
+        string SerializeBrain();
+    }
+
+    public static class BrainSerializer
+    {
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.All
+        };
+        public static IRobotBrain[] DeserializeArray(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<IRobotBrain[]>(jsonString, JsonSettings);
+        }
+
+        public static string SerializeArray(IRobotBrain[] brains)
+        {
+            return JsonConvert.SerializeObject(brains, JsonSettings);
+
+        }
     }
 }

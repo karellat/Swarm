@@ -39,5 +39,15 @@ namespace SwarmSimFramework.Classes.RobotBrains
             s.AppendLine("\t"+Output.ToStringList() + "\n");
             return s;
         }
+
+        public IRobotBrain DeserializeBrain(string jsonString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string SerializeBrain()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

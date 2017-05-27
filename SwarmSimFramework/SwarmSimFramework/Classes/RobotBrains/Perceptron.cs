@@ -61,6 +61,16 @@ namespace SwarmSimFramework.Classes.RobotBrains
             return new StringBuilder("Perceptron");
         }
 
+        public IRobotBrain DeserializeBrain(string jsonString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string SerializeBrain()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Decide actual input
         /// </summary>
