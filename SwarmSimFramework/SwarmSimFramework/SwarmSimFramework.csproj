@@ -69,6 +69,7 @@
     <Compile Include="Classes\Entities\TreeEnity.cs" />
     <Compile Include="Classes\Entities\WoodEntity.cs" />
     <Compile Include="Classes\Experiments\TestingExperiment.cs" />
+    <Compile Include="Classes\Experiments\WalkingExperiment.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />

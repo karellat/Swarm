@@ -223,6 +223,9 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 * 27.05.2017 
 	* Robot decition function fixed(Decition base on read values !)
 	* RobotBrain serialization 
+
+* 28.05.2017
+	* Walking experiment definition 
 	
 	
 
