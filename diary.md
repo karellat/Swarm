@@ -225,7 +225,10 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* RobotBrain serialization 
 
 * 28.05.2017
-	* Walking experiment definition 
+	* Walking experiment definition
+
+* 29.05.2017 
+	* Differential Evolution skeleton
 	
 	
 
