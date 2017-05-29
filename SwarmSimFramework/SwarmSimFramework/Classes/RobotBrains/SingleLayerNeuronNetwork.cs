@@ -50,7 +50,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// <summary>
         /// Intern neurons of single output 
         /// </summary>
-        public Perceptron[] Neurons { get; protected set; }
+        public Perceptron[] Neurons { get; set; }
         /// <summary>
         /// Make all neurons decide, set input
         /// </summary>

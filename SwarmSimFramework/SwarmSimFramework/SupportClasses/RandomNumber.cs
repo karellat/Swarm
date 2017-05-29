@@ -23,6 +23,11 @@ namespace SwarmSimFramework.SupportClasses
             return randomNumber.Next();
         }
 
+        public static int GetRandomFloat()
+        {
+            return (float) randomNumber.NextDouble();
+        }
+
     }
 
     public static class MyExtensions
