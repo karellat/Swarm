@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
+using MathNet.Numerics;
 using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.RobotBrains;
@@ -14,6 +15,10 @@ namespace SwarmSimFramework.Classes.Experiments
 {
     public class WalkingExperiment: IExperiment
     {
+        /// <summary>
+        /// Num of evolution algorithm
+        /// </summary>
+        public int numOfEvolutionAlg = 1; 
         //Evolution 
         public static int SizeOfGeneration = 1000;
         public static int AmountOfGenerations = 1000;
@@ -177,10 +182,13 @@ namespace SwarmSimFramework.Classes.Experiments
                 this.ResetFitness();
                 Map.Reset();
                 actualBrainIndex++;
-                //Prepare new brain
-                actualBrain =
-                    DifferentialEvolution.DifferentialEvolutionBrain(actualGeneration[actualBrainIndex],
+                //Prepare new brain use given evolution algorithm 
+                if (numOfEvolutionAlg == 1)
+                    actualBrain = DifferentialEvolution.DifferentialEvolutionBrain(actualGeneration[actualBrainIndex],
                         actualGeneration);
+                else
+                    actualBrain =
+                        EvolutionWithMutation.MutateSingleLayerNeuronNetwork(actualGeneration[actualBrainIndex]);
             }
 
             //Make one iteration of map 
@@ -192,7 +200,7 @@ namespace SwarmSimFramework.Classes.Experiments
                 CountIndividualFitness(r);
             }
         }
-
+        //If experiment finished
         public bool Finnished { get; protected set; }
 
 
@@ -204,10 +212,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// CrossOver propabillity [0,1] 
         /// </summary>
         public static float CR;
+
         /// <summary>
         /// Differential weight[0, 2]
         /// </summary>
-        public static float F;
+        public static float F = 0.8f;
         /// <summary>
         /// Population size >= 4 
         /// </summary>
@@ -267,6 +276,14 @@ namespace SwarmSimFramework.Classes.Experiments
 
             newPerceptron.Weights = newWeights;
             return newPerceptron;
+        }
+    }
+
+    public static class EvolutionWithMutation
+    {
+        public static SingleLayerNeuronNetwork MutateSingleLayerNeuronNetwork(SingleLayerNeuronNetwork actualBrain)
+        {
+            return actualBrain.CreateMutatedNetwork();
         }
     }
 }

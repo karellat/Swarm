@@ -13,10 +13,10 @@ Add consuming fuel to effectors
 - [x] váhy float - (-0.1,0.1) náhodně
 - [x] mutace, gausovské mutace z normálního rozdělení, málo..., max. 10 vah 
 - [x] %1,%0.5 z vah a mutace časté, 
-- [ ] Evoluční stragii, Diferenciální evoluce, f=0.8 
-- [ ] Testování sensorů v GUI 
+- [x] Evoluční stragii, Diferenciální evoluce, f=0.8 
+- [x] Testování sensorů v GUI 
 - [ ] Kreslení grafů
-- [ ] Jednoduchý experiment na chození
+- [x] Jednoduchý experiment na chození
 - [x] LineTypeSensor
 - na o málo tisicina 
 
