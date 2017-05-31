@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using MathNet.Numerics;
 using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
@@ -27,7 +30,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public static float MapWidth = 800;
         public static int AmountOfRobots = 10;
         public static RobotEntity modelRobot = new ScoutRobot(new Vector2(0,0),100);
-
+        public static string initGenerationFile = "initGen.json";
 
         protected List<SingleLayerNeuronNetwork> actualGeneration;
         protected List<SingleLayerNeuronNetwork> followingGeneration;
@@ -56,7 +59,7 @@ namespace SwarmSimFramework.Classes.Experiments
             visitedBoxes = new int[amountofBoxes];
             
             List<RobotEntity> robots = new List<RobotEntity>(AmountOfRobots);
-            float gap = MapWidth / AmountOfRobots;
+            float gap = MapHeight / (AmountOfRobots +1);
             for (int i = 0; i < 10; i++)
             {
                 var newRobot = (RobotEntity) modelRobot.DeepClone();
@@ -66,15 +69,25 @@ namespace SwarmSimFramework.Classes.Experiments
             }
             //Prepare map 
             Map = new Map.Map(MapHeight, MapWidth,robots);  
-            //Prepare brains 
+            //Prepare brains || read brains from  file
+            if (File.Exists(initGenerationFile))
+            {
+                StreamReader s = new StreamReader(initGenerationFile);
+
+                actualGeneration = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(s.ReadToEnd()).ToList();
+            }
             actualGeneration = new List<SingleLayerNeuronNetwork>(SizeOfGeneration);
             for (int i = 0; i < SizeOfGeneration; i++)
             {
                 actualGeneration.Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension(){Input = modelRobot.SensorsDimension,Output = modelRobot.EffectorsDimension}));
             }
             //Count fitness of brains 
+            
+            int brainI = -1;
             foreach (var brain in actualGeneration)
             {
+                brainI++;
+                info = new StringBuilder("Inicialization of random brain: " + brainI);
                 //Clear map 
                 Map.Reset();
                 //Give brains to robots 
@@ -95,6 +108,9 @@ namespace SwarmSimFramework.Classes.Experiments
                 //Reset fitness counting
                 ResetFitness();
             }
+            StreamWriter file = new StreamWriter(initGenerationFile);
+            file.Write(BrainSerializer.SerializeArray(actualGeneration.ToArray()));
+            file.Close();
 
         }
         /// <summary>
@@ -202,7 +218,27 @@ namespace SwarmSimFramework.Classes.Experiments
         //If experiment finished
         public bool Finnished { get; protected set; }
 
+        protected StringBuilder info = new StringBuilder("Walking experiment: ");
 
+        public StringBuilder ExperimentInfo
+        {
+            get
+            {
+                lock (InfoLock)
+                {
+                    return info;
+                }
+            }
+            protected set
+            {
+                lock (InfoLock)
+                {
+                    info = value;
+                }
+            }
+        }
+
+        public object InfoLock { get; }
     }
 
     public static class DifferentialEvolution

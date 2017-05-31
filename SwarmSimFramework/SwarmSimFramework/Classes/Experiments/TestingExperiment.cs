@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
@@ -52,5 +53,7 @@ namespace SwarmSimFramework.Classes.Experiments
         }
 
         public bool Finnished { get; protected set; }
+        public StringBuilder ExperimentInfo { get; } = new StringBuilder("Testing Experiment" );
+        public object InfoLock { get; } = new  object();
     }
 }

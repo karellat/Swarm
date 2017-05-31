@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 using MathNet.Numerics.Distributions;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
@@ -62,14 +63,19 @@ namespace SwarmSimFramework.Classes.RobotBrains
             return new StringBuilder("Perceptron");
         }
 
-        public IRobotBrain DeserializeBrain(string jsonString)
+        IRobotBrain IRobotBrain.DeserializeBrain(string jsonString)
         {
-            throw new NotImplementedException();
+            return DeserializeBrain(jsonString);
+        }
+
+        public static IRobotBrain DeserializeBrain(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<Perceptron>(jsonString, BrainSerializer.JsonSettings);
         }
 
         public string SerializeBrain()
         {
-            throw new NotImplementedException();
+            return JsonConvert.SerializeObject(this, BrainSerializer.JsonSettings);
         }
 
         /// <summary>

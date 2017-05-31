@@ -61,7 +61,7 @@ namespace SwarmSimFramework.Interfaces
 
     public static class BrainSerializer
     {
-        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings()
+        public static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings()
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             TypeNameHandling = TypeNameHandling.All
@@ -75,6 +75,16 @@ namespace SwarmSimFramework.Interfaces
         {
             return JsonConvert.SerializeObject(brains, JsonSettings);
 
+        }
+
+        public static T[] DeserializeArray<T>(string jsonString) where T : IRobotBrain
+        {
+            return JsonConvert.DeserializeObject<T[]>(jsonString, JsonSettings);
+        }
+
+        public static string SerializeArray<T>(T[] brains) where T : IRobotBrain
+        {
+            return JsonConvert.SerializeObject(brains, JsonSettings);
         }
     }
 }

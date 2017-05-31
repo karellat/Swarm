@@ -93,9 +93,9 @@ namespace SwarmSimFramework.Classes.Effectors
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
        {
            lastSettings = settings;
-           //Check position 
+           //Check position, if robot on different possition make connect
            if (this.Middle != robot.Middle)
-               throw new ArgumentException("Unknown situation");
+               ConnectToRobot(robot);
            float[] normalizeSettings = settings.Normalize(NormalizeFuncs);
             //Set speeds
             //Check speed change bound 

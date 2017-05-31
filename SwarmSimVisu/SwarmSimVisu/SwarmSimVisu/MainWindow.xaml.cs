@@ -63,6 +63,8 @@ namespace SwarmSimVisu
         public bool Stopping;
         public bool Paused;
 
+       
+
         /// <summary>
         /// Loc of the controls 
         /// </summary>
@@ -99,27 +101,37 @@ namespace SwarmSimVisu
                     MessageBox.Show("Unknown experiment");
                     return;
             }
-            RunningExperiment.Init();
             //Maximaze window
             WindowState = WindowState.Maximized;
-            if (!PrepareExperiment(RunningExperiment))
-            {
-                MessageBox.Show("Small height and width to show whole map");
-                return;
-            }
+            RunningExperiment.Init();
 
             //if successfull disable ExperimentCombox & init button, show experiment control button
             ExperimentComboBox.IsEditable = false;
             ExperimentComboBox.IsHitTestVisible = false;
             ExperimentComboBox.Focusable = false;
-            //Set up controls
+            //Hide controls 
             InitExpB.Visibility = Visibility.Hidden;
+            
+            
+            if (!PrepareExperiment(RunningExperiment))
+            {
+                MessageBox.Show("Small height and width to show whole map");
+                return;
+            }
             StartB.Visibility = Visibility.Visible;
             Running = false;
             Stopping = false;
             Paused = false;
             Pausing = false;
+
+
         }
+
+        private void ShowMetaInfoInit()
+        {
+            
+        }
+
         /// <summary>
         /// Prepare Experiment Drawing stuff
         /// </summary>
