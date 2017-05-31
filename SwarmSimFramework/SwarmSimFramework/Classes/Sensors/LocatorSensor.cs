@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
 using System.Xml.Schema;
@@ -18,7 +19,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Intern value bounds
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization functions to robot values
         /// </summary>
@@ -62,7 +63,7 @@ namespace SwarmSimFramework.Classes.Entities
                 LocalBounds[1].Max = map.MaxHeight;
                 NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
             }
-
+           
             Vector2 dirV = Vector2.Normalize(robot.FPoint - robot.Middle);
 
             float[] o = new[] {robot.Middle.X, robot.Middle.Y, dirV.X, dirV.Y};
@@ -89,7 +90,10 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public ISensor Clone()
         {
-            return (ISensor) DeepClone();
+            var s = (LocatorSensor) DeepClone();
+            s.LocalBounds = new Bounds[this.LocalBounds.Length];
+            this.LocalBounds.CopyTo(s.LocalBounds,0);
+            return s;
         }
         /// <summary>
         /// Last read values

@@ -28,10 +28,11 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// Specific weights of input values
         /// </summary>
         public float[] Weights;
+
         /// <summary>
         /// Transformation fncs transforming output
         /// </summary>
-        public Func<float, float> ActivationFnc { get; protected set; }
+        public Func<float, float> ActivationFnc { get; protected set; } = (float x) => ActivationFuncs.ResieTanh(100, x);
         /// <summary>
         /// Fitness of actual brain 
         /// </summary>

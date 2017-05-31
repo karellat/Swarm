@@ -26,14 +26,13 @@ namespace SwarmSimFramework.Classes.Experiments
         public static float MapHeight = 660;
         public static float MapWidth = 800;
         public static int AmountOfRobots = 10;
-        public static RobotEntity modelRobot = new ScoutRobot(new Vector2(Single.NaN,Single.NaN),100);
+        public static RobotEntity modelRobot = new ScoutRobot(new Vector2(0,0),100);
+
+
         protected List<SingleLayerNeuronNetwork> actualGeneration;
         protected List<SingleLayerNeuronNetwork> followingGeneration;
-
         protected int actualIterationIndex;
-
         protected int actualGenerationIndex;
-
         protected int actualBrainIndex;
 
         protected SingleLayerNeuronNetwork actualBrain;
@@ -51,9 +50,9 @@ namespace SwarmSimFramework.Classes.Experiments
             Finnished = false;
             //Prepare fitness count 
             sizeOfBox = modelRobot.Radius * 2;
-            boxesInRow = ((int) Math.Ceiling(Map.MaxWidth / sizeOfBox));
-            int amountofBoxes = ((int) Math.Ceiling(Map.MaxHeight / sizeOfBox)) *
-                                ((int) Math.Ceiling(Map.MaxWidth / sizeOfBox));
+            boxesInRow = ((int) Math.Ceiling(MapHeight / sizeOfBox));
+            int amountofBoxes = ((int) Math.Ceiling(MapHeight / sizeOfBox)) *
+                                ((int) Math.Ceiling(MapWidth / sizeOfBox));
             visitedBoxes = new int[amountofBoxes];
             
             List<RobotEntity> robots = new List<RobotEntity>(AmountOfRobots);

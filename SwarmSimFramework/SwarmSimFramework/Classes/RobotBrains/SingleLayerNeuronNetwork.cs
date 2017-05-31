@@ -25,10 +25,11 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// Permille propability of mutation
         /// </summary>
         public static int PermilleOfMutation;
+
         /// <summary>
         /// Activation funcs 
         /// </summary>
-        protected static Func<float, float> ActivationFunc; 
+        protected static Func<float, float> ActivationFunc => (float x) => ActivationFuncs.ResieTanh(100, x);
 
         /// <summary>
         /// Fitness of current brain
@@ -122,7 +123,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
             nn.Neurons = new Perceptron[nn.IoDimension.Output];
             for (int i = 0; i < nn.IoDimension.Output; i++)
             {
-                nn.Neurons[i] = Perceptron.GenerateRandom(ExpectedValue,Variance,nn.ActivationFnc,nn.IoDimension);
+                nn.Neurons[i] = Perceptron.GenerateRandom(ExpectedValue,Variance,nn.ActivationFnc,new IODimension() {Input = nn.IoDimension.Input, Output = 1});
             }
 
             return nn;

@@ -31,9 +31,10 @@ namespace SwarmSimVisu
         {
             InitializeComponent();
             //ComoBox for choosing experiment
-            ExperimentComboBox.SelectedIndex = 1;
+            ExperimentComboBox.SelectedIndex = 2;
             ExperimentComboBox.Items.Add("None");
             ExperimentComboBox.Items.Add("TestingExperiment");
+            ExperimentComboBox.Items.Add("WalkingExperiment");
 
         }
         /// <summary>
@@ -90,6 +91,9 @@ namespace SwarmSimVisu
                     return;
                 case (1):
                     RunningExperiment = new TestingExperiment();
+                    break;
+                case (2): 
+                    RunningExperiment = new WalkingExperiment();
                     break;
                 default:
                     MessageBox.Show("Unknown experiment");
