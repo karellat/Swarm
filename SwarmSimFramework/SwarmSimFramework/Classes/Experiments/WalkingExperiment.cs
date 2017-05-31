@@ -33,7 +33,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public static string initGenerationFile = "initGen.json";
 
         protected List<SingleLayerNeuronNetwork> actualGeneration;
-        protected List<SingleLayerNeuronNetwork> followingGeneration;
+        protected List<SingleLayerNeuronNetwork> followingGeneration = new List<SingleLayerNeuronNetwork>();
         protected int actualIterationIndex;
         protected int actualGenerationIndex;
         protected int actualBrainIndex;
@@ -76,42 +76,58 @@ namespace SwarmSimFramework.Classes.Experiments
 
                 actualGeneration = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(s.ReadToEnd()).ToList();
             }
-            actualGeneration = new List<SingleLayerNeuronNetwork>(SizeOfGeneration);
-            for (int i = 0; i < SizeOfGeneration; i++)
+            else
             {
-                actualGeneration.Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension(){Input = modelRobot.SensorsDimension,Output = modelRobot.EffectorsDimension}));
-            }
-            //Count fitness of brains 
-            
-            int brainI = -1;
-            foreach (var brain in actualGeneration)
-            {
-                brainI++;
-                info = new StringBuilder("Inicialization of random brain: " + brainI);
-                //Clear map 
-                Map.Reset();
-                //Give brains to robots 
-                foreach (var robot in Map.Robots)
-                    robot.Brain = brain;
-                //MakeSimulation 
-                for (int i = 0; i < MapIteration; i++)
+                actualGeneration = new List<SingleLayerNeuronNetwork>(SizeOfGeneration);
+                for (int i = 0; i < SizeOfGeneration; i++)
                 {
-                    Map.MakeStep();
-                    //Count fitness
-                    foreach (var r in Map.Robots)
+                    actualGeneration.Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
                     {
-                        CountIndividualFitness(r);
-                    }
+                        Input = modelRobot.SensorsDimension,
+                        Output = modelRobot.EffectorsDimension
+                    }));
                 }
-                //Set created Fitness
-                brain.Fitness = CountBrainFitness();
-                //Reset fitness counting
-                ResetFitness();
-            }
-            StreamWriter file = new StreamWriter(initGenerationFile);
-            file.Write(BrainSerializer.SerializeArray(actualGeneration.ToArray()));
-            file.Close();
+                //Count fitness of brains 
 
+                int brainI = -1;
+                foreach (var brain in actualGeneration)
+                {
+                    brainI++;
+                    info = new StringBuilder("Inicialization of random brain: " + brainI);
+                    //Clear map 
+                    Map.Reset();
+                    //Give brains to robots 
+                    foreach (var robot in Map.Robots)
+                        robot.Brain = brain;
+                    //MakeSimulation 
+                    for (int i = 0; i < MapIteration; i++)
+                    {
+                        Map.MakeStep();
+                        // DEBUG 
+                        Map.CheckCorrectionOfPossition();
+                        //Count fitness
+                        foreach (var r in Map.Robots)
+                        {
+                            CountIndividualFitness(r);
+                        }
+                    }
+                    //Set created Fitness
+                    brain.Fitness = CountBrainFitness();
+                    //Reset fitness counting
+                    ResetFitness();
+                }
+                StreamWriter file = new StreamWriter(initGenerationFile);
+                file.Write(BrainSerializer.SerializeArray(actualGeneration.ToArray()));
+                file.Close();
+            }
+            //prepare first brain for evolution
+            actualBrain = actualGeneration[0];
+            actualBrain.Fitness = 0;
+            foreach (var r in Map.Robots)
+            {
+                r.Brain = actualBrain.GetCleanCopy();
+                
+            }
         }
         /// <summary>
         /// Reset fitness of brain
@@ -178,33 +194,10 @@ namespace SwarmSimFramework.Classes.Experiments
                 Finnished = true;
             //If all new brains generated 
             if (actualBrainIndex == SizeOfGeneration-1)
-            {
-                actualGeneration = followingGeneration;
-                followingGeneration = new List<SingleLayerNeuronNetwork>();
-                actualBrainIndex = 0;
-                actualGenerationIndex++;
-            }
+                SingleGeneration();
             //If map iteration ended
             if (actualIterationIndex == MapIteration)
-            {
-                actualIterationIndex = 0;
-                //Choose brain with best fitness
-                actualBrain.Fitness = CountBrainFitness();
-                if(actualBrain.Fitness > actualGeneration[actualBrainIndex].Fitness)
-                    followingGeneration.Add(actualBrain);
-                else
-                   followingGeneration.Add(actualGeneration[actualBrainIndex]);
-                this.ResetFitness();
-                Map.Reset();
-                actualBrainIndex++;
-                //Prepare new brain use given evolution algorithm 
-                if (numOfEvolutionAlg == 1)
-                    actualBrain = DifferentialEvolution.DifferentialEvolutionBrain(actualGeneration[actualBrainIndex],
-                        actualGeneration);
-                else
-                    actualBrain =
-                        EvolutionWithMutation.MutateSingleLayerNeuronNetwork(actualGeneration[actualBrainIndex]);
-            }
+                SingleMapSimulation();
 
             //Make one iteration of map 
             Map.MakeStep();
@@ -217,6 +210,47 @@ namespace SwarmSimFramework.Classes.Experiments
         }
         //If experiment finished
         public bool Finnished { get; protected set; }
+
+        //Single steps of makestep 
+        /// <summary>
+        /// End of generation
+        /// </summary>
+        protected void SingleGeneration ()
+        {
+            actualGeneration = followingGeneration;
+            followingGeneration = new List<SingleLayerNeuronNetwork>();
+            actualBrainIndex = 0;
+            actualGenerationIndex++;
+        }
+
+        protected void SingleMapSimulation()
+        {
+            //Start new iteration cycle 
+            actualIterationIndex = 0;
+            //Choose brain with best fitness to push 
+            actualBrain.Fitness = CountBrainFitness();
+            if (actualBrain.Fitness > actualGeneration[actualBrainIndex].Fitness)
+                followingGeneration.Add(actualBrain);
+            else
+                followingGeneration.Add(actualGeneration[actualBrainIndex]);
+            this.ResetFitness();
+            Map.Reset();
+            actualBrainIndex++;
+            //Prepare new brain use given evolution algorithm 
+            if (numOfEvolutionAlg == 1)
+                actualBrain = DifferentialEvolution.DifferentialEvolutionBrain(actualGeneration[actualBrainIndex],
+                    actualGeneration);
+            else
+                actualBrain =
+                    EvolutionWithMutation.MutateSingleLayerNeuronNetwork(actualGeneration[actualBrainIndex]);
+
+            //set brain to robot bodies,Reset fitness
+            actualBrain.Fitness = 0;
+            foreach (var r in Map.Robots)
+            {
+                r.Brain = actualBrain.GetCleanCopy();
+            }
+        }
 
         protected StringBuilder info = new StringBuilder("Walking experiment: ");
 

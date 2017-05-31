@@ -13,23 +13,26 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// <summary>
         /// expected values of weights 
         /// </summary>
-        public static float ExpectedValue;
+        public static float ExpectedValue = 0;
+
         /// <summary>
         /// variance of weights 
         /// </summary>
-        public static float Variance;
+        public static float Variance = 0.1f;
         /// <summary>
         /// Variance of adding values of mutation 
         /// </summary>
-        public static float VarianceOfGaussianMutations;
+        public static float VarianceOfGaussianMutations = 0.05f;
+
         /// <summary>
         /// Permille propability of mutation
         /// </summary>
-        public static int PermilleOfMutation;
+        public static int PermilleOfMutation = 50;
 
         /// <summary>
         /// Activation funcs 
         /// </summary>
+         [JsonIgnore]
         protected static Func<float, float> ActivationFunc => (float x) => ActivationFuncs.ResieTanh(100, x);
 
         /// <summary>
@@ -39,15 +42,18 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// <summary>
         /// Transformation fncs for output
         /// </summary>
+        [JsonIgnore]
         public Func<float, float> ActivationFnc => SingleLayerNeuronNetwork.ActivationFunc;
 
         /// <summary>
         /// Input & Output dimensions
         /// </summary>
+        [JsonProperty]
         public IODimension IoDimension { get; protected set; }
         /// <summary>
         /// bounds for input & outpus
         /// </summary>
+        [JsonProperty]
         public Bounds InOutBounds { get; protected set; }
         /// <summary>
         /// Intern neurons of single output 

@@ -16,14 +16,19 @@ namespace SwarmSimFramework.Classes.RobotBrains
     public class Perceptron : IRobotBrain
     {
         //STATIC INITIAL  VALUES
+        [JsonIgnore]
         public static Bounds StandartBounds = RobotEntity.StandardBounds;
+        [JsonIgnore]
+        public static Func<float, float> ActivationnFnc = (float x) => ActivationFuncs.ResieTanh(100, x);
         /// <summary>
         /// Bounds of input/output values
         /// </summary>
+        [JsonProperty]
         public Bounds InOutBounds { get; protected set; }
         /// <summary>
         /// Dimension of input output
         /// </summary>
+        [JsonProperty]
         public IODimension IoDimension { get; protected set; }
         /// <summary>
         /// Specific weights of input values
@@ -33,7 +38,9 @@ namespace SwarmSimFramework.Classes.RobotBrains
         /// <summary>
         /// Transformation fncs transforming output
         /// </summary>
-        public Func<float, float> ActivationFnc { get; protected set; } = (float x) => ActivationFuncs.ResieTanh(100, x);
+        [JsonIgnore]
+        public Func<float, float> ActivationFnc => Perceptron.ActivationnFnc;
+
         /// <summary>
         /// Fitness of actual brain 
         /// </summary>
@@ -114,7 +121,6 @@ namespace SwarmSimFramework.Classes.RobotBrains
             {
                 InOutBounds = inOutBounds,
                 IoDimension = dim,
-                ActivationFnc = activationFunc,
                 Fitness = 0
             };
 

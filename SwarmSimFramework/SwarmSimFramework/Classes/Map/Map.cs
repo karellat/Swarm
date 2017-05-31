@@ -60,21 +60,9 @@ namespace SwarmSimFramework.Classes.Map
                 modelFuelEntities.Add((FuelEntity) f.DeepClone());
             }
             //Init colliding testing 
-            foreach (var r in Robots)
-            {
-                if(OutOfBorderTest(r))
-                    throw new ArgumentException("Robot out of map");
-            }
-            foreach (var p in PasiveEntities)
-            {
-                if (OutOfBorderTest(p))
-                    throw new ArgumentException("Robot out of map");
-            }
-            foreach (var f in FuelEntities)
-            {
-                if (OutOfBorderTest(f))
-                    throw new ArgumentException("Fuel out of map");
-            }
+            CheckCorrectionOfPossition();
+            
+
         }
 
         /// <summary>
@@ -276,6 +264,8 @@ namespace SwarmSimFramework.Classes.Map
             return theNearestIntersection;
         }
 
+      
+
         //COLISION WITH RADIO BROADCASTING
         /// <summary>
         /// Return dictionary of colliding radioEntities with frequency and mean direction  
@@ -415,6 +405,7 @@ namespace SwarmSimFramework.Classes.Map
 
             return o;
         }
+        //BORDER CHECK TESTS
         /// <summary>
         /// Check if line entity lies out of map borders 
         /// return false if not 
@@ -443,7 +434,25 @@ namespace SwarmSimFramework.Classes.Map
                 return true;
             return false;
         }
-
+        //GLOBAL Map Test
+        public void CheckCorrectionOfPossition()
+        {
+            foreach (var r in Robots)
+            {
+                if (OutOfBorderTest(r))
+                    throw new ArgumentException("Robot out of map");
+            }
+            foreach (var p in PasiveEntities)
+            {
+                if (OutOfBorderTest(p))
+                    throw new ArgumentException("Robot out of map");
+            }
+            foreach (var f in FuelEntities)
+            {
+                if (OutOfBorderTest(f))
+                    throw new ArgumentException("Fuel out of map");
+            }
+        }
         //PUBLIC MEMBERS
         //Characteristcs of map 
         //border vertices

@@ -83,9 +83,18 @@ namespace SwarmSimFramework.Classes.Entities
                 }
                 else
                 {
+                    //Coliding with border
+                    if (intersection.CollidingEntity != null)
+                    {
+                    output[(int)intersection.CollidingEntity.Color + 1] =
+                        LocalBounds[(int)intersection.CollidingEntity.Color + 1].Max;
+                    }
+                    else
+                    {
+                    //Coliding with the border
+                        output[(int) EntityColor.ObstacleColor +1] = LocalBounds[(int)EntityColor.ObstacleColor + 1].Max;
+                    }
                     output[0] = (float) Math.Sqrt(intersection.Distance);
-                    output[(int) intersection.CollidingEntity.Color + 1] =
-                        LocalBounds[(int) intersection.CollidingEntity.Color + 1].Max;
                 }
             //Normalize output & mark old values 
                 LastReadValues = output;
