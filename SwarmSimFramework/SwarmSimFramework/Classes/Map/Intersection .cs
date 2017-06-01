@@ -1,4 +1,5 @@
-﻿using SwarmSimFramework.Classes.Entities;
+﻿using System;
+using SwarmSimFramework.Classes.Entities;
 using System.Numerics;
 
 namespace SwarmSimFramework.Classes.Map
@@ -33,7 +34,12 @@ namespace SwarmSimFramework.Classes.Map
         {
             if(AmountOfSignal == 0)
                 return Vector2.Zero;
-            return Vector2.Normalize(new Vector2(SumOfDirections.X / AmountOfSignal, SumOfDirections.Y / AmountOfSignal));
+
+            
+            var dir =  new Vector2(SumOfDirections.X / AmountOfSignal, SumOfDirections.Y / AmountOfSignal);
+            if (dir == Vector2.Zero)
+                return dir;
+            return Vector2.Normalize(dir);
         }
     }
     /// <summary>

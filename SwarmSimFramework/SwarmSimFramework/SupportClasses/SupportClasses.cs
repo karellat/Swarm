@@ -12,6 +12,15 @@
         /// Minimum bound
         /// </summary>
         public float Min;
+
+        public bool In(float x)
+        {
+            if (float.IsNaN(x)) return false;
+            if (float.IsInfinity(x)) return false;
+            if (x >= Min && x <= Max)
+                return true;
+            return false;
+        }
     }
 
     /// Normalize functions   

@@ -86,6 +86,8 @@ namespace SwarmSimFramework.Classes.Map
                 FuelEntities.Add(f);
             }
             //No point of coping passive entities 
+            //DEBUG
+            CheckCorrectionOfPossition();
         }
 
         /// <summary>

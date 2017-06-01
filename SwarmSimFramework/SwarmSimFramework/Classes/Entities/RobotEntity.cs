@@ -169,13 +169,23 @@ namespace SwarmSimFramework.Classes.Entities
             {
                 foreach (var f in s.Count(this,map))
                 {
+                    //DEBUG
                     readValues[index] = f;
+                    if (!StandardBounds.In(f))
+                        throw new ArgumentException("Wrong sensor read values");
                     index++;
                 }
             }
+
             LastReadValues = readValues;
             //Feed brain
             BrainDecidedValues = Brain.Decide(LastReadValues);
+            //DEBUG
+            foreach (var r in BrainDecidedValues)
+            {
+                if (!StandardBounds.In(r))
+                    throw new ArgumentException("Wrong sensor read values");
+            }
         }
         //METHODS 
         /// <summary>
@@ -196,6 +206,7 @@ namespace SwarmSimFramework.Classes.Entities
                     set[i] = BrainDecidedValues[index];
                     index++;
                 }
+
                 e.Effect(set,this,map);
             }
         }

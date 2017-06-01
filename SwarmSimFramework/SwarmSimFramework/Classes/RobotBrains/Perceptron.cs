@@ -100,6 +100,8 @@ namespace SwarmSimFramework.Classes.RobotBrains
                 dec += Weights[i] * inputFloats[i];
             }
 
+            if (float.IsNaN(dec))
+                throw new ArgumentException("Unknown situation ");
             dec = ActivationFnc.Invoke(dec);
             if (dec > InOutBounds.Max)
                 return InOutBounds.Max;

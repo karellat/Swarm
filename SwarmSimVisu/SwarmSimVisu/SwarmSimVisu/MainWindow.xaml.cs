@@ -193,7 +193,8 @@ namespace SwarmSimVisu
                     RunningExperiment.MakeStep();
                     //Draw experiment
                     DrawExperiment();
-                    //Thread.Sleep(500);
+                    //Wait
+                    Thread.Sleep(100);
                 }
             }
             MainGrid.Dispatcher.Invoke(StopExperiment);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Net;
 using System.Numerics;
 using System.Text;
@@ -76,6 +77,7 @@ namespace SwarmSimFramework.Classes.Effectors
             //Reset position 
             Middle = robot.Middle;
             FPoint = robot.FPoint;
+            RotationMiddle = robot.Middle;
             Orientation = robot.Orientation;
             WheelDistance = 2 * robot.Radius;
             //Create normalization funcs
@@ -84,19 +86,20 @@ namespace SwarmSimFramework.Classes.Effectors
             RightVelocity = 0;
             LeftVelocity = 0;
         }
-       /// <summary>
-       /// Make effect on Robot and the enviroment
-       /// </summary>
-       /// <param name="settings"></param>
-       /// <param name="robot"></param>
-       /// <param name="map"></param>
+
+        /// <summary>
+        /// Make effect on Robot and the enviroment
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="robot"></param>
+        /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
-       {
-           lastSettings = settings;
-           //Check position, if robot on different possition make connect
-           if (this.Middle != robot.Middle)
-               ConnectToRobot(robot);
-           float[] normalizeSettings = settings.Normalize(NormalizeFuncs);
+        {
+            lastSettings = settings;
+            //Check position, if robot on different possition make connect
+            if (this.Middle != robot.Middle)
+                ConnectToRobot(robot);
+            float[] normalizeSettings = settings.Normalize(NormalizeFuncs);
             //Set speeds
             //Check speed change bound 
             RightVelocity = (Math.Abs(RightVelocity - normalizeSettings[0])) < MaxVelocityChange
@@ -105,14 +108,16 @@ namespace SwarmSimFramework.Classes.Effectors
             LeftVelocity = (Math.Abs(LeftVelocity - normalizeSettings[1])) < MaxVelocityChange
                 ? normalizeSettings[1]
                 : Math.Sign(settings[1] - LeftVelocity) * MaxVelocityChange + LeftVelocity;
-           // Count, speed, rotation and make move if not collide
-           float s = (RightVelocity + LeftVelocity) / 2.0f;
-           float o = ((RightVelocity - LeftVelocity) / WheelDistance);
-           robot.RotateRadians(o);
-           this.RotateRadians(o);
-           Vector2 newPos = new Vector2(s * (float) Math.Sin(Pi2 - Orientation) + Middle.X, s * (float) Math.Cos(Pi2 -Orientation) + Middle.Y);
-            //Make move if not collide, if colide mark collision
-            if (!map.Collision(robot, newPos))
+            // Count, speed, rotation and make move if not collide
+            float s = (RightVelocity + LeftVelocity) / 2.0f;
+            float o = ((RightVelocity - LeftVelocity) / WheelDistance);
+            robot.RotateRadians(o);
+            this.RotateRadians(o);
+            Vector2 newPos = new Vector2(s * (float) Math.Sin(Pi2 - Orientation) + Middle.X,
+                s * (float) Math.Cos(Pi2 - Orientation) + Middle.Y);
+        
+        //Make move if not collide, if colide mark collision
+        if (!map.Collision(robot, newPos))
            {
                robot.MoveTo(newPos);
                this.MoveTo(newPos);
