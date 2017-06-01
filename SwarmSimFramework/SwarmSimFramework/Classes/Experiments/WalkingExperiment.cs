@@ -23,8 +23,9 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         public int numOfEvolutionAlg = 1; 
         //Evolution 
-        public static int SizeOfGeneration = 1000;
-        public static int AmountOfGenerations = 1000;
+       
+        public static int PopulationSize = 1000;
+        public static int NumberOfGenerations = 1000;
         public static int MapIteration = 1000;
         public static float MapHeight = 660;
         public static float MapWidth = 800;
@@ -43,7 +44,7 @@ namespace SwarmSimFramework.Classes.Experiments
         protected int[] visitedBoxes;
         protected int boxesInRow;
         protected float sizeOfBox;
-        protected float emptyBoxScore = -100;
+        protected float emptyBoxScore = 0;
         protected float oneBoxScore = 10;
         protected float moreBoxScore = 0.5f;
 
@@ -78,8 +79,8 @@ namespace SwarmSimFramework.Classes.Experiments
             }
             else
             {
-                actualGeneration = new List<SingleLayerNeuronNetwork>(SizeOfGeneration);
-                for (int i = 0; i < SizeOfGeneration; i++)
+                actualGeneration = new List<SingleLayerNeuronNetwork>(PopulationSize);
+                for (int i = 0; i < PopulationSize; i++)
                 {
                     actualGeneration.Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
                     {
@@ -190,10 +191,10 @@ namespace SwarmSimFramework.Classes.Experiments
         public void MakeStep()
         {
             //If all generation simulated 
-            if(actualGenerationIndex == AmountOfGenerations)
+            if(actualGenerationIndex == NumberOfGenerations)
                 Finnished = true;
             //If all new brains generated 
-            if (actualBrainIndex == SizeOfGeneration-1)
+            if (actualBrainIndex == PopulationSize-1)
                 SingleGeneration();
             //If map iteration ended
             if (actualIterationIndex == MapIteration)
