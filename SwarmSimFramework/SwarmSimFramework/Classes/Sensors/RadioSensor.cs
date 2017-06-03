@@ -40,6 +40,7 @@ namespace SwarmSimFramework.Classes.Entities
         {
             //No need for orientation
             FPoint = Middle;
+            RotationMiddle = Middle; 
             //Set bounds 
             Dimension = 9;
             LocalBounds = new Bounds[Dimension];
@@ -67,9 +68,11 @@ namespace SwarmSimFramework.Classes.Entities
         public float[] Count(RobotEntity robot, Map.Map map)
         {
             //Update location 
-            if(robot.Middle != Middle)
+            if (robot.Middle != Middle)
+            {
                 this.MoveTo(robot.Middle);
-           
+                this.RotationMiddle = robot.Middle;
+            }
             //Find intersections 
             var intertesections = map.CollisionRadio(this);
             //Prepare ouput
@@ -102,6 +105,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="robot"></param>
         public void ConnectToRobot(RobotEntity robot)
         {
+            this.RotationMiddle = robot.Middle;
             this.Middle = robot.Middle;
             this.FPoint = this.Middle;
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);

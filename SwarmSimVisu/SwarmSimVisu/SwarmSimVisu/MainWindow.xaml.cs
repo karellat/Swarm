@@ -191,7 +191,7 @@ namespace SwarmSimVisu
                     }
                     //Make step of Experiment: 
                     RunningExperiment.MakeStep();
-                    //Draw experiment
+                    //Draw experisiment
                     DrawExperiment();
                     //Wait
                     Thread.Sleep(100);

@@ -353,6 +353,7 @@ namespace SwarmSimFramework.Classes.Entities
         {
             StringBuilder s = new StringBuilder("Robot: " + this.GetType().ToString() + "\n");
             s.AppendLine("\t Location info: " + base.Log());
+            s.AppendLine("\t Rotation Point: " + this.RotationMiddle + " FPoint: " + this.FPoint);
             s.AppendLine("\t Starting Point: " + StartingPoint);
             s.AppendLine("\t Health: " + Health + " Alive: " + Alive);
             s.AppendLine("\t TeamNumber: " + TeamNumber + " Fuel: " + FuelAmount);
