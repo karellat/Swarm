@@ -203,6 +203,13 @@ namespace SwarmSimFramework.Classes.Experiments
             //Make one iteration of map 
             Map.MakeStep();
             actualIterationIndex++;
+            StringBuilder newInfo = new StringBuilder("Actual map iteration: ");
+            newInfo.Append(actualIterationIndex);
+            newInfo.Append(" Actual brain from population: ");
+            newInfo.Append(actualBrainIndex);
+            newInfo.Append(" Actual generation index: ");
+            newInfo.Append(actualGenerationIndex);
+            ExperimentInfo = newInfo;
             //Count fitness for all robot bodies
             foreach (var r in Map.Robots)
             {
@@ -222,6 +229,12 @@ namespace SwarmSimFramework.Classes.Experiments
             followingGeneration = new List<SingleLayerNeuronNetwork>();
             actualBrainIndex = 0;
             actualGenerationIndex++;
+            //Log actual generation
+        
+            var i = GenerationInfoStruct.GetGenerationInfo(actualGeneration);
+            StringBuilder sb = new StringBuilder("Info about " + (actualGenerationIndex-1) + ". generation " );
+            sb.AppendLine("Best fitness: "); 
+            //TODO: end of programming
         }
 
         protected void SingleMapSimulation()
@@ -254,7 +267,9 @@ namespace SwarmSimFramework.Classes.Experiments
         }
 
         protected StringBuilder info = new StringBuilder("Walking experiment: ");
-
+        /// <summary>
+        /// Thread safe info about Experiment
+        /// </summary>
         public StringBuilder ExperimentInfo
         {
             get
@@ -273,7 +288,31 @@ namespace SwarmSimFramework.Classes.Experiments
             }
         }
 
-        public object InfoLock { get; }
+        private StringBuilder generationInfo;
+        public StringBuilder GenerationInfo {
+            get
+            {
+                //Clean info
+                var v = generationInfo;
+                generationInfo = null;
+                return v;
+            }
+            protected set => generationInfo = value;
+        }
+
+        public bool FinnishedGeneration
+        {
+            get
+            {
+                lock (GenerationInfoLock)
+                {
+                    return GenerationInfo != null;
+                }
+            }
+        }
+
+        public object InfoLock { get; } = new Object();
+        public object GenerationInfoLock = new Object();
     }
 
     public static class DifferentialEvolution

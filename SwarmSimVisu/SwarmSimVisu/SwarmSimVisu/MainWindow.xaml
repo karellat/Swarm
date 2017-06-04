@@ -9,7 +9,9 @@
 
     <Grid x:Name="MainGrid" Margin="15,60,15,15">
         <Grid Background="AliceBlue"/>
-        <Border BorderThickness="1" BorderBrush="Black"></Border>
+        <Border BorderThickness="1" BorderBrush="Black">
+            <TextBox x:Name ="BasicInfo" TextWrapping="Wrap" Text="TextBox" Margin="129.2,-27.8,8.8,0" Background="#FFCA1F1F" Height="22" VerticalAlignment="Top" Visibility="Hidden"/>
+        </Border>
         <Button x:Name ="InitExpB" Click="InitExperimentClick" Content="Init Experiment" HorizontalAlignment="Left" Margin="0,-25,0,0" VerticalAlignment="Top" Width="105"/>
         <ComboBox x:Name="ExperimentComboBox"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="140" Margin="0,-57,0,0"/>
         <Label Content="Experiment:" Margin="0,-57,140,0" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Width="75"/>

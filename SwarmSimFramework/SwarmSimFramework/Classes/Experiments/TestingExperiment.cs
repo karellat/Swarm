@@ -54,6 +54,8 @@ namespace SwarmSimFramework.Classes.Experiments
 
         public bool Finnished { get; protected set; }
         public StringBuilder ExperimentInfo { get; } = new StringBuilder("Testing Experiment" );
+        public StringBuilder GenerationInfo { get; }
+        public bool FinnishedGeneration { get; }
         public object InfoLock { get; } = new  object();
     }
 }

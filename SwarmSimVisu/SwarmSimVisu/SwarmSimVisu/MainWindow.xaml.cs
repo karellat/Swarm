@@ -118,6 +118,7 @@ namespace SwarmSimVisu
                 MessageBox.Show("Small height and width to show whole map");
                 return;
             }
+            BasicInfo.Visibility = Visibility.Visible;
             StartB.Visibility = Visibility.Visible;
             Running = false;
             Stopping = false;
@@ -125,11 +126,6 @@ namespace SwarmSimVisu
             Pausing = false;
 
 
-        }
-
-        private void ShowMetaInfoInit()
-        {
-            
         }
 
         /// <summary>
@@ -208,6 +204,7 @@ namespace SwarmSimVisu
             StartB.Visibility = Visibility.Hidden;
             PauseB.Visibility = Visibility.Hidden;
             StopB.Visibility = Visibility.Hidden;
+            BasicInfo.Visibility = Visibility.Hidden;
             //Remove grid
             MainGrid.Children.Remove(DrawGrid);
             DrawGrid = null;
@@ -286,7 +283,8 @@ namespace SwarmSimVisu
                 }
 
             }
-
+            //Mark Metainfos 
+            Dispatcher.Invoke( () => BasicInfo.Text = RunningExperiment.ExperimentInfo.ToString());
             //Finish frame
             DrawCanvas.CompleteFrame();
         }
