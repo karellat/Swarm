@@ -47,7 +47,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Index of the actual evaluating brain
         /// </summary>
-        protected int BrainIndex; 
+        protected int BrainIndex;
+        /// <summary>
+        /// Actual evaluated brains, index of the brains suits to robot model of same index 
+        /// </summary>
+        protected T[] ActualBrains; 
         
         //MAP CHARACTERISTICS 
         /// <summary>
@@ -89,19 +93,38 @@ namespace SwarmSimFramework.Classes.Experiments
             if (BrainIndex == PopulationSize - 1)
             {
                 SingleGeneration();
+                BrainIndex = 0;
+                GenerationIndex++;
+                //Init new generation & change actual generation
+                ActualGeneration = FollowingGeneration;
+                FollowingGeneration = new List<T>[ActualGeneration.Length];
+                for (int i = 0; i < FollowingGeneration.Length; i++)
+                    FollowingGeneration[i] = new List<T>();
             }
-            //if map iteration ended
+            //if map iterations ended
             if (IterationIndex == MapIteration)
             {
                 SingleMapSimulation();
+                IterationIndex = 0;
+                BrainIndex++;
+                foreach (var r in Map.Robots)
+                {
+                    for (int i = 0; i < Models.Length; i++)
+                    {
+                        if (r.GetType() == Models[i].GetType())
+                            r.Brain = ActualBrains[i];
+                    }
+                }
             }
 
             //Make one iteration of map 
             Map.MakeStep();
-            IterationIndex++;
             SingleIteration();
+            IterationIndex++;
         }
-
+        /// <summary>
+        /// One iteration of map 
+        /// </summary>
         protected virtual  void SingleIteration()
         {
             StringBuilder newInfo = new StringBuilder("Actual map iteration" );
@@ -117,7 +140,10 @@ namespace SwarmSimFramework.Classes.Experiments
                 CountIndividualFitness(r);
             }
         }
-
+        /// <summary>
+        /// Count fitness of single robot body
+        /// </summary>
+        /// <param name="robotEntity"></param>
         protected abstract void CountIndividualFitness(RobotEntity robotEntity);
 
         /// <summary>
