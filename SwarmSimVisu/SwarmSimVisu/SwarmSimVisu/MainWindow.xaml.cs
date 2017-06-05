@@ -36,6 +36,7 @@ namespace SwarmSimVisu
             ExperimentComboBox.Items.Add("None");
             ExperimentComboBox.Items.Add("TestingExperiment");
             ExperimentComboBox.Items.Add("WalkingExperiment");
+            //wait after draw
             ThreadWaitComboBox.SelectedIndex = 0;
             ThreadWaitComboBox.Items.Add("0");
             ThreadWaitComboBox.Items.Add("100");
@@ -46,6 +47,18 @@ namespace SwarmSimVisu
                 else if ((sender as ComboBox).SelectedIndex == 1)
                     ThreadWait = 100;
             });
+            //Drawing state, if draw or not
+            VisualCombox.SelectedIndex = 0;
+            VisualCombox.Items.Add("On");
+            VisualCombox.Items.Add("Off");
+            VisualCombox.SelectionChanged += ((sender, args) =>
+            {
+                if ((sender as ComboBox).SelectedIndex == 0)
+                    Visualization = true;
+                else
+                    Visualization = false;
+            });
+
 
         }
         /// <summary>
@@ -74,7 +87,7 @@ namespace SwarmSimVisu
         public bool Stopping;
         public bool Paused;
         public int ThreadWait = 0;
-       
+        public bool Visualization = true;
 
         /// <summary>
         /// Loc of the controls 
@@ -240,6 +253,27 @@ namespace SwarmSimVisu
         /// </summary>
         private void DrawExperiment()
         {
+            //Mark Metainfos
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                new DrawBasicInfo(() => BasicInfo.Text = RunningExperiment.ExperimentInfo.ToString()));
+            //Draw info about generation
+            if (RunningExperiment.FinnishedGeneration)
+            {
+                string text = RunningExperiment.GenerationInfo.ToString();
+                Dispatcher.Invoke(() =>
+                {
+                    lock (infoLock)
+                    {
+                        var w = new InfoWindow(text, this);
+                        infoWindows.Add(w);
+                        w.Show();
+                        return;
+                    }
+                });
+
+            }
+            //If no visualization do not draw robots
+            if (!Visualization) return;
             //Draw radio signals
             foreach (var radio in RunningExperiment.Map.RadioEntities)
             {
@@ -289,27 +323,10 @@ namespace SwarmSimVisu
                 }
 
             }
-            //Mark Metainfos
-            Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new DrawBasicInfo(() => BasicInfo.Text = RunningExperiment.ExperimentInfo.ToString()));
+
             //Finish frame
             DrawCanvas.CompleteFrame();
-            //Draw info about generation
-            if (RunningExperiment.FinnishedGeneration)
-            {
-                string text = RunningExperiment.GenerationInfo.ToString();
-                Dispatcher.Invoke(() =>
-                {
-                    lock (infoLock)
-                    {
-                        var w = new InfoWindow(text, this);
-                        infoWindows.Add(w);
-                        w.Show();
-                        return;
-                    }
-                });
 
-            }
 
         }
         private  delegate void DrawBasicInfo();

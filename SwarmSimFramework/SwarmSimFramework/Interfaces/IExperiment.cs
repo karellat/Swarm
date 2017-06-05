@@ -48,6 +48,10 @@ namespace SwarmSimFramework.Interfaces
         /// Best brain logging info
         /// </summary>
         public string BestBrainInfo;
+        /// <summary>
+        /// Best brain
+        /// </summary>
+        public IRobotBrain BestBrain; 
 
         /// <summary>
         /// Get basic information about generation of brains 
@@ -81,7 +85,8 @@ namespace SwarmSimFramework.Interfaces
                 BestBrainInfo = info,
                 FitnessAverage = fitnessAverage / (double) brains.Count,
                 FitnessMaximum = fitnessMaximum,
-                FitnessMinimum = fitnessMinimum
+                FitnessMinimum = fitnessMinimum,
+                BestBrain = bestBrain
             };
         }
     }

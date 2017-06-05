@@ -24,7 +24,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public int numOfEvolutionAlg = 1; 
         //Evolution 
        
-        public static int PopulationSize = 1000;
+        public static int PopulationSize = 100;
         public static int NumberOfGenerations = 1000;
         public static int MapIteration = 1000;
         public static float MapHeight = 660;
@@ -32,12 +32,15 @@ namespace SwarmSimFramework.Classes.Experiments
         public static int AmountOfRobots = 10;
         public static RobotEntity modelRobot = new ScoutRobot(new Vector2(0,0),100);
         public static string initGenerationFile = "initGen.json";
-
+        //State variable
         protected List<SingleLayerNeuronNetwork> actualGeneration;
         protected List<SingleLayerNeuronNetwork> followingGeneration = new List<SingleLayerNeuronNetwork>();
         protected int actualIterationIndex;
         protected int actualGenerationIndex;
         protected int actualBrainIndex;
+        //Serialization
+        protected string serializerFolderDir = "bestBrains";
+
 
         protected SingleLayerNeuronNetwork actualBrain;
         //Fitness Count
@@ -52,6 +55,9 @@ namespace SwarmSimFramework.Classes.Experiments
         public void Init()
         {
             Finnished = false;
+            //Prep  are folder for serialized brains
+            System.IO.Directory.CreateDirectory(serializerFolderDir);
+
             //Prepare fitness count 
             sizeOfBox = modelRobot.Radius * 2;
             boxesInRow = ((int) Math.Ceiling(MapHeight / sizeOfBox));
@@ -238,6 +244,10 @@ namespace SwarmSimFramework.Classes.Experiments
             sb.AppendLine("Average fitness: " + i.FitnessAverage);
             sb.AppendLine("Brain: " + i.BestBrainInfo);
             GenerationInfo = sb;
+            //Serialize brain 
+            StreamWriter n = new StreamWriter(serializerFolderDir+"\\brain"+(actualGenerationIndex-1));
+            n.Write(i.BestBrain.SerializeBrain());
+            n.Close();
         }
 
         protected void SingleMapSimulation()
