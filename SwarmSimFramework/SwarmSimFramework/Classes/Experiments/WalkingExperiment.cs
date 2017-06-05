@@ -233,8 +233,11 @@ namespace SwarmSimFramework.Classes.Experiments
         
             var i = GenerationInfoStruct.GetGenerationInfo(actualGeneration);
             StringBuilder sb = new StringBuilder("Info about " + (actualGenerationIndex-1) + ". generation " );
-            sb.AppendLine("Best fitness: "); 
-            //TODO: end of programming
+            sb.AppendLine("Best fitness: " + i.FitnessMaximum);
+            sb.AppendLine("Worst fitness " + i.FitnessMinimum);
+            sb.AppendLine("Average fitness: " + i.FitnessAverage);
+            sb.AppendLine("Brain: " + i.BestBrainInfo);
+            GenerationInfo = sb;
         }
 
         protected void SingleMapSimulation()
@@ -249,7 +252,7 @@ namespace SwarmSimFramework.Classes.Experiments
                 followingGeneration.Add(actualGeneration[actualBrainIndex]);
             this.ResetFitness();
             Map.Reset();
-            actualBrainIndex++;
+            
             //Prepare new brain use given evolution algorithm 
             if (numOfEvolutionAlg == 1)
                 actualBrain = DifferentialEvolution.DifferentialEvolutionBrain(actualGeneration[actualBrainIndex],
@@ -258,6 +261,7 @@ namespace SwarmSimFramework.Classes.Experiments
                 actualBrain =
                     EvolutionWithMutation.MutateSingleLayerNeuronNetwork(actualGeneration[actualBrainIndex]);
 
+            actualBrainIndex++;
             //set brain to robot bodies,Reset fitness
             actualBrain.Fitness = 0;
             foreach (var r in Map.Robots)
@@ -292,12 +296,16 @@ namespace SwarmSimFramework.Classes.Experiments
         public StringBuilder GenerationInfo {
             get
             {
-                //Clean info
-                var v = generationInfo;
-                generationInfo = null;
-                return v;
+                lock (GenerationInfoLock)
+                {
+                    //Clean info
+                    var v = generationInfo;
+                    generationInfo = null;
+                     return v;
+                }
+
             }
-            protected set => generationInfo = value;
+            protected set { lock(GenerationInfoLock){generationInfo = value;} }
         }
 
         public bool FinnishedGeneration
@@ -306,7 +314,7 @@ namespace SwarmSimFramework.Classes.Experiments
             {
                 lock (GenerationInfoLock)
                 {
-                    return GenerationInfo != null;
+                    return generationInfo != null;
                 }
             }
         }

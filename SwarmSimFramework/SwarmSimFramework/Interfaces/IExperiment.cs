@@ -58,7 +58,7 @@ namespace SwarmSimFramework.Interfaces
         {
             
             double fitnessAverage = 0;
-            double fitnessMinimum = float.NegativeInfinity;
+            double fitnessMinimum = float.PositiveInfinity;
             double fitnessMaximum = float.NegativeInfinity;
             IRobotBrain bestBrain = null; 
 

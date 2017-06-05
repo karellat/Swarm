@@ -18,6 +18,7 @@ using SharpDX.Direct3D9;
 using SwarmSimFramework.Classes.Experiments;
 using SwarmSimFramework.Interfaces;
 using System.Threading;
+using System.Windows.Threading;
 using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimVisu
@@ -35,6 +36,16 @@ namespace SwarmSimVisu
             ExperimentComboBox.Items.Add("None");
             ExperimentComboBox.Items.Add("TestingExperiment");
             ExperimentComboBox.Items.Add("WalkingExperiment");
+            ThreadWaitComboBox.SelectedIndex = 0;
+            ThreadWaitComboBox.Items.Add("0");
+            ThreadWaitComboBox.Items.Add("100");
+            ThreadWaitComboBox.SelectionChanged += ((sender, args) =>
+            {
+                if ((sender as ComboBox).SelectedIndex == 0)
+                    ThreadWait = 0;
+                else if ((sender as ComboBox).SelectedIndex == 1)
+                    ThreadWait = 100;
+            });
 
         }
         /// <summary>
@@ -62,7 +73,7 @@ namespace SwarmSimVisu
         public bool Pausing;
         public bool Stopping;
         public bool Paused;
-
+        public int ThreadWait = 0;
        
 
         /// <summary>
@@ -104,11 +115,6 @@ namespace SwarmSimVisu
             //Maximaze window
             WindowState = WindowState.Maximized;
             RunningExperiment.Init();
-
-            //if successfull disable ExperimentCombox & init button, show experiment control button
-            ExperimentComboBox.IsEditable = false;
-            ExperimentComboBox.IsHitTestVisible = false;
-            ExperimentComboBox.Focusable = false;
             //Hide controls 
             InitExpB.Visibility = Visibility.Hidden;
             
@@ -124,8 +130,6 @@ namespace SwarmSimVisu
             Stopping = false;
             Paused = false;
             Pausing = false;
-
-
         }
 
         /// <summary>
@@ -165,6 +169,7 @@ namespace SwarmSimVisu
         /// </summary>
         private void RunExperiment()
         {
+
             while (!RunningExperiment.Finnished)
             {
                 //Check Controls
@@ -190,9 +195,10 @@ namespace SwarmSimVisu
                     //Draw experisiment
                     DrawExperiment();
                     //Wait
-                    Thread.Sleep(100);
+                    if(ThreadWait > 0) Thread.Sleep(ThreadWait);
                 }
             }
+ 
             MainGrid.Dispatcher.Invoke(StopExperiment);
         }
         /// <summary>
@@ -283,12 +289,32 @@ namespace SwarmSimVisu
                 }
 
             }
-            //Mark Metainfos 
-            Dispatcher.Invoke( () => BasicInfo.Text = RunningExperiment.ExperimentInfo.ToString());
+            //Mark Metainfos
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                new DrawBasicInfo(() => BasicInfo.Text = RunningExperiment.ExperimentInfo.ToString()));
             //Finish frame
             DrawCanvas.CompleteFrame();
+            //Draw info about generation
+            if (RunningExperiment.FinnishedGeneration)
+            {
+                string text = RunningExperiment.GenerationInfo.ToString();
+                Dispatcher.Invoke(() =>
+                {
+                    lock (infoLock)
+                    {
+                        var w = new InfoWindow(text, this);
+                        infoWindows.Add(w);
+                        w.Show();
+                        return;
+                    }
+                });
+
+            }
+
         }
-        
+        private  delegate void DrawBasicInfo();
+
+
         //CLICK CONTROL: 
         /// <summary>
         /// Show metainfo about nearest object
