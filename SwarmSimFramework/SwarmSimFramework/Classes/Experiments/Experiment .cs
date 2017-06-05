@@ -39,15 +39,15 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Actual iteration of map for evaluating individual 
         /// </summary>
-        protected int IterationIndex;
+        protected int IterationIndex = 0;
         /// <summary>
         /// Actual generation index  
         /// </summary>
-        protected int GenerationIndex;
+        protected int GenerationIndex = 0;
         /// <summary>
         /// Index of the actual evaluating brain
         /// </summary>
-        protected int BrainIndex;
+        protected int BrainIndex = 0;
         /// <summary>
         /// Actual evaluated brains, index of the brains suits to robot model of same index 
         /// </summary>
@@ -75,7 +75,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Map enviroment
         /// </summary>
-        public Map.Map Map { get; }
+        public Map.Map Map { get; protected set; }
 
         /// <summary>
         /// Prepare map, initial generation

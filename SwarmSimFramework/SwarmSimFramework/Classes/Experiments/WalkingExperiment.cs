@@ -338,16 +338,12 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// CrossOver propabillity [0,1] 
         /// </summary>
-        public static float CR;
+        public static float CR = 0.5f;
 
         /// <summary>
         /// Differential weight[0, 2]
         /// </summary>
         public static float F = 0.8f;
-        /// <summary>
-        /// Population size >= 4 
-        /// </summary>
-        public static int NP; 
 
         /// <summary>
         /// Make Differencial evolution on  brain 
@@ -392,10 +388,12 @@ namespace SwarmSimFramework.Classes.Experiments
         {
             Perceptron newPerceptron = (Perceptron) x.GetCleanCopy();
             float[] newWeights = new float[newPerceptron.Weights.Length];
+            //Changed weight 
+            int R = RandomNumber.GetRandomInt(0, newWeights.Length - 1);
             for (int i = 0; i < newWeights.Length; i++)
             {
                 float U = RandomNumber.GetRandomFloat();
-                if (U < CR)
+                if (U < CR || R == i)
                     newWeights[i] = a.Weights[i] + F * (b.Weights[i] - c.Weights[i]);
                 else
                     newWeights[i] = x.Weights[i];

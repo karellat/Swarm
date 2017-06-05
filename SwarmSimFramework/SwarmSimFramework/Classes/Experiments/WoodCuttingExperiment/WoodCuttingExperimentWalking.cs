@@ -1,28 +1,38 @@
 ﻿using System.Text;
+using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 {
-    public class WoodCuttingExperimentWalkingExperiment : IExperiment
+    public class WoodCuttingExperimentWalking : Experiment<SingleLayerNeuronNetwork>
     {
-        public static float MapHeight = 800;
-        public static float MapWidth = 600;
-        public Map.Map Map { get; }
-
-        public void Init()
+        /// <summary>
+        /// Init of wood cutting experiment walking
+        /// </summary>
+        public override void Init()
+        {
+            
+        }
+        /// <summary>
+        /// Fitness of individual
+        /// </summary>
+        /// <param name="robotEntity"></param>
+        protected override void CountIndividualFitness(RobotEntity robotEntity)
+        {
+            throw new System.NotImplementedException();
+        }
+        /// <summary>
+        /// Single map iterations 
+        /// </summary>
+        protected override void SingleMapSimulation()
         {
             throw new System.NotImplementedException();
         }
 
-        public void MakeStep()
+        protected override void SingleGeneration()
         {
             throw new System.NotImplementedException();
         }
-
-        public bool Finnished { get; protected set; }
-
-        public StringBuilder ExperimentInfo { get; }
-        public StringBuilder GenerationInfo { get; }
-        public bool FinnishedGeneration { get; }
     }
 }
