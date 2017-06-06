@@ -5,6 +5,9 @@ using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
+using System.IO;
+using System.Linq;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 {
@@ -53,9 +56,63 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             //Prepare Map 
             Map = new Map.Map(MapHeight,MapWidth,robots,trees);
 
+            //read from file, if exists
+            if (File.Exists(initGenerationFile[0]))
+            {
+                StreamReader s =  new StreamReader(initGenerationFile[0]);
+                ActualGeneration[0] = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(s.ReadToEnd())
+                    .ToList();
+            }
             //Prepare first generation of brains
+            else
+            {
+                ActualGeneration[0] = new List<SingleLayerNeuronNetwork>(PopulationSize);
+                for (int i = 0; i < PopulationSize; i++)
+                {
+                    ActualGeneration[0].Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
+                    {
+                        Input = Models[0].SensorsDimension,
+                        Output = Models[1].EffectorsDimension
+                    }));
+                }
+
+                //Count fitness of brains
+                int brainI = 0;
+                //over all brains
+                foreach (var brain in ActualGeneration[0])
+                {
+                    ExperimentInfo = new StringBuilder("Inicialization of random brain: " + brainI);
+                    //Clean map 
+                    Map.Reset();
+                    foreach (var robot in Map.Robots)
+                        robot.Brain = brain; 
+
+                    //Make Simulation 
+                    for (int i = 0; i < MapIteration; i++)
+                    {
+                        Map.MakeStep();
+                        //DEBUG
+                        Map.CheckCorrectionOfPossition();
+                        foreach (var r in Map.Robots)
+                        {
+                            CountIndividualFitness(r);
+                        }
+                    }
+
+                    //Set created fitness
+                    brain.Fitness = CountBrainFitness();
+                    ResetFitness();
+                }
+            }
+
 
         }
+
+        private double CountBrainFitness()
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// Fitness of individual
         /// </summary>
