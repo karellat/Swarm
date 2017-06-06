@@ -13,11 +13,13 @@ using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
+using SwarmSimFramework.SupportClasses.AwokeKnowing.GnuplotCSharp;
 
 namespace SwarmSimFramework.Classes.Experiments
 {
     public class WalkingExperiment: IExperiment
     {
+        public FitPlot Graph;
         /// <summary>
         /// Num of evolution algorithm
         /// </summary>
@@ -25,7 +27,7 @@ namespace SwarmSimFramework.Classes.Experiments
         //Evolution 
        
         public static int PopulationSize = 100;
-        public static int NumberOfGenerations = 1000;
+        public static int NumberOfGenerations = 100;
         public static int MapIteration = 1000;
         public static float MapHeight = 660;
         public static float MapWidth = 800;
@@ -54,6 +56,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public Map.Map Map { get; protected set; }
         public void Init()
         {
+            Graph = new FitPlot(NumberOfGenerations * PopulationSize);
             Finnished = false;
             //Prep  are folder for serialized brains
             System.IO.Directory.CreateDirectory(serializerFolderDir);
@@ -197,8 +200,11 @@ namespace SwarmSimFramework.Classes.Experiments
         public void MakeStep()
         {
             //If all generation simulated 
-            if(actualGenerationIndex == NumberOfGenerations)
+            if (actualGenerationIndex == NumberOfGenerations)
+            {
+                Graph.PlotGraph();
                 Finnished = true;
+            }
             //If all new brains generated 
             if (actualBrainIndex == PopulationSize-1)
                 SingleGeneration();
@@ -231,6 +237,10 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         protected void SingleGeneration ()
         {
+            foreach (var a in actualGeneration)
+            {
+                Graph.AddFitness(a.Fitness,actualGenerationIndex);
+            }
             actualGeneration = followingGeneration;
             followingGeneration = new List<SingleLayerNeuronNetwork>();
             actualBrainIndex = 0;
@@ -333,76 +343,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public object GenerationInfoLock = new Object();
     }
 
-    public static class DifferentialEvolution
-    {
-        /// <summary>
-        /// CrossOver propabillity [0,1] 
-        /// </summary>
-        public static float CR = 0.5f;
-
-        /// <summary>
-        /// Differential weight[0, 2]
-        /// </summary>
-        public static float F = 0.8f;
-
-        /// <summary>
-        /// Make Differencial evolution on  brain 
-        /// </summary>
-        /// <param name="actualBrain"></param>
-        /// <param name="wholeGeneration"></param>
-        /// <returns></returns>
-
-        public static SingleLayerNeuronNetwork DifferentialEvolutionBrain(SingleLayerNeuronNetwork actualBrain,
-            List<SingleLayerNeuronNetwork> wholeGeneration)
-        {
-            Perceptron[] newNetwork = new Perceptron[actualBrain.Neurons.Length];
-            // Three unique numbers from generation 
-            int a, b, c;
-            a = RandomNumber.GetRandomInt(0, wholeGeneration.Count);
-            b = 0;
-            c = 0; 
-            while(wholeGeneration[a] == actualBrain)
-                a = RandomNumber.GetRandomInt(0, wholeGeneration.Count);
-            while (a == b || wholeGeneration[b] == actualBrain)
-                b = RandomNumber.GetRandomInt(0, wholeGeneration.Count);
-            while(a == c || b == c || wholeGeneration[c] == actualBrain)
-                c = RandomNumber.GetRandomInt(0, wholeGeneration.Count);
-            for (int i = 0; i < actualBrain.Neurons.Length; i++)
-            {
-                newNetwork[i] = DifferentialEvolutionPerceptron(actualBrain.Neurons[i],wholeGeneration[a].Neurons[i], wholeGeneration[b].Neurons[i], wholeGeneration[c].Neurons[i]);
-            }
-
-            SingleLayerNeuronNetwork newBrain = (SingleLayerNeuronNetwork) actualBrain.GetCleanCopy();
-            newBrain.Neurons = newNetwork;
-            return newBrain;
-        }
-        /// <summary>
-        /// Create DifferencialEvolution on Perceptron 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        public static Perceptron DifferentialEvolutionPerceptron(Perceptron x, Perceptron a, Perceptron b, Perceptron c)
-        {
-            Perceptron newPerceptron = (Perceptron) x.GetCleanCopy();
-            float[] newWeights = new float[newPerceptron.Weights.Length];
-            //Changed weight 
-            int R = RandomNumber.GetRandomInt(0, newWeights.Length - 1);
-            for (int i = 0; i < newWeights.Length; i++)
-            {
-                float U = RandomNumber.GetRandomFloat();
-                if (U < CR || R == i)
-                    newWeights[i] = a.Weights[i] + F * (b.Weights[i] - c.Weights[i]);
-                else
-                    newWeights[i] = x.Weights[i];
-            }
-
-            newPerceptron.Weights = newWeights;
-            return newPerceptron;
-        }
-    }
+   
 
     public static class EvolutionWithMutation
     {
@@ -411,4 +352,6 @@ namespace SwarmSimFramework.Classes.Experiments
             return actualBrain.CreateMutatedNetwork();
         }
     }
+
+  
 }

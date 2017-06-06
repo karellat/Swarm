@@ -229,4 +229,47 @@ namespace SwarmSimFramework.Classes.Experiments
                 }
             }}
     }
+
+    //Other classes connected to experiment
+
+    /// <summary>
+    /// Implement fitness ploting
+    /// </summary>
+    public class FitPlot
+    {
+        /// <summary>
+        /// Generation index axis
+        /// </summary>
+        protected List<double> Xs;
+        /// <summary>
+        /// Fitness axis
+        /// </summary>
+        protected List<double> Ys;
+        /// <summary>
+        /// Create new fitPlot
+        /// </summary>
+        /// <param name="expectedSize"></param>
+        public FitPlot(int expectedSize)
+        {
+            Xs = new List<double>(expectedSize);
+            Ys = new List<double>(expectedSize);
+        }
+        /// <summary>
+        /// Add new fitness to graph
+        /// </summary>
+        /// <param name="fitness"></param>
+        /// <param name="generationIndex"></param>
+        public void AddFitness(double fitness, int generationIndex)
+        {
+            Xs.Add(generationIndex);
+            Ys.Add(fitness);
+        }
+        /// <summary>
+        /// Draw graph by GNUplot
+        /// </summary>
+        public void PlotGraph()
+        {
+            SupportClasses.AwokeKnowing.GnuplotCSharp.GnuPlot.Plot(Xs.ToArray(), Ys.ToArray());
+        }
+    }
 }
