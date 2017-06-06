@@ -49,7 +49,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 
             //Prepare fitness count
             RawMaterialEntity tree = new RawMaterialEntity(new Vector2(0,0),5,10,10);
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(Map.MaxWidth/2,Map.MaxHeight/2),20);
+            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth/2,MapHeight/2),20);
             //Generate randomly deployed tree
             Map.Map preparedMap = new Map.Map(MapHeight,MapWidth,null, new List<CircleEntity>() {initPosition});
             List<CircleEntity> trees =
@@ -89,7 +89,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                     ActualGeneration[0].Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
                     {
                         Input = Models[0].SensorsDimension,
-                        Output = Models[1].EffectorsDimension
+                        Output = Models[0].EffectorsDimension
                     }));
                 }
 

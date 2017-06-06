@@ -88,7 +88,7 @@ namespace SwarmSimFramework.Classes.Effectors
             {
                 var intersection = map.Collision(this, robot);
                 //if material to refactor 
-                if (!float.IsPositiveInfinity(intersection.Distance) && intersection.CollidingEntity.Color == EntityColor.RawMaterialColor)
+                if (!float.IsPositiveInfinity(intersection.Distance) && intersection.CollidingEntity != null && intersection.CollidingEntity.Color == EntityColor.RawMaterialColor)
                 {
                     var c = (RawMaterialEntity) intersection.CollidingEntity;
                     map.PasiveEntities.Remove(c);

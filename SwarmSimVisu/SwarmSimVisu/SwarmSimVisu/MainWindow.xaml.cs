@@ -20,6 +20,7 @@ using SwarmSimFramework.Interfaces;
 using System.Threading;
 using System.Windows.Threading;
 using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment;
 
 namespace SwarmSimVisu
 {
@@ -32,10 +33,12 @@ namespace SwarmSimVisu
         {
             InitializeComponent();
             //ComoBox for choosing experiment
-            ExperimentComboBox.SelectedIndex = 2;
+            ExperimentComboBox.SelectedIndex = 3;
             ExperimentComboBox.Items.Add("None");
             ExperimentComboBox.Items.Add("TestingExperiment");
             ExperimentComboBox.Items.Add("WalkingExperiment");
+            ExperimentComboBox.Items.Add("WoodCuttingExperiment - Walk");
+
             //wait after draw
             ThreadWaitComboBox.SelectedIndex = 0;
             ThreadWaitComboBox.Items.Add("0");
@@ -120,6 +123,9 @@ namespace SwarmSimVisu
                     break;
                 case (2): 
                     RunningExperiment = new WalkingExperiment();
+                    break;
+                case (3):
+                    RunningExperiment = new WoodCuttingExperimentWalking();
                     break;
                 default:
                     MessageBox.Show("Unknown experiment");
@@ -282,7 +288,17 @@ namespace SwarmSimVisu
             //Draw map passive entities
             foreach (var passive in RunningExperiment.Map.PasiveEntities)
             {
-                DrawCanvas.AddCircle(passive.Middle,passive.Radius,passive.Color.ToString());   
+                if (passive.Color != Entity.EntityColor.RawMaterialColor)
+                    DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString());
+                else
+                {
+                    if((passive as RawMaterialEntity).Discovered)
+                        DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString()+'D');
+                    else
+                        DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString() + 'N');
+
+                }
+
             }
             //Draw fuel
             foreach (var fuel in RunningExperiment.Map.FuelEntities)
@@ -313,7 +329,7 @@ namespace SwarmSimVisu
                     if (e is LineEntity)
                     {
                         var l = (LineEntity)e;
-                        DrawCanvas.AddLine(l.A, l.B, "LINEEFFECTOR", 1);
+                        DrawCanvas.AddLine(l.A, l.B, "LINEEFECTOR", 1);
                     }
                     else if (e is CircleEntity)
                     {
