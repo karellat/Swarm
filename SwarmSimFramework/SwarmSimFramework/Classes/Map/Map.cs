@@ -75,11 +75,16 @@ namespace SwarmSimFramework.Classes.Map
             //Clear old bodies
             Robots.Clear();
             RadioEntities.Clear();
+            PasiveEntities.Clear();
             FuelEntities.Clear();
             //Copy models from set up lists
             foreach (var r in modelRobotEntities)
             {
                 Robots.Add((RobotEntity) r.DeepClone());
+            }
+            foreach (var p in modelPasiveEntities)
+            {
+                PasiveEntities.Add((CircleEntity) p.DeepClone());
             }
             foreach (var f in modelFuelEntities)
             {

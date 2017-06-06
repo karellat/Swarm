@@ -62,6 +62,18 @@ namespace SwarmSimVisu
                     Visualization = false;
             });
 
+            //Drawing state, if draw or not
+            InfoCombox.SelectedIndex = 0;
+            InfoCombox.Items.Add("On");
+            InfoCombox.Items.Add("Off");
+            InfoCombox.SelectionChanged += ((sender, args) =>
+            {
+                if ((sender as ComboBox).SelectedIndex == 0)
+                    ShowInfo = true;
+                else
+                    ShowInfo = false;
+            });
+
 
         }
         /// <summary>
@@ -91,6 +103,7 @@ namespace SwarmSimVisu
         public bool Paused;
         public int ThreadWait = 0;
         public bool Visualization = true;
+        public bool ShowInfo = true;
 
         /// <summary>
         /// Loc of the controls 
@@ -266,6 +279,7 @@ namespace SwarmSimVisu
             if (RunningExperiment.FinnishedGeneration)
             {
                 string text = RunningExperiment.GenerationInfo.ToString();
+                if (!ShowInfo) return;
                 Dispatcher.Invoke(() =>
                 {
                     lock (infoLock)

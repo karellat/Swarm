@@ -15,11 +15,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Size of population(amount of brains) 
         /// </summary>
-        public int PopulationSize = 100;
+        public int PopulationSize = 1000;
         /// <summary>
         /// Amount of generation iteration 
         /// </summary>
-        public int NumberOfGenerations = 100;
+        public int NumberOfGenerations = 1000;
         /// <summary>
         /// Iteration between fitness count
         /// </summary>
@@ -109,7 +109,7 @@ namespace SwarmSimFramework.Classes.Experiments
             if (GenerationIndex == NumberOfGenerations)
                 Finnished = true;
             //If all new brains generated
-            if (BrainIndex == PopulationSize - 1)
+            if (BrainIndex == PopulationSize -1)
             {
                 //fill graphs
                 for (var index = 0; index < ActualGeneration.Length; index++)
@@ -126,7 +126,6 @@ namespace SwarmSimFramework.Classes.Experiments
                 //Show grahs 
                 if (GenerationIndex % DrawGraphCycle == 0)
                 {
-                   
                     GnuPlot.HoldOn();
                     GnuPlot.Set("title \"Fitness of " + GenerationIndex + " generations \"" );
                     GnuPlot.Set("xlabel \"Index of generation\"");
@@ -148,9 +147,10 @@ namespace SwarmSimFramework.Classes.Experiments
             if (IterationIndex == MapIteration)
             {
                 SingleMapSimulation();
+                BrainIndex++;
                 Map.Reset();
                 IterationIndex = 0;
-                BrainIndex++;
+                
                 foreach (var r in Map.Robots)
                 {
                     for (int i = 0; i < Models.Length; i++)
@@ -159,7 +159,6 @@ namespace SwarmSimFramework.Classes.Experiments
                             r.Brain = ActualBrains[i];
                     }
                 }
-                
             }
 
             //Make one iteration of map 
@@ -178,11 +177,11 @@ namespace SwarmSimFramework.Classes.Experiments
             newInfo.Append(NumberOfGenerations);
             newInfo.Append(" Map iteration: ");
             newInfo.Append(MapIteration);
-            newInfo.Append(" Actual map iteration");
+            newInfo.Append(" Actual map iteration: ");
             newInfo.Append(IterationIndex);
             newInfo.Append(" Actual brain from population: ");
             newInfo.Append(BrainIndex);
-            newInfo.Append("Actual generation index: ");
+            newInfo.Append(" Actual generation index: ");
             newInfo.Append(GenerationIndex);
             ExperimentInfo = newInfo;
             //Count fitness for all robot bodies
@@ -229,6 +228,11 @@ namespace SwarmSimFramework.Classes.Experiments
             Models = models;
             AmountOfRobots = amount;
             InitGenerationFile = new string[TypesCount]; 
+            Graphs  = new FitPlot[TypesCount];
+            for (int i = 0; i < Models.Length; i++)
+            {
+                Graphs[i] = new FitPlot(PopulationSize*NumberOfGenerations,Models.GetType().ToString());
+            }
             ActualBrains = new T[TypesCount];
             ActualGeneration = new List<T>[TypesCount];
             FollowingGeneration = new List<T>[TypesCount];

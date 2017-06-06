@@ -18,7 +18,11 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
     public class WoodCuttingExperimentWalking : Experiment<SingleLayerNeuronNetwork>
     {
         //ENVIROMENT Variables
-        protected const int AmountOfTrees = 100;
+        protected const int AmountOfTrees = 200;
+        /// <summary>
+        /// Origin network
+        /// </summary>
+        protected SingleLayerNeuronNetwork originNetwork;
 
         //FITNESS VARIABLES
         /// <summary>
@@ -30,10 +34,14 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// </summary>
         protected const double ValueOfDiscoveredTree = 100;
         /// <summary>
+        /// Value of tree changed to the wood
+        /// </summary>
+        protected const double ValueOfCutWood = 105;
+        /// <summary>
         /// Value of single collision
         /// </summary>
         protected const double ValueOfCollision = -1;
-
+        
 
         /// <summary>
         /// Directory for ass
@@ -53,7 +61,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             //Generate randomly deployed tree
             Map.Map preparedMap = new Map.Map(MapHeight,MapWidth,null, new List<CircleEntity>() {initPosition});
             List<CircleEntity> trees =
-                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, 100);
+                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, AmountOfTrees);
             //set experiment
             InitRobotEntities(new [] {new ScoutCutterRobot(new Vector2(0,0))},new []{5});
             InitGenerationFile[0] =  "scoutCutterInit.json";
@@ -67,9 +75,12 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             //Initial position 
             robots[0].MoveTo(new Vector2(MapWidth/2,MapHeight/2));
             robots[1].MoveTo(new Vector2(MapWidth / 2 + 10, MapHeight / 2));
+            robots[1].RotateDegrees(90);
             robots[2].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 + 10));
+            robots[2].RotateDegrees(180);
             robots[3].MoveTo(new Vector2(MapWidth / 2 -10, MapHeight / 2));
             robots[4].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 -10));
+            robots[4].RotateDegrees(270);
             //Prepare Map 
             Map = new Map.Map(MapHeight,MapWidth,robots,trees);
 
@@ -128,7 +139,10 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                 file.Close();
             }
             //Prepare first brain for evolution 
-            ActualBrains[0] = ActualGeneration[0][0];
+            FollowingGeneration[0] = new List<SingleLayerNeuronNetwork>();
+            originNetwork = ActualGeneration[0][0];
+            ActualBrains[0] =
+                DifferentialEvolution.DifferentialEvolutionBrain(ActualGeneration[0][0], ActualGeneration[0]);
             ActualBrains[0].Fitness = 0;
             foreach (var r in Map.Robots)
                 r.Brain = ActualBrains[0].GetCleanCopy();
@@ -155,6 +169,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         private double CountBrainFitness()
         {
             DiscoveredTrees = 0;
+            int CutWoods = 0;
             //Find discovered trees 
             foreach (var p in Map.PasiveEntities)
             {
@@ -162,6 +177,10 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                 {
                     if ((p as RawMaterialEntity).Discovered)
                         DiscoveredTrees++;
+                }
+                else if (p.Color == Entity.EntityColor.WoodColor)
+                {
+                    CutWoods++;
                 }
             }
             long amountOfCollision = 0;
@@ -173,7 +192,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                     amountOfCollision += r.CollisionDetected;
                 }
             }
-            return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision);
+            return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
         }
 
         /// <summary>
@@ -191,18 +210,19 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         {
             //Give brain to following generation
             double nbFitness = CountBrainFitness();
-            if (nbFitness >= ActualGeneration[0][BrainIndex].Fitness)
+            if (nbFitness >= originNetwork.Fitness)
             {
                 ActualBrains[0].Fitness = nbFitness;
                 FollowingGeneration[0].Add(ActualBrains[0]);
             }
             else
             {
-                FollowingGeneration[0].Add(ActualGeneration[0][BrainIndex]);
+                FollowingGeneration[0].Add(originNetwork);
             }
             //Prepare new brain by differencial evolution algorithm
+            originNetwork = ActualGeneration[0][BrainIndex];
             ActualBrains[0] =
-                DifferentialEvolution.DifferentialEvolutionBrain(ActualGeneration[0][BrainIndex + 1],
+                DifferentialEvolution.DifferentialEvolutionBrain(ActualGeneration[0][BrainIndex],
                     ActualGeneration[0]);
         }
         /// <summary>
