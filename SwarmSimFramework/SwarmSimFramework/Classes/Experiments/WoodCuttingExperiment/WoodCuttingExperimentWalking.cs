@@ -8,11 +8,19 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
     public class WoodCuttingExperimentWalking : Experiment<SingleLayerNeuronNetwork>
     {
         /// <summary>
+        /// Directory for ass
+        /// </summary>
+        protected string WorkingDir = "walkwoodE";
+        /// <summary>
         /// Init of wood cutting experiment walking
         /// </summary>
         public override void Init()
         {
-            
+            //Prepare stuff for serialization 
+            System.IO.Directory.CreateDirectory(WorkingDir);
+
+            //Prepare fitness count 
+
         }
         /// <summary>
         /// Fitness of individual

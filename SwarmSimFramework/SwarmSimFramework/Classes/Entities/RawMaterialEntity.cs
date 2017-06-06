@@ -5,6 +5,10 @@ namespace SwarmSimFramework.Classes.Entities
     public class RawMaterialEntity:CircleEntity
     {
         /// <summary>
+        /// Discovered by any robot 
+        /// </summary>
+        public bool Discovered = false;
+        /// <summary>
         /// Amount of cycles to refactor to fuel 
         /// </summary>
         public int CycleToRefactor { get; }

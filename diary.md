@@ -230,7 +230,8 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 * 29.05.2017 
 	* Differential Evolution skeleton
 	
-	
+* 05.06.2017
+	* abstract experiment class
 
 
 

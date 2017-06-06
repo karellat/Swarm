@@ -262,7 +262,9 @@ namespace SwarmSimFramework.Classes.Map
                     }
                 }
             }
-
+            //if the nearest intersection is a raw material markdown discovery
+            if (theNearestIntersection.CollidingEntity.Color == Entity.EntityColor.RawMaterialColor)
+                (theNearestIntersection.CollidingEntity as RawMaterialEntity).Discovered = true;
             return theNearestIntersection;
         }
 
