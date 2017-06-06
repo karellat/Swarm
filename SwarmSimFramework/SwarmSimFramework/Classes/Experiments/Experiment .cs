@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
+using SwarmSimFramework.SupportClasses.AwokeKnowing.GnuplotCSharp;
 
 namespace SwarmSimFramework.Classes.Experiments
 {
@@ -48,11 +49,23 @@ namespace SwarmSimFramework.Classes.Experiments
         /// Index of the actual evaluating brain
         /// </summary>
         protected int BrainIndex = 0;
+
         /// <summary>
         /// Actual evaluated brains, index of the brains suits to robot model of same index 
         /// </summary>
-        protected T[] ActualBrains; 
+        protected T[] ActualBrains = null; 
         
+        //GRAPH
+        /// <summary>
+        /// Amount of cycles aftert the graphs is drawn
+        /// </summary>
+        protected int DrawGraphCycle = 100;
+
+        /// <summary>
+        /// Graph of fitness : index of generation
+        /// </summary>
+        protected FitPlot[] Graphs = null;
+
         //MAP CHARACTERISTICS 
         /// <summary>
         /// Height of map
@@ -92,7 +105,31 @@ namespace SwarmSimFramework.Classes.Experiments
             //If all new brains generated
             if (BrainIndex == PopulationSize - 1)
             {
+                //fill graphs
+                for (var index = 0; index < ActualGeneration.Length; index++)
+                {
+                    var l = ActualGeneration[index];
+                    foreach (var b in l)
+                    {
+                        //fill suitable graph with given values
+                        Graphs[index].AddFitness(b.Fitness,GenerationIndex);
+                    }
+                }
                 SingleGeneration();
+
+                //Show grahs 
+                if (GenerationIndex % DrawGraphCycle == 0)
+                {
+                   
+                    GnuPlot.HoldOn();
+                    GnuPlot.Set("title \"Fitness of " + GenerationIndex + " generations \"" );
+                    GnuPlot.Set("xlabel \"Index of generation\"");
+                    GnuPlot.Set("ylabel \"Fitness value\"");
+                    foreach (var g in Graphs)
+                        g.PlotGraph();
+                    GnuPlot.HoldOff();
+                }
+
                 BrainIndex = 0;
                 GenerationIndex++;
                 //Init new generation & change actual generation
@@ -246,13 +283,18 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         protected List<double> Ys;
         /// <summary>
+        /// Title of plot
+        /// </summary>
+        protected string Title; 
+        /// <summary>
         /// Create new fitPlot
         /// </summary>
         /// <param name="expectedSize"></param>
-        public FitPlot(int expectedSize)
+        public FitPlot(int expectedSize,string title)
         {
             Xs = new List<double>(expectedSize);
             Ys = new List<double>(expectedSize);
+            this.Title = "title \"" + title + "\"";
         }
         /// <summary>
         /// Add new fitness to graph
@@ -269,7 +311,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         public void PlotGraph()
         {
-            SupportClasses.AwokeKnowing.GnuplotCSharp.GnuPlot.Plot(Xs.ToArray(), Ys.ToArray());
+            SupportClasses.AwokeKnowing.GnuplotCSharp.GnuPlot.Plot(Xs.ToArray(), Ys.ToArray(),Title);
         }
     }
 }
