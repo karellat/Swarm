@@ -15,7 +15,7 @@ Add consuming fuel to effectors
 - [x] %1,%0.5 z vah a mutace časté, 
 - [x] Evoluční stragii, Diferenciální evoluce, f=0.8 
 - [x] Testování sensorů v GUI 
-- [ ] Kreslení grafů
+- [x] Kreslení grafů
 - [x] Jednoduchý experiment na chození
 - [x] LineTypeSensor
 - na o málo tisicina 
@@ -85,10 +85,11 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* LocatorSensor
 	* TypeCircleSensor
 	* 3x TouchSensor
+	* RadioSensor
+	
+	* WoodRefactor 
 	* TwoWheelMotor
 	* RadioTransmitter
-	* RadioSensor
-	* WoodRefactor 
 
 * Worker Robot
 	* container size: 5

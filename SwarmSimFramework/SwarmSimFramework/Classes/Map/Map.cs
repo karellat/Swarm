@@ -116,6 +116,45 @@ namespace SwarmSimFramework.Classes.Map
             Cycle++;
         }
 
+        //GENERATOR
+        /// <summary>
+        /// Gener
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="model"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public static List<T> GenerateRandomPos<T>(Map map, CircleEntity model, int amount) where T : CircleEntity
+        {
+            List<T> newList = new List<T>();
+            float newX;
+            float newY;
+
+            for (int i = 0; i < amount; i++)
+            {
+                for (int j = 0; j < 1000; j++)
+                {
+                    //Generate Random position
+                    newX = RandomNumber.GetRandomFloat() * map.MaxWidth;
+                    newY = RandomNumber.GetRandomFloat() * map.MaxHeight;
+                    T c = (T) model.DeepClone();
+                    c.MoveTo(new Vector2(newX,newY));
+                    if (!map.Collision(c))
+                    {
+                        map.PasiveEntities.Add(c);
+                        newList.Add(c);
+                        break;
+                    }
+                }
+            }
+            if (newList.Count != amount)
+                throw new ArgumentException("Wrong generating random possition ");
+
+            return newList;
+
+
+        }
+
         //COLISION AND MOVEMENTS 
         //COLLISION WITH OTHER ROBOTS OR PASSIVE ENTITY 
         /// <summary>

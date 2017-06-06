@@ -10,6 +10,7 @@ namespace SwarmSimFramework.Classes.Experiments
 {
     public abstract class Experiment<T> : IExperiment where T : IRobotBrain
     {
+  
         //BASIC EVOLUTION CHARACTERISTICS
         /// <summary>
         /// Size of population(amount of brains) 
@@ -24,6 +25,10 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         public int MapIteration = 1000;
         /// <summary>
+        /// Amount of different types of robots
+        /// </summary>
+        public int TypesCount;
+        /// <summary>
         /// amounts of specific models of robots 
         /// </summary>
         public int[] AmountOfRobots = null;
@@ -35,6 +40,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// Path to randomly Generated robots brains of specific model
         /// </summary>
         public string[] initGenerationFile = null;
+        
         
         //STATE VARIABLE
         /// <summary>
@@ -198,7 +204,22 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         public bool Finnished { get; protected set; }
 
-       
+        //INIT METHODS
+        /// <summary>
+        /// Init basic variables TypeCount,Models,AmountOfRobots, Graph, Generation 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="amount"></param>
+        public void InitRobotEntities(RobotEntity[] models, int[] amount)
+        {
+            TypesCount = models.Length;
+            Models = models;
+            AmountOfRobots = amount;
+            initGenerationFile = new string[TypesCount]; 
+            ActualBrains = new T[TypesCount];
+            ActualGeneration = new List<T>[TypesCount];
+            FollowingGeneration = new List<T>[TypesCount];
+        }
 
         //LOGING INFO
         /// <summary>

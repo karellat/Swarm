@@ -56,7 +56,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public Map.Map Map { get; protected set; }
         public void Init()
         {
-            Graph = new FitPlot(NumberOfGenerations * PopulationSize);
+            Graph = new FitPlot(NumberOfGenerations * PopulationSize,"ScoutRobot");
             Finnished = false;
             //Prep  are folder for serialized brains
             System.IO.Directory.CreateDirectory(serializerFolderDir);
