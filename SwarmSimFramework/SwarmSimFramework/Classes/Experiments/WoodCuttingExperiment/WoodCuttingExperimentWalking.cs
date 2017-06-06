@@ -7,17 +7,34 @@ using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
 using System.IO;
 using System.Linq;
+using System.Management.Instrumentation;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 {
+    /// <summary>
+    /// First step of wood cutting experiment, walking part & discovery of trees
+    /// </summary>
     public class WoodCuttingExperimentWalking : Experiment<SingleLayerNeuronNetwork>
     {
         //ENVIROMENT Variables
-        protected int AmountOfTrees = 100;
+        protected const int AmountOfTrees = 100;
 
         //FITNESS VARIABLES
-        protected List<RawMaterialEntity> Trees;
+        /// <summary>
+        /// Trees discovered by current brain
+        /// </summary>
+        protected int DiscoveredTrees = 0;
+        /// <summary>
+        /// Value of single discovered tree
+        /// </summary>
+        protected const double ValueOfDiscoveredTree = 100;
+        /// <summary>
+        /// Value of single collision
+        /// </summary>
+        protected const double ValueOfCollision = -1;
+
+
         /// <summary>
         /// Directory for ass
         /// </summary>
@@ -39,7 +56,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                 Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, 100);
             //set experiment
             InitRobotEntities(new [] {new ScoutCutterRobot(new Vector2(0,0))},new []{5});
-            initGenerationFile[0] =  "scoutCutterInit.json";
+            InitGenerationFile[0] =  "scoutCutterInit.json";
             //Prepare robot bodies
             List<RobotEntity> robots = new List<RobotEntity>();
             for (int i = 0; i < Models.Length; i++)
@@ -57,9 +74,9 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             Map = new Map.Map(MapHeight,MapWidth,robots,trees);
 
             //read from file, if exists
-            if (File.Exists(initGenerationFile[0]))
+            if (File.Exists(InitGenerationFile[0]))
             {
-                StreamReader s =  new StreamReader(initGenerationFile[0]);
+                StreamReader s =  new StreamReader(InitGenerationFile[0]);
                 ActualGeneration[0] = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(s.ReadToEnd())
                     .ToList();
             }
@@ -84,6 +101,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                     ExperimentInfo = new StringBuilder("Inicialization of random brain: " + brainI);
                     //Clean map 
                     Map.Reset();
+                    ResetFitness();
                     foreach (var robot in Map.Robots)
                         robot.Brain = brain; 
 
@@ -97,20 +115,65 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                         {
                             CountIndividualFitness(r);
                         }
+                        CountIterationFitness();
                     }
 
                     //Set created fitness
                     brain.Fitness = CountBrainFitness();
+                    Map.Reset();
                     ResetFitness();
                 }
+                StreamWriter file = new StreamWriter(InitGenerationFile[0]);
+                file.Write(BrainSerializer.SerializeArray(ActualGeneration[0].ToArray()));
+                file.Close();
             }
-
+            //Prepare first brain for evolution 
+            ActualBrains[0] = ActualGeneration[0][0];
+            ActualBrains[0].Fitness = 0;
+            foreach (var r in Map.Robots)
+                r.Brain = ActualBrains[0].GetCleanCopy();
 
         }
-
+        /// <summary>
+        /// Global fitnessCount after single iteration
+        /// </summary>
+        protected  override void CountIterationFitness()
+        {
+            //No need for iteration fitness count
+        }
+        /// <summary>
+        /// Reset fitness counters 
+        /// </summary>
+        private void ResetFitness()
+        {
+           
+        }
+        /// <summary>
+        /// Count fitness of actual brain
+        /// </summary>
+        /// <returns></returns>
         private double CountBrainFitness()
         {
-            throw new System.NotImplementedException();
+            DiscoveredTrees = 0;
+            //Find discovered trees 
+            foreach (var p in Map.PasiveEntities)
+            {
+                if (p.Color == Entity.EntityColor.RawMaterialColor)
+                {
+                    if ((p as RawMaterialEntity).Discovered)
+                        DiscoveredTrees++;
+                }
+            }
+            long amountOfCollision = 0;
+            //Find collision
+            foreach (var r in Map.Robots)
+            {
+                checked
+                {
+                    amountOfCollision += r.CollisionDetected;
+                }
+            }
+            return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision);
         }
 
         /// <summary>
@@ -119,19 +182,46 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// <param name="robotEntity"></param>
         protected override void CountIndividualFitness(RobotEntity robotEntity)
         {
-            throw new System.NotImplementedException();
+            //No need for iteration fitness count of individual
         }
         /// <summary>
         /// Single map iterations 
         /// </summary>
         protected override void SingleMapSimulation()
         {
-            throw new System.NotImplementedException();
+            //Give brain to following generation
+            double nbFitness = CountBrainFitness();
+            if (nbFitness >= ActualGeneration[0][BrainIndex].Fitness)
+            {
+                ActualBrains[0].Fitness = nbFitness;
+                FollowingGeneration[0].Add(ActualBrains[0]);
+            }
+            else
+            {
+                FollowingGeneration[0].Add(ActualGeneration[0][BrainIndex]);
+            }
+            //Prepare new brain by differencial evolution algorithm
+            ActualBrains[0] =
+                DifferentialEvolution.DifferentialEvolutionBrain(ActualGeneration[0][BrainIndex + 1],
+                    ActualGeneration[0]);
         }
-
+        /// <summary>
+        /// After signle generation
+        /// </summary>
         protected override void SingleGeneration()
         {
-            throw new System.NotImplementedException();
+            //log generation
+            var i = GenerationInfoStruct.GetGenerationInfo(ActualGeneration[0]);
+            StringBuilder sb = new StringBuilder("Info about " + (GenerationIndex) + ". generation ");
+            sb.AppendLine("Best fitness: " + i.FitnessMaximum);
+            sb.AppendLine("Worst fitness " + i.FitnessMinimum);
+            sb.AppendLine("Average fitness: " + i.FitnessAverage);
+            sb.AppendLine("Brain: " + i.BestBrainInfo);
+            GenerationInfo = sb;
+            //Serialize brain 
+            StreamWriter n = new StreamWriter( WorkingDir + "\\brain" + (GenerationIndex));
+            n.Write(i.BestBrain.SerializeBrain());
+            n.Close();
         }
     }
 }

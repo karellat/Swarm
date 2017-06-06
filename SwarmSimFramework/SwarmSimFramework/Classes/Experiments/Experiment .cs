@@ -39,7 +39,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Path to randomly Generated robots brains of specific model
         /// </summary>
-        public string[] initGenerationFile = null;
+        public string[] InitGenerationFile = null;
         
         
         //STATE VARIABLE
@@ -148,6 +148,7 @@ namespace SwarmSimFramework.Classes.Experiments
             if (IterationIndex == MapIteration)
             {
                 SingleMapSimulation();
+                Map.Reset();
                 IterationIndex = 0;
                 BrainIndex++;
                 foreach (var r in Map.Robots)
@@ -158,6 +159,7 @@ namespace SwarmSimFramework.Classes.Experiments
                             r.Brain = ActualBrains[i];
                     }
                 }
+                
             }
 
             //Make one iteration of map 
@@ -170,7 +172,13 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         protected virtual  void SingleIteration()
         {
-            StringBuilder newInfo = new StringBuilder("Actual map iteration" );
+            StringBuilder newInfo = new StringBuilder("Population Size: ");
+            newInfo.Append(PopulationSize);
+            newInfo.Append(" Number of generation: ");
+            newInfo.Append(NumberOfGenerations);
+            newInfo.Append(" Map iteration: ");
+            newInfo.Append(MapIteration);
+            newInfo.Append(" Actual map iteration");
             newInfo.Append(IterationIndex);
             newInfo.Append(" Actual brain from population: ");
             newInfo.Append(BrainIndex);
@@ -182,13 +190,18 @@ namespace SwarmSimFramework.Classes.Experiments
             {
                 CountIndividualFitness(r);
             }
+            
+            
         }
         /// <summary>
         /// Count fitness of single robot body
         /// </summary>
         /// <param name="robotEntity"></param>
         protected abstract void CountIndividualFitness(RobotEntity robotEntity);
-
+        /// <summary>
+        /// Count fitness of global goals
+        /// </summary>
+        protected abstract void CountIterationFitness(); 
         /// <summary>
         /// Operations after all map iteration
         /// </summary>
@@ -215,7 +228,7 @@ namespace SwarmSimFramework.Classes.Experiments
             TypesCount = models.Length;
             Models = models;
             AmountOfRobots = amount;
-            initGenerationFile = new string[TypesCount]; 
+            InitGenerationFile = new string[TypesCount]; 
             ActualBrains = new T[TypesCount];
             ActualGeneration = new List<T>[TypesCount];
             FollowingGeneration = new List<T>[TypesCount];
