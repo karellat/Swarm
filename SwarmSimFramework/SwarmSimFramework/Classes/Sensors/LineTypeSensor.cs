@@ -75,7 +75,7 @@ namespace SwarmSimFramework.Classes.Entities
                 if(Orientation != robot.Orientation + OrientationToRobotFPoint)
                     this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
                 //Count from the map 
-                Intersection intersection = map.Collision(this, robot);
+                Intersection intersection = map.Collision(this, robot,true);
                 float[] output = new float[Dimension];
                 if (intersection.Distance == Double.PositiveInfinity)
                 {

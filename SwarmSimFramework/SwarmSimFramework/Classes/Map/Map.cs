@@ -184,7 +184,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <param name="entity"></param>
         /// <param name="ignoredEntity"></param>
         /// <returns>The nearest point to the first point of Line entity </returns>
-        public Intersection Collision(LineEntity entity, Entity ignoredEntity = null)
+        public Intersection Collision(LineEntity entity, Entity ignoredEntity = null, bool discovering = false)
         {
             Intersection theNearestIntersection = new Intersection
             {
@@ -263,8 +263,11 @@ namespace SwarmSimFramework.Classes.Map
                 }
             }
             //if the nearest intersection is a raw material markdown discovery
-            if (theNearestIntersection.CollidingEntity.Color == Entity.EntityColor.RawMaterialColor)
-                (theNearestIntersection.CollidingEntity as RawMaterialEntity).Discovered = true;
+            if (!discovering || theNearestIntersection.CollidingEntity == null || theNearestIntersection.CollidingEntity.Color != Entity.EntityColor.RawMaterialColor)
+                return theNearestIntersection;
+            var rawMaterialEntity = theNearestIntersection.CollidingEntity as RawMaterialEntity;
+            if (rawMaterialEntity != null)
+                rawMaterialEntity.Discovered = true;
             return theNearestIntersection;
         }
 

@@ -1857,6 +1857,37 @@ namespace UnitTests
         }
     }
 
+    [TestClass]
+    public class DiscoveryTesting
+    {
+        [TestMethod]
+        public void NoDiscovery()
+        {
+            List<CircleEntity> l = new List<CircleEntity>();
+            var rm = new RawMaterialEntity(new Vector2(30, 44), 1, 90, 1);
+            l.Add(rm);
+            Map map = new Map(150,150);
+            EmptyRobot er = new EmptyRobot(new Vector2(30,30),5);
+            LineTypeSensor  ls = new LineTypeSensor(er,10,0);
+            ls.Count(er, map);
+            Assert.IsFalse(rm.Discovered);
+        }
+
+        [TestMethod]
+        public void Discovery()
+        {
+            List<CircleEntity> l = new List<CircleEntity>();
+            var rm = new RawMaterialEntity(new Vector2(30, 44), 1, 90, 1);
+            l.Add(rm);
+            Map map = new Map(150, 150,null,l);
+            EmptyRobot er = new EmptyRobot(new Vector2(30, 30), 5);
+            LineTypeSensor ls = new LineTypeSensor(er, 10, 0);
+           
+            ls.Count(er, map);
+            Assert.IsTrue(rm.Discovered);
+        }
+    }
+
     public static class TestExtensions
     {
         public static void AssertArrayEquality(float[] a, float[] b)
