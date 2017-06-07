@@ -86,5 +86,10 @@ namespace SwarmSimFramework.Interfaces
         {
             return JsonConvert.SerializeObject(brains, JsonSettings);
         }
+
+        public static IRobotBrain DeserializeBrain(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<IRobotBrain>(jsonString, JsonSettings);
+        }
     }
 }

@@ -33,8 +33,9 @@ namespace SwarmSimVisu
         {
             InitializeComponent();
             //ComoBox for choosing experiment
-            ExperimentComboBox.SelectedIndex = 3;
+            ExperimentComboBox.SelectedIndex = 1;
             ExperimentComboBox.Items.Add("None");
+            ExperimentComboBox.Items.Add("Testing Brain");
             ExperimentComboBox.Items.Add("TestingExperiment");
             ExperimentComboBox.Items.Add("WalkingExperiment");
             ExperimentComboBox.Items.Add("WoodCuttingExperiment - Walk");
@@ -117,7 +118,6 @@ namespace SwarmSimVisu
         /// Control of experiment
         /// </summary>
         private static Thread ExperimentThread;
-
         /// <summary>
         /// Init selected Experiment
         /// </summary>
@@ -132,12 +132,17 @@ namespace SwarmSimVisu
                     MessageBox.Show("None experiment chosen!");
                     return;
                 case (1):
+                    MessageBox.Show("Select brain and experiment");
+                    var w = new BrainSelectionWindow();
+                    w.Show();
+                    return;
+                case (2):
                     RunningExperiment = new TestingExperiment();
                     break;
-                case (2): 
+                case (3): 
                     RunningExperiment = new WalkingExperiment();
                     break;
-                case (3):
+                case (4):
                     RunningExperiment = new WoodCuttingExperimentWalking();
                     break;
                 default:

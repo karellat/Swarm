@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using SwarmSimFramework.Classes.Entities;
@@ -110,7 +111,16 @@ namespace SwarmSimFramework.Classes.Experiments
             {
                 //Draw Graph
                 DrawGraphs();
+                //Serialize actual generation
+                int index = 0;
+                foreach (var a in ActualGeneration)
+                {
+                    StreamWriter sw = new StreamWriter("finalGeneration" + index +".json");
+                    BrainSerializer.SerializeArray(a.ToArray());
+                    index++;
+                }
                 Finnished = true;
+                return;
             }
             //If all new brains generated
             if (BrainIndex == PopulationSize -1)
