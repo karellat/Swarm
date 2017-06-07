@@ -32,15 +32,15 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// <summary>
         /// Value of single discovered tree
         /// </summary>
-        protected const double ValueOfDiscoveredTree = 100;
+        protected const double ValueOfDiscoveredTree = 1000;
         /// <summary>
         /// Value of tree changed to the wood
         /// </summary>
-        protected const double ValueOfCutWood = 105;
+        protected const double ValueOfCutWood = 1050;
         /// <summary>
         /// Value of single collision
         /// </summary>
-        protected const double ValueOfCollision = -1;
+        protected const double ValueOfCollision = 0;
         
 
         /// <summary>
@@ -75,12 +75,9 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             //Initial position 
             robots[0].MoveTo(new Vector2(MapWidth/2,MapHeight/2));
             robots[1].MoveTo(new Vector2(MapWidth / 2 + 10, MapHeight / 2));
-            robots[1].RotateDegrees(90);
             robots[2].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 + 10));
-            robots[2].RotateDegrees(180);
             robots[3].MoveTo(new Vector2(MapWidth / 2 -10, MapHeight / 2));
             robots[4].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 -10));
-            robots[4].RotateDegrees(270);
             //Prepare Map 
             Map = new Map.Map(MapHeight,MapWidth,robots,trees);
 

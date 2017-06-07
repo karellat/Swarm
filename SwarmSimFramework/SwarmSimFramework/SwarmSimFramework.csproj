@@ -70,6 +70,7 @@
     <Compile Include="Classes\Experiments\Evolution Alg\DifferencialEvolution.cs" />
     <Compile Include="Classes\Experiments\Experiment .cs" />
     <Compile Include="Classes\Experiments\TestingExperiment.cs" />
+    <Compile Include="Classes\Experiments\TestingMaps\TestingBrain.cs" />
     <Compile Include="Classes\Experiments\WalkingExperiment.cs" />
     <Compile Include="Classes\Experiments\WoodCuttingExperiment\WoodCuttingExperimentWalking.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
