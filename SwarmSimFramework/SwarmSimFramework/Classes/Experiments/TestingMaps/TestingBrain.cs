@@ -63,6 +63,7 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
             TestedBrain = brain;
             this.Map = Map;
             TestingCycle = lengthOfCycle;
+            Finnished = false;
         }
         /// <summary>
         /// Testing brain
@@ -86,7 +87,7 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
         public void Init()
         {
             GenerationInfo = null;
-            Finnished = true;
+
             FinnishedGeneration = false;
             Map.Reset();
             foreach (var r in Map.Robots)

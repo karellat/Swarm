@@ -20,7 +20,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Amount of generation iteration 
         /// </summary>
-        public int NumberOfGenerations = 300;
+        public int NumberOfGenerations = 1000;
         /// <summary>
         /// Iteration between fitness count
         /// </summary>

@@ -119,6 +119,10 @@ namespace SwarmSimVisu
         /// </summary>
         private static Thread ExperimentThread;
         /// <summary>
+        /// Selection of brain
+        /// </summary>
+        private Thread BrainSelectionThread;
+        /// <summary>
         /// Init selected Experiment
         /// </summary>
         /// <param name="sender"></param>
@@ -132,10 +136,19 @@ namespace SwarmSimVisu
                     MessageBox.Show("None experiment chosen!");
                     return;
                 case (1):
-                    MessageBox.Show("Select brain and experiment");
                     var w = new BrainSelectionWindow();
-                    w.Show();
+                    w.ShowDialog();
+                    if (w.Experiment != null)
+                    {
+                        RunningExperiment = w.Experiment;
+                        break;
+                    }
+                    else
+                    {
+                    MessageBox.Show("Unknown experiment");
                     return;
+                    }
+
                 case (2):
                     RunningExperiment = new TestingExperiment();
                     break;
