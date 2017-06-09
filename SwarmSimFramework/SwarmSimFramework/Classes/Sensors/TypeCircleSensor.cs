@@ -38,9 +38,9 @@ namespace SwarmSimFramework.Classes.Entities
             Dimension = 3;
             //set bounds of local values
             LocalBounds = new Bounds[3];
-            LocalBounds[0] = new Bounds() {Min = 0, Max = 100};
-            LocalBounds[1] = new Bounds() {Min = 0, Max = 100};
-            LocalBounds[2] = new Bounds() {Min = 0, Max = 100};
+            LocalBounds[0] = new Bounds() {Min = 0, Max = 10};
+            LocalBounds[1] = new Bounds() {Min = 0, Max = 10};
+            LocalBounds[2] = new Bounds() {Min = 0, Max = 10};
              
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
 
@@ -66,6 +66,12 @@ namespace SwarmSimFramework.Classes.Entities
             o[0] = dic.ContainsKey(EntityColor.RawMaterialColor) ? dic[EntityColor.RawMaterialColor].Amount : 0;
             o[1] = dic.ContainsKey(EntityColor.ObstacleColor) ? dic[EntityColor.ObstacleColor].Amount : 0;
             o[2] = dic.ContainsKey(EntityColor.FuelColor) ? dic[EntityColor.FuelColor].Amount : 0;
+            //Check overflow 
+            for (int i = 0; i < o.Length; i++)
+            {
+                if (o[i] > LocalBounds[i].Max)
+                    o[i] = LocalBounds[i].Max;
+            }
 
             LastReadValues = o;
             return o.Normalize(NormalizeFuncs);
