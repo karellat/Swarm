@@ -18,29 +18,52 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
     public class WoodCuttingExperimentWalking : Experiment<SingleLayerNeuronNetwork>
     {
         //ENVIROMENT Variables
-        protected const int AmountOfTrees = 200;
         /// <summary>
-        /// Origin network
+        /// Number of trees in the eviroment after init
         /// </summary>
-        protected SingleLayerNeuronNetwork originNetwork;
+        protected  int AmountOfTrees = 200;
+        /// <summary>
+        /// Number of woods in the enviroment after init
+        /// </summary>
+        protected  int AmountOfWood = 0;
+
+        /// <summary>
+        /// Name  of init file
+        /// </summary>
+        protected string NameOfInitFile = "scoutCutterInitWithMem";
+
+        protected RobotEntity model = new ScoutCutterRobotWithMemory(new Vector2(0, 0));
+
+
+/// <summary>
+/// Origin network
+/// </summary>
+protected SingleLayerNeuronNetwork originNetwork;
 
         //FITNESS VARIABLES
         /// <summary>
         /// Trees discovered by current brain
         /// </summary>
         protected int DiscoveredTrees = 0;
+
+        /// <summary>
+        /// Amount of discovered woods 
+        /// </summary>
+        protected int DiscoveredWood = 0;
+
+        
         /// <summary>
         /// Value of single discovered tree
         /// </summary>
-        protected const double ValueOfDiscoveredTree = 1000;
+        protected  double ValueOfDiscoveredTree = 1000;
         /// <summary>
-        /// Value of tree changed to the wood
+        /// Value of tree changed to the wood or discovered wood 
         /// </summary>
-        protected const double ValueOfCutWood = 1050;
+        protected  double ValueOfCutWood = 1050;
         /// <summary>
         /// Value of single collision
         /// </summary>
-        protected const double ValueOfCollision = 0;
+        protected  double ValueOfCollision = 0;
         
 
         /// <summary>
@@ -58,14 +81,20 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 
             //Prepare fitness count
             RawMaterialEntity tree = new RawMaterialEntity(new Vector2(0,0),5,10,10);
+            WoodEntity wood = new WoodEntity(new Vector2(0,0),5,10);
             ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth/2,MapHeight/2),20);
             //Generate randomly deployed tree
             Map.Map preparedMap = new Map.Map(MapHeight,MapWidth,null, new List<CircleEntity>() {initPosition});
             List<CircleEntity> trees =
                 Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, AmountOfTrees);
+            var tp = trees.ToList();
+            tp.Add(initPosition);
+            preparedMap = new Map.Map(MapHeight, MapWidth, null, tp);
+            List<CircleEntity> woods = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, AmountOfWood);
+
             //set experiment
-            InitRobotEntities(new [] {new ScoutCutterRobotWithMemory(new Vector2(0,0))},new []{5});
-            InitGenerationFile[0] =  "scoutCutterInitWithMem.json";
+            InitRobotEntities(new [] {model}, new[] { 5 });
+            InitGenerationFile[0] = NameOfInitFile+ ".json";
             //Prepare robot bodies
             List<RobotEntity> robots = new List<RobotEntity>();
             for (int i = 0; i < Models.Length; i++)
@@ -80,7 +109,9 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             robots[3].MoveTo(new Vector2(MapWidth / 2 -10, MapHeight / 2));
             robots[4].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 -10));
             //Prepare Map 
-            Map = new Map.Map(MapHeight,MapWidth,robots,trees);
+            //merge trees and woods
+            var pas = woods.Concat(trees).ToList();
+            Map = new Map.Map(MapHeight,MapWidth,robots,pas);
 
             //read from file, if exists
             if (File.Exists(InitGenerationFile[0]))
@@ -164,23 +195,26 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// Count fitness of actual brain
         /// </summary>
         /// <returns></returns>
-        private double CountBrainFitness()
+        protected virtual double CountBrainFitness()
         {
             DiscoveredTrees = 0;
             int CutWoods = 0;
             //Find discovered trees 
             foreach (var p in Map.PasiveEntities)
             {
-                if (p.Color == Entity.EntityColor.RawMaterialColor)
+                if (p.Discovered)
                 {
-                    if ((p as RawMaterialEntity).Discovered)
+                    if (p.Color == Entity.EntityColor.RawMaterialColor)
+                    {
                         DiscoveredTrees++;
-                }
-                else if (p.Color == Entity.EntityColor.WoodColor)
-                {
-                    CutWoods++;
+                    }
+                    else if (p.Color == Entity.EntityColor.WoodColor)
+                    {
+                        CutWoods++;
+                    }
                 }
             }
+        
             long amountOfCollision = 0;
             //Find collision
             foreach (var r in Map.Robots)

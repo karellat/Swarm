@@ -104,6 +104,14 @@ namespace SwarmSimFramework.Classes.Entities
         /// Intern container for entities 
         /// </summary>
         protected Stack<CircleEntity> Container;
+        /// <summary>
+        /// Return container content
+        /// </summary>
+        /// <returns></returns>
+        public List<CircleEntity> containerList()
+        {
+            return Container.ToList();
+        }
         //CONSTRUCTOR
         /// <summary>
         /// Create new entity with given sensors and effectors 

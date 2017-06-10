@@ -78,7 +78,7 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* RadioTransmitter
 
 ### Wood Cutting 
-* Scout Cutter 
+* Scout Cutter (radius 2.5)
 	* container size: 0
 	* 3x FuelLineSensor
 	* 3x LineTypeeSensor
@@ -91,7 +91,7 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 	* TwoWheelMotor
 	* RadioTransmitter
 
-* Worker Robot
+* Worker Robot (radius 5)
 	* container size: 5
 	* TwoWheelMotor
 	* Picker

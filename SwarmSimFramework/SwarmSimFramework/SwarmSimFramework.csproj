@@ -73,6 +73,7 @@
     <Compile Include="Classes\Experiments\TestingMaps\TestingBrain.cs" />
     <Compile Include="Classes\Experiments\WalkingExperiment.cs" />
     <Compile Include="Classes\Experiments\WoodCuttingExperiment\WoodCuttingExperimentWalking.cs" />
+    <Compile Include="Classes\Experiments\WoodCuttingExperiment\WoodCuttingExperimentWorker.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Classes\Robots\ScoutCutterRobot.cs" />
     <Compile Include="Classes\Robots\ScoutCutterRobotWithMemory.cs" />
     <Compile Include="Classes\Robots\ScoutRobot.cs" />
+    <Compile Include="Classes\Robots\WorkerCutterRobot.cs" />
     <Compile Include="Classes\Robots\WorkerRobot.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
