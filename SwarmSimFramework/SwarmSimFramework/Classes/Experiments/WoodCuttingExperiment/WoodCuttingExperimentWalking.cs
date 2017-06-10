@@ -52,6 +52,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// </summary>
         public override void Init()
         {
+            base.Init();
             //Prepare stuff for serialization 
             System.IO.Directory.CreateDirectory(WorkingDir);
 
@@ -217,10 +218,20 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
                 FollowingGeneration[0].Add(originNetwork);
             }
             //Prepare new brain by differencial evolution algorithm
-            originNetwork = ActualGeneration[0][BrainIndex];
-            ActualBrains[0] =
-                DifferentialEvolution.DifferentialEvolutionBrain(ActualGeneration[0][BrainIndex],
-                    ActualGeneration[0]);
+            if (BrainIndex + 1 != PopulationSize)
+            {
+                originNetwork = ActualGeneration[0][BrainIndex + 1];
+                ActualBrains[0] =
+                    DifferentialEvolution.DifferentialEvolutionBrain(ActualGeneration[0][BrainIndex],
+                        ActualGeneration[0]);
+            }
+            else
+            {
+                originNetwork = FollowingGeneration[0][0];
+                ActualBrains[0] =
+                    DifferentialEvolution.DifferentialEvolutionBrain(FollowingGeneration[0][0],
+                        FollowingGeneration[0]);
+            }
         }
         /// <summary>
         /// After signle generation

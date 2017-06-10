@@ -16,11 +16,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Size of population(amount of brains) 
         /// </summary>
-        public int PopulationSize = 100;
+        public int PopulationSize = 10;
         /// <summary>
         /// Amount of generation iteration 
         /// </summary>
-        public int NumberOfGenerations = 1000;
+        public int NumberOfGenerations = 10;
         /// <summary>
         /// Iteration between fitness count
         /// </summary>
@@ -56,18 +56,26 @@ namespace SwarmSimFramework.Classes.Experiments
         /// Index of the actual evaluating brain
         /// </summary>
         protected int BrainIndex = 0;
-
         /// <summary>
         /// Actual evaluated brains, index of the brains suits to robot model of same index 
         /// </summary>
-        protected T[] ActualBrains = null; 
-        
+        protected T[] ActualBrains = null;
+
+        //SERIALIZATION 
+        /// <summary>
+        /// After this amount cycles all brains are serialized
+        /// </summary>
+        protected int AllBrainSerializationCycle = 100;
+        /// <summary>
+        /// Name of file with saved brains
+        /// </summary>
+        protected string[] NamesOfSerializationFiles;
+
         //GRAPH
         /// <summary>
         /// Amount of cycles aftert the graphs is drawn
         /// </summary>
         protected int DrawGraphCycle = 10;
-
         /// <summary>
         /// Graph of fitness : index of generation
         /// </summary>
@@ -100,12 +108,18 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Prepare map, initial generation
         /// </summary>
-        public abstract void Init();
+        public virtual void Init()
+        {
+            //prepare graph 
+            GnuPlot.HoldOn();
+        }
+
         /// <summary>
         /// Make single step of iteration, so map can be drawn after iteration
         /// </summary>
         public void MakeStep()
         {
+            
             //If all generation simulated
             if (GenerationIndex == NumberOfGenerations)
             {
@@ -115,61 +129,106 @@ namespace SwarmSimFramework.Classes.Experiments
                 int index = 0;
                 foreach (var a in ActualGeneration)
                 {
-                    StreamWriter sw = new StreamWriter("finalGeneration" + index +".json");
+                    StreamWriter sw = new StreamWriter("finalGeneration" + index + ".json");
                     BrainSerializer.SerializeArray(a.ToArray());
                     index++;
                 }
                 Finnished = true;
                 return;
             }
+
             //If all new brains generated
-            if (BrainIndex == PopulationSize -1)
+            if (BrainIndex == PopulationSize)
             {
-                //fill graphs
-                for (var index = 0; index < ActualGeneration.Length; index++)
-                {
-                    var l = ActualGeneration[index];
-                    foreach (var b in l)
-                    {
-                        //fill suitable graph with given values
-                        Graphs[index].AddFitness(b.Fitness,GenerationIndex);
-                    }
-                }
-                SingleGeneration();
-
-                //Show grahs 
-                if (GenerationIndex % DrawGraphCycle == 0)
-                    DrawGraphs();
-                BrainIndex = 0;
-                GenerationIndex++;
-                //Init new generation & change actual generation
-                ActualGeneration = FollowingGeneration;
-                FollowingGeneration = new List<T>[ActualGeneration.Length];
-                for (int i = 0; i < FollowingGeneration.Length; i++)
-                    FollowingGeneration[i] = new List<T>();
+               GenerationFinnish();
+                return;
             }
-            //if map iterations ended
-            if (IterationIndex == MapIteration)
+        //if map iterations ended
+        if (IterationIndex == MapIteration)
             {
-                SingleMapSimulation();
-                BrainIndex++;
-                Map.Reset();
-                IterationIndex = 0;
-                
-                foreach (var r in Map.Robots)
-                {
-                    for (int i = 0; i < Models.Length; i++)
-                    {
-                        if (r.GetType() == Models[i].GetType())
-                            r.Brain = ActualBrains[i];
-                    }
-                }
+                MapIterationFinnish();
+                return;
             }
-
+            //Make single iteration of map
+            MapSingleIteration();
+        }
+        /// <summary>
+        /// Single general iteration of map
+        /// </summary>
+        protected void MapSingleIteration()
+        {
             //Make one iteration of map 
             Map.MakeStep();
+            //Virtual call of single iteration of map
             SingleIteration();
             IterationIndex++;
+        }
+        /// <summary>
+        /// General implementation of operations after map iterations ended
+        /// </summary>
+        protected void MapIterationFinnish()
+        {
+            //Virtual call of concrete experiment implementation of setting next  brain to evaluate 
+            SingleMapSimulation();
+            BrainIndex++;
+            Map.Reset();
+            IterationIndex = 0;
+
+            foreach (var r in Map.Robots)
+            {
+                for (int i = 0; i < Models.Length; i++)
+                {
+                    if (r.GetType() == Models[i].GetType())
+                        r.Brain = ActualBrains[i];
+                }
+            }
+        }
+        /// <summary>
+        /// Operation swaping actual and following generation
+        /// </summary>
+        protected void GenerationFinnish()
+        {
+            //Serialize if serialization cycle
+            if (GenerationIndex % AllBrainSerializationCycle == 0)
+            {
+                foreach (var a in ActualGeneration)
+                {
+                    StreamWriter sw = new StreamWriter("Generation" + GenerationIndex + ".json");
+                    BrainSerializer.SerializeArray(a.ToArray());
+                }
+            }
+
+            //fill graphs
+            for (var index = 0; index < ActualGeneration.Length; index++)
+            {
+                var l = ActualGeneration[index];
+                foreach (var b in l)
+                {
+                    //fill suitable graph with given values
+                    Graphs[index].AddFitness(b.Fitness, GenerationIndex);
+                }
+            }
+            //Virtual call of specific experiment implemention
+            SingleGeneration();
+
+            //Show grahs 
+            if (GenerationIndex % DrawGraphCycle == 0)
+            {
+                DrawGraphs();
+                //Clear old values
+                foreach (var g in Graphs)
+                {
+                    g.ClearActualValue();
+                }
+            }
+            BrainIndex = 0;
+            GenerationIndex++;
+            //Init new generation & change actual generation
+            ActualGeneration = FollowingGeneration;
+            FollowingGeneration = new List<T>[ActualGeneration.Length];
+            for (int i = 0; i < FollowingGeneration.Length; i++)
+                FollowingGeneration[i] = new List<T>();
+
         }
         /// <summary>
         /// One iteration of map 
@@ -202,13 +261,13 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         protected virtual void DrawGraphs()
         {
-            GnuPlot.HoldOn();
+           
             GnuPlot.Set("title \"Fitness of " + GenerationIndex + " generations \"");
             GnuPlot.Set("xlabel \"Index of generation\"");
             GnuPlot.Set("ylabel \"Fitness value\"");
             foreach (var g in Graphs)
                 g.PlotGraph();
-            GnuPlot.HoldOff();
+            
         }
         /// <summary>
         /// Count fitness of single robot body
@@ -245,9 +304,11 @@ namespace SwarmSimFramework.Classes.Experiments
             AmountOfRobots = amount;
             InitGenerationFile = new string[TypesCount]; 
             Graphs  = new FitPlot[TypesCount];
+            NamesOfSerializationFiles = new string[TypesCount];
             for (int i = 0; i < Models.Length; i++)
             {
-                Graphs[i] = new FitPlot(PopulationSize*NumberOfGenerations,Models.GetType().ToString());
+                Graphs[i] = new FitPlot(PopulationSize*NumberOfGenerations,Models[i].GetType().ToString());
+                NamesOfSerializationFiles[i] = Models[i].GetType().ToString();
             }
             ActualBrains = new T[TypesCount];
             ActualGeneration = new List<T>[TypesCount];
@@ -366,6 +427,15 @@ namespace SwarmSimFramework.Classes.Experiments
         public void PlotGraph()
         {
             SupportClasses.AwokeKnowing.GnuplotCSharp.GnuPlot.Plot(Xs.ToArray(), Ys.ToArray(),Title);
+        }
+
+        /// <summary>
+        /// Clean all values from graph
+        /// </summary>
+        public void ClearActualValue()
+        {
+            Xs.Clear();
+            Ys.Clear();
         }
     }
 }

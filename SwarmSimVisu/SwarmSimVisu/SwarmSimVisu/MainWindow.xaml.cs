@@ -33,7 +33,7 @@ namespace SwarmSimVisu
         {
             InitializeComponent();
             //ComoBox for choosing experiment
-            ExperimentComboBox.SelectedIndex = 1;
+            ExperimentComboBox.SelectedIndex = 4;
             ExperimentComboBox.Items.Add("None");
             ExperimentComboBox.Items.Add("Testing Brain");
             ExperimentComboBox.Items.Add("TestingExperiment");
@@ -52,7 +52,7 @@ namespace SwarmSimVisu
                     ThreadWait = 100;
             });
             //Drawing state, if draw or not
-            VisualCombox.SelectedIndex = 0;
+            VisualCombox.SelectedIndex = 1;
             VisualCombox.Items.Add("On");
             VisualCombox.Items.Add("Off");
             VisualCombox.SelectionChanged += ((sender, args) =>
@@ -103,7 +103,7 @@ namespace SwarmSimVisu
         public bool Stopping;
         public bool Paused;
         public int ThreadWait = 0;
-        public bool Visualization = true;
+        public bool Visualization = false;
         public bool ShowInfo = true;
 
         /// <summary>

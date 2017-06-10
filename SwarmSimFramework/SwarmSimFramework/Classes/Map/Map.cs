@@ -414,13 +414,15 @@ namespace SwarmSimFramework.Classes.Map
         }
 
         // COLISION THAT COUNTS COLOR 
-        public Dictionary<Entity.EntityColor, ColorIntersection> CollisionColor(CircleEntity entity)
+        public Dictionary<Entity.EntityColor, ColorIntersection> CollisionColor(CircleEntity entity,RobotEntity ignoredRobot=null)
         {
             Dictionary<Entity.EntityColor, ColorIntersection> o =
                 new Dictionary<Entity.EntityColor, ColorIntersection>();
             //Collision with other robots: 
             foreach (var r in Robots)
             {
+                if(r == ignoredRobot) continue;
+                
                 if (!r.Alive) continue;
 
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))

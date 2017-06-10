@@ -150,5 +150,10 @@ namespace SwarmSimFramework.Classes.RobotBrains
             nn.Mutate();
             return nn;
         }
+
+        public override string ToString()
+        {
+            return base.ToString() + " - " + Fitness.ToString();
+        }
     }
 }

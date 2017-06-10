@@ -61,7 +61,7 @@ namespace SwarmSimFramework.Classes.Entities
             }
             float[] o = new float[Dimension];
 
-            Dictionary<EntityColor, ColorIntersection> dic = map.CollisionColor(this);
+            Dictionary<EntityColor, ColorIntersection> dic = map.CollisionColor(this,robot);
 
             o[0] = dic.ContainsKey(EntityColor.RawMaterialColor) ? dic[EntityColor.RawMaterialColor].Amount : 0;
             o[1] = dic.ContainsKey(EntityColor.ObstacleColor) ? dic[EntityColor.ObstacleColor].Amount : 0;
