@@ -46,7 +46,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// Head of circle
         /// </summary>
         public Vector2 FPoint { get; protected set; }
-        
+
+        /// <summary>
+        /// If entity was discovered by robot 
+        /// </summary>
+        public bool Discovered { get; set; } = false;
         //METHODS 
         /// <summary>
         /// Rotate fPoint around Middle

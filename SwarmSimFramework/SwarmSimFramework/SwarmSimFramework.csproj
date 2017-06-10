@@ -79,6 +79,7 @@
     <Compile Include="Classes\RobotBrains\SingleLayerNeuronNetwork.cs" />
     <Compile Include="Classes\Robots\RefactorRobot.cs" />
     <Compile Include="Classes\Robots\ScoutCutterRobot.cs" />
+    <Compile Include="Classes\Robots\ScoutCutterRobotWithMemory.cs" />
     <Compile Include="Classes\Robots\ScoutRobot.cs" />
     <Compile Include="Classes\Robots\WorkerRobot.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />

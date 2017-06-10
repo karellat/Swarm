@@ -16,11 +16,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Size of population(amount of brains) 
         /// </summary>
-        public int PopulationSize = 10;
+        public int PopulationSize = 1000;
         /// <summary>
         /// Amount of generation iteration 
         /// </summary>
-        public int NumberOfGenerations = 10;
+        public int NumberOfGenerations = 1000;
         /// <summary>
         /// Iteration between fitness count
         /// </summary>

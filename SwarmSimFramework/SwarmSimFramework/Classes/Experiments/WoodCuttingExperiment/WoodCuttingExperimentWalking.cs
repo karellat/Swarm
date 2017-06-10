@@ -46,7 +46,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// <summary>
         /// Directory for ass
         /// </summary>
-        protected string WorkingDir = "walkwoodExp";
+        protected string WorkingDir = "walkwoodExpMem";
         /// <summary>
         /// Init of wood cutting experiment walking
         /// </summary>
@@ -64,8 +64,8 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             List<CircleEntity> trees =
                 Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, AmountOfTrees);
             //set experiment
-            InitRobotEntities(new [] {new ScoutCutterRobot(new Vector2(0,0))},new []{5});
-            InitGenerationFile[0] =  "scoutCutterInit.json";
+            InitRobotEntities(new [] {new ScoutCutterRobotWithMemory(new Vector2(0,0))},new []{5});
+            InitGenerationFile[0] =  "scoutCutterInitWithMem.json";
             //Prepare robot bodies
             List<RobotEntity> robots = new List<RobotEntity>();
             for (int i = 0; i < Models.Length; i++)
