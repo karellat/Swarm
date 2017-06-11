@@ -17,11 +17,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Size of population(amount of brains) 
         /// </summary>
-        public int PopulationSize = 1000;
+        public int PopulationSize = 100;
         /// <summary>
         /// Amount of generation iteration 
         /// </summary>
-        public int NumberOfGenerations = 20;
+        public int NumberOfGenerations = 500;
         /// <summary>
         /// Iteration between fitness count
         /// </summary>
@@ -262,13 +262,13 @@ namespace SwarmSimFramework.Classes.Experiments
         /// </summary>
         protected virtual void DrawGraphs()
         {
-           
+
             GnuPlot.Set("title \"Fitness of " + GenerationIndex + " generations \"");
             GnuPlot.Set("xlabel \"Index of generation\"");
             GnuPlot.Set("ylabel \"Fitness value\"");
             foreach (var g in Graphs)
                 g.PlotGraph();
-            
+
         }
         /// <summary>
         /// Count fitness of single robot body

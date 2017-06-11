@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Security.Policy;
 using System.Text;
 using SwarmSimFramework.Classes.Map;
 
@@ -51,7 +52,11 @@ namespace SwarmSimFramework.Interfaces
         /// <summary>
         /// Best brain
         /// </summary>
-        public IRobotBrain BestBrain; 
+        public IRobotBrain BestBrain;
+        /// <summary>
+        /// Best brain index
+        /// </summary>
+        public int BestBrainIndex; 
 
         /// <summary>
         /// Get basic information about generation of brains 
@@ -64,10 +69,12 @@ namespace SwarmSimFramework.Interfaces
             double fitnessAverage = 0;
             double fitnessMinimum = float.PositiveInfinity;
             double fitnessMaximum = float.NegativeInfinity;
-            IRobotBrain bestBrain = null; 
+            IRobotBrain bestBrain = null;
+            int brainIndex = -1;
 
-            foreach (var b in brains)
+            for (var index = 0; index < brains.Count; index++)
             {
+                var b = brains[index];
                 fitnessAverage += b.Fitness;
                 if (b.Fitness < fitnessMinimum)
                     fitnessMinimum = b.Fitness;
@@ -75,7 +82,8 @@ namespace SwarmSimFramework.Interfaces
                 {
                     fitnessMaximum = b.Fitness;
                     bestBrain = b;
-                } 
+                    brainIndex = index;
+                }
             }
             string info = "";
             if (bestBrain != null)
@@ -86,7 +94,8 @@ namespace SwarmSimFramework.Interfaces
                 FitnessAverage = fitnessAverage / (double) brains.Count,
                 FitnessMaximum = fitnessMaximum,
                 FitnessMinimum = fitnessMinimum,
-                BestBrain = bestBrain
+                BestBrain = bestBrain,
+                BestBrainIndex =  brainIndex
             };
         }
     }
