@@ -11,12 +11,12 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         {
             AmountOfTrees = 50;
             AmountOfWood = 200;
-            NameOfInitFile = "WorkerWalkingInit";
-            WorkingDir = "WorkerWalking";
+            NameOfInitFile = "WorkerPickUpInit";
+            WorkingDir = "WorkerPickUp";
             model = new WorkerCutterRobot(new Vector2(0, 0));
-            ValueOfDiscoveredTree = 1;
+            ValueOfDiscoveredTree = 0;
             ValueOfCollision = 0;
-            ValueOfCutWood = 10;
+            ValueOfCutWood = 0;
         }
 
         protected override double CountBrainFitness()

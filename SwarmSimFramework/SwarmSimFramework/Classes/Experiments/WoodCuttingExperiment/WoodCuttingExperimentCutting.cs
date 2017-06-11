@@ -11,7 +11,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             AmountOfWood = 0;
             NameOfInitFile = "CuttingExperimentInit";
             WorkingDir = "CuttingExperiment";
-            model = new ScoutCutterRobotWithMemory(new Vector2(0, 0));
+            model = new ScoutCutterRobot(new Vector2(0, 0));
             ValueOfDiscoveredTree = 10;
             ValueOfCollision = 0;
             ValueOfCutWood = 1000;

@@ -103,7 +103,7 @@ namespace SwarmSimFramework.Classes.Effectors
                 //Move to the end point of sensor 
                 removingEntity.MoveTo(B);
                 //Check collision
-                if (map.Collision(removingEntity))
+                if (map.Collision(removingEntity) || map.OutOfBorderTest(removingEntity))
                 {
                     robot.InvalidContainerOperation++;
                     return;
@@ -128,9 +128,9 @@ namespace SwarmSimFramework.Classes.Effectors
                     robot.InvalidContainerOperation++;
                     return;
                 }
-                //Check if entity is Circle & size is suitable for container
+                //Check if entity is Circle & size is suitable for container & its not RobotEntity
                 if (intersections.CollidingEntity is CircleEntity &&
-                    ((CircleEntity) intersections.CollidingEntity).Radius * 2 < this.Length)
+                    ((CircleEntity) intersections.CollidingEntity).Radius * 2 <= this.Length && (!(intersections.CollidingEntity is RobotEntity)))
                 {
                     if (robot.PushContainer((CircleEntity) intersections.CollidingEntity))
                     {

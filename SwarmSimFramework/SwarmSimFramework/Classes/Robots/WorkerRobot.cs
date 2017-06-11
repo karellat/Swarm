@@ -14,13 +14,13 @@ namespace SwarmSimFramework.Classes.Robots
         {
             ISensor[] sensors = new ISensor[11];
             //FUEL Sensors
-            sensors[0] = new FuelLineSensor(this, 10, DegreesToRadians(45));
-            sensors[1] = new FuelLineSensor(this, 10, 0);
-            sensors[2] = new FuelLineSensor(this, 10, DegreesToRadians(-45));
+            sensors[0] = new FuelLineSensor(this, 15, DegreesToRadians(45));
+            sensors[1] = new FuelLineSensor(this, 15, 0);
+            sensors[2] = new FuelLineSensor(this, 15, DegreesToRadians(-45));
             //Line Type Sensors
-            sensors[3] = new LineTypeSensor(this, 10, DegreesToRadians(45));
-            sensors[4] = new LineTypeSensor(this, 10, 0);
-            sensors[5] = new LineTypeSensor(this, 10, DegreesToRadians(-45));
+            sensors[3] = new LineTypeSensor(this, 15, DegreesToRadians(45));
+            sensors[4] = new LineTypeSensor(this, 15, 0);
+            sensors[5] = new LineTypeSensor(this, 15, DegreesToRadians(-45));
             //Locator
             sensors[6] = new LocatorSensor(this);
             //Touch sensors
@@ -35,7 +35,7 @@ namespace SwarmSimFramework.Classes.Robots
             IEffector[] effectors = new IEffector[3];
             effectors[0] = new TwoWheelMotor(this, 1.5f);
             effectors[1] = new RadioTransmitter(this, 200);
-            effectors[2] = new Picker(this,15,0);
+            effectors[2] = new Picker(this,20,0);
 
             this.Effectors = effectors;
 

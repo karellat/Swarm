@@ -57,7 +57,8 @@ namespace SwarmSimVisu
             resCache.Add("FuelColor", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 0.000f, 1.0f)));
             resCache.Add("RawMaterialColorN", t => new SolidColorBrush(t, new RawColor4(0.000f, 1.000f, 0.498f, 1.0f)));
             resCache.Add("RawMaterialColorD", t => new SolidColorBrush(t, new RawColor4(1.000f, 1.000f, 0.000f, 1.0f)));
-            resCache.Add("WoodColor", t => new SolidColorBrush(t, new RawColor4(0.545f, 0.271f, 0.075f, 1.0f)));
+            resCache.Add("WoodColorN", t => new SolidColorBrush(t, new RawColor4(0.545f, 0.271f, 0.075f, 1.0f)));
+            resCache.Add("WoodColorD", t => new SolidColorBrush(t, new RawColor4(0.804f, 0.522f, 0.247f, 1.0f)));
             resCache.Add("ROBOT1", t => new SolidColorBrush(t, new RawColor4(0.000f, 1.00f, 0.000f, 0.0f)));
             resCache.Add("ROBOT2", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 1.000f, 1.00f)));
             resCache.Add("HEAD", t => new SolidColorBrush(t, new RawColor4(1.000f, 0.000f, 1.000f, 1.0f)));

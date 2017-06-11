@@ -38,7 +38,11 @@ namespace SwarmSimVisu
             ExperimentComboBox.Items.Add("Testing Brain");
             ExperimentComboBox.Items.Add("TestingExperiment");
             ExperimentComboBox.Items.Add("WalkingExperiment");
-            ExperimentComboBox.Items.Add("WoodCuttingExperiment - Walk");
+            ExperimentComboBox.Items.Add("Wood Experiment - Cuttor Walk");
+            ExperimentComboBox.Items.Add("Wood Experiment - Cuttor Cut");
+            ExperimentComboBox.Items.Add("Wood Experiment - Worker Walking");
+            ExperimentComboBox.Items.Add("Wood Experiment - Worker Pick up");
+
 
             //wait after draw
             ThreadWaitComboBox.SelectedIndex = 0;
@@ -157,6 +161,15 @@ namespace SwarmSimVisu
                     break;
                 case (4):
                     RunningExperiment = new WoodCuttingExperimentWalking();
+                    break;
+                case (5): 
+                    RunningExperiment = new WoodCuttingExperimentCutting();
+                    break;
+                case (6):
+                    RunningExperiment = new WoodCuttingExperimentWorkerWalking();
+                    break;
+                case (7):
+                    RunningExperiment = new WoodCuttingExperimentPickUp();
                     break;
                 default:
                     MessageBox.Show("Unknown experiment");
@@ -320,11 +333,11 @@ namespace SwarmSimVisu
             //Draw map passive entities
             foreach (var passive in RunningExperiment.Map.PasiveEntities)
             {
-                if (passive.Color != Entity.EntityColor.RawMaterialColor)
+                if (passive.Color != Entity.EntityColor.RawMaterialColor && passive.Color != Entity.EntityColor.WoodColor)
                     DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString());
                 else
                 {
-                    if((passive as RawMaterialEntity).Discovered)
+                    if(passive.Discovered)
                         DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString()+'D');
                     else
                         DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString() + 'N');

@@ -144,7 +144,7 @@ namespace SwarmSimFramework.Classes.Map
                     newY = RandomNumber.GetRandomFloat() * map.MaxHeight;
                     T c = (T) model.DeepClone();
                     c.MoveTo(new Vector2(newX,newY));
-                    if (!map.Collision(c))
+                    if (!map.Collision(c) && !map.OutOfBorderTest(c))
                     {
                         map.PasiveEntities.Add(c);
                         newList.Add(c);
@@ -496,7 +496,7 @@ namespace SwarmSimFramework.Classes.Map
             foreach (var p in PasiveEntities)
             {
                 if (OutOfBorderTest(p))
-                    throw new ArgumentException("Robot out of map");
+                    throw new ArgumentException("Passive entity out of map");
             }
             foreach (var f in FuelEntities)
             {
