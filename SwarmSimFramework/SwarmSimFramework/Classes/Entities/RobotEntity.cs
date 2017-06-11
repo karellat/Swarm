@@ -108,7 +108,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// Return container content
         /// </summary>
         /// <returns></returns>
-        public List<CircleEntity> containerList()
+        public List<CircleEntity> ContainerList()
         {
             return Container.ToList();
         }

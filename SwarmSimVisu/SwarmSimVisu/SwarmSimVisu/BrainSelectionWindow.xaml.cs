@@ -29,16 +29,26 @@ namespace SwarmSimVisu
         public Map SelectedMap;
         public BrainSelectionWindow()
         {
+            
             InitializeComponent();
             MapComboBox.Items.Add("None");
             MapComboBox.Items.Add("WoodMapCutters");
+            MapComboBox.Items.Add("WoodMapCutters with mem");
+            string name = "";
             MapComboBox.SelectionChanged += (sender, args) =>
             {
                 switch (MapComboBox.SelectedIndex)
                 {
                     case 1:
                     {
+                        name = "Wood map cutters";
                         SelectedMap = TestingMaps.GetWoodMapCuters();
+                        break;
+                    }
+                    case 2:
+                    {
+                        name = "Wood map cutters with mem";
+                        SelectedMap = TestingMaps.GetWoodMapCutersWithMem();
                         break;
                     }
                     default:
@@ -49,7 +59,7 @@ namespace SwarmSimVisu
                     }
                 }
 
-                StringBuilder mapInfo = new StringBuilder("Wood Map Cutter \n");
+                StringBuilder mapInfo = new StringBuilder(name + "\n");
                 mapInfo.Append("Height: " + SelectedMap.MaxHeight + " Width: " + SelectedMap.MaxWidth + "\n");
                 mapInfo.AppendLine("Amount of robots: " + SelectedMap.Robots.Count);
                 mapInfo.AppendLine("Passive entities: " +SelectedMap.PasiveEntities.Count);

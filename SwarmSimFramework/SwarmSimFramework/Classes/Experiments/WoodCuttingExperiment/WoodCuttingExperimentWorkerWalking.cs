@@ -4,9 +4,9 @@ using SwarmSimFramework.Classes.Robots;
 
 namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 {
-    public class WoodCuttingExperimentWorker: WoodCuttingExperimentWalking
+    public class WoodCuttingExperimentWorkerWalking: WoodCuttingExperimentWalking
     {
-        public WoodCuttingExperimentWorker()
+        public WoodCuttingExperimentWorkerWalking()
         {
             AmountOfTrees = 50;
             AmountOfWood = 200;
