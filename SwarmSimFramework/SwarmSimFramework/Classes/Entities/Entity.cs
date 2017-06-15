@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -35,26 +36,31 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Name of entity
         /// </summary>
+        [JsonProperty]
         public string Name { get; protected set; } = "Entity";
 
         /// <summary>
         /// Return Shape of entity
         /// </summary>
+        [JsonProperty]
         public Shape GetShape { get; protected set; }
 
         /// <summary>
         ///  Actual orientation in radians
         /// </summary>
+        [JsonProperty]
         public float Orientation { get; protected set; }
 
         /// <summary>
         /// Middle of rotation 
         /// </summary>
+        [JsonProperty]
         public Vector2 RotationMiddle { get; protected set; }
 
         /// <summary>
         /// Get color of entity
         /// </summary>
+        [JsonProperty]
         public EntityColor Color { get; protected set; }
 
         //METHODS

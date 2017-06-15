@@ -16,14 +16,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Dimension of the locator sensor
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Intern value bounds
         /// </summary>
+        [JsonProperty]
         public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization functions to robot values
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Locator sensor constructor

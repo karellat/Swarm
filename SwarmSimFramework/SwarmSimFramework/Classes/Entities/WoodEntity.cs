@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -20,8 +21,17 @@ namespace SwarmSimFramework.Classes.Entities
             AmountOfWood = amountOfWood;
         }
         /// <summary>
+        /// Json Constructor 
+        /// </summary>
+        [JsonConstructor]
+        protected WoodEntity() : base("Wood entity")
+        {
+            
+        }
+        /// <summary>
         /// Get actual amount of wood 
         /// </summary>
+        [JsonProperty]
         public float AmountOfWood { get; protected set; }
         /// <summary>
         /// Return deep clone of wood entity 

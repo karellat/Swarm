@@ -16,11 +16,13 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Intern radio signal
         /// </summary>
+        [JsonProperty]
         protected RadioEntity radioSignal;
         /// <summary>
         /// Dimension of effector 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Add transmitting to map 
         /// </summary>
@@ -51,10 +53,12 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Local bounds of internvalues, transmitting Value
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization funcs to robot bounds
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set;  }
         /// <summary>
         /// Create new radio transmitting effector 

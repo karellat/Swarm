@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
 
@@ -15,18 +16,21 @@ namespace SwarmSimFramework.Classes.Entities
         //STANDART VALUES
         public static Bounds StandardBounds = new Bounds() {Max = 100, Min = -100};
         //MEMBERs
-            //Characteristics
+        //Characteristics
         /// <summary>
         /// If entity has enough fuel & health integrity
         /// </summary>
+        [JsonProperty]
         public bool Alive { get; protected set; }
         /// <summary>
         /// number of friendly team  
         /// </summary>
+        [JsonProperty]
         public int TeamNumber { get; protected set; }
         /// <summary>
         /// Actual health of robot 
         /// </summary>
+        [JsonProperty]
         public float Health { get; protected set; }
         /// <summary>
         /// Amount of fuel
@@ -48,10 +52,12 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Sensor dimension
         /// </summary>
+        [JsonProperty]
         public int SensorsDimension { get; protected set; }
         /// <summary>
         /// Effector dimension 
         /// </summary>
+        [JsonProperty]
         public int EffectorsDimension { get; protected set; }
             //Info 
         /// <summary>
@@ -82,15 +88,18 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Max capacity of container
         /// </summary>
+        [JsonProperty]
         public int ContainerMaxCapacity { get; protected set; }
         /// <summary>
         /// Actual amount of entities in container
         /// </summary>
+        [JsonProperty]
         public int ActualContainerCount { get; protected set; }
         //PRIVATE MEMBERS
         /// <summary>
         /// Health after creation
         /// </summary>
+        [JsonProperty]
         protected float InitialHealth;
         /// <summary>
         /// Last values from last invoke of PrepareMove
@@ -103,6 +112,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Intern container for entities 
         /// </summary>
+        [JsonProperty]
         protected Stack<CircleEntity> Container;
         /// <summary>
         /// Return container content

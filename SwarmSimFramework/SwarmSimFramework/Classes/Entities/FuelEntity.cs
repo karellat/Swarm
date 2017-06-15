@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Newtonsoft.Json;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -9,10 +10,12 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// True if the tank was consumed
         /// </summary>
+        [JsonProperty]
         public bool Empty { get; protected set; }
         /// <summary>
         /// Return the amount of fuel in this tank
         /// </summary>
+        [JsonProperty]
         public float Capacity { get; protected set; }
         /// <summary>
         /// Give clone of this fuel tank
@@ -34,6 +37,14 @@ namespace SwarmSimFramework.Classes.Entities
         {
             Color = EntityColor.FuelColor;
             Capacity = capacity;
+        }
+        /// <summary>
+        /// Json constructor
+        /// </summary>
+        [JsonConstructor]
+        protected FuelEntity() : base("FuelEntity")
+        {
+            
         }
         /// <summary>
         /// Empty this fuel tank and return amount of fuel 

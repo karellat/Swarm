@@ -21,30 +21,37 @@ namespace SwarmSimFramework.Classes.Effectors
         /// maximal change of speed 
         /// </summary>
         public static float MaxVelocityChange = 1.0f;
+
         /// <summary>
         /// Dimension of effector
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Intern values
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization fnc from robot bounds to local 
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
 
         /// <summary>
         /// Last speed of right wheel 
         /// </summary>
+        [JsonProperty]
         protected float RightVelocity;
         /// <summary>
         /// Last speed of left wheel
         /// </summary>
+        [JsonProperty]
         protected float LeftVelocity;
         /// <summary>
         /// Distance between wheels
         /// </summary>
+        [JsonProperty]
         protected float WheelDistance; 
 
         /// <summary>

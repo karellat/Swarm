@@ -19,11 +19,12 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Dimension of picker 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Local bounds 0-1 - put 1-2 - idle 2-3 pick
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization fnc from brain
         /// </summary>

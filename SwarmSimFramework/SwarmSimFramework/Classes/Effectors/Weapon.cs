@@ -18,18 +18,22 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Intern values 
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization fncs from robot brain
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Dimension of settings
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Rotation angle to FPoint of robot
         /// </summary>
+        [JsonProperty]
         protected float OrientationToRobotFPoint;
         /// <summary>
         /// Damage of weapon

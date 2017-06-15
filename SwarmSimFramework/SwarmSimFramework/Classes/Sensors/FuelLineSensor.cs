@@ -12,20 +12,29 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Dimension of output 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Local bounds of read values 
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization funcs to  
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Orientation to robot FPoint, adds to the robot orientationToFPoint to rotate to correct possition 
         /// </summary>
+        [JsonProperty]
         protected float OrientationToFPointToRobotFPoint;
-
+        /// <summary>
+        /// Fuel Line constructor
+        /// </summary>
+        /// <param name="robot"></param>
+        /// <param name="lenght"></param>
+        /// <param name="orientationToFPoint"></param>
         public FuelLineSensor(RobotEntity robot, float lenght, float orientationToFPoint) : base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght), robot.Middle, "Line Fuel Sensors")
         {
             //rotate sensor to its possition

@@ -19,14 +19,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Dimension of sensor 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Bounds of specific dimension of out put
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization funcs, from read values to output(robot suitable)
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Bounds of output 

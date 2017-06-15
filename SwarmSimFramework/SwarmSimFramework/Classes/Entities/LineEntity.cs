@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace SwarmSimFramework.Classes.Entities
 {
@@ -24,14 +25,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// first of the LineSegment verteces 
         /// </summary>
+        [JsonProperty]
         public Vector2 A { get; protected set; }
         /// <summary>
         /// second of the LineSegment verteces
         /// </summary>
+        [JsonProperty]
         public Vector2 B { get; protected set;  }
         /// <summary>
         /// Distance between A & B 
         /// </summary>
+        [JsonProperty]
         public float Length { get; protected set; }
         //METHODS 
         /// <summary>

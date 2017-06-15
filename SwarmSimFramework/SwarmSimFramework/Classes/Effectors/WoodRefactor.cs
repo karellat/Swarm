@@ -16,19 +16,23 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Orientation to robot FPoint
         /// </summary>
+        [JsonProperty]
         public float OrientationToRobotFPoint { get; protected set; }
         /// <summary>
         /// Intern values bounds
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization fncs 
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Dimension of effector 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Create wood refactor 
         /// </summary>

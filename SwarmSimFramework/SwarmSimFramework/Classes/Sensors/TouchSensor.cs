@@ -14,19 +14,23 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Dimension of touch  sensors 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Local maximum and minimum for given dimension 
         /// </summary>
+        [JsonProperty]
         public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization functions for given robot.
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Maxoutput of touch sensor 
         /// </summary>
         //PRIVATE MEMBERs
+        [JsonProperty]
         protected float OrientationToRobotFPoint;
         /// <summary>
         /// Constructor 

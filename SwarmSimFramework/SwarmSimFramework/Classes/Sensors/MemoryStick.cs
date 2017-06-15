@@ -64,6 +64,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Size of memory
         /// </summary>
+        [JsonProperty]
         public int Dimension { get; protected set; }
         /// <summary>
         /// Set bounds  and middle to local 
@@ -111,11 +112,13 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Local bounds 
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Unnecessary normalization fncs 
         /// </summary>
-        public NormalizeFunc[] NormalizeFuncs { get; }
+        [JsonProperty]
+        public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Intern implementation of memory
         /// </summary>

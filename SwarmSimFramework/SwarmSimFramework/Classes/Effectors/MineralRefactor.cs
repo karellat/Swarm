@@ -11,31 +11,37 @@ namespace SwarmSimFramework.Classes.Effectors
     /// Refactor entity on top of container, if mineral entity
     /// </summary>
     public class MineralRefactor : CircleEntity,IEffector
-    { 
+    {
         /// <summary>
         /// Cycles left to complete refactor from mineral to fuel 
         /// </summary>
+        [JsonProperty]
         public int CyclesToEnd { get; protected set; }
         /// <summary>
         /// Amount of fuel created by refactor 
         /// </summary>
+        [JsonProperty]
         public float FuelToRefactor { get; protected set; }
         /// <summary>
         /// curently refactoring mineral or waiting for empty stack 
         /// </summary>
+        [JsonProperty]
         public bool Refactoring { get; protected set; }
         /// <summary>
         /// Local bounds of setting refactor
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization funcs from robot values to local bounds
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set;  }
         /// <summary>
         /// Dimension of setting
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Create new Mineral Refactor 
         /// </summary>

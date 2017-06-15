@@ -15,14 +15,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Dimension of TypeSensor 
         /// </summary>
-        public int Dimension { get; }
+        [JsonProperty]
+        public int Dimension { get; protected set; }
         /// <summary>
         /// Local intern values 
         /// </summary>
-        public Bounds[] LocalBounds { get; }
+        [JsonProperty]
+        public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization fncs 
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set;  }
         /// <summary>
         /// Create new type sensor
