@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -66,6 +67,13 @@ namespace SwarmSimFramework.Classes.Entities
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
 
+        /// <summary>
+        /// Json Constructor
+        /// </summary>
+        [JsonConstructor]
+        protected LineTypeSensor() : base("Line Sensors")
+        {
+        }
 
         public virtual float[] Count(RobotEntity robot, Map.Map map)
             {

@@ -34,6 +34,7 @@ namespace SwarmSimVisu
             MapComboBox.Items.Add("None");
             MapComboBox.Items.Add("WoodMapCutters");
             MapComboBox.Items.Add("WoodMapCutters with mem");
+            MapComboBox.Items.Add("WoodMapWorkers");
             string name = "";
             MapComboBox.SelectionChanged += (sender, args) =>
             {
@@ -49,6 +50,12 @@ namespace SwarmSimVisu
                     {
                         name = "Wood map cutters with mem";
                         SelectedMap = TestingMaps.GetWoodMapCutersWithMem();
+                        break;
+                    }
+                    case 3:
+                    {
+                        name = "Wood map workers";
+                        SelectedMap = TestingMaps.GetWoodMapWorkers();
                         break;
                     }
                     default:

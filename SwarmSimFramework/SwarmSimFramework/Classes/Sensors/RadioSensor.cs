@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -57,6 +58,12 @@ namespace SwarmSimFramework.Classes.Entities
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
 
         }
+        /// <summary>
+        /// Json COnvertor
+        /// </summary>
+        [JsonConstructor]
+        protected RadioSensor() : base("RadioSensor")
+        { }
         /// <summary>
         /// Make clone of radiosensor 
         /// </summary>

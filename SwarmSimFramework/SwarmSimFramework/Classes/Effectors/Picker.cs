@@ -2,6 +2,7 @@
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -53,6 +54,11 @@ namespace SwarmSimFramework.Classes.Effectors
                 LocalBounds[i] = new Bounds() {Max = 1, Min = 0};
             }
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
+        }
+        [JsonConstructor]
+        protected Picker() : base("Picker Effector")
+        {
+            
         }
         /// <summary>
         /// Make deep clone of effector 

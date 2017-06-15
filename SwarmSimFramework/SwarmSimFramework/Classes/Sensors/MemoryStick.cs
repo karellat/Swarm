@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Policy;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -29,6 +30,14 @@ namespace SwarmSimFramework.Classes.Entities
             }
             //no need for normalization
 
+        }
+        /// <summary>
+        ///  Json Constructor
+        /// </summary>
+         [JsonConstructor]
+        protected MemoryStick() : base("Memory stick")
+        {
+            
         }
         /// <summary>
         /// Make Deep clone of entity

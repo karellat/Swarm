@@ -3,6 +3,7 @@ using System.Diagnostics.Tracing;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -42,9 +43,15 @@ namespace SwarmSimFramework.Classes.Entities
             //Make bounds of touch sensor 
             LocalBounds[0] = new Bounds() {Max = 1, Min = 0};
             NormalizeFuncs = Entity.MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound); 
-
-
         }
+        /// <summary>
+        /// Json Constructor
+        /// </summary>
+        [JsonConstructor]
+        protected TouchSensor() : base("TouchSensor")
+        {
+        } 
+
         /// <summary>
         /// 
         /// </summary>

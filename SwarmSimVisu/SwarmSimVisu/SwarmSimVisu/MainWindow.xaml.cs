@@ -204,8 +204,8 @@ namespace SwarmSimVisu
         {
             var HeightMargin = MainGrid.ActualHeight - experiment.Map.MaxHeight;
             var WidthMargin = MainGrid.ActualWidth - experiment.Map.MaxWidth;
-            if (HeightMargin < 0 || WidthMargin < 0)
-                return false;
+            //if (HeightMargin < 0 || WidthMargin < 0)
+            //    return false;
 
             //Prepare grid and drawing canvas for map 
             DrawGrid = new Grid();

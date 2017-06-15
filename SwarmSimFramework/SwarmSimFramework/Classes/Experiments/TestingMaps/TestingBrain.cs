@@ -20,6 +20,10 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
         /// </summary>
         public const int WoodTreesAmount = 200;
         /// <summary>
+        /// Number of wood
+        /// </summary>
+        public const int WoodWoodAmount = 100;
+        /// <summary>
         /// Height of map
         /// </summary>
         public const float WoodMapHeight = 800;
@@ -63,6 +67,32 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, WoodTreesAmount);
             //set experiment
             RobotEntity robotModel = new ScoutCutterRobotWithMemory(new Vector2(0, 0));
+            List<RobotEntity> robots = new List<RobotEntity>();
+            for (int i = 0; i < 5; i++)
+            {
+                robots.Add((RobotEntity)robotModel.DeepClone());
+            }
+            //Initial position 
+            robots[0].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2));
+            robots[1].MoveTo(new Vector2(WoodMapWidth / 2 + 10, WoodMapHeight / 2));
+            robots[2].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 + 10));
+            robots[3].MoveTo(new Vector2(WoodMapWidth / 2 - 10, WoodMapHeight / 2));
+            robots[4].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 - 10));
+
+            return new Map.Map(WoodMapHeight, WoodMapWidth, robots, trees, null);
+        }
+
+        public static Map.Map GetWoodMapWorkers()
+        {
+            //Prepare models and fix the initial position
+            WoodEntity wood = new WoodEntity(new Vector2(0,0),5,10);
+            ObstacleEntity initPosition = new ObstacleEntity(new Vector2((WoodMapWidth / 2), (WoodMapHeight / 2)), 20);
+            //Generate radomly deployed tree
+            Map.Map preparedMap = new Map.Map(WoodMapHeight, WoodMapWidth, null, new List<CircleEntity>() { initPosition });
+            List<CircleEntity> trees =
+                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, WoodTreesAmount);
+            //set experiment
+            RobotEntity robotModel = new WorkerCutterRobot(new Vector2(0, 0));
             List<RobotEntity> robots = new List<RobotEntity>();
             for (int i = 0; i < 5; i++)
             {

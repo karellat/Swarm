@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -40,7 +41,14 @@ namespace SwarmSimFramework.Classes.Entities
             //Create normalization func to robot normal values
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }
-
+        /// <summary>
+        /// Json constructor
+        /// </summary>
+        [JsonConstructor]
+        protected FuelLineSensor() : base("Line Fuel Sensors")
+        {
+            
+        }
         public override Entity DeepClone()
         {
             return (Entity) this.MemberwiseClone();

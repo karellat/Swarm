@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
@@ -43,8 +44,12 @@ namespace SwarmSimFramework.Classes.Entities
             LocalBounds[2] = new Bounds() {Min = 0, Max = 10};
              
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
-
         }
+        /// <summary>
+        /// Json constructor
+        /// </summary>
+        [JsonConstructor]
+        protected TypeCircleSensor() : base ("Type Sensor") { }
         /// <summary>
         /// Count types in surrounding 
         /// </summary>

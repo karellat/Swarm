@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
 using System.Xml.Schema;
+using Newtonsoft.Json;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -38,6 +39,11 @@ namespace SwarmSimFramework.Classes.Entities
             LocalBounds[2] = new Bounds() { Max = robot.Radius, Min = -robot.Radius };
             LocalBounds[3] = new Bounds() { Max = robot.Radius, Min = -robot.Radius };
         }
+        /// <summary>
+        /// Json Constructor
+        /// </summary>
+        [JsonConstructor]
+        protected LocatorSensor() : base("LocatorSensor") { }
         /// <summary>
         /// Make deep clone of sensor
         /// </summary>

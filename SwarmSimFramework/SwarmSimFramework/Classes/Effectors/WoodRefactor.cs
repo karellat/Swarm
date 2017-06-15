@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlTypes;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -46,6 +47,14 @@ namespace SwarmSimFramework.Classes.Effectors
             LocalBounds = new [] {new Bounds(){Min=-1,Max = 1}, };
 
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound,LocalBounds);
+        }
+        /// <summary>
+        /// Json Constructor
+        /// </summary>
+        [JsonConstructor]
+        protected WoodRefactor() : base("Wood refactor")
+        {
+            
         }
         /// <summary>
         /// Make clone woodrefactor 

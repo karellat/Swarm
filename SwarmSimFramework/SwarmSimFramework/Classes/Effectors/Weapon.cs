@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -54,6 +55,14 @@ namespace SwarmSimFramework.Classes.Effectors
 
             LocalBounds = new [] {new Bounds(){Max=1, Min=0}, new Bounds() { Max = 1, Min = 0 }, new Bounds() { Max = 1, Min = 0 } };
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
+        }
+        /// <summary>
+        /// Json Constructor
+        /// </summary>
+        [JsonConstructor]
+        protected Weapon() : base("Weapon Effector")
+        {
+            
         }
         /// <summary>
         /// Make clone of weapon

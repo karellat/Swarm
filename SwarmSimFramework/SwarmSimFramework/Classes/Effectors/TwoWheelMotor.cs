@@ -4,6 +4,7 @@ using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
@@ -67,6 +68,14 @@ namespace SwarmSimFramework.Classes.Effectors
             RightVelocity = 0;
             LeftVelocity = 0;
         }
+        /// <summary>
+        /// Json Constructor
+        /// </summary>
+        [JsonConstructor]
+        protected TwoWheelMotor() : base("TwoWheelMotor")
+        {
+        }
+
 
         /// <summary>
         /// Reset position and normalization func

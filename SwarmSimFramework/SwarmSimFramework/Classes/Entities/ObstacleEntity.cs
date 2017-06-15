@@ -10,7 +10,7 @@ namespace SwarmSimFramework.Classes.Entities
     /// <summary>
     /// Represent Circle obstacle 
     /// </summary>
-    class ObstacleEntity : CircleEntity
+   public  class ObstacleEntity : CircleEntity
     {
         /// <summary>
         /// 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 
@@ -47,6 +48,15 @@ namespace SwarmSimFramework.Classes.Effectors
             LocalBounds[0] = new Bounds() {Max = 2,Min=0};
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound,LocalBounds);
         }
+        /// <summary>
+        /// Constructor for json
+        /// </summary>
+        [JsonConstructor]
+        protected MineralRefactor() : base("Mineral Refactor Effector")
+        {
+            
+        }
+
         /// <summary>
         /// Create clone of refactor 
         /// </summary>

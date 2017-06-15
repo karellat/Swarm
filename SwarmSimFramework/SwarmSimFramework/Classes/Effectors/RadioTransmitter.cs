@@ -4,6 +4,7 @@ using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 using System;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace SwarmSimFramework.Classes.Effectors
 {
@@ -74,6 +75,14 @@ namespace SwarmSimFramework.Classes.Effectors
             }
             NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound, LocalBounds);
 
+        }
+        /// <summary>
+        /// Json constructor
+        /// </summary>
+        [JsonConstructor]
+        protected RadioTransmitter() : base("RadioTransmiter")
+        {
+            
         }
         /// <summary>
         /// Create deep clone 
