@@ -16,18 +16,22 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Dimension of the ouput
         /// </summary>
+        [JsonProperty]
         public int Dimension { get; protected set;  }
         /// <summary>
         /// Local bounds 
         /// </summary>
+        [JsonProperty]
         public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalize Funcs 
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Orientation to robot FPoint, adds to the robot orientationToRobotFPoint to rotate to correct possition 
         /// </summary>
+        [JsonProperty]
         protected float OrientationToRobotFPoint;
         /// <summary>
         /// Return clone of this LineTypeSensor

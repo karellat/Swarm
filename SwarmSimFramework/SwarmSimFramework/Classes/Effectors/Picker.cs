@@ -24,14 +24,17 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <summary>
         /// Local bounds 0-1 - put 1-2 - idle 2-3 pick
         /// </summary>
+        [JsonProperty]
         public Bounds[] LocalBounds { get; protected set; }
         /// <summary>
         /// Normalization fnc from brain
         /// </summary>
+        [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set; }
         /// <summary>
         /// Orientation shift to FPoint of robot
         /// </summary>
+        [JsonProperty]
         protected float OrientationToRobotFPoint;
         /// <summary>
         /// Creates new picker with given  length & orientation to robot FPoint

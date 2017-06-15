@@ -131,6 +131,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <summary>
         /// Last read values 
         /// </summary>
+        [JsonProperty]
         public float[] LastReadValues = new float[9];
         /// <summary>
         /// Log local info
