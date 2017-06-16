@@ -257,17 +257,49 @@ namespace SwarmSimFramework.Classes.Entities
             r.Brain = null;
             r.Effectors = new IEffector[Effectors.Length];
             r.Sensors = new ISensor[Sensors.Length];
+            List<int> indexOfMemoryEffector = new List<int>();
+            List<int> indexOfMemorySensor = new List<int>();
+
+            //Clone all effectors and sensor except MemoryStick
             for (int i = 0; i < Effectors.Length; i++)
             {
-                r.Effectors[i] = Effectors[i].Clone(); 
-                r.Effectors[i].ConnectToRobot(r);
+                if (!(r.Effectors[i] is MemoryStick))
+                {
+                    r.Effectors[i] = Effectors[i].Clone();
+                    r.Effectors[i].ConnectToRobot(r);
+                }
+                else
+                {
+                    indexOfMemoryEffector.Add(i);
+                }
             }
             for (int i = 0; i < Sensors.Length; i++)
             {
-                r.Sensors[i] = Sensors[i].Clone(); 
-                r.Sensors[i].ConnectToRobot(r);
+                if (!(r.Sensors[i] is MemoryStick))
+                {
+                    r.Sensors[i] = Sensors[i].Clone();
+                    r.Sensors[i].ConnectToRobot(r);
+                }
+                else
+                {
+                    indexOfMemorySensor.Add(i);
+                }
             }
-            
+
+            //Clone MemoryStick 
+            if(indexOfMemorySensor.Count != indexOfMemoryEffector.Count)
+                throw new ArgumentException("Different amount of memory stick");
+            for (int i = 0; i < indexOfMemoryEffector.Count; i++)
+            {
+                if(r.Sensors[i] != r.Effectors[i])
+                    throw new ArgumentException("Wrongly connected memory stick");
+                var newMemory =(MemoryStick) r.Sensors[i].Clone();
+                r.Sensors[i] = newMemory;
+                r.Effectors[i] = newMemory;
+                r.Sensors[i].ConnectToRobot(r);
+                r.Effectors[i].ConnectToRobot(r);
+            }
+
             return r;
         }
         /// <summary>

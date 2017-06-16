@@ -8,6 +8,7 @@ using SwarmSimFramework.Interfaces;
 using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
+using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
@@ -79,40 +80,11 @@ protected SingleLayerNeuronNetwork originNetwork;
             //Prepare stuff for serialization 
             System.IO.Directory.CreateDirectory(WorkingDir);
 
-            //Prepare fitness count
-            RawMaterialEntity tree = new RawMaterialEntity(new Vector2(0,0),5,10,10);
-            WoodEntity wood = new WoodEntity(new Vector2(0,0),5,10);
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth/2,MapHeight/2),20);
-            //Generate randomly deployed tree
-            Map.Map preparedMap = new Map.Map(MapHeight,MapWidth,null, new List<CircleEntity>() {initPosition});
-            List<CircleEntity> trees =
-                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, AmountOfTrees);
-            var tp = trees.ToList();
-            tp.Add(initPosition);
-            preparedMap = new Map.Map(MapHeight, MapWidth, null, tp);
-            List<CircleEntity> woods = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, AmountOfWood);
-
+         
             //set experiment
             InitRobotEntities(new [] {model}, new[] { 5 });
             InitGenerationFile[0] = NameOfInitFile+ ".json";
-            //Prepare robot bodies
-            List<RobotEntity> robots = new List<RobotEntity>();
-            for (int i = 0; i < Models.Length; i++)
-            {
-                for (int j = 0; j < AmountOfRobots[i]; j++)
-                    robots.Add((RobotEntity) Models[i].DeepClone());
-            }
-            //Initial position 
-            robots[0].MoveTo(new Vector2(MapWidth/2,MapHeight/2));
-            robots[1].MoveTo(new Vector2(MapWidth / 2 + 10, MapHeight / 2));
-            robots[2].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 + 10));
-            robots[3].MoveTo(new Vector2(MapWidth / 2 -10, MapHeight / 2));
-            robots[4].MoveTo(new Vector2(MapWidth / 2, MapHeight / 2 -10));
-            //Prepare Map 
-            //merge trees and woods
-            var pas = woods.Concat(trees).ToList();
-            Map = new Map.Map(MapHeight,MapWidth,robots,pas);
-
+           
             //read from file, if exists
             if (File.Exists(InitGenerationFile[0]))
             {
