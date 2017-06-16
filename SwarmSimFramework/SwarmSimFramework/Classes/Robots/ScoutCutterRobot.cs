@@ -12,9 +12,9 @@ namespace SwarmSimFramework.Classes.Robots
             ISensor[] sensors = new ISensor[9];
 
             //Line Type Sensors
-            sensors[0] = new LineTypeSensor(this, 10, DegreesToRadians(45));
-            sensors[1] = new LineTypeSensor(this, 10, 0);
-            sensors[2] = new LineTypeSensor(this, 10, DegreesToRadians(-45));
+            sensors[0] = new LineTypeSensor(this, 50, DegreesToRadians(45));
+            sensors[1] = new LineTypeSensor(this, 50, 0);
+            sensors[2] = new LineTypeSensor(this, 50, DegreesToRadians(-45));
             //Locator
             sensors[3] = new LocatorSensor(this);
             //Type Line sensor

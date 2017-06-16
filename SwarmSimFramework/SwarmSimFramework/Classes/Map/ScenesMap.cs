@@ -29,13 +29,13 @@ namespace SwarmSimFramework.Classes.Map
                 rb.Add((RobotEntity) r.DeepClone());
             var pe = new List<CircleEntity>(PassiveEntities.Count);
             foreach (var p in PassiveEntities)
-                pe.Add(p);
+                pe.Add((CircleEntity)p.DeepClone());
             var fe = new List<FuelEntity>(FuelEntities.Count);
             foreach (var f in FuelEntities)
-                fe.Add(f);
+                fe.Add((FuelEntity) f.DeepClone());
             var cr = new List<RadioEntity>(ConstRadioSignals.Count);
             foreach (var c in ConstRadioSignals)
-                cr.Add(c);
+                cr.Add((RadioEntity) c.DeepClone());
                 
             
                 return new Map(MapHeight,MapWidth,rb,pe,fe,cr);

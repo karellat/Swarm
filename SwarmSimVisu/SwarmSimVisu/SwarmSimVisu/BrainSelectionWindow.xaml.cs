@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SwarmSimFramework.Classes.Experiments.TestingMaps;
 using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimVisu
@@ -43,7 +45,9 @@ namespace SwarmSimVisu
                     case 1:
                     {
                         name = "Wood map cutters";
-                        SelectedMap = TestingMaps.GetWoodMapCuters();
+                        WoodScene.AmountOfTrees = 200;
+                        SelectedMap = WoodScene.MakeMap(new[]
+                            {new RobotModel() {amount = 5, model = new ScoutCutterRobot((Vector2.Zero))}});
                         break;
                     }
                     case 2:

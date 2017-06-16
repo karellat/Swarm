@@ -194,6 +194,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             
             //Create new map, just reading values
             Map.Map map = MapModel.ConstructMap();
+            //DEBUG
+            foreach (var p in map.PasiveEntities)
+            {
+                if(p.Discovered)
+                    throw new NotImplementedException("Discovered entity");
+            }
             //model of brains, only for read
             var modelBrains = new T[ActualGeneration.Length];
             for (int i = 0; i < modelBrains.Length; i++)
