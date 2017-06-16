@@ -22,7 +22,7 @@ namespace SwarmSimFramework.Classes.Map
         /// Creates new map with given set up of robots etc
         /// </summary>
         public Map(float height, float width, List<RobotEntity> robots = null, List<CircleEntity> pasiveEntities = null,
-            List<FuelEntity> fuelEntities = null)
+            List<FuelEntity> fuelEntities = null, List<RadioEntity> constRadioSignals = null)
         {
             //Init characteristics of map 
             MaxHeight = height;
@@ -44,6 +44,7 @@ namespace SwarmSimFramework.Classes.Map
             modelRobotEntities = new List<RobotEntity>(Robots.Count);
             modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
             modelPasiveEntities = new List<CircleEntity>(RadioEntities.Count);
+            constantRadioSignal = constRadioSignals ?? new List<RadioEntity>(); 
 
             foreach (var r in Robots)
             {
@@ -58,6 +59,10 @@ namespace SwarmSimFramework.Classes.Map
             foreach (var f in FuelEntities)
             {
                 modelFuelEntities.Add((FuelEntity) f.DeepClone());
+            }
+            foreach (var r in constantRadioSignal)
+            {
+                RadioEntities.Add(r);
             }
             //Init colliding testing 
             CheckCorrectionOfPossition();
@@ -90,6 +95,10 @@ namespace SwarmSimFramework.Classes.Map
             {
                 FuelEntities.Add(f);
             }
+            foreach (var r in constantRadioSignal)
+            {
+                RadioEntities.Add(r);
+            }
             //No point of coping passive entities 
             //DEBUG
             CheckCorrectionOfPossition();
@@ -108,6 +117,8 @@ namespace SwarmSimFramework.Classes.Map
             }
             //Clean signals from map 
             RadioEntities.Clear();
+            //Add constant signals
+            constantRadioSignal.ForEach((entity =>RadioEntities.Add(entity)));
             //Random iteration through list of robot
             //Make movent, activate effectors
             foreach (int i in Enumerable.Range(0, Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
@@ -566,5 +577,9 @@ namespace SwarmSimFramework.Classes.Map
         /// Initial position of fuel
         /// </summary>
         private List<FuelEntity> modelFuelEntities;
+        /// <summary>
+        /// Const radio signals
+        /// </summary>
+        public List<RadioEntity> constantRadioSignal;
     }
 }

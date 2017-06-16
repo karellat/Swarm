@@ -1225,9 +1225,9 @@ namespace UnitTests
             map.PasiveEntities.Add(new Circle(new Vector2(13, 13), 1));
             map.PasiveEntities.Add(new Circle(new Vector2(140, 140), 1));
             map.Robots.Add(r);
-            TestExtensions.AssertArrayEquality(new[] {-100.0f, -20, -100}, ts.Count(r, map));
+            TestExtensions.AssertArrayEquality(new[] {-100.0f, 100, -100}, ts.Count(r, map));
             r.MoveTo(new Vector2(160, 160));
-            TestExtensions.AssertArrayEquality(new[] {-100.0f, -80, -100}, ts.Count(r, map));
+            TestExtensions.AssertArrayEquality(new[] {-100.0f, 100, -100}, ts.Count(r, map));
         }
     }
 

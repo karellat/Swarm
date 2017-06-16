@@ -85,9 +85,11 @@ namespace SwarmSimFramework.Classes.Map
             preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, tp);
             List<CircleEntity> woods = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, AmountOfWoods);
             List<CircleEntity> passive = woods;
+
+            List<RadioEntity> constSignals = new List<RadioEntity>(new []{new RadioEntity(new Vector2(MapWidth/2,MapHeight/2),50,0)});
             foreach (var t in trees)
                 passive.Add(t);
-            return new Map(MapHeight,MapWidth,null,passive);
+            return new Map(MapHeight,MapWidth,null,passive,null,constSignals);
 
         }
         /// <summary>
@@ -124,7 +126,7 @@ namespace SwarmSimFramework.Classes.Map
             }
 
             Map emptyMap = MakeEmptyMap(); 
-            return new Map(MapHeight,MapWidth,robots,emptyMap.PasiveEntities,emptyMap.FuelEntities);
+            return new Map(MapHeight,MapWidth,robots,emptyMap.PasiveEntities,emptyMap.FuelEntities,emptyMap.constantRadioSignal);
         }
     }
 }

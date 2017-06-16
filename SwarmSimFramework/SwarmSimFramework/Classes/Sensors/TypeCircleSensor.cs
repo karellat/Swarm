@@ -42,9 +42,9 @@ namespace SwarmSimFramework.Classes.Entities
             Dimension = 3;
             //set bounds of local values
             LocalBounds = new Bounds[3];
-            LocalBounds[0] = new Bounds() {Min = 0, Max = 10};
-            LocalBounds[1] = new Bounds() {Min = 0, Max = 10};
-            LocalBounds[2] = new Bounds() {Min = 0, Max = 10};
+            LocalBounds[0] = new Bounds() {Min = 0, Max = 1};
+            LocalBounds[1] = new Bounds() {Min = 0, Max = 1};
+            LocalBounds[2] = new Bounds() {Min = 0, Max = 1};
              
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
         }

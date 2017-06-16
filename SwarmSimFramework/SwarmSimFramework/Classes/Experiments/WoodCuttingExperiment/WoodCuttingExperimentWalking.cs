@@ -31,9 +31,9 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
         /// <summary>
         /// Name  of init file
         /// </summary>
-        protected string NameOfInitFile = "scoutCutterInitWithMem";
+        protected string NameOfInitFile = "scoutCutterInit";
 
-        protected RobotEntity model = new ScoutCutterRobotWithMemory(new Vector2(0, 0));
+        protected RobotEntity model = new ScoutCutterRobot(new Vector2(0, 0));
 
 
 /// <summary>
@@ -84,7 +84,10 @@ protected SingleLayerNeuronNetwork originNetwork;
             //set experiment
             InitRobotEntities(new [] {model}, new[] { 5 });
             InitGenerationFile[0] = NameOfInitFile+ ".json";
-           
+            //Prepare map
+            WoodScene.AmountOfTrees = AmountOfTrees;
+            WoodScene.AmountOfWoods = AmountOfWood;
+            Map = WoodScene.MakeMap(new[] {new RobotModel() {amount = 5, model = Models[0]}});
             //read from file, if exists
             if (File.Exists(InitGenerationFile[0]))
             {
