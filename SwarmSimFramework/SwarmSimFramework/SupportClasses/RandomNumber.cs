@@ -7,20 +7,23 @@ namespace SwarmSimFramework.SupportClasses
     public static class RandomNumber
     {
         private static Random randomNumber = new Random(13051995);
-
+        private static object randomLock = new object();
         public static int GetRandomInt(int min, int max)
         {
-            return randomNumber.Next(min, max);
+            lock(randomLock)
+            { return randomNumber.Next(min, max);}
         }
 
         public static int GetRandomInt(int max)
         {
-            return randomNumber.Next(max);
+            lock(randomLock)
+            { return randomNumber.Next(max);}
         }
 
         public static int GetRandomInt()
         {
-            return randomNumber.Next();
+            lock(randomLock)
+            { return randomNumber.Next();}
         }
         /// <summary>
         /// Return random float [0,1]
@@ -28,7 +31,8 @@ namespace SwarmSimFramework.SupportClasses
         /// <returns></returns>
         public static float GetRandomFloat()
         {
-            return (float) randomNumber.NextDouble();
+            lock(randomLock)
+            { return (float) randomNumber.NextDouble();}
         }
 
     }

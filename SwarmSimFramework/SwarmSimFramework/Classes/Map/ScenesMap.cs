@@ -12,6 +12,35 @@ namespace SwarmSimFramework.Classes.Map
         public RobotEntity model;
         public int amount; 
     }
+
+    public struct MapModel
+    {
+        public float MapHeight;
+        public float MapWidth;
+        public List<RobotEntity> RobotBodies;
+        public List<CircleEntity> PassiveEntities;
+        public List<FuelEntity> FuelEntities;
+        public List<RadioEntity> ConstRadioSignals;
+
+        public Map ConstructMap()
+        {
+            var rb = new List<RobotEntity>(RobotBodies.Count);
+            foreach (var r in RobotBodies)
+                rb.Add((RobotEntity) r.DeepClone());
+            var pe = new List<CircleEntity>(PassiveEntities.Count);
+            foreach (var p in PassiveEntities)
+                pe.Add(p);
+            var fe = new List<FuelEntity>(FuelEntities.Count);
+            foreach (var f in FuelEntities)
+                fe.Add(f);
+            var cr = new List<RadioEntity>(ConstRadioSignals.Count);
+            foreach (var c in ConstRadioSignals)
+                cr.Add(c);
+                
+            
+                return new Map(MapHeight,MapWidth,rb,pe,fe,cr);
+        }
+    }
     public static class WoodScene
     {
         //WOOD EXPERIMENT - VARIABLES 
@@ -98,7 +127,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <param name="robotModels"></param>
         /// <param name="amountOfRobots"></param>
         /// <returns></returns>
-        public static Map MakeMap(RobotModel[] models)
+        public static MapModel MakeMapModel(RobotModel[] models)
         {
             //Check size & amount 
             int amountOfRobot = 0;
@@ -125,8 +154,21 @@ namespace SwarmSimFramework.Classes.Map
                 r.MoveTo(initPos[index]);
             }
 
-            Map emptyMap = MakeEmptyMap(); 
-            return new Map(MapHeight,MapWidth,robots,emptyMap.PasiveEntities,emptyMap.FuelEntities,emptyMap.constantRadioSignal);
+            Map emptyMap = MakeEmptyMap();
+            return new MapModel()
+            {
+                MapHeight = MapHeight,
+                MapWidth = MapWidth,
+                ConstRadioSignals = emptyMap.constantRadioSignal,
+                FuelEntities = emptyMap.FuelEntities,
+                PassiveEntities = emptyMap.PasiveEntities,
+                RobotBodies = robots
+            };
+        }
+
+        public static Map MakeMap(RobotModel[] models)
+        {
+            return MakeMapModel(models).ConstructMap();
         }
     }
 }

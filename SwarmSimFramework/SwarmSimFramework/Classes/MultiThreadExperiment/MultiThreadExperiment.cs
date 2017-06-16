@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.Experiments;
+using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses.AwokeKnowing.GnuplotCSharp;
 
@@ -17,20 +19,24 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Size of population(amount of brains) 
         /// </summary>
-        public int PopulationSize = 1000;
+        public int PopulationSize = 100;
         /// <summary>
         /// Amount of generation iteration 
         /// </summary>
-        public int NumberOfGenerations = 20;
+        public int NumberOfGenerations = 100;
         /// <summary>
         /// Iteration between fitness count
         /// </summary>
         public int MapIteration = 1000;
-
         /// <summary>
-        /// Model of testing robots
+        /// Name of experiment
         /// </summary>
-        public RobotEntity[] Models = null;
+        public string Name;
+        //ROBOTS & BRAIN FOR THEM
+        /// <summary>
+        /// Model of testing robots with amount of them 
+        /// </summary>
+        public RobotModel[] Models;
 
 
         //SERIALIZATION 
@@ -44,25 +50,16 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Cycle of graph drawing
         /// </summary>
-        protected const int GraphGenerationIndex = 25;
+        protected const int GraphGenerationIndex = 1;
         /// <summary>
         /// Cycle of loging info
         /// </summary>
-        protected const int LogGenerationIndex = 10;
+        protected const int LogGenerationIndex = 1;
         /// <summary>
         /// Graphs of brains
         /// </summary>
         protected FitPlot[] Graphs = null;
 
-        //MAP CHARACTERISTICS 
-        /// <summary>
-        /// Height of map
-        /// </summary>
-        public float MapHeight = 800;
-        /// <summary>
-        /// Width of map 
-        /// </summary>
-        public float MapWidth = 1200;
 
         //GENERATION 
         /// <summary>
@@ -76,21 +73,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         //MAP STATES 
         /// <summary>
-        /// Models with localization of robot bodies used for reading only
+        /// Model of map including models of Entities, Height and Width
         /// </summary>
-        protected List<RobotEntity> ModelsOfRobots;
-        /// <summary>
-        /// Models with localization of pasive entities used for reading only 
-        /// </summary>
-        protected List<CircleEntity> ModelsOfPasiveEntities;
-        /// <summary>
-        /// Models with localization of fuel entities used for reading only 
-        /// </summary>
-        protected List<FuelEntity> ModelsOfFuelEntities;
-        /// <summary>
-        /// Models with localization of radio signals which are permatnent used for reading only
-        /// </summary>
-        protected List<RadioEntity> PermanentRadioSignals;
+        protected MapModel MapModel;
         /// <summary>
         /// Threads making evaluating of brains
         /// </summary>
@@ -116,37 +101,40 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             Init();
             //Init part
             FollowingGeneration = new ConcurrentStack<T>[ActualGeneration.Length];
+            Graphs = new FitPlot[ActualGeneration.Length];
             for (int i = 0; i < ActualGeneration.Length; i++)
             {
                 FollowingGeneration[i] = new ConcurrentStack<T>();
-                Graphs[i] = new FitPlot(ActualGeneration[i].Count,Models[i].Name);
+                Graphs[i] = new FitPlot(ActualGeneration[i].Count,Models[i].model.Name);
             }
             for (int generationIndex  = 0; generationIndex  < NumberOfGenerations; generationIndex ++)
             {
                 GenerationFinnished = false;
+                FreeBrainIndex = 0;
                 lock(ControlLock)
                 {
                     while (!GenerationFinnished)
                     {
                         for (int j = 0; j < Threads.Length; j++)
                         {
-                            if (FreeBrainIndex == NumberOfGenerations) break;
+                            if (FreeBrainIndex == PopulationSize) break;
 
-                            if (Threads[generationIndex ].IsAlive == false)
+                            if (Threads[j] == null || Threads[j].IsAlive == false)
                             {
-                                var threadIndex = FreeBrainIndex;
-                                Threads[generationIndex ] = new Thread(() => SingleBrainEvaluationMt(threadIndex));
-                                Threads[generationIndex ].Start();
+                                int threadIndex = FreeBrainIndex;
+                                Threads[j] = new Thread(() => SingleBrainEvaluationMt(threadIndex));
+                                Threads[j].Start();
                                 FreeBrainIndex++;
                             }
                         }
-                        Monitor.Wait(ControlLock);
+                        //Monitor.Wait(ControlLock);
                     }
                 }
-                //Change generation
+                //Change generation, clear buffer
                 for (int j = 0; j < ActualGeneration.Length; j++)
                 {
-                    ActualGeneration[j] = new List<T>(FollowingGeneration[generationIndex].ToArray());
+                    ActualGeneration[j] = new List<T>(FollowingGeneration[j].ToArray());
+                    FollowingGeneration[j].Clear();
                 }
        
                 Console.WriteLine(generationIndex +". Generation finnished");
@@ -166,6 +154,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         sb.AppendLine("\t\tBrain " + j + ". " + ActualGeneration[j][i.BestBrainIndex].Log().ToString());
                     }
                     Console.WriteLine(sb.ToString());
+                    //Serialize best brain
+                    //Serialize brain 
+                    StreamWriter n = new StreamWriter("bestbrain" + generationIndex + ".json");
+                    n.Write(i.BestBrain.SerializeBrain());
+                    n.Close();
                 }
                 //fill graphs
                 FillGraphs(generationIndex);
@@ -180,7 +173,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     for (var index = 0; index < ActualGeneration.Length; index++)
                     {
                         var a = ActualGeneration[index];
-                        StreamWriter sw = new StreamWriter("Generation" + generationIndex + "Brain" + index +".json");
+                        StreamWriter sw = new StreamWriter( Name + "gen" + generationIndex + "Brain" + index +".json");
                         BrainSerializer.SerializeArray(a.ToArray());
                     }
                 }
@@ -198,9 +191,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <param name="brainIndex"></param>
         protected void SingleBrainEvaluationMt(int brainIndex)
         {
-            //TODO: add radio signals 
+            
             //Create new map, just reading values
-            Map.Map map = new Map.Map(MapHeight,MapWidth,ModelsOfRobots,ModelsOfPasiveEntities,ModelsOfFuelEntities);
+            Map.Map map = MapModel.ConstructMap();
             //model of brains, only for read
             var modelBrains = new T[ActualGeneration.Length];
             for (int i = 0; i < modelBrains.Length; i++)
@@ -208,14 +201,14 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 modelBrains[i] = ActualGeneration[i][brainIndex];
             }
             //Create new brains implemented by evolution alg
-            var evalBrains = SingleBrainSelection();
+            var evalBrains = SingleBrainSelection(modelBrains);
             //For model choose suitable brain
             foreach (var r in map.Robots)
             {
                 for (int i = 0; i < Models.Length; i++)
                 {
-                    if (r.GetType() == Models[i].GetType())
-                        r.Brain = evalBrains[i];
+                    if (evalBrains[i].SuitableRobot(r))
+                        r.Brain = evalBrains[i].Brain.GetCleanCopy();
                 }
             }
 
@@ -230,16 +223,14 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 for (int i = 0; i < evalBrains.Length; i++)
                 {
                     //Set fitness to brains
-                    evalBrains[i].Fitness = fitness;
-                    FollowingGeneration[i].Push(evalBrains[i]);
+                    evalBrains[i].Brain.Fitness = fitness;
+                    FollowingGeneration[i].Push(evalBrains[i].Brain);
                 }
             }
             else
             {
                 for (int i = 0; i < modelBrains.Length; i++)
-                {
                     FollowingGeneration[i].Push(modelBrains[i]);
-                }
             }
 
             //Check if this is the last running thread
@@ -253,13 +244,16 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //Set if generation done
             if (lastRunning) GenerationFinnished = true;
             //Wake up the Control Thread
-            Monitor.Pulse(ControlLock);
+            //lock (ControlLock)
+            //{
+            //    Monitor.Pulse(ControlLock);
+            //}
         }
         /// <summary>
         /// Thread safe brain creation 
         /// </summary>
         /// <returns></returns>
-        protected abstract T[] SingleBrainSelection();
+        protected abstract BrainModel<T>[] SingleBrainSelection(T[] evolveBrains);
         /// <summary>
         /// Fitness count after one map simulation
         /// </summary>
