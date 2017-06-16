@@ -9,23 +9,19 @@ namespace SwarmSimFramework.Classes.Robots
         public WorkerCutterRobot(Vector2 middle, float orientation = 0)
             : base(middle, 5f, "ScoutRobot", null, null, 100, 5, 1, 100, 100, -100, orientation)
         {
-            ISensor[] sensors = new ISensor[11];
-            //FUEL Sensors
-            sensors[0] = new FuelLineSensor(this, 10, DegreesToRadians(45));
-            sensors[1] = new FuelLineSensor(this, 10, 0);
-            sensors[2] = new FuelLineSensor(this, 10, DegreesToRadians(-45));
+            ISensor[] sensors = new ISensor[8];
             //Line Type Sensors
-            sensors[3] = new LineTypeSensor(this, 10, DegreesToRadians(45));
-            sensors[4] = new LineTypeSensor(this, 10, 0);
-            sensors[5] = new LineTypeSensor(this, 10, DegreesToRadians(-45));
+            sensors[0] = new LineTypeSensor(this, 25, DegreesToRadians(45));
+            sensors[1] = new LineTypeSensor(this, 25, 0);
+            sensors[2] = new LineTypeSensor(this, 25, DegreesToRadians(-45));
             //Locator
-            sensors[6] = new LocatorSensor(this);
+            sensors[3] = new LocatorSensor(this);
             //Touch sensors
-            sensors[7] = new TouchSensor(this, 0.1f, DegreesToRadians(90));
-            sensors[8] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
-            sensors[9] = new TouchSensor(this, 0.1f, DegreesToRadians(270));
+            sensors[4] = new TouchSensor(this, 0.1f, DegreesToRadians(90));
+            sensors[5] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
+            sensors[6] = new TouchSensor(this, 0.1f, DegreesToRadians(270));
             //Radio sensor 
-            sensors[10] = new RadioSensor(this, 100);
+            sensors[7] = new RadioSensor(this, 100);
 
             this.Sensors = sensors;
 
