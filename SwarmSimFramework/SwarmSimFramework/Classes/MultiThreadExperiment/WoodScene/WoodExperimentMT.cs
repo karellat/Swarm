@@ -65,6 +65,76 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 }
             }
         }
+
+        protected override void Init(string[] nameOfInitialFile)
+        {
+            WoodScene.AmountOfTrees = AmountOfTrees;
+            WoodScene.AmountOfWoods = AmountOfWood;
+            MapModel = WoodScene.MakeMapModel(Models);
+
+            //Prepare model brains from models
+            BrainModels = new BrainModel<SingleLayerNeuronNetwork>[Models.Length];
+            for (int i = 0; i < Models.Length; i++)
+            {
+                BrainModels[i] = new BrainModel<SingleLayerNeuronNetwork>()
+                {
+                    Robot = Models[i].model,
+                    Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
+                    {
+                        Input = Models[i].model.SensorsDimension,
+                        Output = Models[i].model.EffectorsDimension
+                    })
+                };
+            }
+
+            if(Models.Length != nameOfInitialFile.Length)
+                throw new ArgumentException("Wrong parameters");
+            //Generate actual Generation
+            ActualGeneration = new List<SingleLayerNeuronNetwork>[Models.Length];
+            for (int i = 0; i < nameOfInitialFile.Length; i++)
+            {
+                StreamReader s = new StreamReader(nameOfInitialFile[i]);
+                String text = s.ReadToEnd(); 
+                ActualGeneration[i] = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(text).ToList();
+            }
+
+            //DEBUG 
+            int size = ActualGeneration[0].Count;
+            foreach (var a in ActualGeneration)
+            {
+                if(a.Count != size)
+                    throw new ArgumentException("Invalid size of actual generation ");
+            }
+
+            //Evaluate brains for actual fitness
+            Console.WriteLine("Brains read from serialization file, evaluating brains by local fitness");
+
+
+            for (int i = 0; i < ActualGeneration[0].Count; i++)
+            {
+                Map.Map map = MapModel.ConstructMap();
+                //Set all brains to Robots  
+                foreach (var r in map.Robots)
+                {
+                    for (int j = 0; j < BrainModels.Length; i++)
+                    {
+                        if (BrainModels[j].SuitableRobot(r) && BrainModels[j].SuitableBrain(ActualGeneration[j][i]))
+                            r.Brain = ActualGeneration[j][i].GetCleanCopy();
+                    }
+                }
+
+                //iterate map
+                for (int q = 0; q < MapIteration; q++)
+                    map.MakeStep();
+                double fitness = CountFitness(map);
+                //Set fitness from current experiment
+                for (int j = 0; j < ActualGeneration.Length; j++)
+                    ActualGeneration[j][i].Fitness = fitness;
+            }
+            Console.WriteLine("Init from files finnished.");
+
+        }
+
         /// <summary>
         /// Create new brain for suitable robot
         /// </summary>

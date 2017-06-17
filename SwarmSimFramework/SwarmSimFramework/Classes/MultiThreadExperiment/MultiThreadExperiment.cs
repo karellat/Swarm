@@ -94,11 +94,15 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Index of first 
         /// </summary>
         protected int FreeBrainIndex = 0;
-        public void Run()
+        public void Run(string[] nameOfInitFile=null)
         {
             //Init Threads
             Threads = new Thread[Environment.ProcessorCount];
-            Init();
+            //Init specific experiment
+            if(nameOfInitFile == null)
+                Init();
+            else
+                Init(nameOfInitFile);
             //Init part
             FollowingGeneration = new ConcurrentStack<T>[ActualGeneration.Length];
             Graphs = new FitPlot[ActualGeneration.Length];
@@ -174,7 +178,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     {
                         var a = ActualGeneration[index];
                         StreamWriter sw = new StreamWriter( Name + "gen" + generationIndex + "Brain" + index +".json");
-                        BrainSerializer.SerializeArray(a.ToArray());
+                        sw.Write(BrainSerializer.SerializeArray(a.ToArray()));
+                        sw.Close();
                     }
                 }
             }
@@ -184,7 +189,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Init Experiment fill models, prepare actual generation
         /// </summary>
         protected abstract void Init();
-
+        /// <summary>
+        /// Create actual generation from file and evaluate it by current fitness
+        /// </summary>
+        /// <param name="nameOfInitialFile"></param>
+        protected abstract void Init(string[] nameOfInitialFile);
         /// <summary>
         /// Threadsafe implementation of evaluating brain
         /// </summary>

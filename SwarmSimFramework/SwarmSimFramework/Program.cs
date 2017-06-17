@@ -19,7 +19,7 @@ namespace SwarmSimFramework
 
           
             var exp = new WoodCuttorWalk();
-            exp.Run();
+            exp.Run(new [] {"WoodCuttorWalkgen900Brain0.json"});
         }
     }
 }

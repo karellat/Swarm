@@ -80,6 +80,7 @@
     <Compile Include="Classes\Map\ScenesMap.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MultiThreadExperiment.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalk.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalkWithMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodExperimentMT.cs" />
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
