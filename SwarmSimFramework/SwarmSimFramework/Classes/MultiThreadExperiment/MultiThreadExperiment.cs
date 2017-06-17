@@ -101,8 +101,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected int FreeBrainIndex = 0;
         public void Run(string[] nameOfInitFile=null)
         {
-            //Log info dir 
-            System.IO.Directory.CreateDirectory(WorkingDir);
+
             //Init Threads
             Threads = new Thread[Environment.ProcessorCount];
             //Init specific experiment
@@ -111,6 +110,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             else
                 Init(nameOfInitFile);
             //Init part
+            //Log info dir 
+            System.IO.Directory.CreateDirectory(WorkingDir);
             FollowingGeneration = new ConcurrentStack<T>[ActualGeneration.Length];
             Graphs = new FitPlot[ActualGeneration.Length];
             for (int i = 0; i < ActualGeneration.Length; i++)
