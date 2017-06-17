@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SwarmSimFramework.Classes.Experiments;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.MultiThreadExperiment;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 
 namespace SwarmSimFramework
@@ -16,10 +17,14 @@ namespace SwarmSimFramework
     {
         static void Main(string[] args)
         {
-
-          
-            var exp = new WoodCuttorWalk();
-            exp.Run(new [] {"WoodCuttorWalkgen900Brain0.json"});
+            MultiThreadExperiment<SingleLayerNeuronNetwork> exp;
+           if(args[0] == "0")
+             exp = new WoodCuttorWalkWithMem();
+           else
+             exp = new WoodCuttorWalk();
+            exp.Run();
+            Console.WriteLine("Simulation finnished");
+            Console.ReadLine();
         }
     }
 }

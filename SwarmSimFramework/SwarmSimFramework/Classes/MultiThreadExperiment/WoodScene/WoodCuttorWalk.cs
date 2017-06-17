@@ -11,6 +11,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// </summary>
         protected override void Init()
         {
+            WorkingDir = "WoodCuttorWalk";
             PopulationSize = 100;
             NumberOfGenerations = 1000;
             Name = "WoodCuttorWalk";
@@ -30,6 +31,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         protected override void Init(string[] nameOfInitialFile)
         {
+            WorkingDir = "WoodCuttorWalk";
             PopulationSize = 100;
             NumberOfGenerations = 1000;
             Name = "WoodCuttorWalk";

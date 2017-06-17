@@ -9,7 +9,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
     {
         protected override void Init()
         {
-            Name = "WoodCuttorWalk";
+            WorkingDir = "WoodCuttorMemWalk";
+            PopulationSize = 100;
+            NumberOfGenerations = 1000;
+            Name = "WoodCuttorMemWalk";
             Models = new RobotModel[1];
             Models[0] = new RobotModel()
             {
@@ -26,7 +29,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         protected override void Init(string[] nameOfInitialFile)
         {
-            Name = "WoodCuttorWalk";
+            WorkingDir = "WoodCuttorMemWalk";
+            PopulationSize = 100;
+            NumberOfGenerations = 1000;
+            Name = "WoodCuttorMemWalk";
             Models = new RobotModel[1];
             Models[0] = new RobotModel()
             {

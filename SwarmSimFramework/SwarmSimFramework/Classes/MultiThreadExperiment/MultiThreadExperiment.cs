@@ -60,6 +60,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// </summary>
         protected FitPlot[] Graphs = null;
 
+        /// <summary>
+        /// Dir for saving serialization files
+        /// </summary>
+        protected string WorkingDir = "mtdir";
+
 
         //GENERATION 
         /// <summary>
@@ -96,6 +101,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected int FreeBrainIndex = 0;
         public void Run(string[] nameOfInitFile=null)
         {
+            //Log info dir 
+            System.IO.Directory.CreateDirectory(WorkingDir);
             //Init Threads
             Threads = new Thread[Environment.ProcessorCount];
             //Init specific experiment
@@ -160,7 +167,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     Console.WriteLine(sb.ToString());
                     //Serialize best brain
                     //Serialize brain 
-                    StreamWriter n = new StreamWriter("bestbrain" + generationIndex + ".json");
+                    StreamWriter n = new StreamWriter( WorkingDir + "\\bestbrain" + generationIndex + ".json");
                     n.Write(i.BestBrain.SerializeBrain());
                     n.Close();
                 }
@@ -177,7 +184,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     for (var index = 0; index < ActualGeneration.Length; index++)
                     {
                         var a = ActualGeneration[index];
-                        StreamWriter sw = new StreamWriter( Name + "gen" + generationIndex + "Brain" + index +".json");
+                        StreamWriter sw = new StreamWriter(WorkingDir + "\\" + Name + "gen" + generationIndex + "Brain" + index +".json");
                         sw.Write(BrainSerializer.SerializeArray(a.ToArray()));
                         sw.Close();
                     }

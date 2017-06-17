@@ -116,7 +116,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 //Set all brains to Robots  
                 foreach (var r in map.Robots)
                 {
-                    for (int j = 0; j < BrainModels.Length; i++)
+                    for (int j = 0; j < BrainModels.Length; j++)
                     {
                         if (BrainModels[j].SuitableRobot(r) && BrainModels[j].SuitableBrain(ActualGeneration[j][i]))
                             r.Brain = ActualGeneration[j][i].GetCleanCopy();
