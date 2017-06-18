@@ -19,9 +19,9 @@ namespace SwarmSimFramework
         {
             MultiThreadExperiment<SingleLayerNeuronNetwork> exp;
            if(args[0] == "0")
-             exp = new WoodWorkerWalkMem();
+             exp = new WoodWorkerPickUpMem();
            else
-             exp = new WoodWorkerWalk();
+             exp = new WoodWorkerPickUp();
            exp.Run();
            Console.WriteLine("Simulation finnished");
            Console.ReadLine();

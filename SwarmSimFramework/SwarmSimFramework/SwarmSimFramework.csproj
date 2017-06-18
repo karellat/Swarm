@@ -82,6 +82,8 @@
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalk.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalkWithMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodExperimentMT.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodWorkerPickUp.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodWorkerPickUpMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodWorkerWalk.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodWorkerWalkMem.cs" />
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />

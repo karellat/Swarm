@@ -26,6 +26,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         public int ValueOfDiscoveredTree { get; protected set; }
 
+        public double ValueOfStockedWood { get; protected set; }
+        public double ValueOfContaineredWood { get; protected set; }
+
 
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
 
@@ -195,6 +198,30 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
 
         }
+        protected double StockContainerFitness(double basicFitness,Map.Map map)
+        {
+            double fit = basicFitness;
+            //dependend on the wood scene
 
+            //Count wood on the stockPlace
+            var stockSignal = map.constantRadioSignal[0];
+            var stockItems = map.CollisionColor(stockSignal);
+            int minedWood = stockItems.ContainsKey(Entity.EntityColor.WoodColor)
+                ? stockItems[Entity.EntityColor.WoodColor].Amount
+                : 0;
+
+            // Count wood in containers 
+            int woodInContainers = 0;
+            foreach (var r in map.Robots)
+            {
+                foreach (var item in r.ContainerList())
+                {
+                    if (item.Color == Entity.EntityColor.WoodColor)
+                        woodInContainers++;
+                }
+            }
+
+            return fit + (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
+        }
     }
 }
