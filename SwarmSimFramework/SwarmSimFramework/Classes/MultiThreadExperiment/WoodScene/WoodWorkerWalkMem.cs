@@ -19,7 +19,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             Models[0] = new RobotModel()
             {
                 amount = 4,
-                model = new WoodWorkerRobot(Vector2.Zero)
+                model = new WoodWorkerRobotMem(Vector2.Zero)
             };
             AmountOfTrees = 50;
             AmountOfWood = 200;

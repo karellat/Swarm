@@ -20,8 +20,8 @@ namespace SwarmSimFramework
             MultiThreadExperiment<SingleLayerNeuronNetwork> exp;
             if (args[0] == "0")
             {
-                exp = new WoodWorkerPickUpMem();
-                exp.Run(new[] { "Init0.json" });
+                exp = new WoodWorkerWalkMem();
+                exp.Run();
             }
             else
             {
