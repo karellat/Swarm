@@ -32,7 +32,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Init map for woodExperiment with given models init in children
         /// </summary>
-        protected override void Init()
+        protected override void Init(string[] nameOfInitialFile = null)
         {
             WoodScene.AmountOfTrees = AmountOfTrees;
             WoodScene.AmountOfWoods = AmountOfWood;
@@ -53,6 +53,17 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 };
             }
 
+            if(nameOfInitialFile == null)
+                GenerateBrains();
+            else
+                ReadBrainsFromFiles(nameOfInitialFile);
+        }
+        /// <summary>
+        /// Generate new brains for actual assignment
+        /// </summary>
+        protected void GenerateBrains()
+        {
+            Console.WriteLine("Generationg new brains.");
             //Generate actual Generation
             ActualGeneration = new List<SingleLayerNeuronNetwork>[Models.Length];
             for (int i = 0; i < ActualGeneration.Length; i++)
@@ -61,40 +72,27 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 var m = Models[i].model;
                 for (int j = 0; j < PopulationSize; j++)
                 {
-                    ActualGeneration[i].Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension(){Input = m.SensorsDimension,Output = m.EffectorsDimension}));
+                    ActualGeneration[i].Add(SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension() { Input = m.SensorsDimension, Output = m.EffectorsDimension }));
                 }
             }
+            Console.WriteLine("Brains generated");
         }
 
-        protected override void Init(string[] nameOfInitialFile)
+        /// <summary>
+        /// Create brains from a file 
+        /// </summary>
+        /// <param name="nameOfInitialFile"></param>
+        protected void ReadBrainsFromFiles(string[] nameOfInitialFile)
         {
-            WoodScene.AmountOfTrees = AmountOfTrees;
-            WoodScene.AmountOfWoods = AmountOfWood;
-            MapModel = WoodScene.MakeMapModel(Models);
-
-            //Prepare model brains from models
-            BrainModels = new BrainModel<SingleLayerNeuronNetwork>[Models.Length];
-            for (int i = 0; i < Models.Length; i++)
-            {
-                BrainModels[i] = new BrainModel<SingleLayerNeuronNetwork>()
-                {
-                    Robot = Models[i].model,
-                    Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
-                    {
-                        Input = Models[i].model.SensorsDimension,
-                        Output = Models[i].model.EffectorsDimension
-                    })
-                };
-            }
-
-            if(Models.Length != nameOfInitialFile.Length)
+            if (Models.Length != nameOfInitialFile.Length)
                 throw new ArgumentException("Wrong parameters");
+
             //Generate actual Generation
             ActualGeneration = new List<SingleLayerNeuronNetwork>[Models.Length];
             for (int i = 0; i < nameOfInitialFile.Length; i++)
             {
                 StreamReader s = new StreamReader(nameOfInitialFile[i]);
-                String text = s.ReadToEnd(); 
+                String text = s.ReadToEnd();
                 ActualGeneration[i] = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(text).ToList();
             }
 
@@ -102,7 +100,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             int size = ActualGeneration[0].Count;
             foreach (var a in ActualGeneration)
             {
-                if(a.Count != size)
+                if (a.Count != size)
                     throw new ArgumentException("Invalid size of actual generation ");
             }
 
@@ -132,9 +130,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     ActualGeneration[j][i].Fitness = fitness;
             }
             Console.WriteLine("Init from files finnished.");
-
         }
-
         /// <summary>
         /// Create new brain for suitable robot
         /// </summary>

@@ -93,14 +93,16 @@ Zaver - uvod v minulym case, shrnuti, jak zlepsit
 
 * Worker Robot (radius 5)
 	* container size: 5
-	* TwoWheelMotor
-	* Picker
+
 	* 3x FuelLineSensor
 	* 3x LineTypeSensor
 	* 3x TouchSensor 
 	* LocatorSensor
 	* RadioSensor
+	
 	* RadioTransmiter
+	* TwoWheelMotor
+	* Picker
 
 ### Competetive
 * Light scout unit  

@@ -50,7 +50,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Cycle of graph drawing
         /// </summary>
-        protected const int GraphGenerationIndex = 1;
+        protected const int GraphGenerationIndex = 10;
         /// <summary>
         /// Cycle of loging info
         /// </summary>
@@ -105,10 +105,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //Init Threads
             Threads = new Thread[Environment.ProcessorCount];
             //Init specific experiment
-            if(nameOfInitFile == null)
-                Init();
-            else
-                Init(nameOfInitFile);
+            Init(nameOfInitFile);
             //Init part
             //Log info dir 
             System.IO.Directory.CreateDirectory(WorkingDir);
@@ -180,7 +177,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     DrawGraphs(generationIndex);
                 }
                 //Serialize brains
-                if (generationIndex % AllBrainSerializationCycle == 0)
+                if (generationIndex % AllBrainSerializationCycle == 0 || generationIndex == NumberOfGenerations-1 )
                 {
                     for (var index = 0; index < ActualGeneration.Length; index++)
                     {
@@ -193,12 +190,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             }
             
         }
+
         /// <summary>
         /// Init Experiment fill models, prepare actual generation
-        /// </summary>
-        protected abstract void Init();
-        /// <summary>
-        /// Create actual generation from file and evaluate it by current fitness
         /// </summary>
         /// <param name="nameOfInitialFile"></param>
         protected abstract void Init(string[] nameOfInitialFile);

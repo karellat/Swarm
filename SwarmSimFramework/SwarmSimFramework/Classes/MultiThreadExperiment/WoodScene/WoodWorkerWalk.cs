@@ -4,28 +4,29 @@ using SwarmSimFramework.Classes.Robots;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
-    public class WoodCuttorWalkWithMem : WoodExperimentMt
-    
+    public class WoodWorkerWalk : WoodExperimentMt
     {
+        /// <summary>
+        /// Prepare models and fitness eval
+        /// </summary>
         protected override void Init(string[] nameOfInitialFile)
         {
-            WorkingDir = "WoodCuttorMemWalk";
+            WorkingDir = "WoodWorkerWalk";
             PopulationSize = 100;
             NumberOfGenerations = 1000;
-            Name = "WoodCuttorMemWalk";
+            Name = "WoodWorkerWalk";
             Models = new RobotModel[1];
             Models[0] = new RobotModel()
             {
-                amount = 5,
-                model = new ScoutCutterRobotWithMemory(new Vector2(0, 0))
+                amount = 4,
+                model = new WoodWorkerRobot(Vector2.Zero)
             };
-            AmountOfTrees = 200;
-            AmountOfWood = 0;
-            ValueOfDiscoveredTree = 1000;
-            ValueOfCutWood = 1050;
+            AmountOfTrees = 50;
+            AmountOfWood = 200;
+            ValueOfDiscoveredTree = 0;
+            ValueOfCutWood = 1000;
             ValueOfCollision = 0;
             base.Init(nameOfInitialFile);
         }
-
     }
 }

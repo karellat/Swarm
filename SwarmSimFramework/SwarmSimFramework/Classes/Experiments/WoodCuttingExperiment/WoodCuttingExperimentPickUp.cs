@@ -13,7 +13,7 @@ namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
             AmountOfWood = 200;
             NameOfInitFile = "WorkerPickUpInit";
             WorkingDir = "WorkerPickUp";
-            model = new WorkerCutterRobot(new Vector2(0, 0));
+            model = new WoodWorkerRobot(new Vector2(0, 0));
             ValueOfDiscoveredTree = 0;
             ValueOfCollision = 0;
             ValueOfCutWood = 0;

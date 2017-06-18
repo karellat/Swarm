@@ -82,6 +82,8 @@
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalk.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalkWithMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodExperimentMT.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodWorkerWalk.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodWorkerWalkMem.cs" />
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
     <Compile Include="Classes\RobotBrains\SingleLayerNeuronNetwork.cs" />
@@ -89,7 +91,8 @@
     <Compile Include="Classes\Robots\ScoutCutterRobot.cs" />
     <Compile Include="Classes\Robots\ScoutCutterRobotWithMemory.cs" />
     <Compile Include="Classes\Robots\ScoutRobot.cs" />
-    <Compile Include="Classes\Robots\WorkerCutterRobot.cs" />
+    <Compile Include="Classes\Robots\WoodWorkerRobotMem.cs" />
+    <Compile Include="Classes\Robots\WoodWorkerRobot.cs" />
     <Compile Include="Classes\Robots\WorkerRobot.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
