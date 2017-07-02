@@ -77,9 +77,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BrainRobotConnectionWindow.xaml.cs">
+      <DependentUpon>BrainRobotConnectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BrainSelectionWindow.xaml.cs">
       <DependentUpon>BrainSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="BrainRobotConnectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="InfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

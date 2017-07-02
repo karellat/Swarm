@@ -7,7 +7,7 @@ namespace SwarmSimFramework.Classes.Robots
     public class ScoutCutterRobotWithMemory:RobotEntity
     {
         public ScoutCutterRobotWithMemory(Vector2 middle, float orientation = 0)
-            : base(middle, 2.5f, "ScoutRobot", null, null, 100, 0, 1, 100, 100, -100, orientation)
+            : base(middle, 2.5f, "ScoutRobotMem", null, null, 100, 0, 1, 100, 100, -100, orientation)
         {
             MemoryStick mem = new MemoryStick(10,this);
             ISensor[] sensors = new ISensor[10];

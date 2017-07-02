@@ -112,10 +112,10 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
     {
 
         ///Prepare testing map and brains to test
-        public TestingBrain(Map.Map Map, IRobotBrain brain, int lengthOfCycle)
+        public TestingBrain(Map.Map Map, BrainModel<IRobotBrain>[] brain, int lengthOfCycle)
         {
 
-            TestedBrain = brain;
+            TestedBrains = brain;
             this.Map = Map;
             TestingCycle = lengthOfCycle;
             Finnished = false;
@@ -123,7 +123,7 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
         /// <summary>
         /// Testing brain
         /// </summary>
-        public IRobotBrain TestedBrain;
+        public BrainModel<IRobotBrain>[] TestedBrains;
         /// <summary>
         /// Map where the brain is tested
         /// </summary>
@@ -147,7 +147,12 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
             Map.Reset();
             foreach (var r in Map.Robots)
             {
-                r.Brain = TestedBrain.GetCleanCopy();
+                foreach (var b in TestedBrains)
+                {
+                    if(b.SuitableRobot(r))
+                        r.Brain = b.Brain.GetCleanCopy();
+                }
+                
             }
             MapIterationIndex = 0;
         }
@@ -161,7 +166,11 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 Map.Reset();
                 foreach (var r in Map.Robots)
                 {
-                    r.Brain = TestedBrain.GetCleanCopy();
+                    foreach (var b in TestedBrains)
+                    {
+                        if (b.SuitableRobot(r))
+                            r.Brain = b.Brain.GetCleanCopy();
+                    }
                 }
                 MapIterationIndex = 0;
             }

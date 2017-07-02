@@ -7,7 +7,7 @@ namespace SwarmSimFramework.Classes.Robots
     public class WoodWorkerRobotMem : RobotEntity
     {
         public WoodWorkerRobotMem(Vector2 middle, float orientation = 0)
-            : base(middle, 5f, "ScoutRobot", null, null, 100, 5, 1, 100, 100, -100, orientation)
+            : base(middle, 5f, "WorkerRobotMEM", null, null, 100, 5, 1, 100, 100, -100, orientation)
         {
             ISensor[] sensors = new ISensor[9];
             //Line Type Sensors

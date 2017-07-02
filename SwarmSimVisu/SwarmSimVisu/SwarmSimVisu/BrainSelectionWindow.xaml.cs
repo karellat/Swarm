@@ -20,47 +20,44 @@ using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimVisu
 {
+    
     /// <summary>
     /// Interaction logic for BrainSelectionWindow.xaml
     /// </summary>
     public partial class BrainSelectionWindow : Window
     {
+        public bool BrainChoosing;
         public bool ExperimentPrepared = false;
         public IExperiment Experiment = null;
-        public IRobotBrain SelectedBrain;
+        public List<RobotModel> preparedRobots = new List<RobotModel>();
+        public List<BrainModel<IRobotBrain>> preparedBrains = new List<BrainModel<IRobotBrain>>();
         public Map SelectedMap;
         public BrainSelectionWindow()
         {
             
             InitializeComponent();
-            MapComboBox.Items.Add("None");
-            MapComboBox.Items.Add("WoodMapCutters");
-            MapComboBox.Items.Add("WoodMapCutters with mem");
-            MapComboBox.Items.Add("WoodMapWorkers");
+            MapComboBox.Items.Add("WoodMap");
             string name = "";
             MapComboBox.SelectionChanged += (sender, args) =>
             {
                 switch (MapComboBox.SelectedIndex)
                 {
-                    case 1:
+                    case 0:
                     {
-                        name = "Wood map cutters";
+                        name = "Wood map";
                         WoodScene.AmountOfTrees = 200;
-                        SelectedMap = WoodScene.MakeMap(new[]
-                            {new RobotModel() {amount = 5, model = new ScoutCutterRobot((Vector2.Zero))}});
-                        break;
-                    }
-                    case 2:
-                    {
-                        name = "Wood map cutters with mem";
-                        SelectedMap = TestingMaps.GetWoodMapCutersWithMem();
-                        break;
-                    }
-                    case 3:
-                    {
-                        name = "Wood map workers";
-                        SelectedMap = TestingMaps.GetWoodMapWorkers();
-                        break;
+                        StringBuilder mapInfo = new StringBuilder(name + "\n");
+                        mapInfo.AppendLine("Max amount of robots: " + WoodScene.MaxOfAmountRobots);
+                        mapInfo.Append("Map heigth: ");
+                        mapInfo.Append(WoodScene.MapHeight.ToString());
+                        mapInfo.Append("Map width: ");
+                        mapInfo.AppendLine(WoodScene.MapWidth.ToString());
+                        mapInfo.Append("Trees in map: ");
+                        mapInfo.Append(WoodScene.AmountOfTrees);
+                        mapInfo.Append(" Woods in map: ");
+                        mapInfo.AppendLine(WoodScene.AmountOfWoods.ToString());
+                        MapText.Text = mapInfo.ToString();
+                            break; 
                     }
                     default:
                     {
@@ -70,46 +67,50 @@ namespace SwarmSimVisu
                     }
                 }
 
-                StringBuilder mapInfo = new StringBuilder(name + "\n");
-                mapInfo.Append("Height: " + SelectedMap.MaxHeight + " Width: " + SelectedMap.MaxWidth + "\n");
-                mapInfo.AppendLine("Amount of robots: " + SelectedMap.Robots.Count);
-                mapInfo.AppendLine("Passive entities: " +SelectedMap.PasiveEntities.Count);
-                MapText.Text = mapInfo.ToString();
+
             };
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            string t = "";
-            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            openFileDialog.InitialDirectory = System.Environment.CurrentDirectory;
-            if (openFileDialog.ShowDialog() == true)
+            if (BrainChoosing) return;
+            BrainChoosing = true;
+            var w = new BrainRobotConnectionWindow();
+            w.ShowDialog();
+            if (w.preparedRobots != null && w.preparedRobots.Count != 0)
             {
-                t = File.ReadAllText(openFileDialog.FileName);
-                SelectedBrain = BrainSerializer.DeserializeBrain(t);
+                foreach (var pR in w.preparedRobots)
+                {
+                    preparedRobots.Add(new RobotModel(){amount=pR.amount,model =pR.model});
+                    preparedBrains.Add(new BrainModel<IRobotBrain>() {Brain = pR.brain, Robot = pR.model});
+                }
+                BrainText.Text = w.PreparedModels.Text;
             }
-
-            //Text about brain update
-            if (SelectedBrain != null)
+            else
             {
-                StringBuilder brainInfo = new StringBuilder("Brain: " + SelectedBrain.GetType().ToString() + '\n');
-                brainInfo.Append(" In Dimension: " + SelectedBrain.IoDimension.Input + '\n');
-                brainInfo.Append(" Out Dimension: " + SelectedBrain.IoDimension.Output + '\n');
-                brainInfo.Append(" Fitness: " + SelectedBrain.Fitness + '\n');
-                BrainText.Text = brainInfo.ToString();
+                MessageBox.Show("Unknown setting of brains");
             }
+            BrainChoosing = false;
 
-           
         }
 
         private void PrepareExperiment_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedBrain == null)
+            if (preparedRobots == null || preparedRobots.Count == 0)
             {
                 MessageBox.Show("Brain has to be selected!");
                 return;
             }
 
+
+            switch (MapComboBox.SelectedIndex)
+            {
+                case 0:
+                {
+                    SelectedMap = WoodScene.MakeMap(preparedRobots.ToArray());
+                    break;
+                }
+            }
             if (SelectedMap == null)
             {
                 MessageBox.Show("Map has to be selected!");
@@ -117,7 +118,7 @@ namespace SwarmSimVisu
             }
 
 
-            Experiment = new TestingBrain(SelectedMap,SelectedBrain,1000);
+            Experiment = new TestingBrain(SelectedMap,preparedBrains.ToArray(),1000);
             this.Close();
         }
     }
