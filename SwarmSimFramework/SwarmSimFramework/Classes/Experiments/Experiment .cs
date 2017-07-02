@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses.AwokeKnowing.GnuplotCSharp;
@@ -401,7 +402,11 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Title of plot
         /// </summary>
-        protected string Title; 
+        protected string Title;
+        /// <summary>
+        /// Name of graph
+        /// </summary>
+        public string Name;
         /// <summary>
         /// Create new fitPlot
         /// </summary>
@@ -411,6 +416,7 @@ namespace SwarmSimFramework.Classes.Experiments
             Xs = new List<double>(expectedSize);
             Ys = new List<double>(expectedSize);
             this.Title = "title \"" + title + "\"";
+            this.Name = title;
         }
         /// <summary>
         /// Add new fitness to graph
@@ -437,6 +443,21 @@ namespace SwarmSimFramework.Classes.Experiments
         {
             Xs.Clear();
             Ys.Clear();
+        }
+
+        public string SerializeGraph()
+        {
+            Tuple<double, double>[] tuples = new Tuple<double, double>[Xs.Count];
+            for (int i = 0; i < Xs.Count; i++)
+            {
+                tuples[i] = new Tuple<double, double>(Xs[i],Ys[i]);
+            }
+             return JsonConvert.SerializeObject(tuples, BrainSerializer.JsonSettings);
+        }
+
+        public static Tuple<double, double> DeserializeGraph(string json)
+        {
+            return JsonConvert.DeserializeObject<Tuple<double, double>>(json, BrainSerializer.JsonSettings);
         }
     }
 }

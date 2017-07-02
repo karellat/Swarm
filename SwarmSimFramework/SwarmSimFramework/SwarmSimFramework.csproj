@@ -79,6 +79,10 @@
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\Map\ScenesMap.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MultiThreadExperiment.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCooperation.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCooperationMEM.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorCut.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorCutMEM.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalk.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodCuttorWalkWithMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodExperimentMT.cs" />

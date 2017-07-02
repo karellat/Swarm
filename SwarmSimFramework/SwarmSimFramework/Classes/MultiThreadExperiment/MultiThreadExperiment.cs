@@ -50,7 +50,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Cycle of graph drawing
         /// </summary>
-        protected const int GraphGenerationIndex = 10;
+        protected const int GraphGenerationIndex = 1;
         /// <summary>
         /// Cycle of loging info
         /// </summary>
@@ -101,7 +101,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected int FreeBrainIndex = 0;
         public void Run(string[] nameOfInitFile=null)
         {
-
             //Init Threads
             Threads = new Thread[Environment.ProcessorCount];
             //Init specific experiment
@@ -110,6 +109,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //Log info dir 
             System.IO.Directory.CreateDirectory(WorkingDir);
             FollowingGeneration = new ConcurrentStack<T>[ActualGeneration.Length];
+            
             Graphs = new FitPlot[ActualGeneration.Length];
             for (int i = 0; i < ActualGeneration.Length; i++)
             {
@@ -299,11 +299,26 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// </summary>
         public void DrawGraphs(int generationIndex)
         {
-            GnuPlot.Set("title \"Fitness of " + generationIndex + " generations \"");
-            GnuPlot.Set("xlabel \"Index of generation\"");
-            GnuPlot.Set("ylabel \"Fitness value\"");
+            //Draw graph if possible
+            if (Directory.Exists(GnuPlot.PathToGnuplot))
+            {
+                GnuPlot.Set("title \"Fitness of " + generationIndex + " generations \"");
+                GnuPlot.Set("xlabel \"Index of generation\"");
+                GnuPlot.Set("ylabel \"Fitness value\"");
+                GnuPlot.HoldOn();
+                foreach (var g in Graphs)
+                    g.PlotGraph();
+                GnuPlot.HoldOff();
+            }
+
+            //serialize graph 
             foreach (var g in Graphs)
-                g.PlotGraph();
+            {
+                StreamWriter n = new StreamWriter(WorkingDir + "\\graph" + g.Name+ ".json");
+                n.Write(g.SerializeGraph());
+                n.Close();
+            }
+            
         }
     }
 }

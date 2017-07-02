@@ -20,7 +20,7 @@ namespace SwarmSimFramework
         {
             MultiThreadExperiment<SingleLayerNeuronNetwork> exp;
             //Selection of experiments args[0]
-            if (args.Length >= 2)
+            if (args.Length < 2)
             {
                Console.WriteLine("Wrong parameters!");
                 Console.ReadLine();
