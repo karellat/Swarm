@@ -171,4 +171,142 @@ namespace SwarmSimFramework.Classes.Map
             return MakeMapModel(models).ConstructMap();
         }
     }
+
+    public static class MineralScene
+    {
+        //Mineral experiment - VARIABLES 
+        /// <summary>
+        /// Amount of mineral 
+        /// </summary>
+        public static int AmountOfMineral;
+        /// <summary>
+        /// Amount of obstacles
+        /// </summary>
+        public static int AmountOfObstacles;
+        /// <summary>
+        /// Amount of fuel in map
+        /// </summary>
+        public static int AmountOfFreeFuel;
+        /// <summary>
+        /// Max amount of robots in map 
+        /// </summary>
+        public static int MaxOfAmountRobots = 15;
+        /// <summary>
+        /// Height of map
+        /// </summary>
+        public static float MapHeight = 800;
+        /// <summary>
+        /// Width of map 
+        /// </summary>
+        public static float MapWidth = 1200;
+        /// <summary>
+        /// Max size of robot
+        /// </summary>
+        public static float RobotMaxRadius = 5;
+        /// <summary>
+        /// Init positions of vector 
+        /// </summary>
+        /// <returns></returns>
+        public static Vector2[] InitPositionOfRobot()
+        {
+            List<Vector2> vectors = new List<Vector2>();
+            float sW = MapWidth / 2 + 44;
+            float sH = MapHeight / 2 + 44;
+            for (int i = 0; i < 9; i++)
+            {
+                var nW = sW - 11 * i;
+                var nH = sH - 11 * i;
+                if (nW == MapWidth / 2 && nH == MapHeight / 2)
+                {
+                    vectors.Add(new Vector2(nW, nH));
+                }
+                else
+                {
+                    vectors.Add(new Vector2(nW, MapHeight / 2));
+                    vectors.Add(new Vector2(MapWidth / 2, nH));
+                }
+            }
+            return vectors.ToArray();
+        }
+
+        public static Map MakeEmptyMap()
+        {
+            //Prepare objects of map 
+            RawMaterialEntity mineral = new RawMaterialEntity(new Vector2(0, 0), 5, 100, 3);
+            ObstacleEntity obstacle = new ObstacleEntity(Vector2.Zero, 5);
+            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth / 2, MapHeight / 2), 50);
+            //Generate randomly deployed minerals 
+            Classes.Map.Map preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, new List<CircleEntity>() { initPosition });
+            List<CircleEntity> minerals =
+                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, mineral, AmountOfMineral);
+            var tp = minerals.ToList();
+            tp.Add(initPosition);
+            preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, tp);
+            List<CircleEntity> obstacles = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, obstacle, AmountOfObstacles);
+            List<CircleEntity> passive = obstacles;
+            
+            foreach (var t in minerals)
+                passive.Add(t);
+            preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, passive);
+            List<FuelEntity> fuels;
+            if (AmountOfFreeFuel > 0)
+                fuels =
+                    Classes.Map.Map.GenerateRandomPos<FuelEntity>(preparedMap, new FuelEntity(Vector2.Zero, 5, 100),
+                        AmountOfFreeFuel);
+            else
+                fuels = null;
+                    
+            return new Map(MapHeight, MapWidth, null, passive, fuels, null);
+
+        }
+        /// <summary>
+        /// Create map with given models 
+        /// </summary>
+        /// <param name="robotModels"></param>
+        /// <param name="amountOfRobots"></param>
+        /// <returns></returns>
+        public static MapModel MakeMapModel(RobotModel[] models)
+        {
+            //Check size & amount 
+            int amountOfRobot = 0;
+            foreach (var m in models)
+            {
+                amountOfRobot += m.amount;
+                if (m.model.Radius > RobotMaxRadius)
+                    throw new ArgumentException("Robot with bigger radius");
+                if (amountOfRobot > MaxOfAmountRobots)
+                    throw new ArgumentException("More robots than maximum size");
+            }
+            List<RobotEntity> robots = new List<RobotEntity>();
+            foreach (var m in models)
+            {
+                for (int i = 0; i < m.amount; ++i)
+                {
+                    robots.Add((RobotEntity)m.model.DeepClone());
+                }
+            }
+            Vector2[] initPos = InitPositionOfRobot();
+            for (var index = 0; index < robots.Count; index++)
+            {
+                var r = robots[index];
+                r.MoveTo(initPos[index]);
+            }
+
+            Map emptyMap = MakeEmptyMap();
+            return new MapModel()
+            {
+                MapHeight = MapHeight,
+                MapWidth = MapWidth,
+                ConstRadioSignals = emptyMap.constantRadioSignal,
+                FuelEntities = emptyMap.FuelEntities,
+                PassiveEntities = emptyMap.PasiveEntities,
+                RobotBodies = robots
+            };
+        }
+
+        public static Map MakeMap(RobotModel[] models)
+        {
+            return MakeMapModel(models).ConstructMap();
+        }
+    }
 }

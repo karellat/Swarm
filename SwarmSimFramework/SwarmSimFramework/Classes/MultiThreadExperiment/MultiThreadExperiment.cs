@@ -164,10 +164,15 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     }
                     Console.WriteLine(sb.ToString());
                     //Serialize best brain
-                    //Serialize brain 
-                    StreamWriter n = new StreamWriter( WorkingDir + "\\bestbrain" + generationIndex + ".json");
-                    n.Write(i.BestBrain.SerializeBrain());
-                    n.Close();
+                    //Serialize brain
+                    for (var index = 0; index < ActualGeneration.Length; index++)
+                    {
+                        var g = ActualGeneration[index];
+                        var bestBrain = GenerationInfoStruct.GetGenerationInfo(g);
+                        StreamWriter n = new StreamWriter(WorkingDir + "\\"+ generationIndex + "bestbrain" + index+  ".json");
+                        n.Write(i.BestBrain.SerializeBrain());
+                        n.Close();
+                    }
                 }
                 //fill graphs
                 FillGraphs(generationIndex);

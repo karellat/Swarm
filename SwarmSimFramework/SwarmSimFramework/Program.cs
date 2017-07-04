@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -11,6 +12,7 @@ using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.MultiThreadExperiment;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimFramework
 {
@@ -28,6 +30,27 @@ namespace SwarmSimFramework
             }
             switch (args[0])
             {
+                case "debug":
+                {
+                    var i = MineralScene.InitPositionOfRobot();
+                    return;
+                }
+                case "D":
+                {
+                    for (int i = 0; i < args.Length -1 ; i++)
+                    {
+                        StreamReader sr = new StreamReader(args[i + 1]);
+                        SingleLayerNeuronNetwork[] sln =
+                            BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(sr.ReadToEnd());
+                            sr.Close();
+                        var j = GenerationInfoStruct.GetGenerationInfo(sln.ToList());
+                            StreamWriter sw = new StreamWriter("bestBrain" + i  + ".json");
+                            sw.Write(j.BestBrain.SerializeBrain());
+                            sw.Close();
+                            Console.WriteLine(j.BestBrainInfo);
+                    }
+                    return; 
+                }
                 case "0":
                 {
                     exp = WoodSceneSelection(args[1]);
