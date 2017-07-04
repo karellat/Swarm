@@ -546,22 +546,7 @@ namespace SwarmSimFramework.Classes.Map
         /// Maximum width of map 
         /// </summary> 
         public float MaxWidth { get; protected set;  }
-        /// <summary>
-        /// Stores every actively moving entities on the map 
-        /// </summary>
-        public List<RobotEntity> Robots;
-        /// <summary>
-        /// Stores every pasive entity on the map, as minerals, obstacles etc
-        /// </summary>
-        public List<CircleEntity> PasiveEntities;
-        /// <summary>
-        /// Stores all radio broadcast in the scope 
-        /// </summary>
-        public List<RadioEntity> RadioEntities;
-        /// <summary>
-        /// Stores all fuel entities in the scope 
-        /// </summary>
-        public List<FuelEntity> FuelEntities;
+
 
         //PRIVATE MEMBERS
         // Model of the initicial position 
