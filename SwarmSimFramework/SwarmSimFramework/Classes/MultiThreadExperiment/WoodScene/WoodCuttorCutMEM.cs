@@ -9,11 +9,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
     {
         protected override void Init(string[] nameOfInitialFile)
         {
-            WorkingDir = "WoodCuttorMemWalk";
+            WorkingDir = "WoodCuttorMemCut";
             PopulationSize = 1000;
             NumberOfGenerations = 1000;
             MapIteration = 2000;
-            Name = "WoodCuttorMemWalk";
+            Name = "WoodCuttorMemCut";
             Models = new RobotModel[1];
             Models[0] = new RobotModel()
             {
