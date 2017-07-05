@@ -15,8 +15,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected override void Init(string[] nameOfInitialFile)
         {
             WorkingDir = "WoodWorkerPickUp";
-            PopulationSize = 100;
+            PopulationSize = 1000;
             NumberOfGenerations = 1000;
+            MapIteration = 2000;
             Name = "WoodWorkerPickUp";
             Models = new RobotModel[1];
             Models[0] = new RobotModel()

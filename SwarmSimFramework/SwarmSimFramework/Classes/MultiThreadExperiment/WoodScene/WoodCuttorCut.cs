@@ -12,7 +12,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected override void Init(string[] nameOfInitialFile)
         {
             WorkingDir = "WoodCuttorCut";
-            PopulationSize = 100;
+            PopulationSize = 1000;
             NumberOfGenerations = 1000;
             MapIteration = 2000;
             Name = "WoodCuttorCut";
