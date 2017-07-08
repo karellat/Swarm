@@ -192,6 +192,7 @@ namespace SwarmSimFramework.Classes.Map
 
         private IGridBox<ItemType>[] NearBoxes(Vector2 middle, float radius)
         {
+            IGridBox<ItemType>[] output; 
             //Boxes 
             if (radius > MaximumRadius)
                 throw new ArgumentException("Bigger item than given max. Radius: " + radius);
@@ -207,8 +208,87 @@ namespace SwarmSimFramework.Classes.Map
             int MaxColumnIndex = (int) Math.Floor(MaxColumn);
             int MinColumnIndex = (int) Math.Floor(MinColumn);
 
+            //Axis dividing 4 cell
+            float axisY = MaxColumnIndex * BoxWidth;
+            float axisX = MaxRowIndex * BoxHeight;
 
+            //All four boxes
+            Vector2  m = new Vector2(MaxColumnIndex * BoxWidth,MaxRowIndex * BoxHeight);
 
+            if (Vector2.DistanceSquared(m, middle) < radius * radius)
+            {
+                output = new IGridBox<ItemType>[4];
+                output[0] = gridBoxes[MinRowIndex][MinColumnIndex];
+                output[1] = gridBoxes[MinRowIndex][MaxColumnIndex];
+                output[2] = gridBoxes[MaxRowIndex][MinColumnIndex];
+                output[3] = gridBoxes[MaxRowIndex][MaxColumnIndex];
+                return output;
+            }
+
+            //box with the middle
+            int middleColumn;
+            int middleRow;
+            //Number of interfering cells
+            List<IGridBox<ItemType>> cells = new List<IGridBox<ItemType>>(4);
+            if (middle.X > MaxRowIndex * BoxWidth)
+            {
+                middleRow = MaxRowIndex;
+                //Max row max column 
+                if (middle.Y > MaxColumnIndex * BoxHeight)
+                {
+                    middleColumn = MaxColumnIndex;
+                    //intersect the lower box 
+                    if (middle.Y - radius <= axisY)
+                        cells.Add(gridBoxes[MinRowIndex][middleColumn]);
+                    //intersect the left box
+                    if (middle.X - radius <= axisX)
+                        cells.Add(gridBoxes[middleRow][MinColumnIndex]);
+
+                }
+                //Max row min column
+                else
+                {
+                    middleColumn = MinColumnIndex;
+                    //intersect the lower box 
+                    if(middle.Y - radius <= axisY)
+                        cells.Add(gridBoxes[MinRowIndex][middleColumn]);
+                    //intersect the right box 
+                    if (middle.X + radius >= axisX)
+                        cells.Add(gridBoxes[middleRow][MaxColumnIndex]);
+                }
+            }
+            else
+            {
+                middleRow = MinRowIndex;
+                //Min row max column
+                if (middle.Y > MaxColumnIndex * BoxHeight)
+                {
+                    middleColumn = MaxColumnIndex;
+                    //intersect the upper box
+                    if (middle.Y + radius >= axisY)
+                        cells.Add(gridBoxes[MaxRowIndex][middleColumn]);
+                    //intersect the left box
+                    if(middle.X - radius <= axisX)
+                        cells.Add(gridBoxes[middleRow][MinColumnIndex]);
+
+                }
+                //min row min column
+                else
+                {
+                    middleColumn = MinColumnIndex;
+                    //intersect the upper box 
+                    if (middle.Y + radius >= axisY)
+                        cells.Add(gridBoxes[MaxRowIndex][middleColumn]);
+                    //intersect the right box 
+                    if(middle.X + radius >= axisX)
+                        cells.Add(gridBoxes[middleRow][MaxColumnIndex]);
+                }
+            }
+
+            //Add middle 
+            cells.Add(gridBoxes[middleRow][middleColumn]);
+
+            return cells.ToArray();
         }
         //CONSTRUCTORS
         /// <summary>
