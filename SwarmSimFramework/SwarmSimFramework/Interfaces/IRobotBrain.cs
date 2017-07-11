@@ -113,4 +113,23 @@ namespace SwarmSimFramework.Interfaces
             return Robot.GetType() == entity.GetType();
         }
     }
+
+    public static class BrainModelsSerializer
+    {
+        public static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.All
+        };
+        public static BrainModel<T>[] DeserializeArray<T>(string jsonString) where T : IRobotBrain
+        {
+            return JsonConvert.DeserializeObject<BrainModel<T>[]>(jsonString, JsonSettings);
+        }
+
+        public static string SerializeArray<T>(BrainModel<T>[] brains) where T : IRobotBrain
+        {
+            return JsonConvert.SerializeObject(brains, JsonSettings);
+        }
+    }
+
 }
