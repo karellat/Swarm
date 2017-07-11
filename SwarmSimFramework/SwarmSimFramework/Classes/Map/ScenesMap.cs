@@ -160,8 +160,8 @@ namespace SwarmSimFramework.Classes.Map
                 MapHeight = MapHeight,
                 MapWidth = MapWidth,
                 ConstRadioSignals = emptyMap.constantRadioSignal,
-                FuelEntities = emptyMap.FuelEntities,
-                PassiveEntities = emptyMap.PasiveEntities,
+                FuelEntities = emptyMap.FuelEntities.ToList(),
+                PassiveEntities = emptyMap.PasiveEntities.ToList(),
                 RobotBodies = robots
             };
         }
@@ -298,8 +298,8 @@ namespace SwarmSimFramework.Classes.Map
                 MapHeight = MapHeight,
                 MapWidth = MapWidth,
                 ConstRadioSignals = emptyMap.constantRadioSignal,
-                FuelEntities = emptyMap.FuelEntities,
-                PassiveEntities = emptyMap.PasiveEntities,
+                FuelEntities = emptyMap.FuelEntities.ToList(),
+                PassiveEntities = emptyMap.PasiveEntities.ToList(),
                 RobotBodies = robots
             };
         }

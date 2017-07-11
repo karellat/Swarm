@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using Intersection2D;
@@ -35,11 +36,21 @@ namespace SwarmSimFramework.Classes.Map
             D = new Vector2(MaxWidth, MaxHeight);
 
             //Copy initial set up 
-            Robots = robots ?? new List<RobotEntity>();
-            PasiveEntities = pasiveEntities ?? new List<CircleEntity>();
-            FuelEntities = fuelEntities ?? new List<FuelEntity>();
+            if (robots == null)
+                Robots = new MapHashMapBridge<RobotEntity>();
+            else
+                Robots = new MapHashMapBridge<RobotEntity>(robots);
+            if (pasiveEntities == null)
+                PasiveEntities = new MapHashMapBridge<CircleEntity>();
+            else PasiveEntities = new MapHashMapBridge<CircleEntity>(pasiveEntities);
+
+            if (fuelEntities == null)
+                FuelEntities = new MapHashMapBridge<FuelEntity>();
+            else
+                FuelEntities = new MapHashMapBridge<FuelEntity>();
             //No radio signals in the begining 
-            RadioEntities = new List<RadioEntity>();
+            RadioEntities = new MapHashMapBridge<RadioEntity>();
+
             //Mark down initial set up 
             modelRobotEntities = new List<RobotEntity>(Robots.Count);
             modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
@@ -547,7 +558,23 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary> 
         public float MaxWidth { get; protected set;  }
 
-
+        //ENTITIES 
+        /// <summary>
+        /// Store every actively moving entities on the map 
+        /// </summary>
+        public MapHashMapBridge<RobotEntity> Robots;
+        /// <summary>
+        /// Stores every pasive entity on the map, as minerals, obstacles 
+        /// </summary>
+        public MapHashMapBridge<CircleEntity> PasiveEntities;
+        /// <summary>
+        /// Stores all radio broadcast in the scope scope
+        /// </summary>
+        public MapHashMapBridge<RadioEntity> RadioEntities;
+        /// <summary>
+        /// Stores all fuel entites in the scope
+        /// </summary>
+        public MapHashMapBridge<FuelEntity> FuelEntities;
         //PRIVATE MEMBERS
         // Model of the initicial position 
         /// <summary>

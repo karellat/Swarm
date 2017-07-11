@@ -9,20 +9,7 @@ using System.Numerics;
 
 namespace GridBoxes
 {
-    public static class Program
-    {
-        public static void Main()
-        {
-            Vector2 A = new Vector2(5, 15);
-            Vector2 B = new Vector2(5, -15);
-            SpatialHashMap<string, ListGridbox<string>> map =
-                new SpatialHashMap<string, ListGridbox<string>>(100, 100, 10);
-            var nb = map.NearBoxes(A, B);
-            Debug.Assert(2 == nb.Length);
-            Debug.Assert(nb.Contains(map.gridBoxes[1][0]));
-            Debug.Assert(nb.Contains(map.gridBoxes[0][0]));
-        }
-    }
+
     //STRUCT OF SINGLE GRID BOX
     /// <summary>
     /// Representation of single box of map grid

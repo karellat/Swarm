@@ -77,6 +77,7 @@
     <Compile Include="Classes\Experiments\WoodCuttingExperiment\WoodCuttingExperimentWalking.cs" />
     <Compile Include="Classes\Experiments\WoodCuttingExperiment\WoodCuttingExperimentWorkerWalking.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
+    <Compile Include="Classes\Map\MapHashMapBridge.cs" />
     <Compile Include="Classes\Map\ScenesMap.cs" />
     <Compile Include="Classes\Map\SpatialHashMap.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\MineralExperimentMT.cs" />
