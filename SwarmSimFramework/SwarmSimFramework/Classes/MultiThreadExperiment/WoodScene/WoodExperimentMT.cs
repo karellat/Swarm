@@ -21,13 +21,13 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         // Basic Evolution VARIABLE
         public int AmountOfTrees = 0;
         public int AmountOfWood = 0;
-        public int ValueOfCutWood { get; protected set; }
-        public long ValueOfCollision { get; protected set; }
+        public static int ValueOfCutWood { get; protected set; }
+        public static long ValueOfCollision { get; protected set; }
 
-        public int ValueOfDiscoveredTree { get; protected set; }
+        public static int ValueOfDiscoveredTree { get; protected set; }
 
-        public double ValueOfStockedWood { get; protected set; }
-        public double ValueOfContaineredWood { get; protected set; }
+        public static double ValueOfStockedWood { get; protected set; }
+        public static double ValueOfContaineredWood { get; protected set; }
 
 
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
@@ -167,6 +167,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <returns></returns>
         protected override double CountFitness(Map.Map map)
         {
+            return CountFitnessOfMap(map);
+        }
+
+        public static double CountFitnessOfMap(Map.Map map)
+        {
             int DiscoveredTrees = 0;
             int CutWoods = 0;
             //Find discovered trees and cut woods
@@ -185,20 +190,20 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 }
             }
             long amountOfCollision = 0;
-                //Find collision
-                foreach (var r in map.Robots)
+            //Find collision
+            foreach (var r in map.Robots)
+            {
+                checked
                 {
-                    checked
-                    {
-                        amountOfCollision += r.CollisionDetected;
-                    }
-
+                    amountOfCollision += r.CollisionDetected;
                 }
 
-                return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
+            }
+
+            return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
 
         }
-        protected double StockContainerFitness(double basicFitness,Map.Map map)
+        protected static double StockContainerFitness(double basicFitness,Map.Map map)
         {
             double fit = basicFitness;
             //dependend on the wood scene
