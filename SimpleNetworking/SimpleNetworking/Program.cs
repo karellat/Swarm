@@ -21,13 +21,18 @@ using SwarmSimFramework.SupportClasses;
 namespace SimpleNetworking
 {
 
-
+    /// <summary>
+    /// Struct for representing server adress 
+    /// </summary>
     public struct ServerAddress
     {
         public string Ip;
         public int Port;
         public AddressFamily Family;
     }
+    /// <summary>
+    /// Struct for transfer map
+    /// </summary>
   public  struct  MapPack
   {
       public float Height;
@@ -62,11 +67,6 @@ namespace SimpleNetworking
       }
   }
 
-
-    public enum NetworkControl
-    {
-        
-    }
     class Program
     {
         public static ServerAddress[] TestingAddress = new[] { new ServerAddress()
@@ -96,8 +96,12 @@ namespace SimpleNetworking
 
         }
 
-        protected  static List<Socket> openSocktets = new List<Socket>();
-
+        /// <summary>
+        /// Main of client side 
+        /// </summary>
+        /// <param name="addresses"></param>
+        /// <param name="mapPack"></param>
+        /// <param name="brainModel"></param>
         private static void ClientMain(ServerAddress[] addresses,MapPack mapPack, BrainModel<SingleLayerNeuronNetwork>[] brainModel=null)
         {
             ClientTcpCommunicator client = new ClientTcpCommunicator();
@@ -129,7 +133,9 @@ namespace SimpleNetworking
         static byte[] _data;  // 1
         static Socket _listeningSocket; // 1
         static Socket _comunicationSocket;
-
+        /// <summary>
+        /// Main of server side
+        /// </summary>
         private static void ServerMain()
         {
             ServerTcpCommunicator s = new ServerTcpCommunicator();
@@ -194,9 +200,12 @@ namespace SimpleNetworking
 
      
     }
-
+    /// <summary>
+    /// Static class for TCP socket easy Control 
+    /// </summary>
     public static class TcpControl
     {
+        // Status tag
         public const string MapSendTag = "MAP SEND";
         public const string MapAccept ="MAP ACCEPT";
         public const string SendBrainTag = "SEND BRAIN";
@@ -286,6 +295,7 @@ namespace SimpleNetworking
     /// </summary>
     public class ClientTcpCommunicator
     {
+        //example of map 
         public static MapPack exampleMap = new MapPack()
         {
             Height=600,
@@ -295,8 +305,9 @@ namespace SimpleNetworking
             passives = new List<CircleEntity>() { new ObstacleEntity(new System.Numerics.Vector2(20,20),10), new ObstacleEntity(new System.Numerics.Vector2(40, 50), 10) },
             robots = new List<RobotEntity>() { new ScoutCutterRobot(new Vector2(98,44)), new ScoutCutterRobot(new Vector2(34, 44)), new ScoutCutterRobot(new Vector2(98, 100)) }
         };
+        //model of robot
         public static ScoutCutterRobot model = new ScoutCutterRobot(Vector2.Zero);
-
+        //example of models
         public static BrainModel<SingleLayerNeuronNetwork>[] exampleBrainModels = new[]
         {
             new BrainModel<SingleLayerNeuronNetwork>()
@@ -309,13 +320,19 @@ namespace SimpleNetworking
                 })
             }
         };
-
+        /// <summary>
+        /// Curently communicating sockets
+        /// </summary>
         public List<Socket> OpenSockets = new List<Socket>();
 
         //Connect communication with server 
         public BrainModel<SingleLayerNeuronNetwork>[] actualBrainModels;
-
+        //fitness of the brain 
         public double BrainFitness; 
+        /// <summary>
+        /// connect to address
+        /// </summary>
+        /// <param name="serverAddresses"></param>
         public void Connect(ServerAddress[] serverAddresses)
         {
             //Try to connect to servers possible & add sucessful to OpenSockets
@@ -333,7 +350,10 @@ namespace SimpleNetworking
                 }
             }
         }
-
+        /// <summary>
+        /// Prepare map on server side
+        /// </summary>
+        /// <param name="map"></param>
         public void InitMap(MapPack map)
         {
             string mapJson = JsonConvert.SerializeObject(map, TcpControl.JsonSettings);
@@ -375,7 +395,10 @@ namespace SimpleNetworking
            
             
         }
-
+        /// <summary>
+        /// Prepare brains on the server side
+        /// </summary>
+        /// <param name="brainModels"></param>
         public void InitBrain(BrainModel<SingleLayerNeuronNetwork>[] brainModels)
         {
             actualBrainModels = brainModels;
@@ -393,7 +416,9 @@ namespace SimpleNetworking
                     throw new NotImplementedException("Sending brain not check ");
             }
         }
-
+        /// <summary>
+        /// Prepare generating brain on the server side
+        /// </summary>
         public void InitBrain()
         {
             foreach (var os in OpenSockets)
@@ -411,7 +436,13 @@ namespace SimpleNetworking
             }
             
         }
-
+        /// <summary>
+        /// Send map pack 
+        /// </summary>
+        /// <param name="os"></param>
+        /// <param name="mapJson"></param>
+        /// <param name="jsonBytes"></param>
+        /// <returns></returns>
         private bool SendMap(Socket os, string mapJson, byte[] jsonBytes)
         {
             //Send map tag
@@ -433,7 +464,10 @@ namespace SimpleNetworking
             }
         }
 
-
+        /// <summary>
+        /// Finishing simulation on server and reading result
+        /// </summary>
+        /// <param name="brainRequest"></param>
         public void FinishEval(bool brainRequest = true)
         {
             foreach (var os in OpenSockets)
@@ -469,18 +503,27 @@ namespace SimpleNetworking
 
     }
     /// <summary>
-    /// 
+    /// Server side communication
     /// </summary>
     public class ServerTcpCommunicator
     {
+        /// <summary>
+        /// Socket, where server listens
+        /// </summary>
         public Socket _listeningSocket;
+        /// <summary>
+        /// Socket, where communication with client is going on
+        /// </summary>
         public Socket _comunicationSocket;
+
         public ServerTcpCommunicator()
         {
             _listeningSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); // 2
             _listeningSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6027)); // 3
         }
-
+        /// <summary>
+        /// waiting for client connection
+        /// </summary>
         public void Listen()
         {
             Console.WriteLine("Listening");
@@ -488,7 +531,10 @@ namespace SimpleNetworking
             _comunicationSocket = _listeningSocket.Accept(); // 5
             Console.WriteLine("Listen at " + _comunicationSocket.RemoteEndPoint);
         }
-
+        /// <summary>
+        /// Prepare map from client
+        /// </summary>
+        /// <returns></returns>
         public Map InitMap()
         {
             Map outputMap = null;
@@ -521,7 +567,11 @@ namespace SimpleNetworking
             return outputMap;
 
         }
-
+        /// <summary>
+        /// Finish simulation & send result
+        /// </summary>
+        /// <param name="brainModels"></param>
+        /// <param name="fitness"></param>
         public void FinishEval(BrainModel<SingleLayerNeuronNetwork>[] brainModels, double fitness)
         {
             Console.WriteLine("Simulation finished.");
@@ -561,7 +611,10 @@ namespace SimpleNetworking
                 }
             }
         }
-
+        /// <summary>
+        /// Prepare brains from client
+        /// </summary>
+        /// <returns></returns>
         public BrainModel<SingleLayerNeuronNetwork>[] InitBrains()
         {
             string braintag = TcpControl.ReadTextFromSocket(_comunicationSocket);
