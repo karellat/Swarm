@@ -2,10 +2,14 @@
 using SwarmSimFramework.Classes.Effectors;
 using SwarmSimFramework.Classes.Entities;
 
-namespace SwarmSimFramework.Classes.Robots
+namespace SwarmSimFramework.Classes.Robots.WoodRobots
 {
     public class ScoutCutterRobot : RobotEntity
     {
+        public ScoutCutterRobot() : this(Vector2.Zero)
+        {
+        }
+
         public ScoutCutterRobot(Vector2 middle, float orientation = 0)
             : base(middle, 2.5f, "ScoutRobot", null, null, 100, 0, 1, 100, 100, -100, orientation)
         {

@@ -1,22 +1,29 @@
 \BOOKMARK [1][-]{section.1}{T\351ma}{}% 1
 \BOOKMARK [1][-]{section.2}{Clenen\355 programu:}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Intersection2D}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{SwarmSimFramework}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{SwarmSimVisu}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.4}{SimpleNetworking}{section.2}% 6
-\BOOKMARK [1][-]{section.3}{SwarnSimFramework:}{}% 7
-\BOOKMARK [2][-]{subsection.3.1}{Rozhran\355}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.2}{Tr\355dy:}{section.3}% 9
-\BOOKMARK [3][-]{subsubsection.3.2.1}{abstract class Entity}{subsection.3.2}% 10
-\BOOKMARK [3][-]{subsubsection.3.2.2}{CircleEntity:}{subsection.3.2}% 11
-\BOOKMARK [3][-]{subsubsection.3.2.3}{LineEntity:}{subsection.3.2}% 12
-\BOOKMARK [3][-]{subsubsection.3.2.4}{RobotEntity}{subsection.3.2}% 13
-\BOOKMARK [3][-]{subsubsection.3.2.5}{Ostatn\355 CircleEntity: }{subsection.3.2}% 14
-\BOOKMARK [3][-]{subsubsection.3.2.6}{Pr\355klady robotu:}{subsection.3.2}% 15
-\BOOKMARK [2][-]{subsection.3.3}{Experiments:}{section.3}% 16
-\BOOKMARK [3][-]{subsubsection.3.3.1}{Jednotliv\351 experimenty:}{subsection.3.3}% 17
-\BOOKMARK [2][-]{subsection.3.4}{Map}{section.3}% 18
-\BOOKMARK [2][-]{subsection.3.5}{MultiThread}{section.3}% 19
-\BOOKMARK [2][-]{subsection.3.6}{RobotBrains}{section.3}% 20
-\BOOKMARK [2][-]{subsection.3.7}{Extern\355 knihovny, NuGet}{section.3}% 21
-\BOOKMARK [2][-]{subsection.3.8}{Support tr\355dy}{section.3}% 22
+\BOOKMARK [2][-]{subsection.2.1}{SwarmSimFramework}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Vedlej\235\355 projekty}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{SwarnSimFramework:}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{\332vod:}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Hlavn\355 tr\355dy:}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{Map}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.4}{Rozhran\355}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.5}{Efektory a sensory:}{section.3}% 10
+\BOOKMARK [3][-]{subsubsection.3.5.1}{Effectors:}{subsection.3.5}% 11
+\BOOKMARK [3][-]{subsubsection.3.5.2}{Sensors:}{subsection.3.5}% 12
+\BOOKMARK [2][-]{subsection.3.6}{Entity}{section.3}% 13
+\BOOKMARK [3][-]{subsubsection.3.6.1}{abstract class Entity}{subsection.3.6}% 14
+\BOOKMARK [3][-]{subsubsection.3.6.2}{CircleEntity:}{subsection.3.6}% 15
+\BOOKMARK [3][-]{subsubsection.3.6.3}{LineEntity:}{subsection.3.6}% 16
+\BOOKMARK [3][-]{subsubsection.3.6.4}{RobotEntity}{subsection.3.6}% 17
+\BOOKMARK [3][-]{subsubsection.3.6.5}{Ostatn\355 CircleEntity: }{subsection.3.6}% 18
+\BOOKMARK [3][-]{subsubsection.3.6.6}{Pr\355klady robotu:}{subsection.3.6}% 19
+\BOOKMARK [2][-]{subsection.3.7}{Experiment:}{section.3}% 20
+\BOOKMARK [3][-]{subsubsection.3.7.1}{Experiments:}{subsection.3.7}% 21
+\BOOKMARK [2][-]{subsection.3.8}{MultiThread}{section.3}% 22
+\BOOKMARK [2][-]{subsection.3.9}{RobotBrains}{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.10}{Extern\355 knihovny, NuGet}{section.3}% 24
+\BOOKMARK [2][-]{subsection.3.11}{Support tr\355dy}{section.3}% 25
+\BOOKMARK [1][-]{section.4}{Ostatn\355 projekty:}{}% 26
+\BOOKMARK [2][-]{subsection.4.1}{SwarmSimVisu:}{section.4}% 27
+\BOOKMARK [2][-]{subsection.4.2}{SimpleNetworking:}{section.4}% 28
+\BOOKMARK [2][-]{subsection.4.3}{InterSection2d:}{section.4}% 29

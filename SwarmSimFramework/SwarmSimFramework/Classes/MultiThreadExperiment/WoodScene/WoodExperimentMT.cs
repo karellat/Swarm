@@ -10,26 +10,27 @@ using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
+using Newtonsoft.Json; 
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
     /// <summary>
     /// Basic general Wood experiment MT implementation
     /// </summary>
-    public  abstract  class WoodExperimentMt : MultiThreadExperiment<SingleLayerNeuronNetwork> 
+    public class WoodExperimentMt : MultiThreadExperiment<SingleLayerNeuronNetwork> 
     {
         // Basic Evolution VARIABLE
         public int AmountOfTrees = 0;
         public int AmountOfWood = 0;
-        public static int ValueOfCutWood { get; protected set; }
-        public static long ValueOfCollision { get; protected set; }
+        public int ValueOfCutWood = 0;
+        public long ValueOfCollision = 0;
 
-        public static int ValueOfDiscoveredTree { get; protected set; }
+        public int ValueOfDiscoveredTree = 0;
 
-        public static double ValueOfStockedWood { get; protected set; }
-        public static double ValueOfContaineredWood { get; protected set; }
+        public double ValueOfStockedWood = 0;
+        public double ValueOfContaineredWood = 0; 
 
-
+        [JsonProperty]
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
 
         /// <summary>
@@ -167,10 +168,14 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <returns></returns>
         protected override double CountFitness(Map.Map map)
         {
-            return CountFitnessOfMap(map);
+            double mapFitness = CountFitnessOfMap(map); 
+            double robotFitnes = 0;
+            if (ValueOfStockedWood != 0 || ValueOfContaineredWood != 0)
+                robotFitnes = StockContainerFitness(map);
+            return mapFitness + robotFitnes;
         }
 
-        public static double CountFitnessOfMap(Map.Map map)
+        public double CountFitnessOfMap(Map.Map map)
         {
             int DiscoveredTrees = 0;
             int CutWoods = 0;
@@ -203,11 +208,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
 
         }
-        protected static double StockContainerFitness(double basicFitness,Map.Map map)
+        protected double StockContainerFitness(Map.Map map)
         {
-            double fit = basicFitness;
-            //dependend on the wood scene
-
+         
             //Count wood on the stockPlace
             var stockSignal = map.constantRadioSignal[0];
             var stockItems = map.CollisionColor(stockSignal);
@@ -226,7 +229,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 }
             }
 
-            return fit + (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
+            return (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
         }
+
+        
     }
 }

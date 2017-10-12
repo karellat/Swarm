@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
@@ -12,7 +13,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected override void Init(string[] nameOfInitialFile)
         {
             WorkingDir = "WoodCuttorWalk";
-            PopulationSize = 1000;
+            PopulationSize = 100;
             NumberOfGenerations = 1000;
             MapIteration = 2000;
             Name = "WoodCuttorWalk";

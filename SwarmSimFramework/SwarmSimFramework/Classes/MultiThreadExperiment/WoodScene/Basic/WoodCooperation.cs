@@ -1,18 +1,18 @@
 ﻿using System.Numerics;
 using SwarmSimFramework.Classes.Map;
-using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
-    public class WoodCooperationMEM : WoodExperimentMt
+    public class WoodCooperation : WoodExperimentMt
     {
         protected override void Init(string[] nameOfInitialFile)
         {
-            WorkingDir = "WoodCooperativeMEMDir";
+            WorkingDir = "WoodCooperativeDir";
             PopulationSize = 100;
             NumberOfGenerations = 1000;
-            MapIteration = 3000;
-            Name = "WoodCooperationMEM";
+            MapIteration = 2000;
+            Name = "WoodCooperation";
             Models = new RobotModel[2];
             Models[0] = new RobotModel()
             {
@@ -21,9 +21,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             };
             Models[1] = new RobotModel()
             {
-                amount = 4,
-                model = new WoodWorkerRobot(new Vector2(0, 0))
-
+               amount = 4,
+               model = new WoodWorkerRobot(new Vector2(0,0))
+                
             };
             AmountOfTrees = 200;
             AmountOfWood = 0;
@@ -34,14 +34,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             ValueOfStockedWood = 1000;
             base.Init(nameOfInitialFile);
         }
-        /// <summary>
-        /// Change fitness to calculate 
-        /// </summary>
-        /// <param name="map"></param>
-        /// <returns></returns>
-        protected override double CountFitness(Map.Map map)
-        {
-            return StockContainerFitness(base.CountFitness(map), map);
-        }
+
     }
 }

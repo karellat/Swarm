@@ -15,8 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SwarmSimFramework.Classes.Entities;
-using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Classes.Robots.MineralRobots;
 using SwarmSimFramework.Interfaces;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 
 namespace SwarmSimVisu
 {
@@ -59,6 +60,9 @@ namespace SwarmSimVisu
             modelCombox.Items.Add("Wood Cutter MEM");
             modelCombox.Items.Add("Wood Worker");
             modelCombox.Items.Add("Wood Worker MEM");
+            modelCombox.Items.Add("Mineral Refactor");
+            modelCombox.Items.Add("Mineral Scout");
+            modelCombox.Items.Add("Mineral Worker");
             preparedRobots = new List<PreparedRobot>();
             RobotModel = null;
             SelectedBrain = null;
@@ -121,6 +125,21 @@ namespace SwarmSimVisu
                     RobotModel = new WoodWorkerRobotMem(Vector2.Zero);
                     break;
                 }
+                case 4:
+                    {
+                        RobotModel = new RefactorRobot(Vector2.Zero,2000);
+                        break;
+                    }
+                case 5:
+                    {
+                        RobotModel = new ScoutRobot(Vector2.Zero,2000);
+                        break;
+                    }
+                case 6:
+                    {
+                        RobotModel = new WorkerRobot(Vector2.Zero,2000);
+                        break;
+                    }
                 default:
                 {
                     MessageBox.Show("None robot selecter! ");
@@ -167,8 +186,20 @@ namespace SwarmSimVisu
                 return;
             }
             this.Close();
-            
         }
-    
+
+        private void Slider_ValueChanged(object sender,
+            RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (this.AmountLabel == null)
+                return;
+            var slider = sender as Slider;
+            double value = slider.Value;
+            // ... Set Window Title.
+           this.AmountLabel.Text = value.ToString("0") + "/" + slider.Maximum;
+        }
+
+
+
     }
 }

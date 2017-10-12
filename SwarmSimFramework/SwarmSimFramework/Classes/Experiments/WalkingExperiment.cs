@@ -14,6 +14,7 @@ using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
 using SwarmSimFramework.SupportClasses.AwokeKnowing.GnuplotCSharp;
+using SwarmSimFramework.Classes.Robots.MineralRobots;
 
 namespace SwarmSimFramework.Classes.Experiments
 {

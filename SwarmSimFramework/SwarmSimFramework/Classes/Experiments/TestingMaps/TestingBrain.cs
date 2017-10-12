@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Resources;
 using System.Text;
 using SwarmSimFramework.Classes.Entities;
-using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimFramework.Classes.Experiments.TestingMaps

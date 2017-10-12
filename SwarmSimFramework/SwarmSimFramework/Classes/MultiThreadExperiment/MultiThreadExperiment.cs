@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Diagnostics; 
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.Experiments;
 using SwarmSimFramework.Classes.Map;
@@ -32,6 +33,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Name of experiment
         /// </summary>
         public string Name;
+        /// <summary>
+        /// Dir for saving serialization files
+        /// </summary>
+        public string WorkingDir = "mtdir";
+
         //ROBOTS & BRAIN FOR THEM
         /// <summary>
         /// Model of testing robots with amount of them 
@@ -50,31 +56,25 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Cycle of graph drawing
         /// </summary>
-        protected const int GraphGenerationIndex = 1;
+        protected const int GraphGenerationIndex = 10;
         /// <summary>
         /// Cycle of loging info
         /// </summary>
-        protected const int LogGenerationIndex = 1;
+        protected const int LogGenerationIndex = 10;
         /// <summary>
         /// Graphs of brains
         /// </summary>
         protected FitPlot[] Graphs = null;
 
-        /// <summary>
-        /// Dir for saving serialization files
-        /// </summary>
-        protected string WorkingDir = "mtdir";
-
-
         //GENERATION 
         /// <summary>
         /// Actual generation of brains read only values 
         /// </summary>
-        public List<T>[] ActualGeneration;
+        protected List<T>[] ActualGeneration;
         /// <summary>
         /// Following generation of brains thread safe for adding
         /// </summary>
-        public ConcurrentStack<T>[] FollowingGeneration;
+        protected ConcurrentStack<T>[] FollowingGeneration;
 
         //MAP STATES 
         /// <summary>
@@ -116,8 +116,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 FollowingGeneration[i] = new ConcurrentStack<T>();
                 Graphs[i] = new FitPlot(ActualGeneration[i].Count,Models[i].model.Name);
             }
+            //Stop watch count 
+            var watch = new Stopwatch(); 
             for (int generationIndex  = 0; generationIndex  < NumberOfGenerations; generationIndex ++)
             {
+                watch.Reset(); 
+                watch.Start();
                 GenerationFinnished = false;
                 FreeBrainIndex = 0;
                 lock(ControlLock)
@@ -145,9 +149,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     ActualGeneration[j] = new List<T>(FollowingGeneration[j].ToArray());
                     FollowingGeneration[j].Clear();
                 }
-       
-                Console.WriteLine(generationIndex +". Generation finnished");
-                //Log to console generation
+                watch.Stop(); 
+                Console.WriteLine(generationIndex +". Generation finnished, elapsed time " + watch.ElapsedMilliseconds + " miliseconds");
+                //Log to console generation 
                 if (generationIndex % LogGenerationIndex == 0)
                 {
                     //log generation
@@ -188,6 +192,17 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     {
                         var a = ActualGeneration[index];
                         StreamWriter sw = new StreamWriter(WorkingDir + "\\" + Name + "gen" + generationIndex + "Brain" + index +".json");
+                        sw.Write(BrainSerializer.SerializeArray(a.ToArray()));
+                        sw.Close();
+                    }
+                }
+                //If evolution finnished, write file outside of the working dir 
+                if(generationIndex == NumberOfGenerations-1)
+                {
+                    for (var index = 0; index < ActualGeneration.Length; index++)
+                    {
+                        var a = ActualGeneration[index];
+                        StreamWriter sw = new StreamWriter(Name + "Brain" + index + ".json");
                         sw.Write(BrainSerializer.SerializeArray(a.ToArray()));
                         sw.Close();
                     }

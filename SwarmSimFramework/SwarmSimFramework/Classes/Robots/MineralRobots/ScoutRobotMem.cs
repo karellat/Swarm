@@ -2,17 +2,19 @@
 using SwarmSimFramework.Classes.Effectors;
 using SwarmSimFramework.Classes.Entities;
 
-namespace SwarmSimFramework.Classes.Robots
+namespace SwarmSimFramework.Classes.Robots.MineralRobots
 {
     /// <summary>
     /// ScoutRobot for the 1. Scenario
     /// </summary>
-    public class ScoutRobot : RobotEntity
+    public class ScoutRobotMem : RobotEntity
     {
-        public ScoutRobot(Vector2 middle, float amountOfFuel,float orientation = 0 )
+        public ScoutRobotMem(int amountOfFuel) : this(Vector2.Zero, amountOfFuel) { }
+        public ScoutRobotMem(Vector2 middle, float amountOfFuel,float orientation = 0 )
             : base(middle, 2.5f, "ScoutRobot",null ,null , amountOfFuel, 0, 1, 100, 100, -100, orientation)
         {
-            ISensor[] sensors = new ISensor[12];
+            MemoryStick mem = new MemoryStick(10, this);
+            ISensor[] sensors = new ISensor[13];
             //FUEL Sensors
             sensors[0] = new FuelLineSensor(this,10,DegreesToRadians(45));
             sensors[1] = new FuelLineSensor(this,10,0);
@@ -31,12 +33,14 @@ namespace SwarmSimFramework.Classes.Robots
             sensors[10] = new TouchSensor(this,0.1f,DegreesToRadians(270));
             //Radio sensor 
             sensors[11] = new RadioSensor(this,100);
+            sensors[12] = mem;
 
             this.Sensors = sensors;
 
-            IEffector[] effectors = new IEffector[2];
+            IEffector[] effectors = new IEffector[3];
             effectors[0] = new TwoWheelMotor(this,3);
             effectors[1] = new RadioTransmitter(this,200);
+            effectors[2] = mem; 
 
             this.Effectors = effectors;
 

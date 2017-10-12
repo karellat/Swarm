@@ -20,18 +20,52 @@
 \begin{document}
 \maketitle
 \section{Téma}
-Cílem zápočtového programu bylo implementovat framework pro evoluci robotického swarmu. Jenž umožňuje variabilní tvorbu map, robotů a ostatních entit prostředí( paliva, interaktivních překážek...). Na základě vytvořeného prostředí spustí simulaci akcí jednotlivých robotů a ohodnocuje jejich chování. Poskytuje negrafickou multithread simulaci a vizuální vezi pro sledování korektosti simulace a vyvinutého chování. 
+Cílem zápočtového programu bylo implementovat framework pro evoluci robotického swarmu, jenž umožňuje variabilní tvorbu map, robotů a ostatních entit prostředí( paliva, interaktivních překážek...). Na základě vytvořeného prostředí spustí simulaci akcí jednotlivých robotů a ohodnocuje jejich chování. Poskytuje negrafickou multithread simulaci a vizuální vezi pro sledování korektosti simulace a vyvinutého chování. 
 \section{Členění programu:}
-\subsection{Intersection2D}
-Implementace jednoduchých průsečíků v 2D prostoru (přímky, úsečky, kružnice).
 \subsection{SwarmSimFramework} 
 Vlastní framework, definice rozhraní, vlastní kód simulace, příklady scénářů
-\subsection{SwarmSimVisu} 
+\subsection{Vedlejší projekty}
+\begin{itemize}
+\item SwarmSimVisu - 
 Visualizace průběhu simulace, prohlížení vygenerovaných chování. 
-\subsection{SimpleNetworking}
+\item SimpleNetworking -
 Umožňuje provádět simulaci mapy na vzdáleném stroji přes TCP protokol.
+\item Intersection2D - 
+Implementace jednoduchých průsečíků v 2D prostoru (přímky, úsečky, kružnice).
+\end{itemize}
 \newpage
 \section{SwarnSimFramework:}
+\subsection{Úvod:}
+Map je centrální třídou projektu, zajištuje vlastní průběh simulace. Uchovává jednotlivé entity(, roboty,  překážky, palivo, minerály), volá vyhodnocení akcí pro aktivní entity(roboty) včetně počítání kolizí a interakcí s mapou(přesuny pasivních entit, vysátí paliva, atd..). Potomci třídy entita reprezentuje objekt v mapě, všechny jsou  odděny od stejného předka. V celém projektu se vyskytují 2 tvary entit, konkrétně se jedná o úsečku(sensory, efektory) dále o kruh(roboti, překážky, minerály). Robot zastává pozici aktivní entity pohybující se na mapě a interagující s ostatními entitami. Ke komunikaci, pohybu a změnám se v mapě používá robot efektory a sensory. Sensory se používají ke čtení informací z mapy, tedy vrací vektor čísel representující rozdílné vlasnosti mapy(vzdálenostní sensory, rádiové etc.), zatímco efektory mají opačný účel, tedy ovlivňovat mapu a entity a příjímají vektor čísel jako nastavení konkrétního efektory. Sensor a Efektor jsou implementací rozhraní ISensor a IEffector(viz. další kapitola). Pro simulování chování robotů slouží tzv. "mozek", v programu IRobotBrain, který má za úkol z vektoru ze všech sensorů vytvořit vektor pro všechny efektory a tímto způsobem řídit chování robota. \par
+Vývin jednotlivých mozků je řízen přes experiment, což je pojem implementován v projektu různými způsoby dle požadavků uživatele. (MultiThreadExperiment, Experiment). Jejich společným cílem je nastavení parametrů dané mapy(počet překážek, druhy robotů..), iterace přes simulační kroky, průběh generací mozků, změnu mozků(differenciální evoluce, mutace..). Následně ukládání mezivýsledků a zobrazování postupu daného experimentu. 
+\subsection{Hlavní třídy:}
+\begin{itemize}
+\item Sensors - sensory, které čtou data z  mapy 
+\item Efektory - interakce s mapou a ostatními entitami
+\item Entities - Reprezentace jednotlivých entit, které se vyskytují na mapě. Všechny entity jsou odděděny od abstraktního předka \textbf{Entity}. 
+\item Experiments - jednotlivé parciální evoluce pro řešení daného úkolu, které počítají s visualizací
+\item Map - Reprezentace 2D prostředí, kde se všechny entity pohybují, zajištuje kontrolu kolizí a celý průběh simulací
+\item MultiThreadExperiment - jednotlivé parciální experimenty, optimalizované pro  běh na více vláknech bez GUI. 
+\item RobotBrains - Reprezentace jednotlivých mozků implementující interface IRobotBrain
+\item Robots - konkrétní reprezentace robotů 
+\end{itemize}
+\newpage
+\subsection{Map} 
+Reprezentace 2D prostředí simulace. Mapa je daná obdélníkem o dané velikosti při konstrukci. Běhemi konstrukce také dostává všechny entity ve výchozích pozicích, co se budou v prostředí vyskytovat, také vytvoří jejich klony, aby později bylo možné vrátit mapu do  počátečního stavu. Existují 4 základní typy entit v mapě. Jedná se o  Robots - aktivní entity(IRobotEntity), na které je při každém kroku mapy, zavolána nejdříve PrepareMove() a dále Move() v náhodném pořadí, aby žádný robot nebyl upřednostěn. PasiveEntities pasivní entity, buď překážky nebo jiné nezpracované materiály. (CircleEntity), FuelEntities- palivo vyskytující se v mapě, pokud je spotřebováno je odebráno z tohoto seznamu. Jako poslední RadioEntities, což je vrstva rádiových signálů, které se počítají jen pro speciální kolize. \par 
+MakeStep()  je metoda provádějící jeden krok simulace. 
+Mapa charakterizují 4 krajní body A,B,C,D, také aktuální cyklus(počet zavolaných MakeStep()).
+\begin{itemize}
+\item Kolize: 
+\begin{itemize}
+\item Pro CircleEntity vrací bool, zda s něčím koliduje. 
+\item pro LineEntity vrací průsečík s nejbližším objektem mimo fuel na něj  je speciální metoda. 
+\item pro CircleEntity reprezentující rádiový sensor, vrací slovní všech průsečíku s rádiovými  signály. 
+\item pro  CircleEntity existuje metoda CollisionColor, která vrací všechny průsečíky v dosahu CircleEntity.
+\end{itemize} 
+\item SceneMap - konkrétní mapy pro jednotlivé experimenty, zatím jsou dispozici  dvě vzorové MineralScene a WoodScene
+\item Intersection - struktura pro  jednotlivé druhy průsečíků z kolizí
+\end{itemize} 
+\newpage
 \subsection{Rozhraní}
 \begin{itemize}
 \item IEffector
@@ -44,20 +78,18 @@ Umožňuje provádět simulaci mapy na vzdáleném stroji přes TCP protokol.
 \item IExperiment - definuje průběh experimentu, ale je vhodný pro visualizační řešení. Obsahuje mapu na které je simulace prováděná. Každé volání MakeStep() provede nejmenší krok simulaci(jeden pohyb každé entity). Experiment musí být inicializován metodou Init(). Pokud experiment dosáhl svého cíle, FinnishedGeneration je nastaven na true. 
 \end{itemize}
 \newpage
-\subsection{Třídy:} 
-Skupiny(složky) 
-\begin{itemize}
-\item Effectors
+\subsection{Efektory a sensory:} 
+\subsubsection{Effectors:}
 - obsahuje konkrétní implementace efektorů, všechny třídy jsou odděděny od IEffector. Jedná se o efektory určené pro vzorové scénáře. Mohou být rozšířené skrz IEffector. \\
 \begin{itemize}
 \item MineralRefactor - slouží k přeměně minerálů (RawMaterialEnitity) na palivo. Refaktoruje entitu na vrcholu kontejneru robota. 
 \item Picker - implementovaný jako LineEntity, slouží ke zvedání entit, které se protínají s jeho úsečkou. Dále umí na úsečku pokládat entity z vrcholu zásobníku. 
 \item RadioTransmitter - umí vysílat rádiové  různé rádiové signály dle nastavení Effect
-\item TwoWheelMotor - pohybuje s robotem, dle nastavení rychlostí koleček. Fyzikální model, lze najít, zde  http://rossum.sourceforge.net/papers/DiffSteer/DiffSteer.html. 
+\item TwoWheelMotor - pohybuje s robotem, dle nastavení rychlostí koleček. Fyzikální model, lze najít, zde  \url{http://rossum.sourceforge.net/papers/DiffSteer/DiffSteer.html}. 
 \item Weapon - dle nastavení může působit poškození robotům, protínající úsečku jeho působnosti.(LineEntity) 
 \item WoodRefactor - slouží k přeměně RawMaterialEnitity, pokud protínají úsečku jeho působnosti(LineEnitity), přímo na mapě. Přeměněná entita tedy nemusí být v kontejneru.
 \end{itemize}
-\item Sensors
+\subsubsection{Sensors:}
 - obsahuje konkrétní implementace sensorů, všechny třídy jsou  odděděny od ISensor. Jedná se o sensory pro vzorové scénáře. Mohou být rozšířené skrz ISensor.
 \begin{itemize}
 \item FuelLInSensor - Sensor, který vrací vzdálenost od Fuel, pokud úsečka (LineEntity) nějaké na mapě protíná.
@@ -68,24 +100,10 @@ Skupiny(složky)
 \item TouchSensor - Sensor, který vrací jen binární hodnotu, zda protíná nějakou entitu nebo nikoliv. Implementován jako CircleEntity. 
 \item TypeCircleSensor - Sensor, který vrací binární hodnotu pro každý druh entity(Entity Color), která říká, zda je daná entita v jeho okolí či nikoliv.
 \end{itemize}
-\item Entities - Reprezentace jednotlivých entit, které se vyskytují na mapě. Všechny entity jsou odděděny od abstraktního předka \textbf{Entity}. 
-\item Experiments - jednotlivé parciální evoluce pro řešení daného úkolu, které počítají s visualizací
-\item Map - Reprezentace 2D prostředí, kde se všechny entity pohybují, zajištuje kontrolu kolizí a celý průběh simulací
-\item MultiThreadExperiment - jednotlivé parciální experimenty, optimalizované pro  běh na více vláknech bez GUI. 
-\item RobotBrains - Reprezentace jednotlivých mozků implementující interface IRobotBrain
-\item Robots - konkrétní reprezentace robotů 
 
-
-\end{itemize}
+\subsection{Entity}
 \subsubsection{abstract class Entity}
-Reprezentuje společného předka a implementuje zakladní společné vlastnosti a metody.\\
-\textbf{Vlastnosti:} 
-\begin{itemize}
-\item Name 
-\item GetShape - udává tvar entity(enum Shape(Circle,Line,LineSegment, Abstract) ) 
-\item Orientation - aktuální orientace v radiánech vzhledem k původní poloze
-\item RotationMiddle - střed podle kterého se daná entita otáčí
-\item Color - udává barvu(druh) entity
+Reprezentuje společného předka a implementuje zakladní společné vlastnosti a metody pro všechna entity pasivní i nepasivní. Definuje vlastnost Color určující účel entit v mapě. 
 \begin{itemize}
 \item ObstacleColor
 \item RawMaterialColor
@@ -93,72 +111,22 @@ Reprezentuje společného předka a implementuje zakladní společné vlastnosti
 \item RobotColor
 \item WoodColor 
 \end{itemize}
-\end{itemize}
-\textbf{Metody:}
-\begin{itemize}
-\item  Entity DeepClone();
-\item  void RotateRadians(float angleInRadians);  RotateDegrees(float angleInDegrees); 
-\item  StringBuilder Log();
-\end{itemize}
-	Dále jsou od Entity odděleny základní dva tvary entit absatraktní třídy CircleEntity a LineEntity, které přidávají konkrétní implementace pohybových funkcí a 	přidávají některé další vlastnosti. 
+Dále jsou od Entity odděleny základní dva tvary entit abstraktní třídy CircleEntity a LineEntity, které přidávají konkrétní implementace pohybových funkcí a 	přidávají některé další vlastnosti. 
 
 	\subsubsection{CircleEntity:}
 	Přepisuje metody MoveTo, RotateRadians pro  pohybování kruhu. Přidává vhodné konstruktory. \\ 
-	\textbf{Vlastnosti:} 
-	\begin{itemize}
-	\item Middle
-	\item  Radius - v radiánech
-	\item FPoint - jeden bod na kružnici daný při konstrukci, udává směr kruhu
-	\item Discovered - informace, zda byla daná entita objevena
-	\end{itemize}
-
 	\subsubsection{LineEntity:}
 	Přepisuje metody MoveTo, RotateRadians pro pohybování úsečkou. Přidává vhodné konstruktory. \\ 
-	\textbf{Vlastnosti:} 
-	\begin{itemize}
-	\item Vector2 A - počáteční bod úsečky
-	\item Vector2 B - konečný bod úsečky
-	\item float Length
-	\end{itemize}
-\newpage
+	\newpage
 	\subsubsection{RobotEntity}
-	Potomek třídy CircleEntity, který tvoří základ pro jednotlivé roboty.  \\ 
-	\textbf{Vlastnosti:}
-	\begin{itemize}
- 	\item Bounds StandardBounds - rozsahy hodnot nad kterými robot pracuje
-	\item bool Alive - true, když má robot dostatek paliva a zdraví 
-	\item int TeamNumber
-	\item float Health
-	\item float FuelAmount 
-	\item IEffector[] Effectors - všechny efektory připojené k robotovi 
-	\item ISensor[] Sensors - všechny sensory připojené k robotovi
-	\item IRobotBrain Brain  - mozek robota, zajišťuje chování robota, je mu předkládán výstup ze Sensorů a načítají se z něj hodnoty pro Efektory
-	\item int SensorDimension - celková velikost vektoru přicházejícího ze sensorů
-	\item int EffectorDimension - celková velikost vektoru, který očekávají efektory 
-	\item long CollisionDetected 
-	\item long InvalidContainerOperation 
-	\item long InvalidRefactorOperation
-	\item long InvalidWeaponOperation 
-	\item Vector2 StartingPoint - bod na který byl robot přidán
-	\item Bounds NormalizedBound - rozsahy hodnot se kterými robot pracuje(Sensory a Efektory) 
- 	\item int ContainerMaxCapacity 
-	\item int ActualContainerCount
-	\end{itemize}
-	\textbf{Metody} 
+	Potomek třídy CircleEntity, který tvoří základ pro jednotlivé roboty. Uchovává konkrétní instance efektorů a sensorů, zajišťuje komunikaci mezi nimi a mozkem(i převody jednotlivých rozsahů. Přidává další vlastnosti jako životy, množství paliva, číslo týmu, kontejner(možnost přesouvat a uchovávat ostatní instance třídy Entity). \\ 
+	\textbf{Některé důležitější metody:} 
 	\begin{itemize}
 	\item List<CircleEntity> ContainerList() - robot může mít kontejner na CircleEntities, dané kapacity při vytváření robota, tata metody vratí celý jeho obsah
 	\item PrepareMove(Map.Map map) - na dané mapě provede výpočet na všech sensorech a dané hodnoty předá mozku na zpracování, uloží vstup pro efektory z mozku. 
 	\item Move(Map.Map map) - spustí všechny efektory na základě vektoru vypočítaného v předchozí metodě. 
-	\item Reset() - převede robota do stavu po konstrukci. 
-	\item DeepClone() 
-	\item ConsumeFuel(FuelEntity fuelTank) - z přijmuté FuelEntity přidá dané množství paliva do své nádrže
 	\item Metody spojené s kontejnerem - PushContainer, PopContainer, PeekContainer
-	\item AcceptDamage - změní život robota
-	\item CountDimension - přepočítá SensorDimension a EffectorDimension
-	\item Log() 
 \end{itemize}
-\newpage
-
 \subsubsection{Ostatní CircleEntity: }
 \begin{itemize}
 \item FuelEntity - pasivní entita, která reprezentuje nádobu s palivem
@@ -175,9 +143,11 @@ Reprezentuje společného předka a implementuje zakladní společné vlastnosti
 \item WoodWorkerRobotMem - stejný jako předchozí jen má navíc paměťový slot
 \end{itemize}
 \newpage 
-\subsection{Experiments:}
-Základem experimentů je abstraktní třída Experimet<T>, kde T je potomek IRobotBrain typ mozku, který chceme vyvíjet. Obsahuje spoustu proměnných pro nastavení prostředí a evoluce. Viz. komentáře u dané třídy. Třída je uzpůsobena na jednotlivé kroky evoluce, aby po nich mohla přijít na řadu visualizace. Slouží výhradně k testování prostředí a výsledných mozků z experimentů. 
-\subsubsection{Jednotlivé experimenty:}
+\subsection{Experiment:}
+Experimenty jsou určeny pro nastavení vývoje mozků. Jedná se o počet iterací jedné simulace mapy, velikost populací, algoritmus, který vytváří nové generace, ohodnocení fitness pro jednotlivé mozky. Jejich hlavním cílem poskytovat třídu, kterou používá GUI nebo konzole a v ní běží všechny simulace. Tomuto konceptu jsou v programu věnovány dvě třídy Experiment(GUI) a MultiThreadExperiment(výkon). \par
+\subsubsection{Experiments:}
+Základem experimentů je abstraktní třída Experimet<T>, kde T je potomek IRobotBrain typ mozku, který chceme vyvíjet. Obsahuje spoustu proměnných pro nastavení prostředí a evoluce. Viz. komentáře u dané třídy. Třída je uzpůsobena na jednotlivé kroky evoluce, aby po nich mohla přijít na řadu visualizace. Slouží výhradně k testování prostředí a výsledných mozků z experimentů. \par
+\textbf{Jednotlivé experimenty:} \par
 \begin{itemize}
 \item TestingExperiment - debugovací experiment
 \item WalkingExperiment - debug. experiment
@@ -190,35 +160,18 @@ Základem experimentů je abstraktní třída Experimet<T>, kde T je potomek IRo
 \item WoodCuttingExperimentPickUp- experiment pro evoluci nově vygenerovaných mozků a optimalizovaný na maximum  odnosených zprac. stromů (WoodWorker)
 \end{itemize}
 \end{itemize}
-\newpage
-\subsection{Map} 
-Reprezentace 2D prostředí simulace.Mapa je daná obdélníkem o dané velikosti při konstrukci. Při konstrukci také dostává všechny entity ve výchozích pozicích, co se budou v prostředí vyskytovat. Při konstrukci si vytvoří jejich klony, aby později bylo možné vrátit mapu do  počátečního stavu. Existují 4 základní typy entit v mapě. Jedná se o  Robots - aktivní entity(IRobotEntity), na které je při každém kroku mapy, zavolána nejdříve PrepareMove() a dále Move() v náhodném pořadí, aby žádný robot nebyl upřednostěn. PasiveEntities pasivní entity, buď překážky nebo jiné nezpracované materiály. (CircleEntity), FuelEntities- palivo vyskytující se v mapě, pokud je spotřebováno je odebráno z tohoto seznamu. Jako poslední RadioEntities, což je vrstva rádiových signálů, které se počítají jen pro speciální kolize. \par 
-MakeStep()  je metoda provádějící jeden krok simulace. 
-Mapa charakterizují 4 krajní body A,B,C,D, také aktuální cyklus(počet zavolaných MakeStep()).
-\begin{itemize}
-\item Kolize: 
-\begin{itemize}
-\item Pro CircleEntity vrací bool, zda s něčím koliduje. 
-\item pro LineEntity vrací průsečík s nejbližším objektem mimo fuel na něj  je speciální metoda. 
-\item pro CircleEntity reprezentující rádiový sensor, vrací slovní všech průsečíku s rádiovými  signály. 
-\item pro  CircleEntity existuje metoda CollisionColor, která vrací všechny průsečíky v dosahu CircleEntity.
-\end{itemize} 
-\item SceneMap - konkrétní mapy pro jednotlivé experimenty, zatím jsou dispozici  dvě vzorové MineralScene a WoodScene
-\item Intersection - struktura pro  jednotlivé druhy průsečíků z kolizí
-\end{itemize} 
-\newpage
 \subsection{MultiThread}
 Základem MT experimentů je bstract class MultiThreadExperiment<T>, kde T je potomek IRobotBrain druh mozku, který vyvíjí. Tato třída obsahuje základní nastavení evoluce. (velikost populace, jméno, počet iterací atd..). Před spuštěním fce Run() je potřeba připravit Mapu a modely mozků, robotů pomocí přetížení abstraktní metody Init(). Funkce Run() - pouští jednotlivé členy aktuální populace každou na jiném vlákně, jejich ohodnocení je implementována pomocí abstraktní metody CountFitness(map). Takto pokračuje napříč všemi generacemi až do poslední. Během běhu serializuje nejlepší mozky, graf(,pokud PC obsahuje GNUplot, tak i vykresluje), všechny mozky(ve zvolených generacích) . \\
 Složky Mineral Scene a WoodScene obsahují vzorové příklady experimentů pro scénáře WoodScene a MineralScene.
 \subsection{RobotBrains} 
-Třídy definující chování robotů. Projekt obsahuje 3 základní mozky:
+Třídy definující chování robotů. Základním principem je funkce, která přijme vektor float hodnot a  z něj vytvoří jiný vektor float. Vstupní hodnoty předává robot ze sensorů a výstupní hodnoty jsou použity pro nastavení efektorů. Projekt obsahuje 3 základní mozky:
 \begin{itemize}
 \item FixedBrain - mozek, který ignoruje vstup a vrací daný výstup 
 \item Perceptron - základní prvek neuronových sítí (vážený součet)  lib. vstup a jeden výstup
 \item SingleLayerNeuronNetwork - neuronová síť tvořená z perceptronů.
 \end{itemize}
 
-Pro SingleLayredNetwork je připravený evoluční algoritmus Parciální Evoluce, definovaná dle  \url{https://en.wikipedia.org/wiki/Differential_evolution}.
+Pro SingleLayredNetwork je připravený evoluční algoritmus Differenciální evoluce, definovaná dle  \url{https://en.wikipedia.org/wiki/Differential_evolution}.
 
 \subsection{Externí knihovny, NuGet}
 \begin{itemize}
@@ -233,8 +186,18 @@ Pro SingleLayredNetwork je připravený evoluční algoritmus Parciální Evoluc
 \item ActivationFuncs - funkce pro převod hodnot ze sensorů do efektorů
 \item GNUPlot - knihovna pro ovládání programu GNUPLOT 
 \item RandomNumber  - statická třída pro volání náhodných tříd
-\item SupportClasses - pomocné třídy
+\item SupportClasses - ostatní pomocné třídy
 
 \end{itemize}
+
+\newpage
+\section{Ostatní projekty:}
+\subsection{SwarmSimVisu:}
+Motivací pro tento projekt je sledování, ladění chyb a v neposlední řadě také pozování vyvinutých mozků a chování dokončených experimentů. Pro debugovací účely umí pouštět jednotlivé potomky třídy Experiment, kde lze sledovat průběh experimentů. Na kontrolu vyvinutých mozků je k dispozici Experiment "Testing Brain", kde mohu připravit experiment simulující průběh mapy, kde se pohybují mnou zvolené entity s nahraným serializovaným mozkem. Vykreslování probíhá přes třídu MapCanvas, kde je použita externí třída D2dControl.D2dControl. Centrální třídou je MainWindow, které spouští jednotlivé Experimenty. Instance třídy InfoWindow slouží pro krátké informativní zprávy. Pro sestavení vlastního "Testing Brain" experimentu jsou k dispozici dvě okna BrainSelectionWindow(nastavení globální parametrů simulace), BrainRobotConnectionWindow(připravení mozků a robotů). 
+\subsection{SimpleNetworking:} 
+Jedná se o projekt, který umožňuje spouštět simulaci jednotlivých generačních cyklů na vzdálených počítačích skrze TCP. Oproti normálním konvencím se jedná o jednoho clienta, který pouští na serverch simulaci a přijímá jejich výsledek. K tomuto jsou připraveny dvě třídy ClientTcpCommunicator a ServerTcpCommunicator, kde lze nastavit, zda se má odesílat mozek k ohodnocení či vygenerovat zcela nový. Po navázání spojení s dostupnými servery se odesílá mapa, dále mozek(nebo se generuje), pak běží výpočet na serveru a zpět je odeslána fitness mozku(ů) či celý serializovaný mozek. Pro pomocné třídy a funkce nad TCP slouží statická třída TcpControl.
+\subsection{InterSection2d:}
+Jedná se  jednoduché průsečíky kruhu, přímek, úseček v 2D prostoru. Projekt cílí na rychlost, neboť se jedná o nejvíce volané třídy z celého projektu.
+  
 
 \end{document}

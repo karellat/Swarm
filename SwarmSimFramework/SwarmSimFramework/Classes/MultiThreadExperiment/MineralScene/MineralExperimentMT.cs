@@ -16,19 +16,20 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         // Basic Evolution VARIABLE
         public int AmountOfMineral = 0;
         public int AmountOfObstacle = 0;
-        public double ValueOfDiscoveredMineral { get; protected set; }
-        public double ValueOfStockedMineral { get; protected set; }
-
-        public double ValueOfRefactoredFuel { get; protected set; }
-        public double ValueOfRemainingFuel { get; protected set; }
+        public int AmountOfFreeFuel = 0;
+        public double ValueOfDiscoveredMineral = 0.0;
+        public double ValueOfStockedMineral = 0.0;
+        public double ValueOfRefactoredFuel = 0.0;
+        public double ValueOfRemainingFuel = 0.0;
 
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
 
         protected override void Init(string[] nameOfInitialFile)
         {
-            MineralScene.AmountOfMineral = AmountOfMineral;
-            MineralScene.AmountOfObstacles = AmountOfObstacle;
-            MapModel = MineralScene.MakeMapModel(Models);
+            Map.MineralScene.AmountOfMineral = AmountOfMineral;
+            Map.MineralScene.AmountOfObstacles = AmountOfObstacle;
+            Map.MineralScene.AmountOfFreeFuel = AmountOfFreeFuel;
+            MapModel = Map.MineralScene.MakeMapModel(Models);
 
             //Prepare model brains from models
             BrainModels = new BrainModel<SingleLayerNeuronNetwork>[Models.Length];

@@ -2,10 +2,11 @@
 using SwarmSimFramework.Classes.Effectors;
 using SwarmSimFramework.Classes.Entities;
 
-namespace SwarmSimFramework.Classes.Robots
+namespace SwarmSimFramework.Classes.Robots.WoodRobots
 {
     public class WoodWorkerRobot : RobotEntity
     {
+        public WoodWorkerRobot() : this(Vector2.Zero) { } 
         public WoodWorkerRobot(Vector2 middle, float orientation = 0)
             : base(middle, 5f, "WorkerRobot", null, null, 100, 5, 1, 100, 100, -100, orientation)
         {

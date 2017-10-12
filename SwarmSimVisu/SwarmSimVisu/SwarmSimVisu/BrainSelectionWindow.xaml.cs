@@ -37,6 +37,7 @@ namespace SwarmSimVisu
             
             InitializeComponent();
             MapComboBox.Items.Add("WoodMap");
+            MapComboBox.Items.Add("MineralMap");
             string name = "";
             MapComboBox.SelectionChanged += (sender, args) =>
             {
@@ -58,6 +59,27 @@ namespace SwarmSimVisu
                         mapInfo.AppendLine(WoodScene.AmountOfWoods.ToString());
                         MapText.Text = mapInfo.ToString();
                             break; 
+                    }
+                    case 1:
+                    {
+                        name = "Mineral map";
+                        MineralScene.AmountOfFreeFuel = 10;
+                        MineralScene.AmountOfMineral = 10;
+                        MineralScene.AmountOfObstacles = 10;
+                        StringBuilder mapInfo = new StringBuilder(name + "\n");
+                        mapInfo.AppendLine("Max amount of robots: " + MineralScene.MaxOfAmountRobots);
+                        mapInfo.Append("Map heigth: ");
+                        mapInfo.Append(MineralScene.MapHeight.ToString());
+                        mapInfo.Append("Map width: ");
+                        mapInfo.AppendLine(MineralScene.MapWidth.ToString());
+                        mapInfo.Append("Free fuel in map: ");
+                        mapInfo.Append(MineralScene.AmountOfFreeFuel);
+                        mapInfo.Append("Minerals in map: ");
+                        mapInfo.AppendLine(MineralScene.AmountOfMineral.ToString());
+                        mapInfo.Append("Obstacles in map: ");
+                        mapInfo.AppendLine(MineralScene.AmountOfObstacles.ToString());
+                        MapText.Text = mapInfo.ToString();
+                        break;
                     }
                     default:
                     {
@@ -108,6 +130,11 @@ namespace SwarmSimVisu
                 case 0:
                 {
                     SelectedMap = WoodScene.MakeMap(preparedRobots.ToArray());
+                    break;
+                }
+                case 1:
+                {
+                    SelectedMap = MineralScene.MakeMap(preparedRobots.ToArray()); 
                     break;
                 }
             }

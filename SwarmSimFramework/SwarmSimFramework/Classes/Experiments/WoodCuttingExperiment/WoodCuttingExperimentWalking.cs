@@ -10,6 +10,7 @@ using System.Linq;
 using System.Management.Instrumentation;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.SupportClasses;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 
 namespace SwarmSimFramework.Classes.Experiments.WoodCuttingExperiment
 {

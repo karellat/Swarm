@@ -1,26 +1,27 @@
 ﻿using System.Numerics;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
-    public class WoodWorkerWalkMem :WoodExperimentMt
+    public class WoodWorkerWalk : WoodExperimentMt
     {
         /// <summary>
         /// Prepare models and fitness eval
         /// </summary>
         protected override void Init(string[] nameOfInitialFile)
         {
-            WorkingDir = "WoodWorkerWalkMem";
-            PopulationSize = 1000;
+            WorkingDir = "WoodWorkerWalk";
+            PopulationSize = 100;
             NumberOfGenerations = 1000;
             MapIteration = 2000;
-            Name = "WoodWorkerWalkMem";
+            Name = "WoodWorkerWalk";
             Models = new RobotModel[1];
             Models[0] = new RobotModel()
             {
                 amount = 4,
-                model = new WoodWorkerRobotMem(Vector2.Zero)
+                model = new WoodWorkerRobot(Vector2.Zero)
             };
             AmountOfTrees = 50;
             AmountOfWood = 200;

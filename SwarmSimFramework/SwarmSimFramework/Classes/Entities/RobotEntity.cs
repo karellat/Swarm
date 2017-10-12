@@ -395,6 +395,7 @@ namespace SwarmSimFramework.Classes.Entities
                 }
             }
         }
+        public abstract void FuelBurn
         /// <summary>
         /// Robot info
         /// </summary>

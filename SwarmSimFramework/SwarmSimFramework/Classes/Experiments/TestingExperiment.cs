@@ -7,6 +7,7 @@ using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
+using SwarmSimFramework.Classes.Robots.MineralRobots;
 
 namespace SwarmSimFramework.Classes.Experiments
 {

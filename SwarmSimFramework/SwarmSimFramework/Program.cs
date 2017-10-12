@@ -13,6 +13,10 @@ using SwarmSimFramework.Classes.MultiThreadExperiment;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
+using SwarmSimFramework.Classes.Robots.MineralRobots;
+using SwarmSimFramework.Classes.MultiThreadExperiment.MineralScene;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace SwarmSimFramework
 {
@@ -22,7 +26,7 @@ namespace SwarmSimFramework
         {
             MultiThreadExperiment<SingleLayerNeuronNetwork> exp;
             //Selection of experiments args[0]
-            if (args.Length < 2)
+            if (args.Length < 2  && args[0] != "debug")
             {
                Console.WriteLine("Wrong parameters!");
                 Console.ReadLine();
@@ -30,10 +34,16 @@ namespace SwarmSimFramework
             }
             switch (args[0])
             {
+                case "-c":
+                    {
+                        exp = MTExperimentReader.ExperimentFromConfig(args[1]);
+                        break;
+                    }
                 case "debug":
-                {
-                    var i = MineralScene.InitPositionOfRobot();
-                    return;
+                    {
+                        Console.WriteLine(MTExperimentReader.ReturnFields(new MineralScoutWalk()));
+                        return; 
+
                 }
                 case "D":
                 {
@@ -84,7 +94,7 @@ namespace SwarmSimFramework
                     exp.Run();
                 }
                 Console.WriteLine("Simulation finnished");
-                Console.ReadLine();
+                
             }
         }
 
