@@ -319,7 +319,7 @@ namespace SwarmSimFramework.Classes.Map
         }
     }
 
-    public static class CompetiveScene<T> where T : IRobotBrain
+    public static class CompetitiveScene<T> where T : IRobotBrain
     {
         /// <summary>
         /// Amount of obstacles

@@ -12,9 +12,9 @@ namespace SwarmSimFramework.Classes.Robots.WoodRobots
         {
             ISensor[] sensors = new ISensor[9];
             //Line Type Sensors
-            sensors[0] = new LineTypeSensor(this, 25, DegreesToRadians(45));
-            sensors[1] = new LineTypeSensor(this, 25, 0);
-            sensors[2] = new LineTypeSensor(this, 25, DegreesToRadians(-45));
+            sensors[0] = new LineTypeSensor(this, 30, DegreesToRadians(45));
+            sensors[1] = new LineTypeSensor(this, 30, 0);
+            sensors[2] = new LineTypeSensor(this, 30, DegreesToRadians(-45));
             //Locator
             sensors[3] = new LocatorSensor(this);
             //Touch sensors

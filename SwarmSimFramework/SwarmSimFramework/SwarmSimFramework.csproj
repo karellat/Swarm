@@ -99,6 +99,10 @@
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
     <Compile Include="Classes\RobotBrains\SingleLayerNeuronNetwork.cs" />
+    <Compile Include="Classes\Robots\CompetitiveRobots\FighterRobotMem.cs" />
+    <Compile Include="Classes\Robots\CompetitiveRobots\FightScoutRobotMem.cs" />
+    <Compile Include="Classes\Robots\CompetitiveRobots\FightScoutRobot.cs" />
+    <Compile Include="Classes\Robots\CompetitiveRobots\FighterRobot.cs" />
     <Compile Include="Classes\Robots\MineralRobots\RefactorRobotMem.cs" />
     <Compile Include="Classes\Robots\MineralRobots\RefactorRobot.cs" />
     <Compile Include="Classes\Robots\MineralRobots\ScoutRobotMem.cs" />
