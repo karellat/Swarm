@@ -126,6 +126,12 @@ namespace SwarmSimFramework.Classes.Map
                 if (Robots[i].Alive)
                     Robots[i].Move(this);
             }
+            //Find intersection with fuels
+            if (FuelEntities.Count != 0)
+            {
+                foreach (var r in Robots)
+                    CollisionFuel(r);
+            }
             //Clean empty fuels 
             FuelEntities.RemoveAll((x => x.Empty));
             //Cycle change 
@@ -209,6 +215,7 @@ namespace SwarmSimFramework.Classes.Map
                 if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, p.Middle, p.Radius))
                     return true;
             }
+
             return false;
         }
 

@@ -99,7 +99,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <returns></returns>
         public override StringBuilder Log()
         {
-            return new StringBuilder("Circle:  M = " + Middle + " r = " + Radius);
+            return new StringBuilder("Name:" + Name + "  M = " + Middle + " r = " + Radius);
         }
     }
 }

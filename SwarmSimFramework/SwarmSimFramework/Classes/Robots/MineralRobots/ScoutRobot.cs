@@ -13,6 +13,8 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
         public ScoutRobot(Vector2 middle, float amountOfFuel,float orientation = 0 )
             : base(middle, 2.5f, "ScoutRobot",null ,null , amountOfFuel, 0, 1, 100, 100, -100, orientation)
         {
+            //set fuel consumation
+            this.BurnFuelPerMove = 1;
             ISensor[] sensors = new ISensor[12];
             //FUEL Sensors
             sensors[0] = new FuelLineSensor(this,10,DegreesToRadians(45));

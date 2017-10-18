@@ -26,7 +26,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// number of friendly team  
         /// </summary>
         [JsonProperty]
-        public int TeamNumber { get; protected set; }
+        public int TeamNumber { get; set; }
         /// <summary>
         /// Actual health of robot 
         /// </summary>
@@ -36,6 +36,11 @@ namespace SwarmSimFramework.Classes.Entities
         /// Amount of fuel
         /// </summary>
         public float FuelAmount;
+        /// <summary>
+        /// Amount of burned fuel of single move
+        /// </summary>
+        public float BurnFuelPerMove = 0.0f;
+
             //Controls
         /// <summary>
         /// Effectors of robot
@@ -215,6 +220,7 @@ namespace SwarmSimFramework.Classes.Entities
         public void Move(Map.Map map)
         {
             //Invoke all effectors with brain decided values
+
             int index = 0;
             foreach (var e in Effectors)
             {
@@ -227,6 +233,8 @@ namespace SwarmSimFramework.Classes.Entities
 
                 e.Effect(set,this,map);
             }
+            if (BurnFuelPerMove != 0)
+                BurnFuel(BurnFuelPerMove);
         }
         /// <summary>
         /// Reset calculators
@@ -395,7 +403,6 @@ namespace SwarmSimFramework.Classes.Entities
                 }
             }
         }
-        public abstract void FuelBurn
         /// <summary>
         /// Robot info
         /// </summary>
@@ -436,6 +443,18 @@ namespace SwarmSimFramework.Classes.Entities
             if (ActualContainerCount > 0)
                 s.AppendLine("\t\t Top of container: " + Container.Peek().GetType());
             return s;
+        }
+        /// <summary>
+        /// Consume fuel of single move
+        /// </summary>
+        /// <param name="amount"></param>
+        public virtual void BurnFuel(float amount)
+        {
+            this.FuelAmount -= amount;
+            if (amount <= 0)
+            {
+                this.Alive = false; 
+            }
         }
     }
 }

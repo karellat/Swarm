@@ -43,6 +43,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Model of testing robots with amount of them 
         /// </summary>
         public RobotModel[] Models;
+        /// <summary>
+        /// Team of robots to change brains
+        /// </summary>
+        private int numOfEvolvingTeam = 0;
 
 
         //SERIALIZATION 
@@ -143,7 +147,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         //Monitor.Wait(ControlLock);
                     }
                 }
-                //Change generation, clear buffer
+                //Change generation, clear buffer 
                 for (int j = 0; j < ActualGeneration.Length; j++)
                 {
                     ActualGeneration[j] = new List<T>(FollowingGeneration[j].ToArray());
@@ -222,7 +226,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <param name="brainIndex"></param>
         protected void SingleBrainEvaluationMt(int brainIndex)
         {
-            
             //Create new map, just reading values
             Map.Map map = MapModel.ConstructMap();
             //DEBUG
@@ -242,13 +245,15 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //For model choose suitable brain
             foreach (var r in map.Robots)
             {
+                if (r.Brain != null && r.TeamNumber != 1)
+                    throw new NotImplementedException("Unknown team");
+
                 for (int i = 0; i < Models.Length; i++)
                 {
                     if (evalBrains[i].SuitableRobot(r))
                         r.Brain = evalBrains[i].Brain.GetCleanCopy();
                 }
             }
-
             for (int i = 0; i < MapIteration; i++)
             {
                 map.MakeStep();

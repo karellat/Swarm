@@ -20,6 +20,6 @@
         <TextBlock x:Name="ModelInfo" Margin="10,33,22.2,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="111"/>
         <Button Click="FinishClick" Content="Finnish" HorizontalAlignment="Left" Margin="672,557,0,0" VerticalAlignment="Top" Width="135"/>
         <TextBlock x:Name="PreparedModels" Margin="10,297,22.2,0" TextWrapping="Wrap" Text="Prepared models:" VerticalAlignment="Top" Height="229"/>
-        <TextBlock x:Name="AmountLabel" HorizontalAlignment="Left" Margin="672,11,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" RenderTransformOrigin="2.981,1.008" Height="15" Width="42"/>
+        <TextBlock x:Name="AmountLabel" HorizontalAlignment="Left" Margin="672,11,0,0" TextWrapping="Wrap" Text="1/10" VerticalAlignment="Top" RenderTransformOrigin="2.981,1.008" Height="15" Width="42"/>
     </Grid>
 </Window>

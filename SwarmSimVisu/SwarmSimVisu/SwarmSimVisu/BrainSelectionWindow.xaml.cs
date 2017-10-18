@@ -13,10 +13,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.Experiments.TestingMaps;
 using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.Interfaces;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimVisu
 {
@@ -38,6 +42,7 @@ namespace SwarmSimVisu
             InitializeComponent();
             MapComboBox.Items.Add("WoodMap");
             MapComboBox.Items.Add("MineralMap");
+            MapComboBox.Items.Add("CompetitiveMap");
             string name = "";
             MapComboBox.SelectionChanged += (sender, args) =>
             {
@@ -63,9 +68,9 @@ namespace SwarmSimVisu
                     case 1:
                     {
                         name = "Mineral map";
-                        MineralScene.AmountOfFreeFuel = 10;
-                        MineralScene.AmountOfMineral = 10;
-                        MineralScene.AmountOfObstacles = 10;
+                        MineralScene.AmountOfFreeFuel = 100;
+                        MineralScene.AmountOfMineral = 100;
+                        MineralScene.AmountOfObstacles = 100;
                         StringBuilder mapInfo = new StringBuilder(name + "\n");
                         mapInfo.AppendLine("Max amount of robots: " + MineralScene.MaxOfAmountRobots);
                         mapInfo.Append("Map heigth: ");
@@ -78,6 +83,34 @@ namespace SwarmSimVisu
                         mapInfo.AppendLine(MineralScene.AmountOfMineral.ToString());
                         mapInfo.Append("Obstacles in map: ");
                         mapInfo.AppendLine(MineralScene.AmountOfObstacles.ToString());
+                        MapText.Text = mapInfo.ToString();
+                        break;
+                    }
+                    case 2:
+                    {
+                        name = "Mineral map";
+                        CompetiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles = 500;
+                        var ScoutRobot = new ScoutCutterRobot();
+                        CompetiveScene<SingleLayerNeuronNetwork>.enemyModels = new [] {new RobotModel()
+                        {
+                            amount = 5,
+                            model =(RobotEntity) ScoutRobot.DeepClone()
+                        }};
+
+                        CompetiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels = new [] {new BrainModel<SingleLayerNeuronNetwork>()
+                        {
+                            Robot = (RobotEntity) ScoutRobot.DeepClone(),
+                            Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension(){Input = ScoutRobot.SensorsDimension, Output = ScoutRobot.EffectorsDimension})
+                        }};
+                        StringBuilder mapInfo = new StringBuilder(name + "\n");
+                        mapInfo.AppendLine("Max amount of robots: " + CompetiveScene<SingleLayerNeuronNetwork>.MaxOfAmountRobots);
+                        mapInfo.Append("Map heigth: ");
+                        mapInfo.Append(CompetiveScene<SingleLayerNeuronNetwork>.MapHeight.ToString());
+                        mapInfo.Append("Map width: ");
+                        mapInfo.AppendLine(CompetiveScene<SingleLayerNeuronNetwork>.MapWidth.ToString());
+                        mapInfo.Append("Obstacles in map: ");
+                        mapInfo.Append(CompetiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles);
+                        
                         MapText.Text = mapInfo.ToString();
                         break;
                     }
@@ -136,6 +169,11 @@ namespace SwarmSimVisu
                 {
                     SelectedMap = MineralScene.MakeMap(preparedRobots.ToArray()); 
                     break;
+                }
+                case 2:
+                {
+                    SelectedMap = CompetiveScene<SingleLayerNeuronNetwork>.MakeMap(preparedRobots.ToArray());
+                    break; 
                 }
             }
             if (SelectedMap == null)

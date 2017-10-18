@@ -13,6 +13,8 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
         public WorkerRobotMem(Vector2 middle,float amountOfFuel,float orientation = 0) 
             : base(middle, 5, "WorkerRobot", null, null, amountOfFuel, 5, 1, 100, 100, -100, orientation)
         {
+            //set fuel consumation
+            this.BurnFuelPerMove = 1;
             MemoryStick mem = new MemoryStick(10, this);
             ISensor[] sensors = new ISensor[12];
             //FUEL Sensors

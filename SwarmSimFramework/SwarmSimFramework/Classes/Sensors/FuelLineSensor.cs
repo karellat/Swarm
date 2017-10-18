@@ -82,7 +82,9 @@ namespace SwarmSimFramework.Classes.Entities
                 output = new[] { LocalBounds[0].Max};
             else
                 output = new[] { (float)Math.Sqrt(intersection.Distance)};
-            //log & return normalized output 
+            //log & return normalized output
+            if (output[0] > LocalBounds[0].Max)
+                output[0] = LocalBounds[0].Max;
             lastReadValues = output;
             return output.Normalize(NormalizeFuncs);
         }

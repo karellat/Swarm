@@ -10,8 +10,8 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
         public RefactorRobot(Vector2 middle, float amountOfFuel, float orientation = 0)
             : base(middle, 10, "RefactorRobot", null, null, amountOfFuel, 5, 1, 100, 100, -100, orientation)
         {
-            //
-
+            //set fuel consumation 
+            this.BurnFuelPerMove = 1;
             ISensor[] sensors = new ISensor[6];
             sensors[0] = new FuelLineSensor(this,10,0);
             sensors[1] = new LineTypeSensor(this,10,0);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace SwarmSimFramework.Classes.Entities
@@ -7,16 +8,19 @@ namespace SwarmSimFramework.Classes.Entities
     public class FuelEntity : CircleEntity
     {
         public static float FuelRadius = 5.0f;
+
         /// <summary>
         /// True if the tank was consumed
         /// </summary>
         [JsonProperty]
         public bool Empty { get; protected set; }
+
         /// <summary>
         /// Return the amount of fuel in this tank
         /// </summary>
         [JsonProperty]
         public float Capacity { get; protected set; }
+
         /// <summary>
         /// Give clone of this fuel tank
         /// </summary>
@@ -25,6 +29,7 @@ namespace SwarmSimFramework.Classes.Entities
         {
             return (Entity) MemberwiseClone();
         }
+
         /// <summary>
         /// Creates new tank with given capacity
         /// </summary>
@@ -33,19 +38,22 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="name"></param>
         /// <param name="capacity"></param>
         /// <param name="orientation"></param>
-        public FuelEntity(Vector2 middle, float radius, float capacity, float orientation = 0) : base(middle, radius, "FuelEntity", orientation)
+        public FuelEntity(Vector2 middle, float radius, float capacity, float orientation = 0) : base(middle, radius,
+            "FuelEntity", orientation)
         {
             Color = EntityColor.FuelColor;
             Capacity = capacity;
         }
+
         /// <summary>
         /// Json constructor
         /// </summary>
         [JsonConstructor]
         protected FuelEntity() : base("FuelEntity")
         {
-            
+
         }
+
         /// <summary>
         /// Empty this fuel tank and return amount of fuel 
         ///  </summary>
@@ -53,8 +61,16 @@ namespace SwarmSimFramework.Classes.Entities
         public float Suck()
         {
             Empty = true;
+            float o = Capacity;
             Capacity = 0;
-            return Capacity;
+            return o;
+        }
+
+        public override StringBuilder Log()
+        {
+            StringBuilder s = base.Log();
+            s.Append("Capacity: " + Capacity.ToString("##.000"));
+            return s;
         }
     }
 }

@@ -10,6 +10,9 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
         public RefactorRobotMem(Vector2 middle, float amountOfFuel, float orientation = 0)
             : base(middle, 10, "RefactorRobot", null, null, amountOfFuel, 5, 1, 100, 100, -100, orientation)
         {
+            //set fuel consumation
+            this.BurnFuelPerMove = 1;
+
             //Memory stick 
             MemoryStick mem = new MemoryStick(10, this);
             ISensor[] sensors = new ISensor[7];

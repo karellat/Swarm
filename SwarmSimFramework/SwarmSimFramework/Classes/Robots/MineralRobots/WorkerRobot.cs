@@ -13,15 +13,17 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
         public WorkerRobot(Vector2 middle, float amountOfFuel,float orientation = 0) 
             : base(middle, 5, "WorkerRobot", null, null, amountOfFuel, 5, 1, 100, 100, -100, orientation)
         {
+            //set fuel consumation
+            this.BurnFuelPerMove = 1;
             ISensor[] sensors = new ISensor[11];
             //FUEL Sensors
-            sensors[0] = new FuelLineSensor(this, 15, DegreesToRadians(45));
-            sensors[1] = new FuelLineSensor(this, 15, 0);
-            sensors[2] = new FuelLineSensor(this, 15, DegreesToRadians(-45));
+            sensors[0] = new FuelLineSensor(this, 30, DegreesToRadians(45));
+            sensors[1] = new FuelLineSensor(this, 30, 0);
+            sensors[2] = new FuelLineSensor(this, 30, DegreesToRadians(-45));
             //Line Type Sensors
-            sensors[3] = new LineTypeSensor(this, 15, DegreesToRadians(45));
-            sensors[4] = new LineTypeSensor(this, 15, 0);
-            sensors[5] = new LineTypeSensor(this, 15, DegreesToRadians(-45));
+            sensors[3] = new LineTypeSensor(this,30, DegreesToRadians(45));
+            sensors[4] = new LineTypeSensor(this, 30, 0);
+            sensors[5] = new LineTypeSensor(this, 30, DegreesToRadians(-45));
             //Locator
             sensors[6] = new LocatorSensor(this);
             //Touch sensors
