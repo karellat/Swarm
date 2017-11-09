@@ -137,8 +137,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Experiments\MineralScene\MineralScoutWalk.expe" />
+    <None Include="Experiments\MineralScene\MineralScoutWalkMem.expe" />
+    <None Include="Experiments\MineralScene\MineralWorkerWalk.expe" />
+    <None Include="Experiments\MineralScene\MineralWorkerWalkMem.expe" />
+    <None Include="Experiments\WoodScene\WoodCuttorCut.expe" />
+    <None Include="Experiments\WoodScene\WoodCuttorCutMem.expe" />
+    <None Include="Experiments\WoodScene\WoodCuttorWalk.expe" />
+    <None Include="Experiments\WoodScene\WoodCuttorWalkMem.expe" />
+    <None Include="Experiments\WoodScene\WoodWorkerPickUp.expe" />
+    <None Include="Experiments\WoodScene\WoodCooperatitiveFinal.expe" />
+    <None Include="Experiments\WoodScene\WoodWorkerPickUpMem.expe" />
+    <None Include="Experiments\WoodScene\WoodWorkerWalk.expe" />
+    <None Include="Experiments\WoodScene\WoodWorkerWalkMem.expe" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Experiments\CompetitiveScene\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

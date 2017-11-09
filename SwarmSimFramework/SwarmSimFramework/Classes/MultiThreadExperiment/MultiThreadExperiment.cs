@@ -56,7 +56,15 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected int AllBrainSerializationCycle = 100;
 
 
-        //GRAPH & LOG INFO 
+        //GRAPH & LOG INFO
+        /// <summary>
+        /// Direct drawing of the graph 
+        /// </summary>
+        protected bool DirectDrawingGraf = true;
+        /// <summary>
+        /// Save graph to file 
+        /// </summary>
+        protected bool SaveGraphToFile = true; 
         /// <summary>
         /// Cycle of graph drawing
         /// </summary>
@@ -324,7 +332,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// </summary>
         public void DrawGraphs(int generationIndex)
         {
-            //Draw graph if possible
+            //Direct graph  
+            if (DirectDrawingGraf)
+                return; 
+            
+            //Draw graph if possibleH
             if (Directory.Exists(GnuPlot.PathToGnuplot))
             {
                 GnuPlot.Set("title \"Fitness of " + generationIndex + " generations \"");
@@ -337,13 +349,16 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             }
 
             //serialize graph 
-            foreach (var g in Graphs)
+            if (SaveGraphToFile)
             {
-                StreamWriter n = new StreamWriter(WorkingDir + "\\graph" + g.Name+ ".json");
-                n.Write(g.SerializeGraph());
-                n.Close();
-            }
-            
+                foreach (var g in Graphs)
+                {
+                    StreamWriter n = new StreamWriter(WorkingDir + "\\graph" + g.Name + ".json");
+                    n.Write(g.SerializeGraph());
+                    n.Close();
+                }
+            } 
+
         }
     }
 }
