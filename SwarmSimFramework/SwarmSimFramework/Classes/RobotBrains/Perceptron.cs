@@ -93,12 +93,15 @@ namespace SwarmSimFramework.Classes.RobotBrains
         public float Decide(float[] inputFloats)
         {
             float dec = 0;
-            if(inputFloats.Length != Weights.Length)
+            //One weight for bias 
+            if((inputFloats.Length + 1) != Weights.Length )
                 throw new ArgumentException("Unsupported length of input");
             for (int i = 0; i < inputFloats.Length; i++)
             {
                 dec += Weights[i] * inputFloats[i];
             }
+
+            dec += getBias();  
 
             if (float.IsNaN(dec))
                 throw new ArgumentException("Unknown situation ");
@@ -126,9 +129,10 @@ namespace SwarmSimFramework.Classes.RobotBrains
                 Fitness = 0
             };
 
-            p.Weights = new float[p.IoDimension.Input];
+            //Add bias 
+            p.Weights = new float[p.IoDimension.Input +1];
 
-            for (int i = 0; i < p.IoDimension.Input; i++)
+            for (int i = 0; i < p.IoDimension.Input+1; i++)
             {
                 p.Weights[i] = (float) Normal.Sample(expectedValue, variance);
             }
@@ -167,6 +171,11 @@ namespace SwarmSimFramework.Classes.RobotBrains
                 if (RandomNumber.GetRandomInt(0, 1000) <= permilleOfMutation)
                     Weights[i] += (float)Normal.Sample(0, varianceOfAddingValue);
             }
+        }
+
+        private float getBias()
+        {
+            return Weights[Weights.Length - 1];
         }
     }
 

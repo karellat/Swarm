@@ -11,7 +11,7 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
     {
         public FighterRobot() : this(Vector2.Zero) { }
         public FighterRobot(Vector2 middle, float amountOfFuel=0,float orientation = 0) 
-            : base(middle, 5, "WorkerRobot", null, null, amountOfFuel, 5, 1, 100, 100, -100, orientation)
+            : base(middle, 5, "WorkerRobot", null, null, amountOfFuel, 0, 1, 100, 100, -100, orientation)
         {
             Health = 1500;
             ISensor[] sensors = new ISensor[8];
@@ -30,14 +30,13 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
 
             this.Sensors = sensors;
 
-            IEffector[] effectors = new IEffector[7];
+            IEffector[] effectors = new IEffector[6];
             effectors[0] = new TwoWheelMotor(this, 1.5f);
             effectors[1] = new RadioTransmitter(this, 200);
-            effectors[2] = new Picker(this,20,0);
-            effectors[3] = new Weapon(this,15,500,DegreesToRadians(45));
-            effectors[4] = new Weapon(this, 15, 500, DegreesToRadians(0));
-            effectors[5] = new Weapon(this, 15, 500, DegreesToRadians(-45));
-            effectors[6] = new Weapon(this,15,500,DegreesToRadians(180));
+            effectors[2] = new Weapon(this,15,500,DegreesToRadians(45));
+            effectors[3] = new Weapon(this, 15, 500, DegreesToRadians(0));
+            effectors[4] = new Weapon(this, 15, 500, DegreesToRadians(-45));
+            effectors[5] = new Weapon(this,15,500,DegreesToRadians(180));
 
             this.Effectors = effectors;
 

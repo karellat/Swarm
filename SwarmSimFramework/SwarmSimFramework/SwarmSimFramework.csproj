@@ -78,6 +78,7 @@
     <Compile Include="Classes\Experiments\WoodCuttingExperiment\WoodCuttingExperimentWorkerWalking.cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\Map\ScenesMap.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\CompetitiveScene\CompetitiveExperimentMT.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\MineralExperimentMT.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\Basic\MineralScoutWalk.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\MEM\MineralScoutWalkMem.cs" />
