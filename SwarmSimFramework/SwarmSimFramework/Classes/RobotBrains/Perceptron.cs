@@ -101,7 +101,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
                 dec += Weights[i] * inputFloats[i];
             }
 
-            dec += getBias();  
+            dec += GetBias();  
 
             if (float.IsNaN(dec))
                 throw new ArgumentException("Unknown situation ");
@@ -173,7 +173,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
             }
         }
 
-        private float getBias()
+        private float GetBias()
         {
             return Weights[Weights.Length - 1];
         }
