@@ -162,7 +162,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     var i = GenerationInfoStruct.GetGenerationInfo(ActualGeneration[0]);
                     StringBuilder sb = new StringBuilder("\tInfo about ");
                     sb.Append(generationIndex);
-                    sb.Append(".generation\n");
+                    sb.AppendLine(".generation");
                     sb.AppendLine("\t\tBest fitness: " + i.FitnessMaximum);
                     sb.AppendLine("\t\tWorst fitness " + i.FitnessMinimum);
                     sb.AppendLine("\t\tAverage fitness: " + i.FitnessAverage);
@@ -212,8 +212,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //Write to graphs
             foreach (var g in graphs)
                 g.Close();
-            
- 
         }
 
         /// <summary>
@@ -232,8 +230,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //DEBUG
             foreach (var p in map.PasiveEntities)
             {
-                if(p.Discovered)
-                    throw new NotImplementedException("Discovered entity");
+                Debug.Assert(!p.Discovered);
             }
             //model of brains, only for read
             var modelBrains = new T[ActualGeneration.Length];
@@ -246,9 +243,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //For model choose suitable brain
             foreach (var r in map.Robots)
             {
-                if (r.Brain != null && r.TeamNumber != 1)
-                    throw new NotImplementedException("Unknown team");
-
+                Debug.Assert(r.Brain == null && r.TeamNumber == 1);
+                
                 for (int i = 0; i < Models.Length; i++)
                 {
                     if (evalBrains[i].SuitableRobot(r))
@@ -316,7 +312,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 foreach (var b in l)
                 {
                     //Write graph info to file
-                    graphs[index].WriteLine("{0};{1}",b.Fitness,generationIndex);
+                    graphs[index].WriteLine("{0};{1}",generationIndex, b.Fitness);
                 }
             }
         }
