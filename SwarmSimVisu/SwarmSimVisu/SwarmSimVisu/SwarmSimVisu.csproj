@@ -83,7 +83,20 @@
     <Compile Include="BrainSelectionWindow.xaml.cs">
       <DependentUpon>BrainSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CompetitiveMapSelectionWindows.xaml.cs">
+      <DependentUpon>CompetitiveMapSelectionWindows.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MineralMapSelectionWindows.xaml.cs">
+      <DependentUpon>MineralMapSelectionWindows.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WoodMapSelectionWindows.xaml.cs">
+      <DependentUpon>WoodMapSelectionWindows.xaml</DependentUpon>
+    </Compile>
     <Page Include="BrainRobotConnectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CompetitiveMapSelectionWindows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -107,6 +120,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="BrainSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MineralMapSelectionWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WoodMapSelectionWindows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

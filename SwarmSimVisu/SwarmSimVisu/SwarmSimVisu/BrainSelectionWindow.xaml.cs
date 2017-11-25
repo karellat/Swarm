@@ -36,9 +36,9 @@ namespace SwarmSimVisu
         public List<RobotModel> preparedRobots = new List<RobotModel>();
         public List<BrainModel<IRobotBrain>> preparedBrains = new List<BrainModel<IRobotBrain>>();
         public Map SelectedMap;
+        public int LengthOfCycle = 1000;
         public BrainSelectionWindow()
         {
-            
             InitializeComponent();
             MapComboBox.Items.Add("WoodMap");
             MapComboBox.Items.Add("MineralMap");
@@ -50,8 +50,10 @@ namespace SwarmSimVisu
                 {
                     case 0:
                     {
-                        name = "Wood map";
                         WoodScene.AmountOfTrees = 200;
+                        var w = new WoodMapSelectionWindows();
+                        w.ShowDialog();
+                        name = "Wood map";
                         StringBuilder mapInfo = new StringBuilder(name + "\n");
                         mapInfo.AppendLine("Max amount of robots: " + WoodScene.MaxOfAmountRobots);
                         mapInfo.Append("Map heigth: ");
@@ -71,6 +73,7 @@ namespace SwarmSimVisu
                         MineralScene.AmountOfFreeFuel = 100;
                         MineralScene.AmountOfMineral = 100;
                         MineralScene.AmountOfObstacles = 100;
+
                         StringBuilder mapInfo = new StringBuilder(name + "\n");
                         mapInfo.AppendLine("Max amount of robots: " + MineralScene.MaxOfAmountRobots);
                         mapInfo.Append("Map heigth: ");
@@ -89,27 +92,27 @@ namespace SwarmSimVisu
                     case 2:
                     {
                         name = "Mineral map";
-                        CompetiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles = 500;
+                        CompetitiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles = 500;
                         var ScoutRobot = new ScoutCutterRobot();
-                        CompetiveScene<SingleLayerNeuronNetwork>.enemyModels = new [] {new RobotModel()
+                        CompetitiveScene<SingleLayerNeuronNetwork>.enemyModels = new [] {new RobotModel()
                         {
                             amount = 5,
                             model =(RobotEntity) ScoutRobot.DeepClone()
                         }};
 
-                        CompetiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels = new [] {new BrainModel<SingleLayerNeuronNetwork>()
+                        CompetitiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels = new [] {new BrainModel<SingleLayerNeuronNetwork>()
                         {
                             Robot = (RobotEntity) ScoutRobot.DeepClone(),
                             Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension(){Input = ScoutRobot.SensorsDimension, Output = ScoutRobot.EffectorsDimension})
                         }};
                         StringBuilder mapInfo = new StringBuilder(name + "\n");
-                        mapInfo.AppendLine("Max amount of robots: " + CompetiveScene<SingleLayerNeuronNetwork>.MaxOfAmountRobots);
+                        mapInfo.AppendLine("Max amount of robots: " + CompetitiveScene<SingleLayerNeuronNetwork>.MaxOfAmountRobots);
                         mapInfo.Append("Map heigth: ");
-                        mapInfo.Append(CompetiveScene<SingleLayerNeuronNetwork>.MapHeight.ToString());
+                        mapInfo.Append(CompetitiveScene<SingleLayerNeuronNetwork>.MapHeight.ToString());
                         mapInfo.Append("Map width: ");
-                        mapInfo.AppendLine(CompetiveScene<SingleLayerNeuronNetwork>.MapWidth.ToString());
+                        mapInfo.AppendLine(CompetitiveScene<SingleLayerNeuronNetwork>.MapWidth.ToString());
                         mapInfo.Append("Obstacles in map: ");
-                        mapInfo.Append(CompetiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles);
+                        mapInfo.Append(CompetitiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles);
                         
                         MapText.Text = mapInfo.ToString();
                         break;
@@ -124,6 +127,12 @@ namespace SwarmSimVisu
 
 
             };
+            LengthOfCycleTextBox.TextChanged += (sender, args) =>
+            {
+                if(!int.TryParse(LengthOfCycleTextBox.Text, out LengthOfCycle))
+                    LengthOfCycleTextBox.Text = LengthOfCycle.ToString();
+            }; 
+
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
@@ -163,6 +172,8 @@ namespace SwarmSimVisu
                 case 0:
                 {
                     SelectedMap = WoodScene.MakeMap(preparedRobots.ToArray());
+                    var w = new WoodMapSelectionWindows();
+                    w.ShowDialog();
                     break;
                 }
                 case 1:
@@ -172,7 +183,7 @@ namespace SwarmSimVisu
                 }
                 case 2:
                 {
-                    SelectedMap = CompetiveScene<SingleLayerNeuronNetwork>.MakeMap(preparedRobots.ToArray());
+                    SelectedMap = CompetitiveScene<SingleLayerNeuronNetwork>.MakeMap(preparedRobots.ToArray());
                     break; 
                 }
             }

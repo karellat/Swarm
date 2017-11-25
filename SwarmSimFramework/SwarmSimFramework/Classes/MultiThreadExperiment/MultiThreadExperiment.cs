@@ -10,7 +10,6 @@ using SwarmSimFramework.Classes.Experiments;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Interfaces;
-using SwarmSimFramework.SupportClasses.AwokeKnowing.GnuplotCSharp;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
@@ -29,6 +28,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Iteration between fitness count
         /// </summary>
         public int MapIteration = 1000;
+
         /// <summary>
         /// Name of experiment
         /// </summary>
@@ -60,7 +60,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Direct drawing of the graph 
         /// </summary>
-        protected bool DirectDrawingGraf = true;
+        protected bool DirectDrawingGraf = false;
         /// <summary>
         /// Save graph to file 
         /// </summary>
@@ -76,7 +76,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Graphs of brains
         /// </summary>
-        protected FitPlot[] Graphs = null;
+        protected StreamWriter[] graphs; 
 
         //GENERATION 
         /// <summary>
@@ -122,12 +122,13 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             System.IO.Directory.CreateDirectory(WorkingDir);
             FollowingGeneration = new ConcurrentStack<T>[ActualGeneration.Length];
             
-            Graphs = new FitPlot[ActualGeneration.Length];
+            graphs = new StreamWriter[ActualGeneration.Length];
             for (int i = 0; i < ActualGeneration.Length; i++)
             {
                 FollowingGeneration[i] = new ConcurrentStack<T>();
-                Graphs[i] = new FitPlot(ActualGeneration[i].Count,Models[i].model.Name);
+                graphs[i] = new StreamWriter("graph_of_"+Models[i].model.Name+".txt");
             }
+
             //Stop watch count 
             var watch = new Stopwatch(); 
             for (int generationIndex  = 0; generationIndex  < NumberOfGenerations; generationIndex ++)
@@ -138,22 +139,13 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 FreeBrainIndex = 0;
                 lock(ControlLock)
                 {
-                    while (!GenerationFinnished)
-                    {
-                        for (int j = 0; j < Threads.Length; j++)
+                        for (int i = 0; i < PopulationSize; i++)
                         {
-                            if (FreeBrainIndex == PopulationSize) break;
-
-                            if (Threads[j] == null || Threads[j].IsAlive == false)
-                            {
-                                int threadIndex = FreeBrainIndex;
-                                Threads[j] = new Thread(() => SingleBrainEvaluationMt(threadIndex));
-                                Threads[j].Start();
-                                FreeBrainIndex++;
-                            }
+                            int threadIndex = i;
+                            ThreadPool.QueueUserWorkItem((state => SingleBrainEvaluationMt(threadIndex))); 
                         }
-                        //Monitor.Wait(ControlLock);
-                    }
+
+                        while (!GenerationFinnished) Thread.Sleep(100);
                 }
                 //Change generation, clear buffer 
                 for (int j = 0; j < ActualGeneration.Length; j++)
@@ -192,11 +184,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 }
                 //fill graphs
                 FillGraphs(generationIndex);
-                //Draw graph
-                if (generationIndex % GraphGenerationIndex == 0)
-                {
-                    DrawGraphs(generationIndex);
-                }
+               
                 //Serialize brains
                 if (generationIndex % AllBrainSerializationCycle == 0 || generationIndex == NumberOfGenerations-1 )
                 {
@@ -220,7 +208,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     }
                 }
             }
+
+            //Write to graphs
+            foreach (var g in graphs)
+                g.Close();
             
+ 
         }
 
         /// <summary>
@@ -322,43 +315,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 var l = ActualGeneration[index];
                 foreach (var b in l)
                 {
-                    //fill suitable graph with given values
-                    Graphs[index].AddFitness(b.Fitness, generationIndex);
+                    //Write graph info to file
+                    graphs[index].WriteLine("{0};{1}",b.Fitness,generationIndex);
                 }
             }
-        }
-        /// <summary>
-        /// Draw graphs 
-        /// </summary>
-        public void DrawGraphs(int generationIndex)
-        {
-            //Direct graph  
-            if (DirectDrawingGraf)
-                return; 
-            
-            //Draw graph if possibleH
-            if (Directory.Exists(GnuPlot.PathToGnuplot))
-            {
-                GnuPlot.Set("title \"Fitness of " + generationIndex + " generations \"");
-                GnuPlot.Set("xlabel \"Index of generation\"");
-                GnuPlot.Set("ylabel \"Fitness value\"");
-                GnuPlot.HoldOn();
-                foreach (var g in Graphs)
-                    g.PlotGraph();
-                GnuPlot.HoldOff();
-            }
-
-            //serialize graph 
-            if (SaveGraphToFile)
-            {
-                foreach (var g in Graphs)
-                {
-                    StreamWriter n = new StreamWriter(WorkingDir + "\\graph" + g.Name + ".json");
-                    n.Write(g.SerializeGraph());
-                    n.Close();
-                }
-            } 
-
         }
     }
 }

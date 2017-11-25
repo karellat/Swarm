@@ -13,8 +13,6 @@
             <TextBox x:Name ="BasicInfo" TextWrapping="Wrap" Text="TextBox" Margin="129.2,-27.8,8.8,0" Background="#FFCA1F1F" Height="22" VerticalAlignment="Top" Visibility="Hidden"/>
         </Border>
         <Button x:Name ="InitExpB" Click="InitExperimentClick" Content="Init Experiment" HorizontalAlignment="Left" Margin="0,-25,0,0" VerticalAlignment="Top" Width="105"/>
-        <ComboBox x:Name="ExperimentComboBox"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="140" Margin="0,-57,-13,0"/>
-        <Label Content="Experiment:" Margin="0,-60,119,0" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Width="75"/>
         <Button x:Name="StartB"  Click="StartClick" Content="Start" Visibility="Hidden" HorizontalAlignment="Left" Margin="0,-50,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="PauseB" Click="PauseClick"  Content="Pause" Visibility="Hidden" HorizontalAlignment="Left" Margin="80,-50,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="StopB" Click="StopClick" Content="Stop" Visibility="Hidden" HorizontalAlignment="Left" Margin="160,-50,0,0" VerticalAlignment="Top" Width="75"/>

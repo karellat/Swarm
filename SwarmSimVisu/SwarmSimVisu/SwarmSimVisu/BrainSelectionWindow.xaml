@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwarmSimVisu"
         mc:Ignorable="d"
-        Title="Brain selection" ResizeMode="NoResize" Height="379.176" Width="525.66">
+        Title="Brain selection" ResizeMode="NoResize" Height="470.109" Width="525.66">
     <Grid>
-        <Grid Margin="10,10,9.6,10.2">
-            <Button Content="Read brain from file" Click="OpenFile_Click" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="142" Height="29"/>
-            <Label Content="Selected  models with brain: " HorizontalAlignment="Left" Margin="37,35,0,0" VerticalAlignment="Top" Height="24" Width="91"/>
-            <Label Content="Map selection:" HorizontalAlignment="Left" Margin="174,12,0,0" VerticalAlignment="Top" Height="29" Width="88"/>
-            <ComboBox x:Name="MapComboBox"  HorizontalAlignment="Left" Margin="267,10,0,0" VerticalAlignment="Top" Width="217" Height="29"/>
-            <Label Content="Selected  Map: " HorizontalAlignment="Left" Margin="281,35,0,0" VerticalAlignment="Top" Height="24" Width="91"/>
-            <TextBlock x:Name="BrainText" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Height="210" Width="228"/>
-            <TextBlock x:Name="MapText" HorizontalAlignment="Left" Margin="243,59,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Height="210" Width="210"/>
+        <Grid Margin="9,10,10.2,10.2">
+            <Button Content="Read brain from file" Click="OpenFile_Click" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="142" Height="29"/>
+            <Label Content="Selected  models with brain: " HorizontalAlignment="Left" Margin="35,67,0,0" VerticalAlignment="Top" Height="24" Width="91"/>
+            <Label Content="Map selection:" HorizontalAlignment="Left" Margin="174,38,0,0" VerticalAlignment="Top" Height="29" Width="88"/>
+            <ComboBox x:Name="MapComboBox"  HorizontalAlignment="Left" Margin="273,38,0,0" VerticalAlignment="Top" Width="217" Height="29"/>
+            <Label Content="Selected  Map: " HorizontalAlignment="Left" Margin="282,67,0,0" VerticalAlignment="Top" Height="24" Width="91"/>
+            <TextBlock x:Name="BrainText" HorizontalAlignment="Left" Margin="10,96,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Height="210" Width="228"/>
+            <TextBlock x:Name="MapText" HorizontalAlignment="Left" Margin="243,96,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Height="210" Width="210"/>
             <Button Content="Create Test Experiment" Click="PrepareExperiment_Click" HorizontalAlignment="Left" Margin="174,288,0,0" VerticalAlignment="Top" Width="146" Height="30"/>
+            <Label Content="Length of Cycle:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="98"/>
+            <TextBox x:Name="LengthOfCycleTextBox" HorizontalAlignment="Left" Height="23" Margin="98,3,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="120"/>
         </Grid>
 
     </Grid>

@@ -36,8 +36,7 @@ namespace SwarmSimVisu
 
         private void FitSize()
         {
-            FrameworkElement parent = this.Parent as FrameworkElement;
-            if (parent != null)
+            if (this.Parent is FrameworkElement parent)
             {
                 var targetWidthSize = this.FontSize;
                 var targetHeightSize = this.FontSize;

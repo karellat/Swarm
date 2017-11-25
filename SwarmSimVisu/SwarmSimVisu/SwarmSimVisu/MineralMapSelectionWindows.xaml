@@ -1,0 +1,55 @@
+﻿<Window x:Class="SwarmSimVisu.MineralMapSelectionWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SwarmSimVisu"
+        xmlns:map="clr-namespace:SwarmSimFramework.Classes.Map;assembly=SwarmSimFramework"
+        mc:Ignorable="d"
+        Title="MineralMapSelectionWindows" Height="260.982" Width="292.602">
+    <Grid>
+        <Label Content="Map Height:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="158,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.MapHeight}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Content="Map Width:" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="158,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.MapWidth}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Content="Max amount of Robots:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="158,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.MaxOfAmountRobots}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Content="Amount of Minerals:" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox x:Name="AmountOfMineralTextBox" HorizontalAlignment="Left" Height="23" Margin="158,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.AmountOfMineral}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Content="Amount of Obstacles:" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox x:Name="AmountOfObstaclesTextBox" HorizontalAlignment="Left" Height="23" Margin="158,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.AmountOfObstacles}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Content="Amount of free fuel:" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox x:Name="AmountOfFreeFuel" HorizontalAlignment="Left" Height="23" Margin="158,154,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.AmountOfFreeFuel}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Content="Max radius of robot:" HorizontalAlignment="Left" Margin="10,178,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="158,182,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Source="{x:Static map:MineralScene.RobotMaxRadius}" Path="."></Binding>
+            </TextBox.Text>
+        </TextBox>
+
+    </Grid>
+</Window>

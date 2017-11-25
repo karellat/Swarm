@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Net;
@@ -47,13 +48,14 @@ namespace SwarmSimFramework.Classes.Map
                 return new Map(MapHeight,MapWidth,rb,pe,fe,cr);
         }
     }
-    public static class WoodScene
+    public class WoodScene
     {
         //WOOD EXPERIMENT - VARIABLES 
         /// <summary>
         /// Amount woods
         /// </summary>
         public static int AmountOfWoods;
+
         /// <summary>
         /// Amount trees
         /// </summary>
@@ -79,8 +81,7 @@ namespace SwarmSimFramework.Classes.Map
         /// Init positions of vector 
         /// </summary>
         /// <returns></returns>
-        public static Vector2[] InitPositionOfRobot()
-        {
+        public static Vector2[] InitPositionOfRobot(){
             List<Vector2> vectors = new List<Vector2>();
             float sW = MapWidth / 2 + 22;
             float sH = MapHeight / 2 + 22;
@@ -495,4 +496,4 @@ namespace SwarmSimFramework.Classes.Map
             return MakeMapModel(models).ConstructMap();
         }
     }
-}
+}   

@@ -36,6 +36,7 @@ namespace SwarmSimFramework
             {
                 case "-c":
                     {
+                        Console.WriteLine("Reading set up from: {0}",args[1]);
                         exp = MTExperimentReader.ExperimentFromConfig(args[1]);
                         break;
                     }
@@ -61,11 +62,6 @@ namespace SwarmSimFramework
                     }
                     return; 
                 }
-                case "0":
-                {
-                    exp = WoodSceneSelection(args[1]);
-                    break;
-                }
                 default:
                 {
                     Console.WriteLine("Wrong format of parameters!");
@@ -81,19 +77,11 @@ namespace SwarmSimFramework
             }
             else
             {
-                if (args.Length > 2)
-                {
-                    int size = args.Length - 2;
-                    string[] initFiles = new string[size];
-                    for (int i = 0; i < size; i++)
-                        initFiles[i] = args[2 + i];
-                    exp.Run(initFiles);
-                }
-                else
-                {
-                    exp.Run();
-                }
-                Console.WriteLine("Simulation finnished");
+              Console.WriteLine("Basic info about experiment");
+              Console.WriteLine("\t Name:{0}", exp.Name);
+              Console.WriteLine("\t Map iterations:{0} Number of generations: {1} Population size: {2} ",exp.MapIteration,exp.NumberOfGenerations,exp.PopulationSize);
+              exp.Run();
+              Console.WriteLine("Simulation finnished");
                 
             }
         }

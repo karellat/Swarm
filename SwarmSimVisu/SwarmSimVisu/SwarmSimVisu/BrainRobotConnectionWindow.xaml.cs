@@ -77,8 +77,8 @@ namespace SwarmSimVisu
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             string t = "";
-            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            openFileDialog.InitialDirectory = System.Environment.CurrentDirectory;
+            Microsoft.Win32.OpenFileDialog openFileDialog =
+                new Microsoft.Win32.OpenFileDialog {InitialDirectory = System.Environment.CurrentDirectory};
             if (openFileDialog.ShowDialog() == true)
             {
                 t = File.ReadAllText(openFileDialog.FileName);

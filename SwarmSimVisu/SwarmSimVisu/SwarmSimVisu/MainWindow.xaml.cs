@@ -32,16 +32,7 @@ namespace SwarmSimVisu
         public MainWindow()
         {
             InitializeComponent();
-            //ComoBox for choosing experiment
-            ExperimentComboBox.SelectedIndex = 4;
-            ExperimentComboBox.Items.Add("None");
-            ExperimentComboBox.Items.Add("Testing Brain");
-            ExperimentComboBox.Items.Add("TestingExperiment");
-            ExperimentComboBox.Items.Add("WalkingExperiment");
-            ExperimentComboBox.Items.Add("Wood Experiment - Cuttor Walk");
-            ExperimentComboBox.Items.Add("Wood Experiment - Cuttor Cut");
-            ExperimentComboBox.Items.Add("Wood Experiment - Worker Walking");
-            ExperimentComboBox.Items.Add("Wood Experiment - Worker Pick up");
+            
 
 
             //wait after draw
@@ -123,10 +114,6 @@ namespace SwarmSimVisu
         /// </summary>
         private static Thread ExperimentThread;
         /// <summary>
-        /// Selection of brain
-        /// </summary>
-        private Thread BrainSelectionThread;
-        /// <summary>
         /// Init selected Experiment
         /// </summary>
         /// <param name="sender"></param>
@@ -134,18 +121,11 @@ namespace SwarmSimVisu
         private void InitExperimentClick(object sender, RoutedEventArgs e)
         {
             //Experiment selection
-            switch (ExperimentComboBox.SelectedIndex)
-            {
-                case (0):
-                    MessageBox.Show("None experiment chosen!");
-                    return;
-                case (1):
-                    var w = new BrainSelectionWindow();
+                var w = new BrainSelectionWindow();
                     w.ShowDialog();
                     if (w.Experiment != null)
                     {
                         RunningExperiment = w.Experiment;
-                        break;
                     }
                     else
                     {
@@ -153,28 +133,8 @@ namespace SwarmSimVisu
                     return;
                     }
 
-                case (2):
-                    RunningExperiment = new TestingExperiment();
-                    break;
-                case (3): 
-                    RunningExperiment = new WalkingExperiment();
-                    break;
-                case (4):
-                    RunningExperiment = new WoodCuttingExperimentWalking();
-                    break;
-                case (5): 
-                    RunningExperiment = new WoodCuttingExperimentCutting();
-                    break;
-                case (6):
-                    RunningExperiment = new WoodCuttingExperimentWorkerWalking();
-                    break;
-                case (7):
-                    RunningExperiment = new WoodCuttingExperimentPickUp();
-                    break;
-                default:
-                    MessageBox.Show("Unknown experiment");
-                    return;
-            }
+
+            
             //Maximaze window
             WindowState = WindowState.Maximized;
             RunningExperiment.Init();
@@ -279,10 +239,6 @@ namespace SwarmSimVisu
             DrawGrid = null;
             DrawCanvas = null;
             ExperimentThread = null;
-            //newExperiment control show
-            ExperimentComboBox.IsEditable = true;
-            ExperimentComboBox.IsHitTestVisible = true;
-            ExperimentComboBox.Focusable = true;
             InitExpB.Visibility = Visibility.Visible;
         }
         /// <summary>
@@ -357,28 +313,24 @@ namespace SwarmSimVisu
                 DrawCanvas.AddLine(robot.Middle,robot.FPoint,"HEAD",3);
                 foreach (var s in robot.Sensors)
                 {
-                    if (s is LineEntity)
+                    if (s is LineEntity l)
                     {
-                        var l = (LineEntity) s;
                         DrawCanvas.AddLine(l.A,l.B,"LINESENSOR",1);
                     }
-                   else if (s is CircleEntity)
+                   else if (s is CircleEntity c)
                     {
-                        var c = (CircleEntity) s;
-                        DrawCanvas.AddCircle(c.Middle,c.Radius,"CIRCLESENSOR");
+                        DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLESENSOR");
                     }
                 }
 
                 foreach (var e in robot.Effectors)
                 {
-                    if (e is LineEntity)
+                    if (e is LineEntity l)
                     {
-                        var l = (LineEntity)e;
                         DrawCanvas.AddLine(l.A, l.B, "LINEEFECTOR", 1);
                     }
-                    else if (e is CircleEntity)
+                    else if (e is CircleEntity c)
                     {
-                        var c = (CircleEntity)e;
                         DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLEEFFECTOR");
                     }
                 }
