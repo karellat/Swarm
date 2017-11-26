@@ -95,7 +95,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
             float dec = 0;
             //One weight for bias 
             if((inputFloats.Length + 1) != Weights.Length )
-                throw new ArgumentException("Unsupported length of input");
+                 throw new ArgumentException("Unsupported length of input");
             for (int i = 0; i < inputFloats.Length; i++)
             {
                 dec += Weights[i] * inputFloats[i];

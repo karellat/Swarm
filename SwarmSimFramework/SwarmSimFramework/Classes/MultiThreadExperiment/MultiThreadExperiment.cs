@@ -93,10 +93,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Model of map including models of Entities, Height and Width
         /// </summary>
         protected MapModel MapModel;
-        /// <summary>
-        /// Threads making evaluating of brains
-        /// </summary>
-        protected Thread[] Threads;
+
  
         /// <summary>
         /// If all threads finnished generation
@@ -113,8 +110,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         protected int FreeBrainIndex = 0;
         public void Run(string[] nameOfInitFile=null)
         {
-            //Init Threads
-            Threads = new Thread[Environment.ProcessorCount];
             //Init specific experiment
             Init(nameOfInitFile);
             //Init part
@@ -178,7 +173,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         var g = ActualGeneration[index];
                         var bestBrain = GenerationInfoStruct.GetGenerationInfo(g);
                         StreamWriter n = new StreamWriter(WorkingDir + "\\"+ generationIndex + "bestbrain" + index+  ".json");
-                        n.Write(i.BestBrain.SerializeBrain());
+                        n.Write(bestBrain.BestBrain.SerializeBrain());
                         n.Close();
                     }
                 }

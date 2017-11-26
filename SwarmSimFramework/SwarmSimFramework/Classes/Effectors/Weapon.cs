@@ -106,9 +106,8 @@ namespace SwarmSimFramework.Classes.Effectors
             if (settings[0] >= settings[1] && settings[0] >= settings[2])
             {
                 var i = map.Collision(this, robot);
-                if (i.CollidingEntity is RobotEntity)
+                if (i.CollidingEntity is RobotEntity e)
                 {
-                    RobotEntity e = (RobotEntity) i.CollidingEntity;
                     if (e.TeamNumber == robot.TeamNumber)
                     {
                         e.AcceptDamage(Damage,map);
@@ -122,9 +121,8 @@ namespace SwarmSimFramework.Classes.Effectors
             else  if (settings[2] >= settings[0] && settings[2] >= settings[1])
                 {
                 var i = map.Collision(this, robot);
-                if (i.CollidingEntity is RobotEntity)
+                if (i.CollidingEntity is RobotEntity e)
                 {
-                    RobotEntity e = (RobotEntity) i.CollidingEntity;
                     if (e.TeamNumber != robot.TeamNumber)
                     {
                         e.AcceptDamage(Damage, map);

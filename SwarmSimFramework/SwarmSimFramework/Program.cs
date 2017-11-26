@@ -77,13 +77,20 @@ namespace SwarmSimFramework
             }
             else
             {
+
               Console.WriteLine("Basic info about experiment");
               Console.WriteLine("\t Name:{0}", exp.Name);
               Console.WriteLine("\t Map iterations:{0} Number of generations: {1} Population size: {2} ",exp.MapIteration,exp.NumberOfGenerations,exp.PopulationSize);
-              exp.Run();
+              if(args.Length > 2)
+                    exp.Run(args.Skip(2).ToArray());
+              else
+                exp.Run();
               Console.WriteLine("Simulation finnished");
                 
             }
+#if DEBUG
+            Console.ReadLine();
+#endif 
         }
 
         private static MultiThreadExperiment<SingleLayerNeuronNetwork> WoodSceneSelection(string index)

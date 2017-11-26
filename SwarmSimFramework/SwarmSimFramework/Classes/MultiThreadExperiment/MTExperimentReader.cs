@@ -59,23 +59,23 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         public static Object ParseExperimentValue(string value,Type type)
         { 
-            if(type.Equals(typeof(int))) 
+            if(type == typeof(int)) 
             {
                 return int.Parse(value); 
             }
-            else if (type.Equals(typeof(double)))
+            else if (type == typeof(double))
             {
                 return double.Parse(value);
             }
-            else if (type.Equals(typeof(string)))
+            else if (type == typeof(string))
             {
                 return value; 
             }
-            else if (type.Equals(typeof(long)))
+            else if (type == typeof(long))
             {
                 return long.Parse(value);
             }
-            else if(type.Equals(typeof(RobotModel[])))
+            else if(type == typeof(RobotModel[]))
             {
                 var robots = value.Split(new[] { ';' });
                 var models = new List<RobotModel>(); 

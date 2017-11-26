@@ -120,8 +120,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 {
                     for (int j = 0; j < BrainModels.Length; j++)
                     {
-                        if (BrainModels[j].SuitableRobot(r) && BrainModels[j].SuitableBrain(ActualGeneration[j][i]))
-                            r.Brain = ActualGeneration[j][i].GetCleanCopy();
+                        if (BrainModels[j].SuitableRobot(r))
+                            foreach (List<SingleLayerNeuronNetwork> t in ActualGeneration)
+                            {
+                                if(BrainModels[j].SuitableBrain(t[i]))
+                                    r.Brain = t[i].GetCleanCopy();
+                            }
                     }
                 }
 

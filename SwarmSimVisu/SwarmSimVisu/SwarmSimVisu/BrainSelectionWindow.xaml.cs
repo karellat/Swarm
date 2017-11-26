@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Classes.Experiments.TestingMaps;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.RobotBrains;
-using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.SupportClasses;
@@ -172,8 +159,6 @@ namespace SwarmSimVisu
                 case 0:
                 {
                     SelectedMap = WoodScene.MakeMap(preparedRobots.ToArray());
-                    var w = new WoodMapSelectionWindows();
-                    w.ShowDialog();
                     break;
                 }
                 case 1:
