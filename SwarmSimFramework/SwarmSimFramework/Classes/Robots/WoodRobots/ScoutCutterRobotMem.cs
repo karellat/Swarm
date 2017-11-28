@@ -4,12 +4,12 @@ using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimFramework.Classes.Robots.WoodRobots
 {
-    public class ScoutCutterRobotWithMemory:RobotEntity
+    public class ScoutCutterRobotMem:RobotEntity
     {
-        public ScoutCutterRobotWithMemory() : this(Vector2.Zero)
+        public ScoutCutterRobotMem() : this(Vector2.Zero)
         {
         } 
-        public ScoutCutterRobotWithMemory(Vector2 middle, float orientation = 0)
+        public ScoutCutterRobotMem(Vector2 middle, float orientation = 0)
             : base(middle, 2.5f, "ScoutRobotMem", null, null, 100, 0, 1, 100, 100, -100, orientation)
         {
             MemoryStick mem = new MemoryStick(10,this);

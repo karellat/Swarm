@@ -89,7 +89,7 @@ namespace SwarmSimFramework
                 
             }
 #if DEBUG
-            Console.ReadLine();
+            //Console.ReadLine();
 #endif 
         }
 

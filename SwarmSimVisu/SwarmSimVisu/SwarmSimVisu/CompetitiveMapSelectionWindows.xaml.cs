@@ -22,6 +22,7 @@ namespace SwarmSimVisu
         public CompetitiveMapSelectionWindows()
         {
             InitializeComponent();
+            this.WindowStyle = WindowStyle.None;
         }
     }
 }

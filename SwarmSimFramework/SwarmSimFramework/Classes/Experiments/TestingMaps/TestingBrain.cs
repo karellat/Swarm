@@ -66,7 +66,7 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
             List<CircleEntity> trees =
                 Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, WoodTreesAmount);
             //set experiment
-            RobotEntity robotModel = new ScoutCutterRobotWithMemory(new Vector2(0, 0));
+            RobotEntity robotModel = new ScoutCutterRobotMem(new Vector2(0, 0));
             List<RobotEntity> robots = new List<RobotEntity>();
             for (int i = 0; i < 5; i++)
             {

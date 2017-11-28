@@ -50,6 +50,7 @@
                 <Binding Source="{x:Static map:MineralScene.RobotMaxRadius}" Path="."></Binding>
             </TextBox.Text>
         </TextBox>
+        <Button Click="Close_Click" Content="OK" Margin="100,210,113,3.6"/>
 
     </Grid>
 </Window>

@@ -76,7 +76,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Graphs of brains
         /// </summary>
-        protected StreamWriter[] graphs; 
+        protected StreamWriter[] Graphs; 
 
         //GENERATION 
         /// <summary>
@@ -117,11 +117,11 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             System.IO.Directory.CreateDirectory(WorkingDir);
             FollowingGeneration = new ConcurrentStack<T>[ActualGeneration.Length];
             
-            graphs = new StreamWriter[ActualGeneration.Length];
+            Graphs = new StreamWriter[ActualGeneration.Length];
             for (int i = 0; i < ActualGeneration.Length; i++)
             {
                 FollowingGeneration[i] = new ConcurrentStack<T>();
-                graphs[i] = new StreamWriter("graph_of_"+Models[i].model.Name+".txt");
+                Graphs[i] = new StreamWriter(WorkingDir + "//graph_of_"+Models[i].model.Name+".txt");
             }
 
             //Stop watch count 
@@ -205,7 +205,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             }
 
             //Write to graphs
-            foreach (var g in graphs)
+            foreach (var g in Graphs)
                 g.Close();
         }
 
@@ -307,7 +307,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 foreach (var b in l)
                 {
                     //Write graph info to file
-                    graphs[index].WriteLine("{0};{1}",generationIndex, b.Fitness);
+                    Graphs[index].WriteLine("{0};{1}",generationIndex, b.Fitness);
                 }
             }
         }

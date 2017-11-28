@@ -21,8 +21,6 @@ namespace SwarmSimVisu
         public MainWindow()
         {
             InitializeComponent();
-            
-
 
             //wait after draw
             ThreadWaitComboBox.SelectedIndex = 0;

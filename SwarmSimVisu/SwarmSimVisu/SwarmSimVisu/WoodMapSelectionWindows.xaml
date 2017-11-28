@@ -7,10 +7,10 @@
         xmlns:map="clr-namespace:SwarmSimFramework.Classes.Map;assembly=SwarmSimFramework"
         mc:Ignorable="d"
 
-    Title="WoodMapSelectionWindows" Height="250.536" Width="316.965">
-    
+    Title="WoodMapSelectionWindows" Height="309.945" Width="316.965">
+
     <Window.Resources>
-        <local:IntConverter x:Key="intConverter" />    
+        <local:IntConverter x:Key="intConverter" />
     </Window.Resources>
     <Grid Margin="10,0,2,3">
         <TextBox x:Name="AmountOfWoodsTextBox" HorizontalAlignment="Left" Height="23" Margin="122,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" RenderTransformOrigin="0.451,3.759">
@@ -30,7 +30,7 @@
         <TextBox HorizontalAlignment="Left" Height="26" Margin="122,85,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="160">
             <TextBox.Text>
                 <Binding Source="{x:Static map:WoodScene.MapHeight}" Path="."/>
-               
+
             </TextBox.Text>
 
         </TextBox>
@@ -52,6 +52,7 @@
                 <Binding Source="{x:Static map:WoodScene.RobotMaxRadius}" Path="." />
             </TextBox.Text>
         </TextBox>
+        <Button Click="Close_Click" Content="OK" Margin="98,235,120,9.8"/>
 
     </Grid>
 </Window>

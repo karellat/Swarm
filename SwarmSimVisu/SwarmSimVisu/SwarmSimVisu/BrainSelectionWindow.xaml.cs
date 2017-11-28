@@ -56,11 +56,12 @@ namespace SwarmSimVisu
                     }
                     case 1:
                     {
-                        name = "Mineral map";
                         MineralScene.AmountOfFreeFuel = 100;
                         MineralScene.AmountOfMineral = 100;
                         MineralScene.AmountOfObstacles = 100;
-
+                        var w = new MineralMapSelectionWindows();
+                        w.ShowDialog();
+                        name = "Mineral map";
                         StringBuilder mapInfo = new StringBuilder(name + "\n");
                         mapInfo.AppendLine("Max amount of robots: " + MineralScene.MaxOfAmountRobots);
                         mapInfo.Append("Map heigth: ");
@@ -179,7 +180,7 @@ namespace SwarmSimVisu
             }
 
 
-            Experiment = new TestingBrain(SelectedMap,preparedBrains.ToArray(),1000);
+            Experiment = new TestingBrain(SelectedMap,preparedBrains.ToArray(),LengthOfCycle);
             this.Close();
         }
     }

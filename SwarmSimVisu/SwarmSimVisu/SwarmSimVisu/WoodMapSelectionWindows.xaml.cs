@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,7 @@ namespace SwarmSimVisu
         public WoodMapSelectionWindows()
         {
             InitializeComponent();
+            this.WindowStyle = WindowStyle.None;
 
             AmountOfTreesTextBox.TextChanged += (sender, args) =>
             {
@@ -60,6 +62,11 @@ namespace SwarmSimVisu
                 if (int.TryParse(AmountOfWoodsTextBox.Text, out i))
                     WoodScene.AmountOfWoods = i;
             };
+        }
+
+        public void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
     }

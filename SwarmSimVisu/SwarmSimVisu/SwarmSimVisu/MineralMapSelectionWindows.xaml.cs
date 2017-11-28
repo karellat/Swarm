@@ -23,6 +23,7 @@ namespace SwarmSimVisu
         public MineralMapSelectionWindows()
         {
             InitializeComponent();
+            this.WindowStyle = WindowStyle.None;
 
             AmountOfFreeFuel.TextChanged += (sender, args) =>
             {
@@ -46,6 +47,9 @@ namespace SwarmSimVisu
             };
         }
 
-
+        public void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

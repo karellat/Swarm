@@ -117,7 +117,7 @@
     <Compile Include="Classes\Robots\MineralRobots\ScoutRobotMem.cs" />
     <Compile Include="Classes\Robots\MineralRobots\WorkerRobotMem.cs" />
     <Compile Include="Classes\Robots\WoodRobots\ScoutCutterRobot.cs" />
-    <Compile Include="Classes\Robots\WoodRobots\ScoutCutterRobotWithMemory.cs" />
+    <Compile Include="Classes\Robots\WoodRobots\ScoutCutterRobotMem.cs" />
     <Compile Include="Classes\Robots\MineralRobots\ScoutRobot.cs" />
     <Compile Include="Classes\Robots\WoodRobots\WoodWorkerRobotMem.cs" />
     <Compile Include="Classes\Robots\WoodRobots\WoodWorkerRobot.cs" />
