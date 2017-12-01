@@ -48,15 +48,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Intersection2D, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Intersection2D\Intersection2D\Intersection2D\bin\Release\Intersection2D.dll</HintPath>
-    </Reference>
     <Reference Include="MathNet.Numerics, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.3.20.0-beta01\lib\net40\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\packages\MathNet.Numerics.3.20.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,14 +74,17 @@
     <Compile Include="Classes\Entities\CircleEntity.cs" />
     <Compile Include="Classes\Entities\Entity.cs" />
     <Compile Include="Classes\Entities\FuelEntity.cs" />
+    <Compile Include="Classes\Entities\GeneralLine.cs" />
     <Compile Include="Classes\Entities\LineEntity.cs" />
     <Compile Include="Classes\Entities\ObstacleEntity.cs" />
     <Compile Include="Classes\Entities\RawMaterialEntity.cs" />
     <Compile Include="Classes\Entities\WoodEntity.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\DifferencialEvolution.cs" />
     <Compile Include="Classes\Experiments\TestingMaps\TestingBrain.cs" />
+    <Compile Include="Classes\Map\EntityMap .cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
     <Compile Include="Classes\Map\ScenesMap.cs" />
+    <Compile Include="Classes\Map\SpatialHash.cs" />
     <Compile Include="Classes\MultiThreadExperiment\CompetitiveScene\CompetitiveExperimentMT.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\MineralExperimentMT.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\Basic\MineralScoutWalk.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportClasses\ActivationFuncs.cs" />
+    <Compile Include="SupportClasses\Intetersection2D.cs" />
     <Compile Include="SupportClasses\RandomNumber.cs" />
     <Compile Include="SupportClasses\SupportClasses.cs" />
   </ItemGroup>

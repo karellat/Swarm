@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -36,7 +37,10 @@ namespace SwarmSimFramework.Classes.Map
 
             //Copy initial set up 
             Robots = robots ?? new List<RobotEntity>();
-            PasiveEntities = pasiveEntities ?? new List<CircleEntity>();
+            PasiveEntities = new EntityMap<CircleEntity>(MaxHeight,MaxWidth,50);
+            if (pasiveEntities != null)
+                foreach (var p in pasiveEntities)
+                    PasiveEntities.Add(p);
             FuelEntities = fuelEntities ?? new List<FuelEntity>();
             //No radio signals in the begining 
             RadioEntities = new List<RadioEntity>();
@@ -208,13 +212,25 @@ namespace SwarmSimFramework.Classes.Map
                     return true;
             }
             //Collision with passive entities: 
+            bool list_output = false;
+            bool spatialHashing_output = false;
             foreach (var p in PasiveEntities)
             {
                 if (p == ignoredEntity)
                     continue;
                 if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, p.Middle, p.Radius))
-                    return true;
+                    list_output = true;
             }
+
+            foreach (var p  in PasiveEntities.CircleIntersection(new ObstacleEntity(newMiddle,entity.Radius)))
+            {
+                if (p == ignoredEntity)
+                    continue;
+                if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, p.Middle, p.Radius))
+                    spatialHashing_output = true;
+            }
+
+            Debug.Assert(spatialHashing_output == list_output);
 
             return false;
         }
@@ -309,6 +325,8 @@ namespace SwarmSimFramework.Classes.Map
                     }
                 }
             }
+            Intersection list_intersection = new Intersection();
+            list_intersection.Distance = float.MaxValue;
             //Collision with passive entities 
             foreach (var p in PasiveEntities)
             {
@@ -316,14 +334,45 @@ namespace SwarmSimFramework.Classes.Map
                 foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < theNearestIntersection.Distance)
+                    if (testedDistance < list_intersection.Distance)
                     {
-                        theNearestIntersection.Distance = testedDistance;
-                        theNearestIntersection.IntersectionPoint = i;
-                        theNearestIntersection.CollidingEntity = p;
+                        list_intersection.Distance = testedDistance;
+                        list_intersection.IntersectionPoint = i;
+                        list_intersection.CollidingEntity = p;
                     }
                 }
             }
+
+            Debug.Assert(Vector2.Distance(list_intersection.IntersectionPoint,entity.A) <= entity.Length);
+
+            Intersection spatial_intersection = new Intersection();
+            spatial_intersection.Distance = float.MaxValue;
+            foreach (var p in PasiveEntities.LineIntersection(entity))
+            {
+                if (p == ignoredEntity) continue;
+                foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
+                {
+                    testedDistance = Vector2.DistanceSquared(i, entity.A);
+                    if (testedDistance < spatial_intersection.Distance)
+                    {
+                        spatial_intersection.Distance = testedDistance;
+                        spatial_intersection.IntersectionPoint = i;
+                        spatial_intersection.CollidingEntity = p;
+                    }
+                }
+            }
+
+            if (list_intersection.Distance <= theNearestIntersection.Distance)
+            {
+                theNearestIntersection = list_intersection;
+
+                Debug.Assert(Math.Abs(list_intersection.Distance - spatial_intersection.Distance) < 0.0001);
+                Debug.Assert(list_intersection.CollidingEntity == spatial_intersection.CollidingEntity);
+                Debug.Assert(list_intersection.IntersectionPoint == spatial_intersection.IntersectionPoint);
+            }
+
+
+
             //if the nearest intersection is a raw material markdown discovery
             if (!discovering || theNearestIntersection.CollidingEntity == null)
                 return theNearestIntersection;
@@ -560,7 +609,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Stores every pasive entity on the map, as minerals, obstacles etc
         /// </summary>
-        public List<CircleEntity> PasiveEntities;
+        public EntityMap<CircleEntity> PasiveEntities;
         /// <summary>
         /// Stores all radio broadcast in the scope 
         /// </summary>

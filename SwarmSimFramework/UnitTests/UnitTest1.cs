@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SwarmSimFramework.Classes.Entities;
 using System.Numerics;
@@ -14,6 +15,26 @@ using SwarmSimFramework.SupportClasses;
 
 namespace UnitTests
 {
+    internal class CircleWithSign : CircleEntity
+    {
+        public CircleWithSign(string name) : base(name)
+        {
+        }
+
+        public CircleWithSign(Vector2 middle, float radius, string name, float orientation = 0) : base(middle, radius, name, orientation)
+        {
+        }
+
+        public CircleWithSign(Vector2 middle, float radius, string name, Vector2 rotationMiddle, float orientation = 0) : base(middle, radius, name, rotationMiddle, orientation)
+        {
+        }
+
+        public override Entity DeepClone()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     internal class Circle : CircleEntity
     {
         public Circle(Vector2 middle, float radius, float orientation = 0) : base(middle, radius, "CIRCLE", orientation)
@@ -1892,6 +1913,54 @@ namespace UnitTests
         }
     }
 
+    [TestClass]
+    public class SpatialHashingTesting
+    {
+        [TestMethod]
+        public void Test1()
+        {
+            var s = new SpatialHash(1,5,5);
+            List<CircleWithSign> circles = new List<CircleWithSign>();
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    CircleWithSign c = new CircleWithSign(new Vector2(0.5f +i, 0.5f + j), 0.2f,
+                        i.ToString() + ':' + j.ToString());
+                    s.Add(c);
+                    circles.Add(c);
+                }
+            }
+
+            foreach (var c in circles)
+            {
+                Assert.IsTrue(c == s.PointIntersection(c.Middle).First() && s.PointIntersection(c.Middle).Count == 1);
+
+            }
+        }
+
+        [TestMethod]
+        public void Test2()
+        {
+            var s = new SpatialHash(1, 5, 5);
+            List<CircleWithSign> circles = new List<CircleWithSign>();
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    CircleWithSign c = new CircleWithSign(new Vector2(0.5f + i, 0.5f + j), 0.2f,
+                        i.ToString() + ':' + j.ToString());
+                    s.Add(c);
+                    circles.Add(c);
+                }
+            }
+
+            var l = new Line(new Vector2(0.5f,0.5f),new Vector2(1.5f,1.5f),Vector2.Zero);
+
+            Assert.IsTrue(s.LineIntersection(l).Count == 4);
+        }
+    }
+
     public static class TestExtensions
     {
         public static void AssertArrayEquality(float[] a, float[] b)
@@ -1903,4 +1972,6 @@ namespace UnitTests
             }
         }
     }
+
+
 }
