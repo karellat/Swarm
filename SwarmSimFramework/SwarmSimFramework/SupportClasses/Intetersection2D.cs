@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 namespace Intersection2D
 {
@@ -142,94 +146,102 @@ namespace Intersection2D
         /// <returns></returns>
         public static Vector2[] CircleLineSegmentIntersection(Vector2 aMiddle, float aRadius, Vector2 b1, Vector2 b2)
         {
+
             
-            //Debug.Assert(b1 == b2);
-            //check if any intersection exists, find intersection with perpedicular line
-            Vector2 p1 = aMiddle;
-            Vector2 directionB = b1 - b2;
-            //Create perpedicular vector to b
-            Vector2 perpedicularB = new Vector2(directionB.Y, (-1.0f * directionB.X));
-            Vector2 p2 = aMiddle + perpedicularB;
-            //Intersection with perpedicular line, no point to 
-            Vector2 i = LineLineIntersection(p1, p2, b1, b2);
-            //If not in the segment 
-            if (float.IsNaN(i.X))
-                return new Vector2[0];
-            //If distance between line and circle is bigger than radius 
-            float distanceBetweenLineCircle = Vector2.DistanceSquared(i, aMiddle);
-            if (distanceBetweenLineCircle > (aRadius * aRadius))
-                return new Vector2[0];
-            //if line is tangent
-            else if (distanceBetweenLineCircle == (aRadius * aRadius))
+
+            float A;
+            float B;
+            float C;
+
+            float x0 = aMiddle.X;
+            float y0 = aMiddle.Y;
+
+            Vector2 d = b1 - b2;
+            Vector2 n = new Vector2(d.Y*-1,d.X);
+            float a = -d.Y;
+            float b = d.X;
+            float c = -a * b1.X - b * b1.Y;
+            float r2 = aRadius * aRadius;
+
+
+            Vector2 X_1 = Vector2.Zero;
+            bool X_1isRoot = false; 
+            Vector2 X_2 = Vector2.Zero;
+            bool X_2isRoot = false; 
+
+            if (a != 0)
             {
-                Debug.Assert(MyExtensions.PointOnLine(b1, b2, i));
-                Debug.Assert(MyExtensions.PointOnCircle(aMiddle, aRadius, i));
-                return new[] { i };
-            }
+                A = 1 + (b * b) / (a * a);
+                B = (c * b) / a + 2 * x0 * (b / a) + 2 * y0;
+                C = (x0 * x0) + y0 * y0 - r2 + c * c / (a * a) + 2 * x0 * (c / a);
 
-            //IF THERE is two intersection 
-            //Using perpedicular line & pythagoren theorem 
-            float distanceToV = (aRadius * aRadius) - Vector2.DistanceSquared(i, aMiddle);
-            distanceToV = (float)Math.Sqrt(distanceToV);
-            directionB = Vector2.Normalize(directionB);
-
-            //Intersection points 
-            Vector2 X_1 = (directionB * distanceToV) + i;
-            Vector2 X_2 = (directionB * distanceToV * -1) + i;
-           
-            Debug.Assert(MyExtensions.PointOnLine(b1,b2,X_1));
-            Debug.Assert(MyExtensions.PointOnCircle(aMiddle,aRadius,X_1));
-            Debug.Assert(MyExtensions.PointOnLine(b1, b2, X_2));
-            Debug.Assert(MyExtensions.PointOnCircle(aMiddle, aRadius, X_2));
-
-
-            if (b1.X != b2.X)
-            {
-                if (MyExtensions.Between(b1.X, b2.X, X_1.X))
+                var xs = MyExtensions.QuadraticSolver(A, B, C);
+                if (xs != null)
                 {
-                    if (MyExtensions.Between(b1.X, b2.X, X_2.X))
+                    if (!float.IsNaN(xs.Item2))
                     {
-                        Debug.Assert(Vector2.Distance(b1, b2) >= Vector2.Distance(b1, X_1) &&
-                                     Vector2.Distance(b1, b2) >= Vector2.Distance(b2, X_1));
-                        return new[] {X_1, X_2};
+                        X_2.Y = xs.Item2;
+                        X_2.X = (-b * X_2.Y - c) / a;
+                        X_2isRoot = true;
                     }
-                    else
-                    {
-                        Debug.Assert(Vector2.Distance(b1, b2) <= Vector2.Distance(b1, X_1) && Vector2.Distance(b1, b2) <= Vector2.Distance(b2, X_1));
-                        return new[] {X_1};
-                    }
+
+                    X_1.Y = xs.Item1;
+                    X_1.X = (-b * X_1.Y - c) / a;
+                    X_1isRoot = true; 
+
                 }
-                else
+            }
+            else if(b != 0)
+            {
+                A = 1 + (a * a) / (b * b);
+                B = (c * a) / b + 2 * y0 * (a / b) + 2 * x0;
+                C = x0 * x0 + y0 * y0 - r2 + c * c / (b * b) + 2 * y0 * (c / b);
+
+                var xs = MyExtensions.QuadraticSolver(A, B, C);
+                if (xs != null)
                 {
-                    if (MyExtensions.Between(b1.X, b2.X, X_2.X))
+                    if (!float.IsNaN(xs.Item2))
                     {
-                        Debug.Assert(Vector2.Distance(b1, b2) <= Vector2.Distance(b1, X_2) && Vector2.Distance(b1, b2) <= Vector2.Distance(b2, X_2));
-                        return new[] { X_2 };
+                        X_2.X = xs.Item2;
+                        X_2.Y = (-a * X_2.X - c) / b;
+                        X_2isRoot = true;
                     }
-                    else
-                        return new Vector2[0];
+
+                    X_1.X = xs.Item1;
+                    X_1.Y = (-a * X_1.X - c) / b;
+                    X_1isRoot = true;
                 }
             }
             else
             {
-                if (MyExtensions.Between(b1.Y, b2.Y, X_1.Y))
-                {
-                    if (MyExtensions.Between(b1.X, b2.X, X_2.X))
-                        return new[] { X_1, X_2 };
-                    else
-                        return new[] { X_1 };
-                }
-                else
-                {
-                    if (MyExtensions.Between(b1.Y, b2.Y, X_2.Y))
-                        return new[] { X_2 };
-                    else
-                        return new Vector2[0];
-                }
+                throw new ArgumentException("Not a line in input! " + b1.ToString() + ' ' +b2.ToString());
             }
-
             
 
+            //Intersection points 
+
+           
+            Debug.Assert(!X_1isRoot || MyExtensions.PointOnLine(b1,b2,X_1));
+            Debug.Assert(!X_1isRoot || MyExtensions.PointOnCircle(aMiddle,aRadius,X_1));
+            Debug.Assert(!X_2isRoot || MyExtensions.PointOnLine(b1, b2, X_2));
+            Debug.Assert(!X_2isRoot || MyExtensions.PointOnCircle(aMiddle, aRadius, X_2));
+
+
+            if (X_1isRoot && MyExtensions.PointOnLineSegment(b1, b2, X_1))
+            {
+                if (X_2isRoot&& MyExtensions.PointOnLineSegment(b1, b2, X_2))
+                    return new[] {X_1, X_2};
+                else
+                    return new[] {X_1};
+            }
+            else
+            {
+                if (X_2isRoot && MyExtensions.PointOnLineSegment(b1, b2, X_2))
+                    return new[] { X_2 };
+                else
+                    return new Vector2[0];
+            }
+           
         }
 
     }
@@ -262,6 +274,16 @@ namespace Intersection2D
                 return true;
             return false;
         }
+        /// <summary>
+        /// Returns true if P lies on line segment given by A,B point
+        /// It has to lie on the Line 
+        /// </summary>
+        public static bool PointOnLineSegment(Vector2 a, Vector2 b, Vector2 p)
+        {
+            Debug.Assert(PointOnLine(a,b,p));
+            return MyExtensions.Between(a.X, b.X, p.X) && MyExtensions.Between(a.Y, b.Y, p.Y);
+
+        }
 
         public static bool PointOnLine(Vector2 l1, Vector2 l2, Vector2 p)
         {
@@ -277,6 +299,22 @@ namespace Intersection2D
         public static bool PointOnCircle(Vector2 m, float radius, Vector2 p)
         {
             return (Math.Abs(Vector2.Distance(m, p) - radius) < 0.0001);
+        }
+
+        public static Tuple<float,float> QuadraticSolver(float a, float b, float c)
+        {
+            Debug.Assert(a != 0);
+
+            var d = b * b - 4 * a * c;
+            if (d < 0)
+                return null; 
+            else if (d == 0)
+                return new Tuple<float, float>(-b / (2 * a), float.NaN);
+            else
+            {
+                var sqrtD = (float) Math.Sqrt(d);
+                return new Tuple<float, float>((-b+sqrtD)/(2*a),(-b-sqrtD)/(2*a));
+            }
         }
     }
 }
