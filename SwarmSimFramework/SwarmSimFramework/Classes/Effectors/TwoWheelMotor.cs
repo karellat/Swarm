@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.Net;
 using System.Numerics;
 using System.Text;
@@ -134,10 +135,11 @@ namespace SwarmSimFramework.Classes.Effectors
         
         //Make move if not collide, if colide mark collision
         if (!map.Collision(robot, newPos))
-           {
-               robot.MoveTo(newPos);
-               this.MoveTo(newPos);
-           }
+        {
+            Debug.Assert(!map.OutOfBorderTest(new ObstacleEntity(newPos, robot.Radius))); 
+            robot.MoveTo(newPos);
+            this.MoveTo(newPos);
+        }
            else
            {
                robot.CollisionDetected++;

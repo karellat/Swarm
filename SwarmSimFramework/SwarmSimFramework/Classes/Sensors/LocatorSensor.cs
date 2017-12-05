@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
@@ -65,6 +66,8 @@ namespace SwarmSimFramework.Classes.Entities
         {
             Middle = robot.Middle;
             FPoint = Middle;
+
+
             //if map borders change, change normalization func
             if (map.MaxWidth != LocalBounds[0].Max || map.MaxHeight != LocalBounds[1].Max)
             {
@@ -76,9 +79,10 @@ namespace SwarmSimFramework.Classes.Entities
             Vector2 dirV = Vector2.Normalize(robot.FPoint - robot.Middle);
 
             float[] o = new[] {robot.Middle.X, robot.Middle.Y, dirV.X, dirV.Y};
+            
             LastReadValues = o;
-            return o.Normalize(NormalizeFuncs);
-
+            o = o.Normalize(NormalizeFuncs);
+            return o; 
         }
         /// <summary>
         /// Change to robot bounds

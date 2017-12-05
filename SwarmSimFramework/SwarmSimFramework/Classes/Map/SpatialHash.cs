@@ -7,10 +7,10 @@ using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimFramework.Classes.Map
 {
-    public class SpatialHash
+    public class SpatialHash<T> where T: CircleEntity
     {
-        private Dictionary<CircleEntity, List<HashSet<CircleEntity>>> dictionary;
-        private HashSet<CircleEntity>[,] boxes;
+        private Dictionary<T, List<HashSet<T>>> dictionary;
+        private HashSet<T>[,] boxes;
         private float BoxSize;
         private int heightCount;
         private int widthCount;
@@ -24,17 +24,17 @@ namespace SwarmSimFramework.Classes.Map
             this.heightCount = (int) Math.Ceiling(heigth / boxSize);
             this.widthCount = (int) Math.Ceiling(width / boxSize);
 
-            boxes = new HashSet<CircleEntity>[widthCount, heightCount];
-            dictionary = new Dictionary<CircleEntity, List<HashSet<CircleEntity>>>();
+            boxes = new HashSet<T>[widthCount, heightCount];
+            dictionary = new Dictionary<T, List<HashSet<T>>>();
         }
 
         //Structure changes 
         /// <summary>
         /// Add circle entity to the grid
         /// </summary>
-        public void Add(CircleEntity item)
+        public void Add(T item)
         {
-            List<HashSet<CircleEntity>> containing_item = new List<HashSet<CircleEntity>>();
+            List<HashSet<T>> containing_item = new List<HashSet<T>>();
 
             //Circle middle box
             int widthBox = (int) Math.Floor(item.Middle.X / BoxSize);
@@ -47,7 +47,7 @@ namespace SwarmSimFramework.Classes.Map
                 (int) Math.Floor((item.Middle.Y - item.Radius) / BoxSize) == heightBox)
             {
                 if (boxes[widthBox, heightBox] == null)
-                    boxes[widthBox, heightBox] = new HashSet<CircleEntity>();
+                    boxes[widthBox, heightBox] = new HashSet<T>();
 
                 boxes[widthBox, heightBox].Add(item);
                 containing_item.Add(boxes[widthBox, heightBox]);
@@ -65,7 +65,7 @@ namespace SwarmSimFramework.Classes.Map
                   
 
                     if (boxes[widthBox + i, heightBox + j] == null)
-                        boxes[widthBox + i, heightBox + j] = new HashSet<CircleEntity>();
+                        boxes[widthBox + i, heightBox + j] = new HashSet<T>();
 
                     boxes[widthBox + i, heightBox + j].Add(item);
                     containing_item.Add(boxes[widthBox + i, heightBox + j]);
@@ -75,16 +75,18 @@ namespace SwarmSimFramework.Classes.Map
             dictionary.Add(item, containing_item);
         }
 
-        public void Remove(CircleEntity item)
+        public void Remove(T item)
         {
             if (!dictionary.ContainsKey(item))
                 throw new ArgumentException("Item entity not in the list");
 
             foreach (var dic in dictionary[item])
                 dic.Remove(item);
+
+            dictionary.Remove(item);
         }
 
-        public void Update(CircleEntity item)
+        public void Update(T item)
         {
             Remove(item);
             Add(item);
@@ -93,9 +95,9 @@ namespace SwarmSimFramework.Classes.Map
         public int Count => dictionary.Count;
 
         //Intersections 
-        public HashSet<CircleEntity> PointIntersection(Vector2 point)
+        public HashSet<T> PointIntersection(Vector2 point)
         {
-            var output = new HashSet<CircleEntity>();
+            var output = new HashSet<T>();
 
             //Point inside the borders
             if (point.X < 0 || point.Y < 0 ||
@@ -151,32 +153,60 @@ namespace SwarmSimFramework.Classes.Map
 
             return output;
         }
-        public HashSet<CircleEntity> CircleIntersection(CircleEntity item)
+        public HashSet<T> CircleIntersection(CircleEntity item)
         {
-            var output = new HashSet<CircleEntity>();
+            var output = new HashSet<T>();
             int widthBox = (int)item.Middle.X / (int)BoxSize;
             int heightBox = (int)item.Middle.Y / (int)BoxSize;
 
             //TODO: Insert to true containing boxes
-            for (int i = -1; i <= 1; i++)
+            //NAIVE solution 
+            //for (int i = -1; i <= 1; i++)
+            //{
+            //    for (int j = -1; j <= 1; j++)
+            //    {
+            //        if (i + widthBox < 0 || j + heightBox < 0 || i + widthBox >= widthCount || j + heightBox >= heightCount) continue;
+
+            //        if (boxes[widthBox + i, heightBox + j] != null)
+            //        {
+            //            foreach (var q in boxes[widthBox + i, heightBox + j])
+            //                output.Add(q);
+            //        }
+            //    }
+            //}
+
+            //More complicated
+
+            var top = item.Middle + Vector2.UnitY * item.Radius;
+            var bottom = item.Middle - Vector2.UnitY * item.Radius;
+            var left = item.Middle - Vector2.UnitX * item.Radius;
+            var right = item.Middle + Vector2.UnitX * item.Radius;
+
+
+            var upper_left = new Vector2(widthBox * BoxSize, heightBox * BoxSize);
+            var upper_right = new Vector2((widthBox + 1) * BoxSize, heightBox * BoxSize);
+            var lower_left = new Vector2(widthBox * BoxSize, (heightBox + 1) * BoxSize);
+            var lower_right = new Vector2(widthBox * BoxSize, (heightBox + 1) * BoxSize);
+
+            var list = new[] { upper_left, upper_right, lower_left, lower_right };
+
+            output.UnionWith(PointIntersection(top));
+            output.UnionWith(PointIntersection(bottom));
+            output.UnionWith(PointIntersection(left));
+            output.UnionWith(PointIntersection(right));
+
+            foreach (var i in list)
             {
-                for (int j = -1; j <= 1; j++)
-                {
-                    if (i + widthBox < 0 || j + heightBox < 0 || i + widthBox >= widthCount || j + heightBox >= heightCount) continue;
-                    
-                    if (boxes[widthBox + i, heightBox + j] != null)
-                    {
-                        foreach (var q in boxes[widthBox + i, heightBox + j])  
-                           output.Add(q);
-                    }
-                }
+                if (Vector2.DistanceSquared(i, item.Middle) <= (item.Radius * item.Radius))
+                    output.UnionWith(PointIntersection(i));
             }
+
 
             return output;
         }
-        public HashSet<CircleEntity> LineIntersection(LineEntity item)
+        public HashSet<T> LineIntersection(LineEntity item)
         {
-            var output = new HashSet<CircleEntity>();
+            var output = new HashSet<T>();
             //direction vector 
             var v = item.A-item.B;
             var n_X = v.Y;
@@ -221,5 +251,19 @@ namespace SwarmSimFramework.Classes.Map
             return output;
         }
 
+        /// <summary>
+        /// Unit test method
+        /// </summary>
+        public T One()
+        {
+            //TODO: Not so nice for testing :] 
+            if(Count != 1)
+                throw new ArgumentException("One fuction is only for unit testing");
+
+            foreach (var k in dictionary.Keys)
+                return k;
+
+            return null;
+        }
     }
 }

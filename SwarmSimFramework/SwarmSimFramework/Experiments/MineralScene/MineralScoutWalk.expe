@@ -1,7 +1,7 @@
 MineralExperimentMT
 AmountOfMineral:200
-AmountOfObstacle:100
-AmountOfFreeFuel:0
+AmountOfObstacle:0
+AmountOfFreeFuel:200
 ValueOfDiscoveredMineral:100
 ValueOfStockedMineral:0
 ValueOfRefactoredFuel:0

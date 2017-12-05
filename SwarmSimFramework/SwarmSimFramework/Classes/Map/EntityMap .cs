@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
@@ -9,7 +10,7 @@ namespace SwarmSimFramework.Classes.Map
     public class EntityMap<T> : IEnumerable<T> where T : CircleEntity
     {
         public List<T> list;
-        public SpatialHash spatialHash;
+        public SpatialHash<T> spatialHash;
         private float boxSize;
         private float mapHeigth;
         private float mapWidth; 
@@ -19,7 +20,7 @@ namespace SwarmSimFramework.Classes.Map
             this.boxSize = boxSize;
             this.mapWidth = mapWidth;
             this.mapHeigth = mapHeight;
-            spatialHash = new SpatialHash(boxSize,mapHeight,mapWidth); 
+            spatialHash = new SpatialHash<T>(boxSize,mapHeight,mapWidth); 
             list = new List<T>();
         }
 
@@ -31,7 +32,7 @@ namespace SwarmSimFramework.Classes.Map
 
         public void Clear()
         {
-            spatialHash = new SpatialHash(boxSize,mapHeigth,mapWidth);
+            spatialHash = new SpatialHash<T>(boxSize,mapHeigth,mapWidth);
             list.Clear();
         }
 
@@ -59,24 +60,39 @@ namespace SwarmSimFramework.Classes.Map
             return GetEnumerator();
         }
 
-        public T this[int key] => list[key];
+        public T One => spatialHash.One();
 
         public List<T> ToList => list;
 
-        public HashSet<CircleEntity> CircleIntersection(CircleEntity item)
+        public HashSet<T> CircleIntersection(CircleEntity item)
         {
             return spatialHash.CircleIntersection(item);
         }
 
-        public HashSet<CircleEntity> PointIntersection(Vector2 point)
+        public HashSet<T> PointIntersection(Vector2 point)
         {
             return spatialHash.PointIntersection(point);
         }
 
-        public HashSet<CircleEntity> LineIntersection(LineEntity item)
+        public HashSet<T> LineIntersection(LineEntity item)
         {
             return spatialHash.LineIntersection(item);
         }
 
+        internal void RemoveAll(Func<T, bool> p)
+        {
+            List<T> willBeRemoved = new List<T>();
+            foreach (var i in list)
+            {
+                if (p.Invoke(i))
+                    willBeRemoved.Add(i);
+            }
+
+            foreach (var i in willBeRemoved)
+            {
+                Remove(i);
+            }
+
+        }
     }
 }

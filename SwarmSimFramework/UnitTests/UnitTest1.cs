@@ -1378,9 +1378,9 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
             RadioTransmitter rt = new RadioTransmitter(r, 10);
             rt.Effect(new[] {0,0,1.0f}, r, map);
-            Assert.AreEqual(new Vector2(100, 100), map.RadioEntities[0].Middle);
-            Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual(2, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual(new Vector2(100, 100), map.RadioEntities.One.Middle);
+            Assert.AreEqual(10, map.RadioEntities.One.Radius);
+            Assert.AreEqual(2, map.RadioEntities.One.ValueOfSignal);
             map.MakeStep();
             Assert.AreEqual(0, map.RadioEntities.Count);
         }
@@ -1392,15 +1392,15 @@ namespace UnitTests
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
             RadioTransmitter rt = new RadioTransmitter(r, 10);
             rt.Effect(new[] {100.0f,0,0}, r, map);
-            Assert.AreEqual(new Vector2(100, 100), map.RadioEntities[0].Middle);
-            Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual(0, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual(new Vector2(100, 100), map.RadioEntities.One.Middle);
+            Assert.AreEqual(10, map.RadioEntities.One.Radius);
+            Assert.AreEqual(0, map.RadioEntities.One.ValueOfSignal);
             map.MakeStep();
             r.MoveTo(new Vector2(10, 10));
             rt.Effect(new[] {0,1.0f,0}, r, map);
-            Assert.AreEqual(new Vector2(10, 10), map.RadioEntities[0].Middle);
-            Assert.AreEqual(10, map.RadioEntities[0].Radius);
-            Assert.AreEqual(1, map.RadioEntities[0].ValueOfSignal);
+            Assert.AreEqual(new Vector2(10, 10), map.RadioEntities.One.Middle);
+            Assert.AreEqual(10, map.RadioEntities.One.Radius);
+            Assert.AreEqual(1, map.RadioEntities.One.ValueOfSignal);
 
         }
     }
@@ -1735,7 +1735,7 @@ namespace UnitTests
             Assert.AreEqual(1, map.Robots.Count);
             Assert.IsFalse(map.Robots[0].Alive);
             Assert.AreEqual(1, map.FuelEntities.Count);
-            Assert.AreEqual(100, map.FuelEntities[0].Capacity);
+            Assert.AreEqual(100, map.FuelEntities.One.Capacity);
             int j = 1;
             for (int i = 0; i < 100; i++)
             {
@@ -1778,7 +1778,7 @@ namespace UnitTests
             Assert.AreEqual(1, map.Robots.Count);
             Assert.IsFalse(map.Robots[0].Alive);
             Assert.AreEqual(1, map.FuelEntities.Count);
-            Assert.AreEqual(100, map.FuelEntities[0].Capacity);
+            Assert.AreEqual(100, map.FuelEntities.One.Capacity);
             int j = 1;
             for (int i = 0; i < 100; i++)
             {
@@ -1838,9 +1838,9 @@ namespace UnitTests
             RawMaterialEntity rme = new RawMaterialEntity(new Vector2(30,40),2,10,0);
             map.PasiveEntities.Add(rme);
             Assert.AreEqual(1,map.PasiveEntities.Count);
-            Assert.AreEqual(Entity.EntityColor.RawMaterialColor,map.PasiveEntities[0].Color);
+            Assert.AreEqual(Entity.EntityColor.RawMaterialColor,map.PasiveEntities.One.Color);
             wr.Effect(new []{100.0f},er,map);
-            Assert.AreEqual(Entity.EntityColor.WoodColor,map.PasiveEntities[0].Color);
+            Assert.AreEqual(Entity.EntityColor.WoodColor,map.PasiveEntities.One.Color);
         }
 
         [TestMethod]
@@ -1857,11 +1857,11 @@ namespace UnitTests
                 Assert.AreEqual(new Vector2(30, 35 +i), wr.A);
                 Assert.AreEqual(new Vector2(30, 45 +i), wr.B);
                 Assert.AreEqual(i+1, er.InvalidRefactorOperation);
-                Assert.AreEqual(Entity.EntityColor.RawMaterialColor, map.PasiveEntities[0].Color);
+                Assert.AreEqual(Entity.EntityColor.RawMaterialColor, map.PasiveEntities.One.Color);
                 er.MoveTo(er.Middle + new Vector2(0,1));
             }
             wr.Effect(new[] { 100.0f }, er, map);
-            Assert.AreEqual(Entity.EntityColor.WoodColor, map.PasiveEntities[0].Color);
+            Assert.AreEqual(Entity.EntityColor.WoodColor, map.PasiveEntities.One.Color);
         }
     }
 
@@ -1919,7 +1919,7 @@ namespace UnitTests
         [TestMethod]
         public void Test1()
         {
-            var s = new SpatialHash(1,5,5);
+            var s = new SpatialHash<CircleWithSign>(1,5,5);
             List<CircleWithSign> circles = new List<CircleWithSign>();
             for (int i = 0; i < 5; i++)
             {
@@ -1942,7 +1942,7 @@ namespace UnitTests
         [TestMethod]
         public void Test2()
         {
-            var s = new SpatialHash(1, 5, 5);
+            var s = new SpatialHash<CircleWithSign>(1, 5, 5);
             List<CircleWithSign> circles = new List<CircleWithSign>();
             for (int i = 0; i < 5; i++)
             {

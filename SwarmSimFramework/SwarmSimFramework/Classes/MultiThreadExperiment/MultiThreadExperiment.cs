@@ -108,6 +108,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// Index of first 
         /// </summary>
         protected int FreeBrainIndex = 0;
+
         public void Run(string[] nameOfInitFile=null)
         {
             //Init specific experiment
@@ -277,11 +278,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             }
             //Set if generation done
             if (lastRunning) GenerationFinnished = true;
-            //Wake up the Control Thread
-            //lock (ControlLock)
-            //{
-            //    Monitor.Pulse(ControlLock);
-            //}
+
+#if DEBUG
+         Console.WriteLine("Original solution time: {0} ; Spatial hashing: {1}; ratio: {2}" ,map.Owatch.ElapsedMilliseconds, map.SHwatch.ElapsedMilliseconds, map.Owatch.ElapsedMilliseconds/ (float)map.SHwatch.ElapsedMilliseconds);   
+#endif
         }
         /// <summary>
         /// Thread safe brain creation 

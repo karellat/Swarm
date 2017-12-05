@@ -1,8 +1,11 @@
-﻿using System;
+﻿//#define POSCORRECT
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using Intersection2D;
@@ -16,6 +19,11 @@ namespace SwarmSimFramework.Classes.Map
     /// </summary>
     public class Map
     {
+#if DEBUG
+        public Stopwatch SHwatch = new Stopwatch();
+        public Stopwatch Owatch  = new Stopwatch();
+
+#endif 
 
         //PUBLIC METHODS
         //GLOBAL METHODS 
@@ -41,9 +49,16 @@ namespace SwarmSimFramework.Classes.Map
             if (pasiveEntities != null)
                 foreach (var p in pasiveEntities)
                     PasiveEntities.Add(p);
-            FuelEntities = fuelEntities ?? new List<FuelEntity>();
+            FuelEntities = new EntityMap<FuelEntity>(MaxHeight, MaxWidth, 50);
+            if (fuelEntities != null)
+            {
+                foreach (var f in fuelEntities)
+                {
+                    FuelEntities.Add(f);
+                }
+            }
             //No radio signals in the begining 
-            RadioEntities = new List<RadioEntity>();
+            RadioEntities = new EntityMap<RadioEntity>(MaxHeight, MaxWidth, 200);
             //Mark down initial set up 
             modelRobotEntities = new List<RobotEntity>(Robots.Count);
             modelFuelEntities = new List<FuelEntity>(FuelEntities.Count);
@@ -69,8 +84,9 @@ namespace SwarmSimFramework.Classes.Map
                 RadioEntities.Add(r);
             }
             //Init colliding testing 
+#if DEBUG
             CheckCorrectionOfPossition();
-            
+#endif    
 
         }
 
@@ -104,8 +120,9 @@ namespace SwarmSimFramework.Classes.Map
                 RadioEntities.Add(r);
             }
             //No point of coping passive entities 
-            //DEBUG
+#if DEBUG
             CheckCorrectionOfPossition();
+#endif 
         }
 
         /// <summary>
@@ -113,11 +130,15 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         public void MakeStep()
         {
+#if DEBUG && POSCORRECT
+            CheckCorrectionOfPossition();
+#endif
             //Make all robots read situation & decide, no point of random iteration 
             foreach (var r in Robots)
             {
                 if (r.Alive)
                     r.PrepareMove(this);
+                Debug.Assert(!OutOfBorderTest(r));
             }
             //Clean signals from map 
             RadioEntities.Clear();
@@ -127,9 +148,14 @@ namespace SwarmSimFramework.Classes.Map
             //Make movent, activate effectors
             foreach (int i in Enumerable.Range(0, Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
             {
+                Debug.Assert(!OutOfBorderTest(Robots[i]));
                 if (Robots[i].Alive)
                     Robots[i].Move(this);
+                Debug.Assert(!OutOfBorderTest(Robots[i]));
             }
+#if DEBUG && POSCORRECT
+            CheckCorrectionOfPossition();
+#endif
             //Find intersection with fuels
             if (FuelEntities.Count != 0)
             {
@@ -186,9 +212,6 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Collision of circle to the newMiddle
         /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="newMiddle"></param>
-        /// <returns></returns>
         public bool Collision(CircleEntity entity, Vector2 newMiddle, Entity ignoredEntity = null)
         {
             if (ignoredEntity == null)
@@ -232,7 +255,7 @@ namespace SwarmSimFramework.Classes.Map
 
             Debug.Assert(spatialHashing_output == list_output);
 
-            return false;
+            return spatialHashing_output;
         }
 
         /// <summary>
@@ -326,8 +349,13 @@ namespace SwarmSimFramework.Classes.Map
                 }
             }
             Intersection list_intersection = new Intersection();
-            list_intersection.Distance = float.MaxValue;
+            list_intersection.Distance = float.PositiveInfinity;
+            list_intersection.CollidingEntity = null;
+            list_intersection.IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
             //Collision with passive entities 
+#if DEBUG
+            Owatch.Start();
+#endif
             foreach (var p in PasiveEntities)
             {
                 if (p == ignoredEntity) continue;
@@ -342,11 +370,21 @@ namespace SwarmSimFramework.Classes.Map
                     }
                 }
             }
+#if DEBUG
+         Owatch.Stop();
+#endif
 
-            Debug.Assert(Vector2.Distance(list_intersection.IntersectionPoint,entity.A) <= entity.Length);
+            Debug.Assert(float.IsPositiveInfinity(list_intersection.Distance) || Vector2.Distance( list_intersection.IntersectionPoint,entity.A) - entity.Length <= 0.01);
 
             Intersection spatial_intersection = new Intersection();
             spatial_intersection.Distance = float.MaxValue;
+            spatial_intersection.CollidingEntity = null;
+            spatial_intersection.IntersectionPoint = new Vector2(float.PositiveInfinity,float.PositiveInfinity);
+
+#if DEBUG
+            SHwatch.Start();
+#endif
+
             foreach (var p in PasiveEntities.LineIntersection(entity))
             {
                 if (p == ignoredEntity) continue;
@@ -361,14 +399,17 @@ namespace SwarmSimFramework.Classes.Map
                     }
                 }
             }
+#if DEBUG
+            SHwatch.Stop();
+#endif
 
             if (list_intersection.Distance <= theNearestIntersection.Distance)
             {
                 theNearestIntersection = list_intersection;
 
-                Debug.Assert(Math.Abs(list_intersection.Distance - spatial_intersection.Distance) < 0.0001);
-                Debug.Assert(list_intersection.CollidingEntity == spatial_intersection.CollidingEntity);
-                Debug.Assert(list_intersection.IntersectionPoint == spatial_intersection.IntersectionPoint);
+                Debug.Assert( (list_intersection.CollidingEntity == null && spatial_intersection.CollidingEntity == null) ||  Math.Abs(list_intersection.Distance - spatial_intersection.Distance) < 0.0001);
+                 Debug.Assert(list_intersection.CollidingEntity == spatial_intersection.CollidingEntity);
+                Debug.Assert((list_intersection.CollidingEntity == null && spatial_intersection.CollidingEntity == null) || list_intersection.IntersectionPoint == spatial_intersection.IntersectionPoint);
             }
 
 
@@ -380,7 +421,6 @@ namespace SwarmSimFramework.Classes.Map
             return theNearestIntersection;
         }
 
-      
 
         //COLISION WITH RADIO BROADCASTING
         /// <summary>
@@ -390,7 +430,32 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public Dictionary<int, RadioIntersection> CollisionRadio(CircleEntity entity)
         {
-            var intersections = new Dictionary<int, RadioIntersection>();
+            var original_intersections = new Dictionary<int, RadioIntersection>();
+            var sh_intersection = new Dictionary<int, RadioIntersection>();
+
+            foreach (var r in RadioEntities.CircleIntersection(new ObstacleEntity(entity.Middle,entity.Radius)))
+            {
+                if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
+                {
+                    //Ignore local transmitting
+                    if (r.Middle == entity.Middle)
+                        continue;
+                    var i = (RadioEntity) r;
+                    if (original_intersections.ContainsKey(r.ValueOfSignal))
+                    {
+                        original_intersections[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
+                        original_intersections[i.ValueOfSignal].AmountOfSignal++;
+                    }
+                    else
+                    {
+                        var ir = new RadioIntersection(i.ValueOfSignal);
+                        ir.AmountOfSignal++;
+                        ir.SumOfDirections += i.Middle - entity.Middle;
+                        original_intersections.Add(i.ValueOfSignal, ir);
+                    }
+                }
+            }
+
             foreach (var r in RadioEntities)
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
@@ -399,22 +464,33 @@ namespace SwarmSimFramework.Classes.Map
                     if (r.Middle == entity.Middle)
                         continue;
                     var i = (RadioEntity) r;
-                    if (intersections.ContainsKey(r.ValueOfSignal))
+                    if (sh_intersection.ContainsKey(r.ValueOfSignal))
                     {
-                        intersections[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
-                        intersections[i.ValueOfSignal].AmountOfSignal++;
+                        sh_intersection[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
+                        sh_intersection[i.ValueOfSignal].AmountOfSignal++;
                     }
                     else
                     {
                         var ir = new RadioIntersection(i.ValueOfSignal);
                         ir.AmountOfSignal++;
                         ir.SumOfDirections += i.Middle - entity.Middle;
-                        intersections.Add(i.ValueOfSignal, ir);
+                        sh_intersection.Add(i.ValueOfSignal, ir);
                     }
                 }
             }
 
-            return intersections;
+            Debug.Assert(sh_intersection.Count == original_intersections.Count);
+#if DEBUG
+            foreach (var k in original_intersections.Keys)
+            {
+                Debug.Assert(sh_intersection.ContainsKey(k));
+                Debug.Assert(Math.Abs(sh_intersection[k].SumOfDirections.X - original_intersections[k].SumOfDirections.X) < 0.001);
+                Debug.Assert(Math.Abs(sh_intersection[k].SumOfDirections.Y - original_intersections[k].SumOfDirections.Y) < 0.001);
+                Debug.Assert(sh_intersection[k].AmountOfSignal == original_intersections[k].AmountOfSignal);
+            }
+#endif
+
+            return original_intersections;
         }
 
         //COLISION WITH FUEL 
@@ -453,7 +529,14 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public Intersection CollisionFuel(LineEntity entity)
         {
-            Intersection theNearestPoint = new Intersection()
+            Intersection origin_nearestPoint = new Intersection()
+            {
+                CollidingEntity = null,
+                Distance = float.PositiveInfinity,
+                IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity)
+            };
+
+            Intersection SH_theNearestPoint = new Intersection()
             {
                 CollidingEntity = null,
                 Distance = float.PositiveInfinity,
@@ -465,16 +548,35 @@ namespace SwarmSimFramework.Classes.Map
                 foreach (var i in Intersections.CircleLineSegmentIntersection(f.Middle, f.Radius, entity.A, entity.B))
                 {
                     float testedDistance = Vector2.DistanceSquared(entity.A, i);
-                    if (testedDistance < theNearestPoint.Distance)
+                    if (testedDistance < origin_nearestPoint.Distance)
                     {
-                        theNearestPoint.Distance = testedDistance;
-                        theNearestPoint.IntersectionPoint = i;
-                        theNearestPoint.CollidingEntity = f;
+                        origin_nearestPoint.Distance = testedDistance;
+                        origin_nearestPoint.IntersectionPoint = i;
+                        origin_nearestPoint.CollidingEntity = f;
                     }
                 }
             }
 
-            return theNearestPoint;
+            foreach (var f in FuelEntities)
+            {
+                foreach (var i in Intersections.CircleLineSegmentIntersection(f.Middle, f.Radius, entity.A, entity.B))
+                {
+                    float testedDistance = Vector2.DistanceSquared(entity.A, i);
+                    if (testedDistance < SH_theNearestPoint.Distance)
+                    {
+                        SH_theNearestPoint.Distance = testedDistance;
+                        SH_theNearestPoint.IntersectionPoint = i;
+                        SH_theNearestPoint.CollidingEntity = f;
+                    }
+                }
+            }
+
+            Debug.Assert((float.IsPositiveInfinity(SH_theNearestPoint.Distance) && float.IsPositiveInfinity(origin_nearestPoint.Distance)) || Math.Abs(SH_theNearestPoint.Distance - origin_nearestPoint.Distance) < 0.01);
+            Debug.Assert(SH_theNearestPoint.CollidingEntity == origin_nearestPoint.CollidingEntity);
+            Debug.Assert((float.IsPositiveInfinity(SH_theNearestPoint.Distance) && float.IsPositiveInfinity(origin_nearestPoint.Distance)) || Math.Abs(SH_theNearestPoint.IntersectionPoint.X - origin_nearestPoint.IntersectionPoint.X) < 0.01);
+            Debug.Assert((float.IsPositiveInfinity(SH_theNearestPoint.Distance) && float.IsPositiveInfinity(origin_nearestPoint.Distance)) || Math.Abs(SH_theNearestPoint.IntersectionPoint.Y - origin_nearestPoint.IntersectionPoint.Y) < 0.01);
+
+            return origin_nearestPoint;
 
         }
 
@@ -559,11 +661,15 @@ namespace SwarmSimFramework.Classes.Map
             {
                 if (OutOfBorderTest(r))
                     throw new ArgumentException("Robot out of map");
+                if(Collision(r,r))
+                    throw new ArgumentException("Robot colides with enviroment");
             }
             foreach (var p in PasiveEntities)
             {
                 if (OutOfBorderTest(p))
                     throw new ArgumentException("Passive entity out of map");
+                if (Collision(p,p))
+                    throw new ArgumentException("Passive entity colides with enviroment");
             }
             foreach (var f in FuelEntities)
             {
@@ -613,11 +719,12 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Stores all radio broadcast in the scope 
         /// </summary>
-        public List<RadioEntity> RadioEntities;
+        public EntityMap<RadioEntity> RadioEntities;
+        //public List<RadioEntity> RadioEntities;
         /// <summary>
         /// Stores all fuel entities in the scope 
         /// </summary>
-        public List<FuelEntity> FuelEntities;
+        public EntityMap<FuelEntity> FuelEntities;
 
         //PRIVATE MEMBERS
         // Model of the initicial position 

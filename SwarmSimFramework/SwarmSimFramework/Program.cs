@@ -17,6 +17,7 @@ using SwarmSimFramework.Classes.Robots.MineralRobots;
 using SwarmSimFramework.Classes.MultiThreadExperiment.MineralScene;
 using System.ComponentModel;
 using System.Reflection;
+using Intersection2D;
 
 namespace SwarmSimFramework
 {
@@ -42,7 +43,14 @@ namespace SwarmSimFramework
                     }
                 case "debug":
                     {
-                        Console.WriteLine(MTExperimentReader.ReturnFields(new MineralScoutWalk()));
+                        var A = new Vector2(7.17f,797.34f);
+                        var B = new Vector2(-18.31f,813.17f);
+
+                        var P1 = new Vector2(1061.67f,142.25f);
+                        var P2 = new Vector2(1069.7f,137.26f);
+
+                        var p1 = Intersections.MyExtensions.PointOnLine(A, B, P1);
+                        var p2 = Intersections.MyExtensions.PointOnLine(A, B, P2);
                         return; 
 
                 }

@@ -121,10 +121,16 @@ namespace SwarmSimFramework.Classes.Effectors
                 //Add to map
                 else
                 {
-                    if(removingEntity is FuelEntity)
+#if DEBUG && POSCORRECT
+                    map.CheckCorrectionOfPossition();
+#endif 
+                    if (removingEntity is FuelEntity)
                         map.FuelEntities.Add((FuelEntity) robot.PopContainer());
                     else
-                        map.PasiveEntities.Add(robot.PopContainer());                        
+                        map.PasiveEntities.Add(robot.PopContainer());
+#if DEBUG && POSCORRECT
+                    map.CheckCorrectionOfPossition();
+#endif 
                 }
             }
             //pick from map

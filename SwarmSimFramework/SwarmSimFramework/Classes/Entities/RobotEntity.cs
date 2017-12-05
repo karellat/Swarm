@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -194,7 +195,7 @@ namespace SwarmSimFramework.Classes.Entities
                 {
                     //DEBUG
                     readValues[index] = f;
-                    if (!StandardBounds.In(f))
+                    if (!StandardBounds.In(f) )
                         throw new ArgumentException("Wrong sensor read values");
                     index++;
                 }
@@ -230,8 +231,8 @@ namespace SwarmSimFramework.Classes.Entities
                     set[i] = BrainDecidedValues[index];
                     index++;
                 }
-
                 e.Effect(set,this,map);
+                Debug.Assert(!map.OutOfBorderTest(this));
             }
             if (BurnFuelPerMove != 0)
                 BurnFuel(BurnFuelPerMove);
