@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -430,8 +431,7 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public Dictionary<int, RadioIntersection> CollisionRadio(CircleEntity entity)
         {
-            var original_intersections = new Dictionary<int, RadioIntersection>();
-            var sh_intersection = new Dictionary<int, RadioIntersection>();
+            var intersections = new Dictionary<int, RadioIntersection>();
 
             foreach (var r in RadioEntities.CircleIntersection(new ObstacleEntity(entity.Middle,entity.Radius)))
             {
@@ -441,56 +441,21 @@ namespace SwarmSimFramework.Classes.Map
                     if (r.Middle == entity.Middle)
                         continue;
                     var i = (RadioEntity) r;
-                    if (original_intersections.ContainsKey(r.ValueOfSignal))
+                    if (intersections.ContainsKey(r.ValueOfSignal))
                     {
-                        original_intersections[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
-                        original_intersections[i.ValueOfSignal].AmountOfSignal++;
+                        intersections[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
+                        intersections[i.ValueOfSignal].AmountOfSignal++;
                     }
                     else
                     {
                         var ir = new RadioIntersection(i.ValueOfSignal);
                         ir.AmountOfSignal++;
                         ir.SumOfDirections += i.Middle - entity.Middle;
-                        original_intersections.Add(i.ValueOfSignal, ir);
+                        intersections.Add(i.ValueOfSignal, ir);
                     }
                 }
             }
-
-            foreach (var r in RadioEntities)
-            {
-                if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, r.Middle, r.Radius))
-                {
-                    //Ignore local transmitting
-                    if (r.Middle == entity.Middle)
-                        continue;
-                    var i = (RadioEntity) r;
-                    if (sh_intersection.ContainsKey(r.ValueOfSignal))
-                    {
-                        sh_intersection[i.ValueOfSignal].SumOfDirections += i.Middle - entity.Middle;
-                        sh_intersection[i.ValueOfSignal].AmountOfSignal++;
-                    }
-                    else
-                    {
-                        var ir = new RadioIntersection(i.ValueOfSignal);
-                        ir.AmountOfSignal++;
-                        ir.SumOfDirections += i.Middle - entity.Middle;
-                        sh_intersection.Add(i.ValueOfSignal, ir);
-                    }
-                }
-            }
-
-            Debug.Assert(sh_intersection.Count == original_intersections.Count);
-#if DEBUG
-            foreach (var k in original_intersections.Keys)
-            {
-                Debug.Assert(sh_intersection.ContainsKey(k));
-                Debug.Assert(Math.Abs(sh_intersection[k].SumOfDirections.X - original_intersections[k].SumOfDirections.X) < 0.001);
-                Debug.Assert(Math.Abs(sh_intersection[k].SumOfDirections.Y - original_intersections[k].SumOfDirections.Y) < 0.001);
-                Debug.Assert(sh_intersection[k].AmountOfSignal == original_intersections[k].AmountOfSignal);
-            }
-#endif
-
-            return original_intersections;
+            return intersections;
         }
 
         //COLISION WITH FUEL 
@@ -557,7 +522,7 @@ namespace SwarmSimFramework.Classes.Map
                 }
             }
 
-            foreach (var f in FuelEntities)
+            foreach (var f in FuelEntities.LineIntersection(entity))
             {
                 foreach (var i in Intersections.CircleLineSegmentIntersection(f.Middle, f.Radius, entity.A, entity.B))
                 {
