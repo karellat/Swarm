@@ -469,7 +469,7 @@ namespace SwarmSimFramework.Classes.Map
             bool o = false;
             List<FuelEntity> l = new List<FuelEntity>();
             //Prepare colliding fuel
-            foreach (var f in FuelEntities)
+            foreach (var f in FuelEntities.CircleIntersection(entity))
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, f.Middle, f.Radius))
                     l.Add(f);
