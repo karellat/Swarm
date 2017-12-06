@@ -34,43 +34,14 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         public void Add(T item)
         {
-            List<HashSet<T>> containing_item = new List<HashSet<T>>();
+            var containing_item = new List<HashSet<T>>();
 
-            //Circle middle box
-            int widthBox = (int) Math.Floor(item.Middle.X / BoxSize);
-            int heightBox = (int) Math.Floor(item.Middle.Y / (int) BoxSize);
-
-            //if not in more than one box
-            if ((int) Math.Floor((item.Middle.X + item.Radius) / BoxSize) == widthBox &&
-                (int) Math.Floor((item.Middle.X - item.Radius) / BoxSize) == widthBox &&
-                (int) Math.Floor((item.Middle.Y + item.Radius) / BoxSize) == heightBox &&
-                (int) Math.Floor((item.Middle.Y - item.Radius) / BoxSize) == heightBox)
+            foreach (var box in GetBoxesContainingCircle(item,true))
             {
-                if (boxes[widthBox, heightBox] == null)
-                    boxes[widthBox, heightBox] = new HashSet<T>();
-
-                boxes[widthBox, heightBox].Add(item);
-                containing_item.Add(boxes[widthBox, heightBox]);
-                dictionary.Add(item, containing_item);
-                return;
+                box.Add(item);
+                containing_item.Add(box);
             }
 
-            //TODO: Insert to true containing boxes
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    if (i + widthBox < 0 || j + heightBox < 0 ||
-                        i + widthBox >= widthCount || j + heightBox >= heightCount) continue;
-                  
-
-                    if (boxes[widthBox + i, heightBox + j] == null)
-                        boxes[widthBox + i, heightBox + j] = new HashSet<T>();
-
-                    boxes[widthBox + i, heightBox + j].Add(item);
-                    containing_item.Add(boxes[widthBox + i, heightBox + j]);
-                }
-            }
 
             dictionary.Add(item, containing_item);
         }
@@ -155,52 +126,11 @@ namespace SwarmSimFramework.Classes.Map
         }
         public HashSet<T> CircleIntersection(CircleEntity item)
         {
-            var output = new HashSet<T>();
-            int widthBox = (int)item.Middle.X / (int)BoxSize;
-            int heightBox = (int)item.Middle.Y / (int)BoxSize;
-
-            //TODO: Insert to true containing boxes
-            //NAIVE solution 
-            //for (int i = -1; i <= 1; i++)
-            //{
-            //    for (int j = -1; j <= 1; j++)
-            //    {
-            //        if (i + widthBox < 0 || j + heightBox < 0 || i + widthBox >= widthCount || j + heightBox >= heightCount) continue;
-
-            //        if (boxes[widthBox + i, heightBox + j] != null)
-            //        {
-            //            foreach (var q in boxes[widthBox + i, heightBox + j])
-            //                output.Add(q);
-            //        }
-            //    }
-            //}
-
-            //More complicated
-
-            var top = item.Middle + Vector2.UnitY * item.Radius;
-            var bottom = item.Middle - Vector2.UnitY * item.Radius;
-            var left = item.Middle - Vector2.UnitX * item.Radius;
-            var right = item.Middle + Vector2.UnitX * item.Radius;
-
-
-            var upper_left = new Vector2(widthBox * BoxSize, heightBox * BoxSize);
-            var upper_right = new Vector2((widthBox + 1) * BoxSize, heightBox * BoxSize);
-            var lower_left = new Vector2(widthBox * BoxSize, (heightBox + 1) * BoxSize);
-            var lower_right = new Vector2(widthBox * BoxSize, (heightBox + 1) * BoxSize);
-
-            var list = new[] { upper_left, upper_right, lower_left, lower_right };
-
-            output.UnionWith(PointIntersection(top));
-            output.UnionWith(PointIntersection(bottom));
-            output.UnionWith(PointIntersection(left));
-            output.UnionWith(PointIntersection(right));
-
-            foreach (var i in list)
+            HashSet<T> output = new HashSet<T>();
+            foreach (var box in GetBoxesContainingCircle(item,false))
             {
-                if (Vector2.DistanceSquared(i, item.Middle) <= (item.Radius * item.Radius))
-                    output.UnionWith(PointIntersection(i));
+                output.UnionWith(box);
             }
-
 
             return output;
         }
@@ -251,6 +181,38 @@ namespace SwarmSimFramework.Classes.Map
             return output;
         }
 
+        private List<HashSet<T>> GetBoxesContainingCircle(CircleEntity item, bool createEmpty = false)
+        {
+            List<HashSet<T>> output = new List<HashSet<T>>();
+            int minWidthBox  =  (int)(item.Middle.X-item.Radius - BoxSize/10f) / (int)BoxSize;
+            int minHeightBox =  (int)(item.Middle.Y-item.Radius  - BoxSize/10f) / (int)BoxSize;
+
+            int maxWidthBox =  (int)(item.Middle.X   + item.Radius) / (int)BoxSize;
+            int maxHeightBox = (int)(item.Middle.Y  + item.Radius) / (int)BoxSize;
+
+            float r2 = item.Radius * item.Radius;
+            for (int i = minWidthBox; i <= maxWidthBox; i++)
+            {
+                for (int j = minHeightBox ; j <= maxHeightBox; j++)
+                {
+                    if(i < 0 || j < 0 || i >= widthCount || j >= heightCount) continue;
+                    //If point not in circle continue
+                    //if (r2 < Vector2.DistanceSquared(new Vector2(i * BoxSize, j * BoxSize), item.Middle))
+                    //    continue;
+                    if (boxes[i, j] == null)
+                    {
+                        if (createEmpty)
+                            boxes[i, j] = new HashSet<T>();
+                        else
+                            continue;
+                    }
+
+                    output.Add(boxes[i,j]);
+                }
+            }
+
+            return output; 
+        }
         /// <summary>
         /// Unit test method
         /// </summary>

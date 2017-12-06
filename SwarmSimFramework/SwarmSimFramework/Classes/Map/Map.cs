@@ -46,11 +46,11 @@ namespace SwarmSimFramework.Classes.Map
 
             //Copy initial set up 
             Robots = robots ?? new List<RobotEntity>();
-            PasiveEntities = new EntityMap<CircleEntity>(MaxHeight,MaxWidth,50);
+            PasiveEntities = new EntityMap<CircleEntity>(MaxHeight,MaxWidth,10);
             if (pasiveEntities != null)
                 foreach (var p in pasiveEntities)
                     PasiveEntities.Add(p);
-            FuelEntities = new EntityMap<FuelEntity>(MaxHeight, MaxWidth, 50);
+            FuelEntities = new EntityMap<FuelEntity>(MaxHeight, MaxWidth, 10);
             if (fuelEntities != null)
             {
                 foreach (var f in fuelEntities)
