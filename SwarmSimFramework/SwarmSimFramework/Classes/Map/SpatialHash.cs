@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimFramework.Classes.Map
 {
-    public class SpatialHash<T> where T: CircleEntity
+    public class SpatialHash<T> : IEnumerable<T> where T: CircleEntity
     {
         private Dictionary<T, List<HashSet<T>>> dictionary;
         private HashSet<T>[,] boxes;
@@ -128,9 +130,7 @@ namespace SwarmSimFramework.Classes.Map
         {
             HashSet<T> output = new HashSet<T>();
             foreach (var box in GetBoxesContainingCircle(item,false))
-            {
-                output.UnionWith(box);
-            }
+               output.UnionWith(box);
 
             return output;
         }
@@ -227,5 +227,24 @@ namespace SwarmSimFramework.Classes.Map
 
             return null;
         }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return dictionary.Keys.GetEnumerator(); 
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public List<T> ToList()
+        {
+            return dictionary.Keys.ToList();
+        }
+
+       
     }
 }
+    
+    

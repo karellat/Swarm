@@ -1,4 +1,7 @@
-﻿namespace SwarmSimFramework.SupportClasses
+﻿using System.Numerics;
+using System.Threading;
+
+namespace SwarmSimFramework.SupportClasses
 {
     /// Represent bounds of interval 
     public struct Bounds
@@ -43,4 +46,5 @@
         public int Input;
         public int Output;
     }
+
 }

@@ -223,11 +223,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         {
             //Create new map, just reading values
             Map.Map map = MapModel.ConstructMap();
-            //DEBUG
+#if DEBUG
             foreach (var p in map.PasiveEntities)
             {
                 Debug.Assert(!p.Discovered);
             }
+#endif
             //model of brains, only for read
             var modelBrains = new T[ActualGeneration.Length];
             for (int i = 0; i < modelBrains.Length; i++)
@@ -279,9 +280,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //Set if generation done
             if (lastRunning) GenerationFinnished = true;
 
-#if DEBUG
-         Console.WriteLine("Original solution time: {0} ; Spatial hashing: {1}; ratio: {2}" ,map.Owatch.ElapsedMilliseconds, map.SHwatch.ElapsedMilliseconds, map.Owatch.ElapsedMilliseconds/ (float)map.SHwatch.ElapsedMilliseconds);   
-#endif
         }
         /// <summary>
         /// Thread safe brain creation 

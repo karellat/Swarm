@@ -18,6 +18,7 @@ using SwarmSimFramework.Classes.MultiThreadExperiment.MineralScene;
 using System.ComponentModel;
 using System.Reflection;
 using Intersection2D;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework
 {
@@ -42,15 +43,47 @@ namespace SwarmSimFramework
                         break;
                     }
                 case "debug":
-                    {
-                        var A = new Vector2(7.17f,797.34f);
-                        var B = new Vector2(-18.31f,813.17f);
+                {
+                    var r = new Random();
+                    var O_watch = new Stopwatch();
+                    var N_watch = new Stopwatch();
+                        for (int i = 0; i < 10000; i++)
+                        {
+                           
+                            HashSet<object> A1 = new HashSet<object>();
+                            HashSet<MyObject> A2 = new HashSet<MyObject>();
 
-                        var P1 = new Vector2(1061.67f,142.25f);
-                        var P2 = new Vector2(1069.7f,137.26f);
+                            HashSet<object> B1 = new HashSet<object>();
+                            HashSet<MyObject> B2 = new HashSet<MyObject>();
 
-                        var p1 = Intersections.MyExtensions.PointOnLine(A, B, P1);
-                        var p2 = Intersections.MyExtensions.PointOnLine(A, B, P2);
+                            for (int j = 0; j <r.Next(1000000,100000000) ; j++)
+                            {
+                                var a = new object();
+                                var b = new object(); 
+                                var a1 = new MyObject();
+                                var b1 = new MyObject();
+
+                                A1.Add(a);
+                                A2.Add(a1);
+
+                                B1.Add(b);
+                                B2.Add(b1); 
+                            }
+
+                            O_watch.Start();
+                            A1.UnionWith(B1);
+                            O_watch.Stop();
+
+                            N_watch.Start();
+                            A2.UnionWith(B2);
+                            N_watch.Stop(); 
+
+                            Console.WriteLine("Original solution {0} my solution {1}" ,O_watch.ElapsedMilliseconds,N_watch.ElapsedMilliseconds);
+                            N_watch.Reset();
+                            O_watch.Reset();
+                        }
+                        
+                       
                         return; 
 
                 }
@@ -153,4 +186,34 @@ namespace SwarmSimFramework
             }
         }
     }
+
+    public static class HashSetsEx
+    {
+        public static void MyMerge(HashSet<object> set, HashSet<object> mergingSet)
+        {
+            foreach (var i in mergingSet)
+                if (!set.Contains(i))
+                    set.Add(i);
+        }
+    }
+
+    public class MyObject
+    {
+        public static int GeneralID = 0;
+        public int id; 
+        public MyObject()
+        {
+            id = GeneralID;
+            checked
+            {
+                GeneralID++;
+            }
+            
+        }
+        public override int GetHashCode()
+        {
+            return id; 
+        }
+    }
+
 }

@@ -20,11 +20,6 @@ namespace SwarmSimFramework.Classes.Map
     /// </summary>
     public class Map
     {
-#if DEBUG
-        public Stopwatch SHwatch = new Stopwatch();
-        public Stopwatch Owatch  = new Stopwatch();
-
-#endif 
 
         //PUBLIC METHODS
         //GLOBAL METHODS 
@@ -236,27 +231,17 @@ namespace SwarmSimFramework.Classes.Map
                     return true;
             }
             //Collision with passive entities: 
-            bool list_output = false;
-            bool spatialHashing_output = false;
-            foreach (var p in PasiveEntities)
-            {
-                if (p == ignoredEntity)
-                    continue;
-                if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, p.Middle, p.Radius))
-                    list_output = true;
-            }
+            
 
             foreach (var p  in PasiveEntities.CircleIntersection(new ObstacleEntity(newMiddle,entity.Radius)))
             {
                 if (p == ignoredEntity)
                     continue;
                 if (Intersections.CircleCircleIntersection(newMiddle, entity.Radius, p.Middle, p.Radius))
-                    spatialHashing_output = true;
+                    return true;
             }
 
-            Debug.Assert(spatialHashing_output == list_output);
-
-            return spatialHashing_output;
+            return false;
         }
 
         /// <summary>
@@ -309,6 +294,7 @@ namespace SwarmSimFramework.Classes.Map
             // C 
             intersection = Intersections.LinesegmentLinesegmentIntersection(entity.A, entity.B, B, D);
             testedDistance = Vector2.DistanceSquared(intersection, entity.A);
+      
             if (testedDistance < theNearestIntersection.Distance)
             {
                 theNearestIntersection.Distance = testedDistance;
@@ -349,73 +335,24 @@ namespace SwarmSimFramework.Classes.Map
                     }
                 }
             }
-            Intersection list_intersection = new Intersection();
-            list_intersection.Distance = float.PositiveInfinity;
-            list_intersection.CollidingEntity = null;
-            list_intersection.IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-            //Collision with passive entities 
-#if DEBUG
-            Owatch.Start();
-#endif
-            foreach (var p in PasiveEntities)
-            {
-                if (p == ignoredEntity) continue;
-                foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
-                {
-                    testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < list_intersection.Distance)
-                    {
-                        list_intersection.Distance = testedDistance;
-                        list_intersection.IntersectionPoint = i;
-                        list_intersection.CollidingEntity = p;
-                    }
-                }
-            }
-#if DEBUG
-         Owatch.Stop();
-#endif
-
-            Debug.Assert(float.IsPositiveInfinity(list_intersection.Distance) || Vector2.Distance( list_intersection.IntersectionPoint,entity.A) - entity.Length <= 0.01);
-
-            Intersection spatial_intersection = new Intersection();
-            spatial_intersection.Distance = float.MaxValue;
-            spatial_intersection.CollidingEntity = null;
-            spatial_intersection.IntersectionPoint = new Vector2(float.PositiveInfinity,float.PositiveInfinity);
-
-#if DEBUG
-            SHwatch.Start();
-#endif
-
+           
             foreach (var p in PasiveEntities.LineIntersection(entity))
             {
                 if (p == ignoredEntity) continue;
                 foreach (var i in Intersections.CircleLineSegmentIntersection(p.Middle, p.Radius, entity.A, entity.B))
                 {
                     testedDistance = Vector2.DistanceSquared(i, entity.A);
-                    if (testedDistance < spatial_intersection.Distance)
+                    if (testedDistance < theNearestIntersection.Distance)
                     {
-                        spatial_intersection.Distance = testedDistance;
-                        spatial_intersection.IntersectionPoint = i;
-                        spatial_intersection.CollidingEntity = p;
+                        theNearestIntersection.Distance = testedDistance;
+                        theNearestIntersection.IntersectionPoint = i;
+                        theNearestIntersection.CollidingEntity = p;
                     }
                 }
             }
-#if DEBUG
-            SHwatch.Stop();
-#endif
-
-            if (list_intersection.Distance <= theNearestIntersection.Distance)
-            {
-                theNearestIntersection = list_intersection;
-
-                Debug.Assert( (list_intersection.CollidingEntity == null && spatial_intersection.CollidingEntity == null) ||  Math.Abs(list_intersection.Distance - spatial_intersection.Distance) < 0.0001);
-                 Debug.Assert(list_intersection.CollidingEntity == spatial_intersection.CollidingEntity);
-                Debug.Assert((list_intersection.CollidingEntity == null && spatial_intersection.CollidingEntity == null) || list_intersection.IntersectionPoint == spatial_intersection.IntersectionPoint);
-            }
 
 
-
-            //if the nearest intersection is a raw material markdown discovery
+          //if the nearest intersection is a raw material markdown discovery
             if (!discovering || theNearestIntersection.CollidingEntity == null)
                 return theNearestIntersection;
             (theNearestIntersection.CollidingEntity as CircleEntity).Discovered = true;
@@ -494,55 +431,29 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public Intersection CollisionFuel(LineEntity entity)
         {
-            Intersection origin_nearestPoint = new Intersection()
+            Intersection intersection = new Intersection()
             {
                 CollidingEntity = null,
                 Distance = float.PositiveInfinity,
                 IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity)
             };
 
-            Intersection SH_theNearestPoint = new Intersection()
-            {
-                CollidingEntity = null,
-                Distance = float.PositiveInfinity,
-                IntersectionPoint = new Vector2(float.PositiveInfinity, float.PositiveInfinity)
-            };
-
-            foreach (var f in FuelEntities)
-            {
-                foreach (var i in Intersections.CircleLineSegmentIntersection(f.Middle, f.Radius, entity.A, entity.B))
-                {
-                    float testedDistance = Vector2.DistanceSquared(entity.A, i);
-                    if (testedDistance < origin_nearestPoint.Distance)
-                    {
-                        origin_nearestPoint.Distance = testedDistance;
-                        origin_nearestPoint.IntersectionPoint = i;
-                        origin_nearestPoint.CollidingEntity = f;
-                    }
-                }
-            }
+            
 
             foreach (var f in FuelEntities.LineIntersection(entity))
             {
                 foreach (var i in Intersections.CircleLineSegmentIntersection(f.Middle, f.Radius, entity.A, entity.B))
                 {
                     float testedDistance = Vector2.DistanceSquared(entity.A, i);
-                    if (testedDistance < SH_theNearestPoint.Distance)
+                    if (testedDistance < intersection.Distance)
                     {
-                        SH_theNearestPoint.Distance = testedDistance;
-                        SH_theNearestPoint.IntersectionPoint = i;
-                        SH_theNearestPoint.CollidingEntity = f;
+                        intersection.Distance = testedDistance;
+                        intersection.IntersectionPoint = i;
+                        intersection.CollidingEntity = f;
                     }
                 }
             }
-
-            Debug.Assert((float.IsPositiveInfinity(SH_theNearestPoint.Distance) && float.IsPositiveInfinity(origin_nearestPoint.Distance)) || Math.Abs(SH_theNearestPoint.Distance - origin_nearestPoint.Distance) < 0.01);
-            Debug.Assert(SH_theNearestPoint.CollidingEntity == origin_nearestPoint.CollidingEntity);
-            Debug.Assert((float.IsPositiveInfinity(SH_theNearestPoint.Distance) && float.IsPositiveInfinity(origin_nearestPoint.Distance)) || Math.Abs(SH_theNearestPoint.IntersectionPoint.X - origin_nearestPoint.IntersectionPoint.X) < 0.01);
-            Debug.Assert((float.IsPositiveInfinity(SH_theNearestPoint.Distance) && float.IsPositiveInfinity(origin_nearestPoint.Distance)) || Math.Abs(SH_theNearestPoint.IntersectionPoint.Y - origin_nearestPoint.IntersectionPoint.Y) < 0.01);
-
-            return origin_nearestPoint;
-
+            return intersection;
         }
 
         // COLISION THAT COUNTS COLOR 
@@ -566,7 +477,7 @@ namespace SwarmSimFramework.Classes.Map
                 }
             }
             //Collision with passive entities: 
-            foreach (var p in PasiveEntities)
+            foreach (var p in PasiveEntities.CircleIntersection(entity))
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, p.Middle, p.Radius))
                 {
@@ -577,7 +488,7 @@ namespace SwarmSimFramework.Classes.Map
                 }
             }
             //Collision with fuel entities 
-            foreach (var f in FuelEntities)
+            foreach (var f in FuelEntities.CircleIntersection(entity))
             {
                 if (Intersections.CircleCircleIntersection(entity.Middle, entity.Radius, f.Middle, f.Radius))
                 {

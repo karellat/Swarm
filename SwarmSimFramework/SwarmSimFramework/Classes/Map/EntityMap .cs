@@ -9,7 +9,6 @@ namespace SwarmSimFramework.Classes.Map
 {
     public class EntityMap<T> : IEnumerable<T> where T : CircleEntity
     {
-        public List<T> list;
         public SpatialHash<T> spatialHash;
         private float boxSize;
         private float mapHeigth;
@@ -21,49 +20,33 @@ namespace SwarmSimFramework.Classes.Map
             this.mapWidth = mapWidth;
             this.mapHeigth = mapHeight;
             spatialHash = new SpatialHash<T>(boxSize,mapHeight,mapWidth); 
-            list = new List<T>();
         }
 
         public void Add(T c)
         {
             spatialHash.Add(c);
-            list.Add(c);
         }
 
         public void Clear()
         {
             spatialHash = new SpatialHash<T>(boxSize,mapHeigth,mapWidth);
-            list.Clear();
         }
 
         public void Remove(T c)
         {
             spatialHash.Remove(c);
-            list.Remove(c);
         }
 
         public int Count {
             get
             {
-                Debug.Assert(list.Count == spatialHash.Count);
-                return list.Count;
+                return spatialHash.Count;
             }
         }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return list.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
+   
         public T One => spatialHash.One();
 
-        public List<T> ToList => list;
-
+        
         public HashSet<T> CircleIntersection(CircleEntity item)
         {
             return spatialHash.CircleIntersection(item);
@@ -82,7 +65,7 @@ namespace SwarmSimFramework.Classes.Map
         internal void RemoveAll(Func<T, bool> p)
         {
             List<T> willBeRemoved = new List<T>();
-            foreach (var i in list)
+            foreach (var i in spatialHash)
             {
                 if (p.Invoke(i))
                     willBeRemoved.Add(i);
@@ -92,7 +75,22 @@ namespace SwarmSimFramework.Classes.Map
             {
                 Remove(i);
             }
+        }
 
+        public List<T> ToList()
+        {
+            return spatialHash.ToList();
+        }
+
+
+        public IEnumerator<T> GetEnumerator()
+        {
+           return spatialHash.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
