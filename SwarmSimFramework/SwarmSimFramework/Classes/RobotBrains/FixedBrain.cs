@@ -49,5 +49,15 @@ namespace SwarmSimFramework.Classes.RobotBrains
         {
             throw new NotImplementedException();
         }
+
+        public float[] GetWeigths()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRobotBrain ChangeWeights(float[] changeOfWeights, Func<float, float, float> originChangeOperation)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

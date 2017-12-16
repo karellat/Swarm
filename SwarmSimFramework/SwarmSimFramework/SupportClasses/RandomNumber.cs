@@ -39,6 +39,15 @@ namespace SwarmSimFramework.SupportClasses
 
     public static class MyExtensions
     {
+
+            public static T[] SubArray<T>(this T[] data, int index, int length)
+            {
+                T[] result = new T[length];
+                Array.Copy(data, index, result, 0, length);
+                return result;
+            }
+
+
         /// <summary>
         /// Return normalized array of float
         /// </summary>

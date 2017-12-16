@@ -31,12 +31,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             return stringBuilder.ToString(); 
         } 
 
-        public static MultiThreadExperiment<SingleLayerNeuronNetwork> ExperimentFromConfig(string path)
+        public static MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> ExperimentFromConfig(string path)
         {
             StreamReader streamReader = new StreamReader(path);
             string name = streamReader.ReadLine();
             var type = Type.GetType("SwarmSimFramework.Classes.MultiThreadExperiment." + name);
-            MultiThreadExperiment<SingleLayerNeuronNetwork> exp =  (MultiThreadExperiment<SingleLayerNeuronNetwork>) Activator.CreateInstance(type); 
+            MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> exp =  (MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork>) Activator.CreateInstance(type); 
 
             Dictionary<string, string> fields = new Dictionary<string, string>();
             while (!streamReader.EndOfStream)

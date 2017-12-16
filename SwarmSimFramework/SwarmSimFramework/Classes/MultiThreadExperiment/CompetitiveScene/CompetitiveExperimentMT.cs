@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
-    public class CompetiveExperimentMT : MultiThreadExperiment<SingleLayerNeuronNetwork>
+    public class CompetiveExperimentMT : MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork>
     {
         // Basic Evolution VARIABLE
         public static int AmountOfObstacle = 500;

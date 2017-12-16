@@ -18,6 +18,8 @@ using SwarmSimFramework.Classes.MultiThreadExperiment.MineralScene;
 using System.ComponentModel;
 using System.Reflection;
 using Intersection2D;
+using SwarmSimFramework.Classes.Experiments.FitnessCounters;
+using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework
@@ -26,7 +28,7 @@ namespace SwarmSimFramework
     {
         static void Main(string[] args)
         {
-            MultiThreadExperiment<SingleLayerNeuronNetwork> exp;
+            MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> exp;
             //Selection of experiments args[0]
             if (args.Length < 2  && args[0] != "debug")
             {
@@ -43,49 +45,41 @@ namespace SwarmSimFramework
                         break;
                     }
                 case "debug":
-                {
-                    var r = new Random();
-                    var O_watch = new Stopwatch();
-                    var N_watch = new Stopwatch();
-                        for (int i = 0; i < 10000; i++)
-                        {
-                           
-                            HashSet<object> A1 = new HashSet<object>();
-                            HashSet<MyObject> A2 = new HashSet<MyObject>();
-
-                            HashSet<object> B1 = new HashSet<object>();
-                            HashSet<MyObject> B2 = new HashSet<MyObject>();
-
-                            for (int j = 0; j <r.Next(1000000,100000000) ; j++)
+                    { 
+                    BrainModel<SingleLayerNeuronNetwork>[][] brainModels = new BrainModel<SingleLayerNeuronNetwork>[5][];
+                    for (int i = 0; i < 5; i++)
+                    {
+                        brainModels[i] = new BrainModel<SingleLayerNeuronNetwork>[2];
+                        brainModels[i][0].Robot = new ScoutCutterRobot();
+                        brainModels[i][0].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(dimension:
+                            new IODimension
                             {
-                                var a = new object();
-                                var b = new object(); 
-                                var a1 = new MyObject();
-                                var b1 = new MyObject();
-
-                                A1.Add(a);
-                                A2.Add(a1);
-
-                                B1.Add(b);
-                                B2.Add(b1); 
-                            }
-
-                            O_watch.Start();
-                            A1.UnionWith(B1);
-                            O_watch.Stop();
-
-                            N_watch.Start();
-                            A2.UnionWith(B2);
-                            N_watch.Stop(); 
-
-                            Console.WriteLine("Original solution {0} my solution {1}" ,O_watch.ElapsedMilliseconds,N_watch.ElapsedMilliseconds);
-                            N_watch.Reset();
-                            O_watch.Reset();
+                                Input = brainModels[i][0].Robot.SensorsDimension,
+                                Output = brainModels[i][0].Robot.EffectorsDimension
+                            });
+                        brainModels[i][1].Robot = new WoodWorkerRobot();
+                        brainModels[i][1].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(dimension:
+                            new IODimension
+                            {
+                                Input = brainModels[i][1].Robot.SensorsDimension,
+                                Output = brainModels[i][1].Robot.EffectorsDimension
+                            });
                         }
-                        
-                       
-                        return; 
+                    
 
+
+                   RobotModel[] robotModel = new RobotModel[2];
+                    robotModel[0].model = new ScoutCutterRobot();
+                    robotModel[0].amount = 5;
+                    robotModel[1].model = new WoodWorkerRobot();
+                    robotModel[1].amount = 4;
+
+                    WoodScene.AmountOfTrees = 400;
+                    MapModel model = WoodScene.MakeMapModel(robotModel);
+
+                    EvolutionaryStrategies ev = new EvolutionaryStrategies(new WoodSceneFitnessCounter(), model,brainModels);
+                    ev.Run();
+                    return; 
                 }
                 case "D":
                 {
@@ -134,7 +128,7 @@ namespace SwarmSimFramework
 #endif 
         }
 
-        private static MultiThreadExperiment<SingleLayerNeuronNetwork> WoodSceneSelection(string index)
+        private static MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> WoodSceneSelection(string index)
         {
             switch (index)
             {

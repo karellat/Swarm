@@ -37,7 +37,7 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
 
             IEffector[] effectors = new IEffector[3];
             effectors[0] = new TwoWheelMotor(this, 1.5f);
-            effectors[1] = new RadioTransmitter(this, 200);
+            effectors[1] = new RadioTransmitter(this, new [] {-1},200);
             effectors[2] = new Picker(this,20,0);
 
             this.Effectors = effectors;

@@ -30,7 +30,7 @@ namespace SwarmSimFramework.Classes.Robots.WoodRobots
 
             IEffector[] effectors = new IEffector[4];
             effectors[0] = new TwoWheelMotor(this, 2);
-            effectors[1] = new RadioTransmitter(this, 200);
+            effectors[1] = new RadioTransmitter(this, new[] { -1,1 }, 200);
             effectors[2] = new Picker(this, 10, 0);
             effectors[3] = m;
             this.Effectors = effectors;

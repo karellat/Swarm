@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using MathNet.Numerics.Distributions;
@@ -83,6 +84,26 @@ namespace SwarmSimFramework.Classes.RobotBrains
         public string SerializeBrain()
         {
             return JsonConvert.SerializeObject(this, BrainSerializer.JsonSettings);
+        }
+
+        public float[] GetWeigths()
+        {
+            return Weights.ToArray();
+        }
+
+        public IRobotBrain ChangeWeights(float[] changeOfWeights, Func<float, float, float> originChangeOperation)
+        {
+            var newWeights = GetWeigths();
+            if (changeOfWeights.Length != newWeights.Length)
+                throw new ArgumentException("Not suitable change, wrong size of change of Weights");
+            
+            for (int i = 0; i < newWeights.Length; i++)
+                newWeights[i] = originChangeOperation(newWeights[i], changeOfWeights[i]);
+
+            var p = (Perceptron) this.GetCleanCopy();
+            p.Weights = newWeights;
+
+            return p; 
         }
 
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Entities;
@@ -110,6 +112,34 @@ namespace SwarmSimFramework.Classes.RobotBrains
             return JsonConvert.SerializeObject(this, BrainSerializer.JsonSettings);
         }
 
+        public float[] GetWeigths()
+        {
+            List<float> output = new List<float>();
+            for (int i = 0; i < Neurons.Length; i++)
+                output.InsertRange(output.Count, Neurons[i].GetWeigths());
+
+            return output.ToArray();
+        }
+
+        public IRobotBrain ChangeWeights(float[] changeOfWeights, Func<float, float, float> originChangeOperation)
+        {
+            int lastIndex = 0;
+
+            Perceptron[] newPerceptrons = new Perceptron[Neurons.Length];
+            for (int i = 0; i < Neurons.Length; i++)
+            {
+                newPerceptrons[i] = (Perceptron) Neurons[i]
+                    .ChangeWeights(changeOfWeights.SubArray(lastIndex, Neurons[i].Weights.Length),
+                        originChangeOperation);
+                lastIndex += Neurons[i].Weights.Length;
+            }
+
+            var b = (SingleLayerNeuronNetwork) this.GetCleanCopy();
+            b.Neurons = newPerceptrons;
+
+            return b; 
+        }
+
         /// <summary>
         /// Mutate every percepton 
         /// </summary>
@@ -155,5 +185,7 @@ namespace SwarmSimFramework.Classes.RobotBrains
         {
             return base.ToString() + " - " + Fitness.ToString();
         }
+
+
     }
 }

@@ -59,6 +59,20 @@ namespace SwarmSimFramework.Interfaces
         /// </summary>
         /// <returns></returns>
         string SerializeBrain();
+
+        /// <summary>
+        /// Return weights of all perceptron in a single copy  
+        /// </summary>
+        /// <returns></returns>
+        float[] GetWeigths();
+
+        /// <summary>
+        /// Get clean copy of brain with changed weights 
+        /// </summary>
+        /// <param name="changeOfWeights"> Value for each weight </param>
+        /// <param name="originChangeOperation"> function takes  each item of weights of actual brain and same position from changeOfWeights returns new Weigth</param>
+        /// <returns></returns>
+        IRobotBrain ChangeWeights(float[] changeOfWeights, Func<float, float, float> originChangeOperation);
     }
 
     public static class BrainSerializer

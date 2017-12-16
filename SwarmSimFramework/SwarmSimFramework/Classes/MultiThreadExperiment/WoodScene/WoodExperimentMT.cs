@@ -17,7 +17,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
     /// <summary>
     /// Basic general Wood experiment MT implementation
     /// </summary>
-    public class WoodExperimentMt : MultiThreadExperiment<SingleLayerNeuronNetwork> 
+    public class WoodExperimentMt : MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> 
     {
         // Basic Evolution VARIABLE
         public int AmountOfTrees = 0;
@@ -151,7 +151,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
             for (int i = 0; i < evolveBrains.Length; i++)
             {
+                //Setings of diffretial evolution 
+
                 var o  = DifferentialEvolution.DifferentialEvolutionBrain(evolveBrains[i], ActualGeneration[i]);
+
                 foreach (var b in BrainModels)
                 {
                     if (b.SuitableBrain(o))

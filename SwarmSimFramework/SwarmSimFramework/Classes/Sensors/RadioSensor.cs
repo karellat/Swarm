@@ -46,6 +46,7 @@ namespace SwarmSimFramework.Classes.Entities
             FPoint = Middle;
             RotationMiddle = Middle; 
             //Set bounds 
+           
             Dimension = 9;
             LocalBounds = new Bounds[Dimension];
             LocalBounds[0] = new Bounds() {Min = 0, Max = 1};

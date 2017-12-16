@@ -36,7 +36,7 @@ namespace SwarmSimFramework.Classes.Robots.CompetitiveRobots
 
             IEffector[] effectors = new IEffector[6];
             effectors[0] = new TwoWheelMotor(this,3);
-            effectors[1] = new RadioTransmitter(this,200);
+            effectors[1] = new RadioTransmitter(this, new[] { -1 }, 200);
             effectors[2] = new Weapon(this,10,100,DegreesToRadians(45));
             effectors[3] = new Weapon(this,10,100,0);
             effectors[4] = new Weapon(this, 10, 100, DegreesToRadians(-45));

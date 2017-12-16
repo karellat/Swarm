@@ -1376,8 +1376,8 @@ namespace UnitTests
         {
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
-            RadioTransmitter rt = new RadioTransmitter(r, 10);
-            rt.Effect(new[] {0,0,1.0f}, r, map);
+            RadioTransmitter rt = new RadioTransmitter(r, new[] {-1, 0, 2}, 10);
+            rt.Effect(new[] {0, 0, 1.0f}, r, map);
             Assert.AreEqual(new Vector2(100, 100), map.RadioEntities.One.Middle);
             Assert.AreEqual(10, map.RadioEntities.One.Radius);
             Assert.AreEqual(2, map.RadioEntities.One.ValueOfSignal);
@@ -1390,18 +1390,32 @@ namespace UnitTests
         {
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
-            RadioTransmitter rt = new RadioTransmitter(r, 10);
-            rt.Effect(new[] {100.0f,0,0}, r, map);
+            RadioTransmitter rt = new RadioTransmitter(r, new[] {0, 1, -1}, 10);
+            rt.Effect(new[] {100.0f, 0, 0}, r, map);
             Assert.AreEqual(new Vector2(100, 100), map.RadioEntities.One.Middle);
             Assert.AreEqual(10, map.RadioEntities.One.Radius);
             Assert.AreEqual(0, map.RadioEntities.One.ValueOfSignal);
             map.MakeStep();
             r.MoveTo(new Vector2(10, 10));
-            rt.Effect(new[] {0,1.0f,0}, r, map);
+            rt.Effect(new[] {0, 1.0f, 0}, r, map);
             Assert.AreEqual(new Vector2(10, 10), map.RadioEntities.One.Middle);
             Assert.AreEqual(10, map.RadioEntities.One.Radius);
             Assert.AreEqual(1, map.RadioEntities.One.ValueOfSignal);
 
+        }
+
+        [TestMethod]
+        public void NoTransmittingTest()
+        {
+            Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
+            EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
+            RadioTransmitter rt = new RadioTransmitter(r, new[] { 0, 1, -1 }, 10);
+            rt.Effect(new [] {0,20.0f,60.0f},r,map);
+            Assert.AreEqual(0,map.RadioEntities.Count);
+            map.MakeStep();
+            r.MoveTo(new Vector2(10, 10));
+            rt.Effect(new[] { 0, 1.0f, 2.0f }, r, map);
+            Assert.AreEqual(0,map.RadioEntities.Count);
         }
     }
 

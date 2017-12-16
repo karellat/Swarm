@@ -122,7 +122,7 @@ namespace SwarmSimFramework.Classes.Map
             List<CircleEntity> woods = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, AmountOfWoods);
             List<CircleEntity> passive = woods;
 
-            List<RadioEntity> constSignals = new List<RadioEntity>(new []{new RadioEntity(new Vector2(MapWidth/2,MapHeight/2),50,0)});
+            List<RadioEntity> constSignals = new List<RadioEntity>(new []{new RadioEntity(new Vector2(MapWidth/2,MapHeight/2),50,2)});
             foreach (var t in trees)
                 passive.Add(t);
             return new Map(MapHeight,MapWidth,null,passive,null,constSignals);

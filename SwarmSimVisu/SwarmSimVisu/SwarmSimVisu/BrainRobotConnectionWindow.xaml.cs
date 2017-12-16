@@ -112,7 +112,7 @@ namespace SwarmSimVisu
                 }
                 case 1:
                 {
-                    RobotModel = new ScoutCutterRobotWithMemory(Vector2.Zero);
+                    RobotModel = new ScoutCutterRobotMem(Vector2.Zero);
                     break;
                 }
                 case 2:

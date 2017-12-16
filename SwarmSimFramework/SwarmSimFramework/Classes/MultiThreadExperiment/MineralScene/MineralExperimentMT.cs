@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
-    public class MineralExperimentMT : MultiThreadExperiment<SingleLayerNeuronNetwork>
+    public class MineralExperimentMT : MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork>
     {
         // Basic Evolution VARIABLE
         public int AmountOfMineral = 0;

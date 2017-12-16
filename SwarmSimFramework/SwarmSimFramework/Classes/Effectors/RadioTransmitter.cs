@@ -3,6 +3,8 @@ using System.Security.Policy;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.SupportClasses;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -23,6 +25,10 @@ namespace SwarmSimFramework.Classes.Effectors
         /// </summary>
         [JsonProperty]
         public int Dimension { get; protected set; }
+
+        [JsonProperty]
+        private int[] availableSignals;
+
         /// <summary>
         /// Add transmitting to map 
         /// </summary>
@@ -31,6 +37,9 @@ namespace SwarmSimFramework.Classes.Effectors
         /// <param name="map"></param>
         public void Effect(float[] settings, RobotEntity robot, Map.Map map)
         {
+            
+
+        Debug.Assert(settings.Length == availableSignals.Length);
             //Update position
             this.MoveTo(robot.Middle);
             radioSignal.MoveTo(robot.Middle);
@@ -47,7 +56,10 @@ namespace SwarmSimFramework.Classes.Effectors
                 }
             }
             //Change signal value & added it to the map 
-            radioSignal.ValueOfSignal = index;
+            if (availableSignals[index] < 0)
+                return;
+            
+            radioSignal.ValueOfSignal = availableSignals[index];
             map.RadioEntities.Add(radioSignal); 
         }
         /// <summary>
@@ -61,17 +73,20 @@ namespace SwarmSimFramework.Classes.Effectors
         [JsonProperty]
         public NormalizeFunc[] NormalizeFuncs { get; protected set;  }
         /// <summary>
-        /// Create new radio transmitting effector 
+        /// 
         /// </summary>
-        /// <param name="robot"></param>
-        /// <param name="radiusOfTransmitting"></param>
-        public RadioTransmitter(RobotEntity robot, float radiusOfTransmitting) : base(robot.Middle, 0,
+        /// <param name="robot"> Robot that will be connect to the transmitter </param>
+        /// <param name="availableSignals"> if -1 do not transmit </param>
+        /// <param name="radiusOfTransmitting"> radius of the signal</param>
+        public RadioTransmitter(RobotEntity robot,int[] availableSignals, float radiusOfTransmitting) : base(robot.Middle, 0,
             "RadioTransmitter")
         {
             //Create representation of radio signal 
             radioSignal = new RadioEntity(robot.Middle,radiusOfTransmitting,0);
+            Debug.Assert(availableSignals.All((x) => x >= -1 && x <= 1 ));
+            this.availableSignals = availableSignals; 
             //Create localBounds and normalization fncs
-            Dimension = 3;
+            Dimension = availableSignals.Length;
             LocalBounds = new Bounds[Dimension];
             for (int i = 0; i < Dimension; i++)
             {

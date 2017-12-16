@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Threading;
 
 namespace SwarmSimFramework.SupportClasses
@@ -46,5 +47,5 @@ namespace SwarmSimFramework.SupportClasses
         public int Input;
         public int Output;
     }
-
+  
 }

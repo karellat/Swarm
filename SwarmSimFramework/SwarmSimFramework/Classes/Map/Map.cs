@@ -149,6 +149,8 @@ namespace SwarmSimFramework.Classes.Map
                     Robots[i].Move(this);
                 Debug.Assert(!OutOfBorderTest(Robots[i]));
             }
+
+            
 #if DEBUG && POSCORRECT
             CheckCorrectionOfPossition();
 #endif

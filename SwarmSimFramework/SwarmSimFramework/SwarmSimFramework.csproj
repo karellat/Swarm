@@ -80,9 +80,13 @@
     <Compile Include="Classes\Entities\RawMaterialEntity.cs" />
     <Compile Include="Classes\Entities\WoodEntity.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\DifferencialEvolution.cs" />
+    <Compile Include="Classes\Experiments\Evolution Alg\EvolutionaryStrategies.cs" />
+    <Compile Include="Classes\Experiments\Evolution Alg\FitnessCounter.cs" />
+    <Compile Include="Classes\Experiments\FitnessCounters\WoodSceneFitnessCounter.cs" />
     <Compile Include="Classes\Experiments\TestingMaps\TestingBrain.cs" />
     <Compile Include="Classes\Map\EntityMap .cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
+    <Compile Include="Classes\Map\MapSimulation.cs" />
     <Compile Include="Classes\Map\ScenesMap.cs" />
     <Compile Include="Classes\Map\SpatialHash.cs" />
     <Compile Include="Classes\MultiThreadExperiment\CompetitiveScene\CompetitiveExperimentMT.cs" />
@@ -92,7 +96,7 @@
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\Basic\MineralWorkerWalk.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\MEM\MineralWorkerWalkMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MTExperimentReader.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\MultiThreadExperiment.cs" />
+    <Compile Include="Classes\MultiThreadExperiment\MultiThreadExperimentClasicApproach.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodCooperation.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\MEM\WoodCooperationMEM.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodCuttorCut.cs" />
