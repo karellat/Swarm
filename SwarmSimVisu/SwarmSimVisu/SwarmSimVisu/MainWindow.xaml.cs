@@ -185,6 +185,8 @@ namespace SwarmSimVisu
                 //Check Controls
                 lock (ControlsLock)
                 {
+                    //Draw experisiment
+                    DrawExperiment();
                     if (Stopping)
                     {
                        MainGrid.Dispatcher.Invoke(StopExperiment);
@@ -202,8 +204,7 @@ namespace SwarmSimVisu
                     }
                     //Make step of Experiment: 
                     RunningExperiment.MakeStep();
-                    //Draw experisiment
-                    DrawExperiment();
+
                     //Wait
                     if(ThreadWait > 0) Thread.Sleep(ThreadWait);
                 }
@@ -306,7 +307,10 @@ namespace SwarmSimVisu
                     }
                    else if (s is CircleEntity c)
                     {
-                        DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLESENSOR");
+                        if(s is TouchSensor)
+                            DrawCanvas.AddCircle(c.Middle, c.Radius, "TOUCHSENSOR");
+                        else 
+                            DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLESENSOR");
                     }
                 }
 

@@ -11,9 +11,9 @@ namespace SwarmSimFramework.Classes.Robots.WoodRobots
         }
 
         public ScoutCutterRobot(Vector2 middle, float orientation = 0)
-            : base(middle, 2.5f, "ScoutRobot", null, null, 100, 0, 1, 100, 100, -100, orientation)
+            : base(middle, 2.5f, "WoodCutter", null, null, 100, 0, 1, 100, 100, -100, orientation)
         {
-            ISensor[] sensors = new ISensor[9];
+            ISensor[] sensors = new ISensor[14];
 
             //Line Type Sensors
             sensors[0] = new LineTypeSensor(this, 50, DegreesToRadians(45));
@@ -23,12 +23,14 @@ namespace SwarmSimFramework.Classes.Robots.WoodRobots
             sensors[3] = new LocatorSensor(this);
             //Type Line sensor
             sensors[4] = new TypeCircleSensor(this, 50);
+            //Radio Sensor
+            sensors[5] = new RadioSensor(this, 100);
             //Touch sensors
-            sensors[5] = new TouchSensor(this, 0.1f, DegreesToRadians(90));
-            sensors[6] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
-            sensors[7] = new TouchSensor(this, 0.1f, DegreesToRadians(270));
-            //Radio sensor 
-            sensors[8] = new RadioSensor(this, 100);
+            for (int i = 0; i < 8; i++)
+            {
+                sensors[i+6] = new TouchSensor(this, 2.0f, DegreesToRadians(i*45));
+            }
+
 
             this.Sensors = sensors;
 

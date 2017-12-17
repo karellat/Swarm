@@ -8,24 +8,25 @@ namespace SwarmSimFramework.Classes.Robots.WoodRobots
     {
         public WoodWorkerRobotMem() : this(Vector2.Zero) { }
         public WoodWorkerRobotMem(Vector2 middle, float orientation = 0)
-            : base(middle, 5f, "WorkerRobotMEM", null, null, 100, 5, 1, 100, 100, -100, orientation)
+            : base(middle, 5f, "WoodWorkerM", null, null, 100, 5, 1, 100, 100, -100, orientation)
         {
-            ISensor[] sensors = new ISensor[9];
+            ISensor[] sensors = new ISensor[14];
+            //Memory
+            var m = new MemoryStick(10, this);
             //Line Type Sensors
             sensors[0] = new LineTypeSensor(this, 30, DegreesToRadians(45));
             sensors[1] = new LineTypeSensor(this, 30, 0);
             sensors[2] = new LineTypeSensor(this, 30, DegreesToRadians(-45));
             //Locator
             sensors[3] = new LocatorSensor(this);
-            //Touch sensors
-            sensors[4] = new TouchSensor(this, 0.1f, DegreesToRadians(90));
-            sensors[5] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
-            sensors[6] = new TouchSensor(this, 0.1f, DegreesToRadians(270));
             //Radio sensor 
-            sensors[7] = new RadioSensor(this, 100);
-            //Memory
-            var m = new MemoryStick(10,this);
-            sensors[8] = m;
+            sensors[4] = new RadioSensor(this, 100);
+            sensors[5] = m;
+            //Touch sensors
+            for (int i = 0; i < 8; i++)
+            {
+                sensors[i + 6] = new TouchSensor(this, 2.0f, DegreesToRadians(i * 45));
+            }
             this.Sensors = sensors;
 
             IEffector[] effectors = new IEffector[4];

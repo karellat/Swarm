@@ -13,6 +13,7 @@ using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Optimization;
 using MathNet.Numerics.Statistics;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Interfaces;
@@ -104,7 +105,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Mutation step mutation size
         /// </summary>
-        public static int SingleStepPopulationSize = 100;
+        public static int SingleStepPopulationSize = 20;
 
         /// <summary>
         /// Number of generation(jitters in terms of evolutionary strategies
@@ -294,7 +295,7 @@ namespace SwarmSimFramework.Classes.Experiments
                 WriteGraph(indexOfIndividual, actualFitness, genIndex);
                 Serialize(myBrainModels,indexOfIndividual,genIndex);
             }
-            Console.WriteLine("Thread with {0}. individual finnished the evaluation");
+            Console.WriteLine("Thread with {0}. individual finnished the evaluation",indexOfIndividual);
 
         }
 
@@ -320,7 +321,7 @@ namespace SwarmSimFramework.Classes.Experiments
             for (int i = 0; i < myBrainModels.Length; i++)
             {
                 StreamWriter output = new StreamWriter(ThreadDirs[threadID] + "//" + iterationID+"_" + myBrainModels[i].Robot.Name);
-                output.Write(BrainSerializer.SerializeArray(new []{myBrainModels[i].Brain}));
+                output.Write(JsonConvert.SerializeObject(myBrainModels[i], BrainSerializer.JsonSettings));
                 output.Close();
             }
         }

@@ -416,7 +416,7 @@ namespace SwarmSimFramework.Classes.Entities
             s.AppendLine("\t Starting Point: " + StartingPoint);
             s.AppendLine("\t Health: " + Health + " Alive: " + Alive);
             s.AppendLine("\t TeamNumber: " + TeamNumber + " Fuel: " + FuelAmount);
-            s.AppendLine("\t SensorDimension : " + SensorsDimension + " EffectoDimension: " + EffectorsDimension);
+            s.AppendLine("\t SensorDimension : " + SensorsDimension + " EffectorDimension: " + EffectorsDimension);
             s.AppendLine("\t Infos: ");
             s.AppendLine("\t\t Collision detected: " + CollisionDetected + " Invalid container operation: " +
                          InvalidContainerOperation);

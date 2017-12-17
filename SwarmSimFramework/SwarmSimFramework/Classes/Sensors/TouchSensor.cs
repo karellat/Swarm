@@ -42,6 +42,7 @@ namespace SwarmSimFramework.Classes.Entities
         public TouchSensor(RobotEntity robot,float size, float orientationToFPoint) : base(Entity.RotatePoint(orientationToFPoint, robot.FPoint, robot.Middle),size, "TouchSensor",robot.Middle)
         {
             //ISensor values
+            this.OrientationToRobotFPoint = orientationToFPoint;
             Dimension = 1; 
             LocalBounds = new Bounds[Dimension];
             //Make bounds of touch sensor 
@@ -67,20 +68,15 @@ namespace SwarmSimFramework.Classes.Entities
 
         public float[] Count(RobotEntity robot, Map.Map map)
         {
-             //Update position
-            if (robot.Middle != RotationMiddle)
-            {
-                this.MoveTo(robot.Middle);
-            }
-            if(Orientation != robot.Orientation + OrientationToRobotFPoint)
-                this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
+            //Update possition
+            ConnectToRobot(robot);
             float[] output;
             //Count collision 
             if (map.Collision(this, robot))
                 output = (new[] {1.0f});
             else
                 output = (new[] {0.0f});
-            LastReadValue = output;
+            LastReadValue[0] = output[0];
             return output.Normalize(NormalizeFuncs);
         }
 
@@ -107,8 +103,12 @@ namespace SwarmSimFramework.Classes.Entities
         {
             StringBuilder s = new StringBuilder("TouchSensor ");
             s.AppendLine("\t" + base.Log());
-            s.AppendLine("\t Last read value:" + LastReadValue[0]);
-            return base.Log();
+            s.Append("\t Last read value: " + LastReadValue[0] + " = ");
+            if (LastReadValue[0] == 1.0f)
+                s.AppendLine("Is Coliding");
+            else
+                s.AppendLine("Is not coliding");
+            return s;
         }
     }
 }

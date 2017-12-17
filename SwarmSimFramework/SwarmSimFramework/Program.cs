@@ -50,14 +50,14 @@ namespace SwarmSimFramework
                     for (int i = 0; i < brainModels.Length; i++)
                     {
                         brainModels[i] = new BrainModel<SingleLayerNeuronNetwork>[2];
-                        brainModels[i][0].Robot = new ScoutCutterRobot();
+                        brainModels[i][0].Robot = new ScoutCutterRobotMem();
                         brainModels[i][0].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(dimension:
                             new IODimension
                             {
                                 Input = brainModels[i][0].Robot.SensorsDimension,
                                 Output = brainModels[i][0].Robot.EffectorsDimension
                             });
-                        brainModels[i][1].Robot = new WoodWorkerRobot();
+                        brainModels[i][1].Robot = new WoodWorkerRobotMem();
                         brainModels[i][1].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(dimension:
                             new IODimension
                             {
@@ -69,9 +69,9 @@ namespace SwarmSimFramework
 
 
                    RobotModel[] robotModel = new RobotModel[2];
-                    robotModel[0].model = new ScoutCutterRobot();
+                    robotModel[0].model = new ScoutCutterRobotMem();
                     robotModel[0].amount = 5;
-                    robotModel[1].model = new WoodWorkerRobot();
+                    robotModel[1].model = new WoodWorkerRobotMem();
                     robotModel[1].amount = 4;
 
                     WoodScene.AmountOfTrees = 400;

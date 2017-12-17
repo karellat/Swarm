@@ -63,6 +63,7 @@ namespace SwarmSimVisu
             resCache.Add("ROBOT2", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 1.000f, 1.00f)));
             resCache.Add("HEAD", t => new SolidColorBrush(t, new RawColor4(1.000f, 0.000f, 1.000f, 1.0f)));
             resCache.Add("LINESENSOR", t => new SolidColorBrush(t, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f)));
+            resCache.Add("TOUCHSENSOR", t => new SolidColorBrush(t, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f)));
             resCache.Add("LINEEFECTOR", t => new SolidColorBrush(t, new RawColor4(0.184f, 0.310f, 0.310f, 1.0f)));
             resCache.Add("CIRCLEEFFECTOR", t => new SolidColorBrush(t, new RawColor4(1.000f, 1.000f, 0.00f, 1.0f)) { Opacity = 0.15f });
             resCache.Add("CIRCLESENSOR",t=> new SolidColorBrush(t,new RawColor4(0.961f, 0.871f, 0.702f,1.0f)) { Opacity = 0.15f });

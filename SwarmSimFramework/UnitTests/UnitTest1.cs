@@ -1376,11 +1376,11 @@ namespace UnitTests
         {
             Map map = new Map(200, 200, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             EmptyRobot r = new EmptyRobot(new Vector2(100, 100), 1);
-            RadioTransmitter rt = new RadioTransmitter(r, new[] {-1, 0, 2}, 10);
+            RadioTransmitter rt = new RadioTransmitter(r, new[] {-1, 0, 1}, 10);
             rt.Effect(new[] {0, 0, 1.0f}, r, map);
             Assert.AreEqual(new Vector2(100, 100), map.RadioEntities.One.Middle);
             Assert.AreEqual(10, map.RadioEntities.One.Radius);
-            Assert.AreEqual(2, map.RadioEntities.One.ValueOfSignal);
+            Assert.AreEqual(1, map.RadioEntities.One.ValueOfSignal);
             map.MakeStep();
             Assert.AreEqual(0, map.RadioEntities.Count);
         }

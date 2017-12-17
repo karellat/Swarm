@@ -79,6 +79,7 @@
     <Compile Include="Classes\Entities\ObstacleEntity.cs" />
     <Compile Include="Classes\Entities\RawMaterialEntity.cs" />
     <Compile Include="Classes\Entities\WoodEntity.cs" />
+    <Compile Include="Classes\Experiments\ESReader.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\DifferencialEvolution.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\EvolutionaryStrategies.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\FitnessCounter.cs" />
@@ -152,15 +153,16 @@
     <None Include="Experiments\MineralScene\MineralScoutWalkMem.expe" />
     <None Include="Experiments\MineralScene\MineralWorkerWalk.expe" />
     <None Include="Experiments\MineralScene\MineralWorkerWalkMem.expe" />
-    <None Include="Experiments\WoodScene\WoodCuttorCut.expe" />
-    <None Include="Experiments\WoodScene\WoodCuttorCutMem.expe" />
-    <None Include="Experiments\WoodScene\WoodCuttorWalk.expe" />
-    <None Include="Experiments\WoodScene\WoodCuttorWalkMem.expe" />
-    <None Include="Experiments\WoodScene\WoodWorkerPickUp.expe" />
-    <None Include="Experiments\WoodScene\WoodCooperatitiveFinal.expe" />
-    <None Include="Experiments\WoodScene\WoodWorkerPickUpMem.expe" />
-    <None Include="Experiments\WoodScene\WoodWorkerWalk.expe" />
-    <None Include="Experiments\WoodScene\WoodWorkerWalkMem.expe" />
+    <None Include="Experiments\WoodScene\DE\BASIC\WoodCuttorCut.expe" />
+    <None Include="Experiments\WoodScene\DE\MEM\WoodCuttorCutMem.expe" />
+    <None Include="Experiments\WoodScene\DE\BASIC\WoodCuttorWalk.expe" />
+    <None Include="Experiments\WoodScene\DE\MEM\WoodCuttorWalkMem.expe" />
+    <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerPickUp.expe" />
+    <None Include="Experiments\WoodScene\DE\BASIC\WoodCooperatitiveFinal.expe" />
+    <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerPickUpMem.expe" />
+    <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerWalk.expe" />
+    <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerWalkMem.expe" />
+    <None Include="Experiments\WoodScene\ES\WoodWalking.es" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

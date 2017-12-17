@@ -6,7 +6,9 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
     {
         public double ValueOfDiscoveredTree = 10;
         public double ValueOfCollision = 0;
-        public double ValueOfCutWood   = 0; 
+        public double ValueOfCutWood   = 0;
+        public double ValueOfStockedWood = 0;
+        public double ValueOfContaineredWood = 0;
 
         public double GetMapFitness(Map.Map map)
         {
@@ -37,6 +39,7 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
                 }
 
             }
+            //TODO: Implemnt wood counting
 
             return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
         }
