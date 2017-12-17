@@ -46,8 +46,8 @@ namespace SwarmSimFramework
                     }
                 case "debug":
                     { 
-                    BrainModel<SingleLayerNeuronNetwork>[][] brainModels = new BrainModel<SingleLayerNeuronNetwork>[5][];
-                    for (int i = 0; i < 5; i++)
+                    BrainModel<SingleLayerNeuronNetwork>[][] brainModels = new BrainModel<SingleLayerNeuronNetwork>[8][];
+                    for (int i = 0; i < brainModels.Length; i++)
                     {
                         brainModels[i] = new BrainModel<SingleLayerNeuronNetwork>[2];
                         brainModels[i][0].Robot = new ScoutCutterRobot();

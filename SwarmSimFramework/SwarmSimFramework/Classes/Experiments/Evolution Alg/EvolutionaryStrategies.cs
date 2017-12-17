@@ -3,12 +3,15 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Threading;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.Optimization;
 using MathNet.Numerics.Statistics;
 using SwarmSimFramework.Classes.Map;
 using SwarmSimFramework.Classes.RobotBrains;
@@ -23,6 +26,7 @@ namespace SwarmSimFramework.Classes.Experiments
     {
         private struct Mutation
         {
+            
             public static Mutation Zero(int size)
             {
                 Mutation m; 
@@ -91,6 +95,7 @@ namespace SwarmSimFramework.Classes.Experiments
 
         }
 
+        public static string WorkingDir = "ES";
         /// <summary>
         /// Number of evaluated brains
         /// </summary>
@@ -104,7 +109,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Number of generation(jitters in terms of evolutionary strategies
         /// </summary>
-        public static int NumberOfGenerations = 100;
+        public static int NumberOfGenerations = 10000;
 
         /// <summary>
         /// Number of iterations of map 
@@ -139,9 +144,10 @@ namespace SwarmSimFramework.Classes.Experiments
 
         private void WriteGraph(int indexOfIndividual, double actualFitness, int genIndex)
         {
-            //TODO: Implement
-            Console.WriteLine("writing to graph");
-
+            Graphs[indexOfIndividual].WriteLine(genIndex.ToString() + ";" + actualFitness.ToString());
+#if DEBUG
+            Graphs[indexOfIndividual].Flush();
+#endif
         }
 
         /// <summary>
@@ -163,6 +169,10 @@ namespace SwarmSimFramework.Classes.Experiments
 
         public void Run()
         {
+            //Prepare dir
+            System.IO.Directory.CreateDirectory(WorkingDir);
+            PrepareFiles();
+  
             //Init number of threads same as the number of evolving individual
             int runningThreads = PopulationSize;
             object runningThreadsLock = new object();
@@ -197,6 +207,8 @@ namespace SwarmSimFramework.Classes.Experiments
 
         public void SingleIndividualRun(int indexOfIndividual)
         {
+            //
+
             BrainModel<SingleLayerNeuronNetwork>[] myBrainModels = new BrainModel<SingleLayerNeuronNetwork>[brainModels[indexOfIndividual].Length];
             double actualFitness = 0;
         
@@ -280,16 +292,37 @@ namespace SwarmSimFramework.Classes.Experiments
                     myBrainModels = offspringBrainModels;
                 }
                 WriteGraph(indexOfIndividual, actualFitness, genIndex);
-                Serialize(myBrainModels);
+                Serialize(myBrainModels,indexOfIndividual,genIndex);
             }
             Console.WriteLine("Thread with {0}. individual finnished the evaluation");
 
         }
 
-        private void Serialize(BrainModel<SingleLayerNeuronNetwork>[] myBrainModels)
+        private void PrepareFiles()
         {
-            //TODO: Implements
-            Console.WriteLine("Serializing brains");
+            Graphs = new StreamWriter[PopulationSize];
+            ThreadDirs = new string[PopulationSize];
+            for (int i = 0; i < PopulationSize; i++)
+            {
+                Graphs[i] = new StreamWriter(WorkingDir + "//graph_of_" + i + ".txt");
+                var tdir = WorkingDir + "//" + i.ToString() + "thread";
+                System.IO.Directory.CreateDirectory(tdir);
+                ThreadDirs[i] = tdir;
+            }
+        }
+
+        private StreamWriter[] Graphs;
+        private string[] ThreadDirs; 
+
+
+        private void Serialize(BrainModel<SingleLayerNeuronNetwork>[] myBrainModels,int threadID, int iterationID)
+        {
+            for (int i = 0; i < myBrainModels.Length; i++)
+            {
+                StreamWriter output = new StreamWriter(ThreadDirs[threadID] + "//" + iterationID+"_" + myBrainModels[i].Robot.Name);
+                output.Write(BrainSerializer.SerializeArray(new []{myBrainModels[i].Brain}));
+                output.Close();
+            }
         }
 
         private Mutation CreateMutation(int numberWeights)
