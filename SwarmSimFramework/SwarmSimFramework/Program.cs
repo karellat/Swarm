@@ -38,48 +38,25 @@ namespace SwarmSimFramework
             }
             switch (args[0])
             {
-                case "-c":
+                case "-de":
                     {
                         Console.WriteLine("Reading set up from: {0}",args[1]);
                         exp = MTExperimentReader.ExperimentFromConfig(args[1]);
                         break;
                     }
-                case "debug":
-                    { 
-                    BrainModel<SingleLayerNeuronNetwork>[][] brainModels = new BrainModel<SingleLayerNeuronNetwork>[8][];
-                    for (int i = 0; i < brainModels.Length; i++)
+                case "-es":
                     {
-                        brainModels[i] = new BrainModel<SingleLayerNeuronNetwork>[2];
-                        brainModels[i][0].Robot = new ScoutCutterRobotMem();
-                        brainModels[i][0].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(dimension:
-                            new IODimension
-                            {
-                                Input = brainModels[i][0].Robot.SensorsDimension,
-                                Output = brainModels[i][0].Robot.EffectorsDimension
-                            });
-                        brainModels[i][1].Robot = new WoodWorkerRobotMem();
-                        brainModels[i][1].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(dimension:
-                            new IODimension
-                            {
-                                Input = brainModels[i][1].Robot.SensorsDimension,
-                                Output = brainModels[i][1].Robot.EffectorsDimension
-                            });
-                        }
-                    
+                        Console.WriteLine("Reading set up from: {0}",args[1]);
+                        EvolutionaryStrategies es = ESReader.ReadFrom(args[1]); 
+                        es.Run();
+                        return;
+                    }
+                case "debug":
+                {
 
-
-                   RobotModel[] robotModel = new RobotModel[2];
-                    robotModel[0].model = new ScoutCutterRobotMem();
-                    robotModel[0].amount = 5;
-                    robotModel[1].model = new WoodWorkerRobotMem();
-                    robotModel[1].amount = 4;
-
-                    WoodScene.AmountOfTrees = 400;
-                    MapModel model = WoodScene.MakeMapModel(robotModel);
-
-                    EvolutionaryStrategies ev = new EvolutionaryStrategies(new WoodSceneFitnessCounter(), model,brainModels);
-                    ev.Run();
-                    return; 
+                    exp = null; 
+                    var  ex = ESReader.ReadFrom(args[1]);
+                    break; 
                 }
                 case "D":
                 {

@@ -9,6 +9,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Optimization;
@@ -96,36 +97,45 @@ namespace SwarmSimFramework.Classes.Experiments
 
         }
 
-        public static string WorkingDir = "ES";
+        public string Name = "nameOfES";
+
+        public string WorkingDir = "ES";
         /// <summary>
         /// Number of evaluated brains
         /// </summary>
-        public static int PopulationSize = 20;
-
+        public  int PopulationSize = 2;
+        /// <summary>
+        /// Turn on elitism
+        /// </summary>
+        public bool Elitism = false;
+        /// <summary>
+        /// Maximum of best brains 
+        /// </summary>
+        public int bestBrainsCount = 2;
         /// <summary>
         /// Mutation step mutation size
         /// </summary>
-        public static int SingleStepPopulationSize = 20;
+        public int SingleStepPopulationSize = 20;
 
         /// <summary>
         /// Number of generation(jitters in terms of evolutionary strategies
         /// </summary>
-        public static int NumberOfGenerations = 10000;
+        public int NumberOfGenerations = 10000;
 
         /// <summary>
         /// Number of iterations of map 
         /// </summary>
-        public static int NumberOfMapIterations = 2000;
+        public int NumberOfMapIterations = 2000;
 
         /// <summary>
         /// Noise standard deviation 
         /// </summary>
-        private const float sigma = 0.1f;
+        public float sigma = 0.1f;
 
         /// <summary>
         /// Learning rate
         /// </summary>
-        private const float alpha = 0.05f;
+        public float alpha = 0.05f;
 
         /// <summary>
         /// Model of current map
@@ -173,33 +183,13 @@ namespace SwarmSimFramework.Classes.Experiments
             //Prepare dir
             System.IO.Directory.CreateDirectory(WorkingDir);
             PrepareFiles();
-  
-            //Init number of threads same as the number of evolving individual
-            int runningThreads = PopulationSize;
-            object runningThreadsLock = new object();
-            object mainSemaphor = new object();
-            for (int i = 0; i < PopulationSize; i++)
-            {
-                int index = i;
-                ThreadPool.QueueUserWorkItem(state =>
+            var tasks = Enumerable.Range(0, PopulationSize).Select(i =>
                 {
-                    SingleIndividualRun(index);
-                    lock (runningThreadsLock)
-                    {
-                        runningThreads--;
-                        Console.WriteLine("Running threads: {0}",runningThreads);
-                        if (runningThreads == 0)
-                        {
-                            Console.WriteLine("All threads finnished pulsing the main one");
-                            Monitor.Pulse(mainSemaphor);
-                        }
-                    }
-                });
-            }
-            lock (mainSemaphor)
-            {
-                Monitor.Wait(mainSemaphor);
-            }
+                    Console.WriteLine("My {0}",i.ToString());
+                    return Task.Run(() => SingleIndividualRun(i));
+                })
+                .ToArray();             //Init number of threads same as the number of evolving individual
+            Task.WaitAll(tasks);           
             Console.WriteLine("All threads finnished");
 
             //Serialize brains
@@ -209,7 +199,7 @@ namespace SwarmSimFramework.Classes.Experiments
         public void SingleIndividualRun(int indexOfIndividual)
         {
             //
-
+            var bestBrains = new SortedList<double,BrainModel<SingleLayerNeuronNetwork>[]>(new IRobotDoubleComperer());
             BrainModel<SingleLayerNeuronNetwork>[] myBrainModels = new BrainModel<SingleLayerNeuronNetwork>[brainModels[indexOfIndividual].Length];
             double actualFitness = 0;
         
@@ -264,7 +254,7 @@ namespace SwarmSimFramework.Classes.Experiments
                 var std = F.StandardDeviation();
                 double[] A = new double[F.Length];
                 for (int i = 0; i < F.Length; i++)
-                    A[i] = (F[i] - mean) / std; //standardize the rewards to have a gaussian distribution
+                    A[i] = std != 0 ? (F[i] - mean) / std : 0.001; //standardize the rewards to have a gaussian distribution
 
                
                 Mutation sumOfMutation = Mutation.Zero(totalDimension); 
@@ -287,13 +277,29 @@ namespace SwarmSimFramework.Classes.Experiments
                 Console.WriteLine("Thread " + indexOfIndividual + ". of Evolutionary Strategies, iteration " + genIndex+ ". \n" +
                                   "Evaluated with: " + offspringFitness.ToString("##.000") + " best fitness: " + actualFitness);
 
-                if (actualFitness <= offspringFitness)
+                //Add to best brains if 
+                if (bestBrains.Count < bestBrainsCount || bestBrains.Last().Key < offspringFitness)
+                {
+                    //If full remove last one
+                   if(bestBrains.Count >= bestBrainsCount)
+                        bestBrains.RemoveAt(bestBrains.Count-1);
+                    bestBrains.Add(offspringFitness,offspringBrainModels);
+                }
+
+                if (!Elitism || actualFitness <= offspringFitness)
                 {
                     actualFitness = offspringFitness;
                     myBrainModels = offspringBrainModels;
                 }
                 WriteGraph(indexOfIndividual, actualFitness, genIndex);
-                Serialize(myBrainModels,indexOfIndividual,genIndex);
+                Serialize(myBrainModels,indexOfIndividual,genIndex.ToString());
+               
+            }
+            int index = 0; 
+            foreach (var bests in bestBrains)
+            {
+                Serialize(bests.Value, indexOfIndividual, "best" + index.ToString());
+                index++; 
             }
             Console.WriteLine("Thread with {0}. individual finnished the evaluation",indexOfIndividual);
 
@@ -316,12 +322,12 @@ namespace SwarmSimFramework.Classes.Experiments
         private string[] ThreadDirs; 
 
 
-        private void Serialize(BrainModel<SingleLayerNeuronNetwork>[] myBrainModels,int threadID, int iterationID)
+        private void Serialize(BrainModel<SingleLayerNeuronNetwork>[] myBrainModels,int threadID, string stringId)
         {
             for (int i = 0; i < myBrainModels.Length; i++)
             {
-                StreamWriter output = new StreamWriter(ThreadDirs[threadID] + "//" + iterationID+"_" + myBrainModels[i].Robot.Name);
-                output.Write(JsonConvert.SerializeObject(myBrainModels[i], BrainSerializer.JsonSettings));
+                StreamWriter output = new StreamWriter(ThreadDirs[threadID] + "//" + stringId + "_" + myBrainModels[i].Robot.Name);
+                output.Write(JsonConvert.SerializeObject(myBrainModels[i].Brain, BrainSerializer.JsonSettings));
                 output.Close();
             }
         }
