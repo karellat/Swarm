@@ -39,7 +39,7 @@ namespace SwarmSimVisu
         protected List<Line> LinesCache;
         protected bool ReadyToChangeFrame;
 
-        protected RawColor4 BackgroundColor = new RawColor4(0, 0, 1.0f, 0.5f);
+        protected RawColor4 BackgroundColor = new RawColor4(0.878f, 1.000f, 1.000f, 1);
 
 
         public MapCanvas()
@@ -52,16 +52,16 @@ namespace SwarmSimVisu
             //Prepare color:
             resCache.Add("SIGNAL0", t => new SolidColorBrush(t, new RawColor4(1.0f, 0, 0, 0.5f)) {Opacity = 0.10f});
             resCache.Add("SIGNAL1", t => new SolidColorBrush(t, new RawColor4(0, 1.0f, 0, 0.5f)) {Opacity = 0.10f});
-            resCache.Add("SIGNAL2", t => new SolidColorBrush(t, new RawColor4(0, 0, 0.5f, 0.5f)) {Opacity = 0.10f});
+            resCache.Add("SIGNAL2", t => new SolidColorBrush(t, new RawColor4(0, 0, 0.5f, 0.5f)) {Opacity = 0.70f});
             resCache.Add("ObstacleColor", t => new SolidColorBrush(t, new RawColor4(0.827f, 0.827f, 0.827f, 1.0f)));
             resCache.Add("FuelColor", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 0.000f, 1.0f)));
             resCache.Add("RawMaterialColorN", t => new SolidColorBrush(t, new RawColor4(0.000f, 1.000f, 0.498f, 1.0f)));
             resCache.Add("RawMaterialColorD", t => new SolidColorBrush(t, new RawColor4(1.000f, 1.000f, 0.000f, 1.0f)));
             resCache.Add("WoodColorN", t => new SolidColorBrush(t, new RawColor4(0.545f, 0.271f, 0.075f, 1.0f)));
             resCache.Add("WoodColorD", t => new SolidColorBrush(t, new RawColor4(0.804f, 0.522f, 0.247f, 1.0f)));
-            resCache.Add("ROBOT1", t => new SolidColorBrush(t, new RawColor4(0.000f, 1.00f, 0.000f, 0.0f)));
+            resCache.Add("ROBOT1", t => new SolidColorBrush(t, new RawColor4(0.863f, 0.078f, 0.235f, 1.0f)));
             resCache.Add("ROBOT2", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 1.000f, 1.00f)));
-            resCache.Add("HEAD", t => new SolidColorBrush(t, new RawColor4(1.000f, 0.000f, 1.000f, 1.0f)));
+            resCache.Add("HEAD", t => new SolidColorBrush(t, new RawColor4(0.000f, 0.000f, 0.000f, 1.0f)));
             resCache.Add("LINESENSOR", t => new SolidColorBrush(t, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f)));
             resCache.Add("TOUCHSENSOR", t => new SolidColorBrush(t, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f)));
             resCache.Add("LINEEFECTOR", t => new SolidColorBrush(t, new RawColor4(0.184f, 0.310f, 0.310f, 1.0f)));

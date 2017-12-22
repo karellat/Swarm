@@ -1,4 +1,5 @@
-﻿using SwarmSimFramework.Classes.Entities;
+﻿using System.CodeDom;
+using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
 {
@@ -9,6 +10,7 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
         public double ValueOfCutWood   = 0;
         public double ValueOfStockedWood = 0;
         public double ValueOfContaineredWood = 0;
+        public double ValueOfContaineredNoWood = 0; 
 
         public double GetMapFitness(Map.Map map)
         {
@@ -39,9 +41,43 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
                 }
 
             }
-            //TODO: Implemnt wood counting
 
-            return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
+            //Count wood on the stockPlace
+            var stockSignal = map.constantRadioSignal[0];
+ 
+            int woodInContainers = 0;
+            int minedWood = 0;
+            int otherObjectInContainers = 0; 
+            if (ValueOfStockedWood != 0)
+            {
+                var stockItems = map.CollisionColor(stockSignal);
+                minedWood = stockItems.ContainsKey(Entity.EntityColor.WoodColor)
+                    ? stockItems[Entity.EntityColor.WoodColor].Amount
+                    : 0;
+            }
+            if (ValueOfContaineredWood != 0)
+            {
+
+
+                // Count wood in containers 
+
+                foreach (var r in map.Robots)
+                {
+                    foreach (var item in r.ContainerList())
+                    {
+                        if (item.Color == Entity.EntityColor.WoodColor)
+                            woodInContainers++;
+                        else
+                            otherObjectInContainers++; 
+                    }
+                }
+            }
+           
+
+            return (ValueOfContaineredNoWood * otherObjectInContainers) +  
+                (DiscoveredTrees * ValueOfDiscoveredTree) + 
+                (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood) +
+                   (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
         }
     }
 }

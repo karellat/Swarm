@@ -1,15 +1,15 @@
 WoodExperimentMt
-AmountOfTrees:50
+AmountOfTrees:100
 AmountOfWood:200
-ValueOfCutWood:1000
+ValueOfCutWood:100
 ValueOfCollision:0
 ValueOfDiscoveredTree:0
-ValueOfStockedWood:0
-ValueOfContaineredWood:0
+ValueOfStockedWood:1000
+ValueOfContaineredWood:110
 PopulationSize:100
 NumberOfGenerations:1000
 MapIteration:2000
-Name:WoodWorkerWalk
+Name:WoodWorkerWalkMem
 Models:WoodRobots.WoodWorkerRobotMem()-4
 WorkingDir:WorkerWalkMem
 

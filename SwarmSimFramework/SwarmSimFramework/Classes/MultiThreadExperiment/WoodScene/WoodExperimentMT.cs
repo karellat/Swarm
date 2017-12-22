@@ -28,7 +28,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public int ValueOfDiscoveredTree = 0;
 
         public double ValueOfStockedWood = 0;
-        public double ValueOfContaineredWood = 0; 
+        public double ValueOfContaineredWood = 0;
+        public double ValueOfNoWood = 0;
+
 
         [JsonProperty]
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
@@ -227,12 +229,16 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
             // Count wood in containers 
             int woodInContainers = 0;
+            int noWoodInContainers = 0; 
+
             foreach (var r in map.Robots)
             {
                 foreach (var item in r.ContainerList())
                 {
                     if (item.Color == Entity.EntityColor.WoodColor)
                         woodInContainers++;
+                    else
+                        noWoodInContainers++; 
                 }
             }
 

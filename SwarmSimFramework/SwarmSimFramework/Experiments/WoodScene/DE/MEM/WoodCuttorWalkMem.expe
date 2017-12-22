@@ -1,9 +1,9 @@
 WoodExperimentMt
-AmountOfTrees:200
+AmountOfTrees:300
 AmountOfWood:0
-ValueOfCutWood:1050
+ValueOfCutWood:1000
 ValueOfCollision:0
-ValueOfDiscoveredTree:1000
+ValueOfDiscoveredTree:100
 ValueOfStockedWood:0
 ValueOfContaineredWood:0
 PopulationSize:100

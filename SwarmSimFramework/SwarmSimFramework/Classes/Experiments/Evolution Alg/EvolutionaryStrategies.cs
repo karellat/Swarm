@@ -111,7 +111,7 @@ namespace SwarmSimFramework.Classes.Experiments
         /// <summary>
         /// Maximum of best brains 
         /// </summary>
-        public int bestBrainsCount = 2;
+        public int bestBrainsCount = 20;
         /// <summary>
         /// Mutation step mutation size
         /// </summary>
