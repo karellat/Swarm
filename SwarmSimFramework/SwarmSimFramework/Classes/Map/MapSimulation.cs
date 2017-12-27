@@ -27,6 +27,9 @@ namespace SwarmSimFramework.Classes.Map
 
         public Map Simulate(int numberOfIteration)
         {
+            //Randomly rotate robots 
+            map.RotateRobotsRandomly();
+
             Debug.Assert(map.Cycle == 0);
             for (int i = 0; i < numberOfIteration; i++)
                 map.MakeStep();

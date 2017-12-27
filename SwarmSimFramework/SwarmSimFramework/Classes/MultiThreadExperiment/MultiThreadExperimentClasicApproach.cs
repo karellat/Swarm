@@ -223,7 +223,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         {
             //Create new map, just reading values
             Map.Map map = MapModel.ConstructMap();
-
             //model of brains, only for read
             var modelBrains = new T[ActualGeneration.Length];
             for (int i = 0; i < modelBrains.Length; i++)
@@ -243,6 +242,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         r.Brain = evalBrains[i].Brain.GetCleanCopy();
                 }
             }
+            //Randomize initial position
+            map.RotateRobotsRandomly();
             for (int i = 0; i < MapIteration; i++)
             {
                 map.MakeStep();

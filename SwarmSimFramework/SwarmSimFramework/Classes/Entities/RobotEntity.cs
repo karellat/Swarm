@@ -14,6 +14,7 @@ namespace SwarmSimFramework.Classes.Entities
 {
     public abstract class RobotEntity :CircleEntity
     {
+       
         //STANDART VALUES
         public static Bounds StandardBounds = new Bounds() {Max = 100, Min = -100};
         //MEMBERs

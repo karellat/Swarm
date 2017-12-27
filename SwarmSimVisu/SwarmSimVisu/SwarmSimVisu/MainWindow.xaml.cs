@@ -180,13 +180,12 @@ namespace SwarmSimVisu
         private void RunExperiment()
         {
 
+            
             while (!RunningExperiment.Finnished)
             {
                 //Check Controls
                 lock (ControlsLock)
                 {
-                    //Draw experisiment
-                    DrawExperiment();
                     if (Stopping)
                     {
                        MainGrid.Dispatcher.Invoke(StopExperiment);
@@ -203,7 +202,7 @@ namespace SwarmSimVisu
                         Paused = false;
                     }
                     //Make step of Experiment: 
-                    RunningExperiment.MakeStep();
+                    RunningExperiment.MakeStep(DrawExperiment);
 
                     //Wait
                     if(ThreadWait > 0) Thread.Sleep(ThreadWait);

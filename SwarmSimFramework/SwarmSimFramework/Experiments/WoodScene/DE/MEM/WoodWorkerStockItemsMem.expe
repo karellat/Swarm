@@ -6,10 +6,10 @@ ValueOfCollision:-1
 ValueOfDiscoveredTree:0
 ValueOfStockedWood:10000
 ValueOfContaineredWood:1000
-ValueOfContaineredNoWood:-10
+ValueOfContaineredNoWood:-100
 PopulationSize:200
 NumberOfGenerations:2000
-MapIteration:1000
+MapIteration:2000
 Name:WoodWorkerPickUpMem
 Models:WoodRobots.WoodWorkerRobotMem()-4
 WorkingDir:WorkerPickUpMem

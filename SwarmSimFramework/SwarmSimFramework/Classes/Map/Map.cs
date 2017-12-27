@@ -136,6 +136,8 @@ namespace SwarmSimFramework.Classes.Map
                     r.PrepareMove(this);
                 Debug.Assert(!OutOfBorderTest(r));
             }
+ 
+
             //Clean signals from map 
             RadioEntities.Clear();
             //Add constant signals
@@ -166,6 +168,55 @@ namespace SwarmSimFramework.Classes.Map
             Cycle++;
         }
 
+
+        /// <summary>
+        /// Make single step of simulation with external function in the middle
+        /// </summary>
+        public void MakeStepwithFnc(Action func)
+        {
+#if DEBUG && POSCORRECT
+            CheckCorrectionOfPossition();
+#endif
+            //Make all robots read situation & decide, no point of random iteration 
+            foreach (var r in Robots)
+            {
+                if (r.Alive)
+                    r.PrepareMove(this);
+                Debug.Assert(!OutOfBorderTest(r));
+            }
+
+            //External method
+            func.Invoke();
+
+            //Clean signals from map 
+            RadioEntities.Clear();
+            //Add constant signals
+            constantRadioSignal.ForEach((entity => RadioEntities.Add(entity)));
+            //Random iteration through list of robot
+            //Make movent, activate effectors
+            foreach (int i in Enumerable.Range(0, Robots.Count).OrderBy(x => RandomNumber.GetRandomInt()))
+            {
+                Debug.Assert(!OutOfBorderTest(Robots[i]));
+                if (Robots[i].Alive)
+                    Robots[i].Move(this);
+                Debug.Assert(!OutOfBorderTest(Robots[i]));
+            }
+
+
+#if DEBUG && POSCORRECT
+            CheckCorrectionOfPossition();
+#endif
+            //Find intersection with fuels
+            if (FuelEntities.Count != 0)
+            {
+                foreach (var r in Robots)
+                    CollisionFuel(r);
+            }
+            //Clean empty fuels 
+            FuelEntities.RemoveAll((x => x.Empty));
+            //Cycle change 
+            Cycle++;
+        }
         //GENERATOR
         /// <summary>
         /// Gener
@@ -622,5 +673,17 @@ namespace SwarmSimFramework.Classes.Map
         /// Const radio signals
         /// </summary>
         public List<RadioEntity> constantRadioSignal;
+
+        public void RotateRobotsRandomly()
+        {
+            return; 
+            if(Cycle != 0) throw new ArgumentException("Zero cycle expected");
+
+            foreach (var r in Robots)
+            {
+                var i = SupportClasses.RandomNumber.GetRandomInt(0, 359);
+                r.RotateDegrees(i);
+            }
+        }
     }
 }

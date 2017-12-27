@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Policy;
 using System.Text;
@@ -12,7 +13,7 @@ namespace SwarmSimFramework.Interfaces
 
         void Init();
 
-        void MakeStep();
+        void MakeStep(Action func);
 
         bool Finnished { get; }
         /// <summary>

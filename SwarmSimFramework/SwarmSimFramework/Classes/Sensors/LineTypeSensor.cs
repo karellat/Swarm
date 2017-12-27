@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -49,7 +50,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// <param name="map"></param>
         /// <returns></returns>
         //CONSTRUCTOR 
-        public LineTypeSensor(RobotEntity robot,float lenght,float orientationToRobotFPoint) : base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght),robot.Middle, "Line Sensors")
+        public LineTypeSensor(RobotEntity robot,float lenght,float orientationToRobotFPoint,bool sameOriented = false) : base(robot.FPoint, Entity.MovePoint(robot.FPoint, Vector2.Normalize(robot.FPoint - robot.Middle) * lenght),robot.Middle, "Line Sensors",0, sameOriented)
         {
             //rotate sensor to its possition
             OrientationToRobotFPoint = orientationToRobotFPoint;
@@ -69,6 +70,11 @@ namespace SwarmSimFramework.Classes.Entities
             }
             //Create normalization func to robot normal values
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
+            //Check orientation 
+#if DEBUG
+            if(sameOriented)
+                Debug.Assert(robot.FPoint == this.A);
+#endif
         }
 
         /// <summary>
@@ -86,8 +92,14 @@ namespace SwarmSimFramework.Classes.Entities
                     this.MoveTo(robot.Middle);
                 if(Orientation != robot.Orientation + OrientationToRobotFPoint)
                     this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
-                //Count from the map 
-                Intersection intersection = map.Collision(this, robot,true);
+#if DEBUG
+                if (this.orientedSameAsFRobot)
+                {
+                    Debug.Assert(Math.Abs(robot.FPoint.X - A.X) < 0.05 && Math.Abs(robot.FPoint.Y - A.Y) < 0.05); 
+                }
+#endif
+            //Count from the map 
+            Intersection intersection = map.Collision(this, robot,true);
                 float[] output = new float[Dimension];
                 if (intersection.Distance == Double.PositiveInfinity)
                 {

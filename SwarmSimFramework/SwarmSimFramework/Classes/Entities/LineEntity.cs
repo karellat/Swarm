@@ -7,10 +7,13 @@ namespace SwarmSimFramework.Classes.Entities
     //Entity represents line segment
     public abstract class LineEntity : Entity
     {
+        //DEBUG
+        protected bool orientedSameAsFRobot = true; 
         //CONSTRUCTOR
 
-        protected LineEntity(Vector2 a, Vector2 b, Vector2 rotationMiddle, string name, float orientation = 0)
+        protected LineEntity(Vector2 a, Vector2 b, Vector2 rotationMiddle, string name, float orientation = 0, bool orientedSameAsFRobot = false)
         {
+            this.orientedSameAsFRobot = orientedSameAsFRobot;
             Name = name; 
             GetShape = Shape.LineSegment;
             A = a;

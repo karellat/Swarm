@@ -47,17 +47,11 @@ namespace SwarmSimFramework.Classes.Entities
             RotationMiddle = Middle; 
             //Set bounds 
            
-            Dimension = 9;
+            Dimension = 3;
             LocalBounds = new Bounds[Dimension];
             LocalBounds[0] = new Bounds() {Min = 0, Max = 1};
-            LocalBounds[1] = CoordinateBounds;
-            LocalBounds[2] = CoordinateBounds;
-            LocalBounds[3] = new Bounds() { Min = 0, Max = 1 };
-            LocalBounds[4] = CoordinateBounds;
-            LocalBounds[5] = CoordinateBounds;
-            LocalBounds[6] = new Bounds() { Min = 0, Max = 1 };
-            LocalBounds[7] = CoordinateBounds;
-            LocalBounds[8] = CoordinateBounds;
+            LocalBounds[1] = new Bounds() { Min = 0, Max = 1 };
+            LocalBounds[2] = new Bounds() { Min = 0, Max = 1 };
             //Create normalization funcs
             NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
 
@@ -93,18 +87,13 @@ namespace SwarmSimFramework.Classes.Entities
             {
                 if (intertesections.ContainsKey(i))
                 {
-                    o[i * 3] = 1;
+                    o[i] = 1;
                     //Vector direction 
                     Vector2 dir = intertesections[i].MeanDirection();
-                    o[i * 3 + 1] = dir.X;
-                    o[i * 3 + 2] = dir.Y;
                 }
                 else
                 {
-                    o[i * 3] = 0;
-                    o[i * 3 + 1] = 0;
-                    o[i * 3 + 2] = 0; 
-
+                    o[i] = 0;
                 }
             }
             LastReadValues = o;
@@ -133,7 +122,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// Last read values 
         /// </summary>
         [JsonProperty]
-        public float[] LastReadValues = new float[9];
+        public float[] LastReadValues = new float[3];
         /// <summary>
         /// Log local info
         /// </summary>
@@ -142,13 +131,9 @@ namespace SwarmSimFramework.Classes.Entities
         {
             StringBuilder s =new StringBuilder("Radio Sensor: ");
             s.AppendLine("\t" + base.Log());
-            s.AppendLine("Radio signal 0: " + LastReadValues[0] + " Mean Vector:(" + LastReadValues[1] + "," +
-                         LastReadValues[2] + ")");
-            s.AppendLine("Radio signal 1: " + LastReadValues[3] + " Mean Vector:(" + LastReadValues[4] + "," +
-                         LastReadValues[5] + ")");
-            s.AppendLine("Radio signal 2: " + LastReadValues[6] + " Mean Vector:(" + LastReadValues[7] + "," +
-                         LastReadValues[8]);
-
+            s.AppendLine("Radio signal 0: " + LastReadValues[0]);
+            s.AppendLine("Radio signal 1: " + LastReadValues[1]);
+            s.AppendLine("Radio signal 2: " + LastReadValues[2]);
             return s; 
         }
     }

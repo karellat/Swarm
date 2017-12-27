@@ -127,6 +127,7 @@
     <Compile Include="Classes\Robots\WoodRobots\WoodWorkerRobotMem.cs" />
     <Compile Include="Classes\Robots\WoodRobots\WoodWorkerRobot.cs" />
     <Compile Include="Classes\Robots\MineralRobots\WorkerRobot.cs" />
+    <Compile Include="Classes\Sensors\ContainerSensor.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
     <Compile Include="Classes\Entities\RadioEntity.cs" />
@@ -155,11 +156,13 @@
     <None Include="Experiments\MineralScene\MineralWorkerWalk.expe" />
     <None Include="Experiments\MineralScene\MineralWorkerWalkMem.expe" />
     <None Include="Experiments\WoodScene\DE\BASIC\WoodCuttorCut.expe" />
+    <None Include="Experiments\WoodScene\DE\MEM\WoodCooperatitiveFinalMem.expe" />
     <None Include="Experiments\WoodScene\DE\MEM\WoodCuttorCutMem.expe" />
     <None Include="Experiments\WoodScene\DE\BASIC\WoodCuttorWalk.expe" />
     <None Include="Experiments\WoodScene\DE\MEM\WoodCuttorWalkMem.expe" />
     <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerPickUp.expe" />
     <None Include="Experiments\WoodScene\DE\BASIC\WoodCooperatitiveFinal.expe" />
+    <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerStockItemsMem.expe" />
     <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerPickUpMem.expe" />
     <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerWalk.expe" />
     <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerWalkMem.expe" />

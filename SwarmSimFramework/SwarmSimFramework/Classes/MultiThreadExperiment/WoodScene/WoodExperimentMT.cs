@@ -29,7 +29,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         public double ValueOfStockedWood = 0;
         public double ValueOfContaineredWood = 0;
-        public double ValueOfNoWood = 0;
+        public double ValueOfContaineredNoWood = 0;
 
 
         [JsonProperty]
@@ -242,7 +242,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 }
             }
 
-            return (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
+            return (ValueOfContaineredNoWood * noWoodInContainers) + (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
         }
 
         

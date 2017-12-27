@@ -155,11 +155,12 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 
             }
             MapIterationIndex = 0;
+            Map.RotateRobotsRandomly();
         }
         /// <summary>
         /// Repeat map simulation
         /// </summary>
-        public void MakeStep()
+        public void MakeStep(Action func)
         {
             if (MapIterationIndex == TestingCycle)
             {
@@ -174,7 +175,7 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 }
                 MapIterationIndex = 0;
             }
-            Map.MakeStep();
+            Map.MakeStepwithFnc(func);
             
             ExperimentInfo = new StringBuilder("Max cycle: " + TestingCycle + " Actual map iteration: " + MapIterationIndex);
             MapIterationIndex++;
