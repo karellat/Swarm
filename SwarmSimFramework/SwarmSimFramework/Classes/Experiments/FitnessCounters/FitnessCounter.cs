@@ -1,4 +1,6 @@
-﻿namespace SwarmSimFramework.Classes.Experiments
+﻿using System.Text;
+
+namespace SwarmSimFramework.Classes.Experiments
 {
     public interface IFitnessCounter
     {
@@ -7,7 +9,8 @@
         /// </summary>
         /// <param name="map"></param>
         /// <returns></returns>
-        double GetMapFitness(Map.Map map); 
+        double GetMapFitness(Map.Map map);
 
+        StringBuilder Log();
     }
 }

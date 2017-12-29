@@ -17,7 +17,9 @@ using SwarmSimFramework.Classes.Robots.MineralRobots;
 using SwarmSimFramework.Classes.MultiThreadExperiment.MineralScene;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Intersection2D;
+using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Experiments.FitnessCounters;
 using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.SupportClasses;
@@ -26,6 +28,7 @@ namespace SwarmSimFramework
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> exp;
@@ -49,6 +52,87 @@ namespace SwarmSimFramework
                         Console.WriteLine("Reading set up from: {0}",args[1]);
                         EvolutionaryStrategies es = ESReader.ReadFrom(args[1]); 
                         es.Run();
+                        return;
+                    }
+                case "-fb":
+                {
+                        IFitnessCounter counter;
+                        Dictionary<string, string> fSettings; 
+
+                        if (args[2].StartsWith("-f"))
+                             fSettings = SettingsReader.GetSettingsFromFile(args[2].Substring(2));
+                        else
+                            throw new NotImplementedException();
+                        
+                        var mapSettings = SettingsReader.GetSettingsFromFile(args[1].Substring(2));
+                        if (args[1].StartsWith("-w"))
+                        {
+                            counter = FitnessCounterReader.GetCounter(FitnessCounterReader.Scene.Wood, fSettings);
+
+                            RobotModel[] robots; 
+                            if (args[3].StartsWith("-") && args[3].Length > 1)
+                            {
+                                robots = new RobotModel[args[3].Length-1];
+                                if (args[3].Contains("c"))
+                                    robots[0] = new RobotModel()
+                                    {
+                                        amount = 5,
+                                        model = new ScoutCutterRobotMem()
+                                    };
+                                if (args[3].Contains("w"))
+                                {
+                                    robots[robots.Length - 1] = new RobotModel()
+                                    {
+                                        amount = 4,
+                                        model = new WoodWorkerRobotMem()
+                                    };
+                                }
+
+                                List<BrainModel<SingleLayerNeuronNetwork>[]> brains = new List<BrainModel<SingleLayerNeuronNetwork>[]>();
+                                for (int i = 4; i < args.Length; i++)
+                                {
+                                    var brainFiles = args[i].Split(new[] { ':' });
+
+                                    if (brainFiles.Length != robots.Length) throw new ArgumentException();
+
+                                    GetBrains(brainFiles, robots).ForEach(x => brains.Add(x));
+                                }
+
+                                MapReader.SetMapValues(MapReader.Scene.Wood,mapSettings);
+                                FitnessBenchmark benchmark = new FitnessBenchmark(FitnessBenchmark.Scene.Wood,counter,robots,brains);
+                                ;
+                                int index = 0;
+                                var benchmarkedList = benchmark.GetSortedBrainsByBenchmark(); 
+                                foreach (var b in benchmarkedList.First().Value)
+                                {
+                                    string json = JsonConvert.SerializeObject(
+                                       b.Brain , BrainModelsSerializer.JsonSettings);
+                                    StreamWriter file = new StreamWriter("benchmarkBrain" + index +".json");
+                                    file.Write(json);
+                                    file.Close();
+                                    index++;
+                                }
+                                Console.WriteLine("Best fitness: {0}", benchmarkedList.First().Key);
+
+
+                            }
+                            else
+                                throw new ArgumentException();
+                        }
+                        else if (args[1].StartsWith("-c"))
+                        {
+                            counter = FitnessCounterReader.GetCounter(FitnessCounterReader.Scene.Competive, fSettings);
+
+                        }
+                        else if (args[1].StartsWith("-m"))
+                        {
+                            counter = FitnessCounterReader.GetCounter(FitnessCounterReader.Scene.Mineral, fSettings);
+
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
                         return;
                     }
                 case "debug":
@@ -103,6 +187,80 @@ namespace SwarmSimFramework
 #if DEBUG
             //Console.ReadLine();
 #endif 
+        }
+
+        private static List<BrainModel<SingleLayerNeuronNetwork>[]> GetBrains(string[] brainFiles,RobotModel[] robots )
+        {
+            var output = new List<BrainModel<SingleLayerNeuronNetwork>[]>();
+            var brainModels = new List<SingleLayerNeuronNetwork>[robots.Length];
+            for (int i = 0; i < brainModels.Length; i++)
+                brainModels[i] = new List<SingleLayerNeuronNetwork>();
+
+
+            for (int i = 0; i < brainFiles.Length; i++)
+            {
+                FileAttributes attr = File.GetAttributes(brainFiles[i]);
+               
+                //detect whether its a directory or file
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    var files = Directory.GetFiles(brainFiles[i]);
+                    var list = new List<BrainModel<SingleLayerNeuronNetwork>>();
+                    foreach (var f in files)
+                        GetBrains(new []{f}, new[] {robots[i]}).ForEach(x => list.Add(x[0]));
+
+                    list.ForEach(x => brainModels[i].Add(x.Brain));
+                }
+                else
+                {
+                    StreamReader file = new StreamReader(brainFiles[i]);
+                    string json = file.ReadToEnd(); 
+                    file.Close();
+
+                    //Try to read as a single brain
+                    SingleLayerNeuronNetwork brain; 
+                    try
+                    {
+                        brain = JsonConvert.DeserializeObject<SingleLayerNeuronNetwork>(json);
+                    }
+                    catch (Exception e)
+                    {
+                        brain = null;
+                    }
+                    
+               
+                    if (brain == null)
+                    {
+                        SingleLayerNeuronNetwork[] brains = BrainSerializer.DeserializeArray<SingleLayerNeuronNetwork>(json);
+                        foreach (var b in brains)
+                            brainModels[i].Add(b);
+                    }
+                    else
+                    {
+                       brainModels[i].Add(brain);
+                    }
+                }
+            }
+
+            
+            for (int i = 0; i < brainModels[0].Count; i++)
+            {
+                var couple = new BrainModel<SingleLayerNeuronNetwork>[robots.Length];
+
+                for (int j = 0; j < brainModels.Length; j++)
+                {
+                    var m = new BrainModel<SingleLayerNeuronNetwork>()
+                    {
+                        Brain = brainModels[j][i],
+                        Robot = robots[j].model
+                    };
+                    Debug.Assert(m.SuitableBrain(m.Brain) && m.SuitableRobot(m.Robot));
+                    couple[j] = m;
+                }
+                output.Add(couple);
+            }
+
+            return output;
         }
 
         private static MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> WoodSceneSelection(string index)

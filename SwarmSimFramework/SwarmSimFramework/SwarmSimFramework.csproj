@@ -82,8 +82,12 @@
     <Compile Include="Classes\Experiments\ESReader.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\DifferencialEvolution.cs" />
     <Compile Include="Classes\Experiments\Evolution Alg\EvolutionaryStrategies.cs" />
+    <Compile Include="Classes\Experiments\FitnessBenchmark.cs" />
     <Compile Include="Classes\Experiments\FitnessCounters\FitnessCounter.cs" />
+    <Compile Include="Classes\Experiments\FitnessCounters\FitnessCounterReader.cs" />
     <Compile Include="Classes\Experiments\FitnessCounters\WoodSceneFitnessCounter.cs" />
+    <Compile Include="Classes\Experiments\MapReader.cs" />
+    <Compile Include="Classes\Experiments\SettingsReader.cs" />
     <Compile Include="Classes\Experiments\TestingMaps\TestingBrain.cs" />
     <Compile Include="Classes\Map\EntityMap .cs" />
     <Compile Include="Classes\Map\Intersection .cs" />
@@ -189,4 +193,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

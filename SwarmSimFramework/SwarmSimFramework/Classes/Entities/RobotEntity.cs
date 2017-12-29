@@ -442,9 +442,16 @@ namespace SwarmSimFramework.Classes.Entities
             s.AppendLine("\t Container info: ");
             s.AppendLine("\t\t Max size of container: " + ContainerMaxCapacity + " Actual size of container: " +
                          ActualContainerCount);
+            int index = 0;
             if (ActualContainerCount > 0)
                 s.AppendLine("\t\t Top of container: " + Container.Peek().GetType());
-            return s;
+            s.AppendLine();
+            foreach (var i  in Container.ToArray())
+            {
+                s.AppendLine("\t\t\t " + index + ". item of container - " + i.GetType());
+                index++;
+            }
+                        return s;
         }
         /// <summary>
         /// Consume fuel of single move

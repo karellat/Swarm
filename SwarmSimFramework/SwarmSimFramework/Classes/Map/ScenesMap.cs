@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
 using System.Numerics;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 using SwarmSimFramework.Interfaces;
 
@@ -55,12 +56,10 @@ namespace SwarmSimFramework.Classes.Map
         /// Amount woods
         /// </summary>
         public static int AmountOfWoods;
-
         /// <summary>
         /// Amount trees
         /// </summary>
-        public static int AmountOfTrees;
-
+        public static int AmountOfTrees= 200;
         /// <summary>
         /// Max amount of robots in map 
         /// </summary>
@@ -111,7 +110,7 @@ namespace SwarmSimFramework.Classes.Map
             //Prepare objects of map 
             RawMaterialEntity tree = new RawMaterialEntity(new Vector2(0, 0), 5, 10, 10);
             WoodEntity wood = new WoodEntity(new Vector2(0, 0), 5, 10);
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth / 2, MapHeight / 2), 30);
+            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth / 2, MapHeight / 2), 60);
             //Generate randomly deployed tree
             Classes.Map.Map preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, new List<CircleEntity>() { initPosition });
             List<CircleEntity> trees =
@@ -122,7 +121,7 @@ namespace SwarmSimFramework.Classes.Map
             List<CircleEntity> woods = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, AmountOfWoods);
             List<CircleEntity> passive = woods;
 
-            List<RadioEntity> constSignals = new List<RadioEntity>(new []{new RadioEntity(new Vector2(MapWidth/2,MapHeight/2),50,2)});
+            List<RadioEntity> constSignals = new List<RadioEntity>(new []{new RadioEntity(new Vector2(MapWidth/2,MapHeight/2),60,2)});
             foreach (var t in trees)
                 passive.Add(t);
             return new Map(MapHeight,MapWidth,null,passive,null,constSignals);
@@ -177,6 +176,20 @@ namespace SwarmSimFramework.Classes.Map
         public static Map MakeMap(RobotModel[] models)
         {
             return MakeMapModel(models).ConstructMap();
+        }
+
+        public static StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder();
+
+            s.AppendLine("AmountOfWoods = " + AmountOfWoods);
+            s.AppendLine("AmountOfTrees = " + AmountOfTrees);
+            s.AppendLine("MaxOfAmountRobots = " + MaxOfAmountRobots);
+            s.AppendLine("MapHeight = " + MapHeight);
+            s.AppendLine("MapWidth = " + MapWidth);
+            s.AppendLine("RobotMaxRadius = " + RobotMaxRadius);
+
+            return s; 
         }
     }
 
@@ -317,6 +330,11 @@ namespace SwarmSimFramework.Classes.Map
         public static Map MakeMap(RobotModel[] models)
         {
             return MakeMapModel(models).ConstructMap();
+        }
+
+        public static StringBuilder Log()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -496,5 +514,9 @@ namespace SwarmSimFramework.Classes.Map
             return MakeMapModel(models).ConstructMap();
         }
 
+        public static StringBuilder Log()
+        {
+            throw new NotImplementedException();
+        }
     }
 }   

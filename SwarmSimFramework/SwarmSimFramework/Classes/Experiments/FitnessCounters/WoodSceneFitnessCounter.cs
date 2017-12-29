@@ -1,4 +1,5 @@
 ﻿using System.CodeDom;
+using System.Text;
 using SwarmSimFramework.Classes.Entities;
 
 namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
@@ -78,6 +79,20 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
                 (DiscoveredTrees * ValueOfDiscoveredTree) + 
                 (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood) +
                    (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
+        }
+
+        public StringBuilder Log()
+        {
+            StringBuilder s = new StringBuilder();
+
+            s.AppendLine("ValueOfDiscoveredTree = " + ValueOfDiscoveredTree);
+            s.AppendLine("ValueOfCollision = " + ValueOfCollision);
+            s.AppendLine("ValueOfCutWood = " + ValueOfCutWood);
+            s.AppendLine("ValueOfStockedWood = " + ValueOfStockedWood);
+            s.AppendLine("ValueOfContaineredWood = " + ValueOfContaineredWood);
+            s.AppendLine("ValueOfContaineredNoWood = " + ValueOfContaineredNoWood);
+
+            return s; 
         }
     }
 }
