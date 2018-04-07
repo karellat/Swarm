@@ -13,12 +13,12 @@ Name:WoodCuttingES
 WorkingDir:WoodCutES
 Elitism:false
 #F SETTINGS
-ValueOfCutWood:10
+ValueOfCutWood:0
 ValueOfCollision:0
-ValueOfDiscoveredTree:1
+ValueOfDiscoveredTree:10
 ValueOfStockedWood:0
 ValueOfContaineredWood:0
 #MAP SETTINGS 
-AmountOfTrees:400
-AmountOfWoods:0
+AmountOfTrees:300
+AmountOfWoods:100
 

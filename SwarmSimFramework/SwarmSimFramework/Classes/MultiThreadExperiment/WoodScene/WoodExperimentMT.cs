@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -30,7 +31,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public double ValueOfStockedWood = 0;
         public double ValueOfContaineredWood = 0;
         public double ValueOfContaineredNoWood = 0;
-
+        public double ValueOfDistanceToMiddle = 1;
 
         [JsonProperty]
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
@@ -211,7 +212,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 {
                     amountOfCollision += r.CollisionDetected;
                 }
-
             }
 
             return (DiscoveredTrees * ValueOfDiscoveredTree) + (ValueOfCollision * amountOfCollision) + (CutWoods * ValueOfCutWood);
@@ -223,13 +223,22 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //Count wood on the stockPlace
             var stockSignal = map.constantRadioSignal[0];
             var stockItems = map.CollisionColor(stockSignal);
-            int minedWood = stockItems.ContainsKey(Entity.EntityColor.WoodColor)
-                ? stockItems[Entity.EntityColor.WoodColor].Amount
-                : 0;
+
+            int minedWood = 0;
+            double distanceSum = 0;
+            var collidingItems = map.GetAllCollidingPassive(stockSignal);
+            foreach (var item in collidingItems)
+            {
+                if (item.Color == Entity.EntityColor.WoodColor)
+                    minedWood++;
+                if (ValueOfDistanceToMiddle != 0)
+                    distanceSum += ((stockSignal.Radius + stockSignal.Radius)
+                        - Intersection2D.Intersections.ManhattanDistance(stockSignal.Middle, item.Middle));
+            }
 
             // Count wood in containers 
             int woodInContainers = 0;
-            int noWoodInContainers = 0; 
+            int noWoodInContainers = 0;
 
             foreach (var r in map.Robots)
             {
@@ -242,7 +251,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 }
             }
 
-            return (ValueOfContaineredNoWood * noWoodInContainers) + (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood);
+            return (ValueOfContaineredNoWood * noWoodInContainers) +
+                (ValueOfContaineredWood * woodInContainers) + (ValueOfStockedWood * minedWood) + distanceSum;
         }
 
         

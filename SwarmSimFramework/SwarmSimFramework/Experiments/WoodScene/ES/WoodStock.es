@@ -16,8 +16,8 @@ Elitism:false
 ValueOfCutWood:100
 ValueOfCollision:-1
 ValueOfDiscoveredTree:0
-ValueOfStockedWood:1010
-ValueOfContaineredWood:1000
+ValueOfStockedWood:1000
+ValueOfContaineredWood:100
 ValueOfContaineredNoWood:-100
 #MAP SETTINGS 
 AmountOfTrees:200

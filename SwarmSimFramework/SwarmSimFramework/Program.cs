@@ -91,7 +91,7 @@ namespace SwarmSimFramework
                                 List<BrainModel<SingleLayerNeuronNetwork>[]> brains = new List<BrainModel<SingleLayerNeuronNetwork>[]>();
                                 for (int i = 4; i < args.Length; i++)
                                 {
-                                    var brainFiles = args[i].Split(new[] { ':' });
+                                    var brainFiles = args[i].Split(new[] { '#' });
 
                                     if (brainFiles.Length != robots.Length) throw new ArgumentException();
 
@@ -115,7 +115,7 @@ namespace SwarmSimFramework
                                 Console.WriteLine("Best fitness: {0}", benchmarkedList.First().Key);
 
 
-                            }
+                             }
                             else
                                 throw new ArgumentException();
                         }

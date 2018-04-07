@@ -412,6 +412,15 @@ namespace SwarmSimFramework.Classes.Map
             return theNearestIntersection;
         }
 
+        public List<CircleEntity> GetAllCollidingPassive(CircleEntity circle)
+        {
+            List<CircleEntity> output = new List<CircleEntity>();
+            foreach (var p in PasiveEntities.CircleIntersection(circle))
+                if(Intersection2D.Intersections.CircleCircleIntersection(circle.Middle, circle.Radius, p.Middle, p.Radius))
+                    output.Add(p);
+
+            return output;
+        }
 
         //COLISION WITH RADIO BROADCASTING
         /// <summary>

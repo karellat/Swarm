@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using MathNet.Numerics.Integration;
 
 namespace Intersection2D
 {
@@ -216,6 +217,20 @@ namespace Intersection2D
             }
         }
 
+        public static double ManhattanDistance(Vector2 a, Vector2 b)
+        {
+            return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        }
+
+        public static double Distance(Vector2 a, Vector2 b)
+        {
+            return Math.Sqrt(SquareDistance(a,b)); 
+        }
+
+        public static double SquareDistance(Vector2 a, Vector2 b)
+        {
+            return (a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y);
+        }
 
 
         public static class MyExtensions

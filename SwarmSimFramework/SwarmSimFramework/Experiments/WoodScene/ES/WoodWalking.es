@@ -13,9 +13,9 @@ Name:WoodWalkingES
 WorkingDir:WoodWalkES
 Elitism:false
 #F SETTINGS
-ValueOfCutWood:0
-ValueOfCollision:0
-ValueOfDiscoveredTree:10
+ValueOfCutWood:10000
+ValueOfCollision:-1
+ValueOfDiscoveredTree:1000
 ValueOfStockedWood:0
 ValueOfContaineredWood:0
 #MAP SETTINGS 

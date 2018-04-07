@@ -170,6 +170,7 @@
     <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerPickUpMem.expe" />
     <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerWalk.expe" />
     <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerWalkMem.expe" />
+    <None Include="Experiments\WoodScene\ES\WoodStock.es" />
     <None Include="Experiments\WoodScene\ES\WoodCollecting.es" />
     <None Include="Experiments\WoodScene\ES\WoodCoop.es" />
     <None Include="Experiments\WoodScene\ES\WoodWWalking.es" />
