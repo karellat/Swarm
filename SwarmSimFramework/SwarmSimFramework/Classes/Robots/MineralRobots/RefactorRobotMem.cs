@@ -15,17 +15,29 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
 
             //Memory stick 
             MemoryStick mem = new MemoryStick(10, this);
-            ISensor[] sensors = new ISensor[7];
+            ISensor[] sensors = new ISensor[17];
             //Fuel & Line sensor 
             sensors[0] = new FuelLineSensor(this,10,0);
             sensors[1] = new LineTypeSensor(this,10,0);
+
             //Touch sensors
-            sensors[2] = new TouchSensor(this, 0.1f, DegreesToRadians(90));
-            sensors[3] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
-            sensors[4] = new TouchSensor(this, 0.1f, DegreesToRadians(270));
+            sensors[2] = new TouchSensor(this, 0.3f, DegreesToRadians(90));
+            sensors[3] = new TouchSensor(this, 0.3f, DegreesToRadians(180));
+            sensors[4] = new TouchSensor(this, 0.3f, DegreesToRadians(270));
 
             sensors[5] = new RadioSensor(this, 100);
             sensors[6] = mem;
+            sensors[7] = new FuelLineSensor(this, 15, DegreesToRadians(45));
+            sensors[8] = new LineTypeSensor(this, 15, DegreesToRadians(45));
+            sensors[9] = new FuelLineSensor(this, 15, DegreesToRadians(-45));
+            sensors[10] = new LineTypeSensor(this, 15, DegreesToRadians(-45));
+            sensors[11] = new FuelLineSensor(this, 15, DegreesToRadians(90));
+            sensors[12] = new LineTypeSensor(this, 15, DegreesToRadians(90));
+            sensors[13] = new FuelLineSensor(this, 15, DegreesToRadians(180));
+            sensors[14] = new LineTypeSensor(this, 15, DegreesToRadians(180));
+            sensors[15] = new FuelLineSensor(this, 15, DegreesToRadians(270));
+            sensors[16] = new LineTypeSensor(this, 15, DegreesToRadians(270));
+
             this.Sensors = sensors;
 
             IEffector[] effectors = new IEffector[7];

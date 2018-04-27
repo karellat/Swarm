@@ -56,13 +56,11 @@ namespace SwarmSimVisu
         public BrainRobotConnectionWindow()
         {
             InitializeComponent();
-            modelCombox.Items.Add("Wood Cutter");
             modelCombox.Items.Add("Wood Cutter MEM");
-            modelCombox.Items.Add("Wood Worker");
             modelCombox.Items.Add("Wood Worker MEM");
-            modelCombox.Items.Add("Mineral Refactor");
-            modelCombox.Items.Add("Mineral Scout");
-            modelCombox.Items.Add("Mineral Worker");
+            modelCombox.Items.Add("Mineral Refactor MEM");
+            modelCombox.Items.Add("Mineral Scout MEM");
+            modelCombox.Items.Add("Mineral Worker MEM");
             preparedRobots = new List<PreparedRobot>();
             RobotModel = null;
             SelectedBrain = null;
@@ -105,44 +103,35 @@ namespace SwarmSimVisu
         {
             switch (modelCombox.SelectedIndex)
             {
+
                 case 0:
-                {
-                    RobotModel = new ScoutCutterRobot(Vector2.Zero);
-                    break;
-                }
-                case 1:
                 {
                     RobotModel = new ScoutCutterRobotMem(Vector2.Zero);
                     break;
                 }
-                case 2:
-                {
-                    RobotModel = new WoodWorkerRobot(Vector2.Zero);
-                    break;
-                }
-                case 3:
+                case 1:
                 {
                     RobotModel = new WoodWorkerRobotMem(Vector2.Zero);
                     break;
                 }
+                case 2:
+                {
+                    RobotModel = new RefactorRobotMem(Vector2.Zero, 2000);
+                    break;
+                }
+                case 3:
+                {
+                        RobotModel = new ScoutRobotMem(Vector2.Zero,2000);
+                        break;
+                }
                 case 4:
-                    {
-                        RobotModel = new RefactorRobot(Vector2.Zero,2000);
+                {
+                        RobotModel = new WorkerRobotMem(Vector2.Zero,2000);
                         break;
-                    }
-                case 5:
-                    {
-                        RobotModel = new ScoutRobot(Vector2.Zero,2000);
-                        break;
-                    }
-                case 6:
-                    {
-                        RobotModel = new WorkerRobot(Vector2.Zero,2000);
-                        break;
-                    }
+                }
                 default:
                 {
-                    MessageBox.Show("None robot selecter! ");
+                    MessageBox.Show("None robot selected! ");
                     return;
                 }
             }

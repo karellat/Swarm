@@ -28,19 +28,22 @@ namespace SwarmSimFramework.Classes.Experiments
     {
         private struct Mutation
         {
-            
+
             public static Mutation Zero(int size)
             {
-                Mutation m; 
+                Mutation m;
                 m.weigths = new float[size];
                 Debug.Assert(m.weigths.All(f => f == 0.0f));
-                return m; 
+                return m;
             }
+
             public float[] weigths;
 
-            public static BrainModel<SingleLayerNeuronNetwork>[] operator+ (BrainModel<SingleLayerNeuronNetwork>[] brain, Mutation m)
+            public static BrainModel<SingleLayerNeuronNetwork>[] operator +(
+                BrainModel<SingleLayerNeuronNetwork>[] brain, Mutation m)
             {
-                BrainModel<SingleLayerNeuronNetwork>[] newBrains = new BrainModel<SingleLayerNeuronNetwork>[brain.Length];
+                BrainModel<SingleLayerNeuronNetwork>[] newBrains =
+                    new BrainModel<SingleLayerNeuronNetwork>[brain.Length];
                 for (int i = 0; i < newBrains.Length; i++)
                 {
                     newBrains[i] = new BrainModel<SingleLayerNeuronNetwork>
@@ -56,7 +59,7 @@ namespace SwarmSimFramework.Classes.Experiments
                     foreach (var n in b.Brain.Neurons)
                         expectedSizeOfWeights += n.Weights.Length;
                 }
-           Debug.Assert(m.weigths.Length == expectedSizeOfWeights );
+                Debug.Assert(m.weigths.Length == expectedSizeOfWeights);
 #endif
 
                 int index = 0;
@@ -68,12 +71,12 @@ namespace SwarmSimFramework.Classes.Experiments
                             return origin + change;
                         });
                 }
-                return newBrains; 
+                return newBrains;
             }
 
-            public static Mutation operator*(Mutation a, float b)
+            public static Mutation operator *(Mutation a, float b)
             {
-               
+
                 var newWeights = new float[a.weigths.Length];
                 for (int i = 0; i < a.weigths.Length; i++)
                     newWeights[i] = a.weigths[i] * b;
@@ -83,15 +86,15 @@ namespace SwarmSimFramework.Classes.Experiments
 
             public static Mutation operator +(Mutation a, Mutation b)
             {
-                if(a.weigths.Length != b.weigths.Length)
+                if (a.weigths.Length != b.weigths.Length)
                     throw new ArgumentException("a and b have different dimensions");
                 Mutation c;
-                
+
                 c.weigths = new float[a.weigths.Length];
                 for (int i = 0; i < c.weigths.Length; i++)
                     c.weigths[i] = a.weigths[i] + b.weigths[i];
 
-                return c; 
+                return c;
 
             }
 
@@ -100,18 +103,22 @@ namespace SwarmSimFramework.Classes.Experiments
         public string Name = "nameOfES";
 
         public string WorkingDir = "ES";
+
         /// <summary>
         /// Number of evaluated brains
         /// </summary>
-        public  int PopulationSize = 2;
+        public int PopulationSize = 2;
+
         /// <summary>
         /// Turn on elitism
         /// </summary>
         public bool Elitism = false;
+
         /// <summary>
         /// Maximum of best brains 
         /// </summary>
         public int bestBrainsCount = 20;
+
         /// <summary>
         /// Mutation step mutation size
         /// </summary>
@@ -161,7 +168,15 @@ namespace SwarmSimFramework.Classes.Experiments
 #endif
         }
 
-        /// <summary>
+        private void CloseGraphs()
+        {
+            foreach (var g in Graphs)
+            {
+                g.Close();
+            }       
+        }
+
+    /// <summary>
         /// 
         /// </summary>
         /// <param name="f"></param>
@@ -189,11 +204,11 @@ namespace SwarmSimFramework.Classes.Experiments
                     return Task.Run(() => SingleIndividualRun(i));
                 })
                 .ToArray();             //Init number of threads same as the number of evolving individual
-            Task.WaitAll(tasks);           
-            Console.WriteLine("All threads finnished");
-
-            //Serialize brains
+            Task.WaitAll(tasks);    
             
+            Console.WriteLine("All threads finnished");
+            CloseGraphs();
+            //Serialize brains
         }
 
         public void SingleIndividualRun(int indexOfIndividual)

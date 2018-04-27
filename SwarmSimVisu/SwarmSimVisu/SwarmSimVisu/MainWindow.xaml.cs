@@ -121,7 +121,7 @@ namespace SwarmSimVisu
                     }
 
 
-            
+                
             //Maximaze window
             WindowState = WindowState.Maximized;
             RunningExperiment.Init();

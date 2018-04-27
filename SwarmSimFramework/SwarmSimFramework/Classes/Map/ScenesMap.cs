@@ -223,31 +223,78 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Max size of robot
         /// </summary>
-        public static float RobotMaxRadius = 5;
+        public static float RobotMaxRadius = 15;
+        /// <summary>
+        /// Position for robot to start
+        /// </summary>
+        public static float initHeight = MapHeight / 2.0f;
+        /// <summary>
+        /// Position for robot to start 
+        /// </summary>
+        public static float initWidth = MapWidth / 2.0f;
+        /// <summary>
+        /// Radius for starting place of robots
+        /// </summary>
+        public static float initRadius = 95;
+
         /// <summary>
         /// Init positions of vector 
         /// </summary>
         /// <returns></returns>
         public static Vector2[] InitPositionOfRobot()
         {
+
+            if(MaxOfAmountRobots > 15) 
+                throw new ArgumentException("More robot than the maximum. Maximum is 15 and trying to add "
+                    + MaxOfAmountRobots.ToString());
+
+            if (RobotMaxRadius > 15)
+                throw new ArgumentException("Bigger robot than the maximum. Maximum size is 15 and trying to add "
+                                            + RobotMaxRadius.ToString());
+
+            List<CircleEntity> placedEntities = new List<CircleEntity>();
             List<Vector2> vectors = new List<Vector2>();
-            float sW = MapWidth / 2 + 44;
-            float sH = MapHeight / 2 + 44;
-            for (int i = 0; i < 9; i++)
+            int maxH = (int)Math.Floor(initHeight + (initRadius - RobotMaxRadius));
+            int minH = (int)Math.Floor(initHeight - (initRadius - RobotMaxRadius));
+
+            int maxW = (int) Math.Floor(initWidth + (initRadius - RobotMaxRadius));
+            int minW = (int) Math.Floor(initWidth - (initRadius - RobotMaxRadius));
+
+            for (int attemps = 0; attemps < 1000; attemps++)
             {
-                var nW = sW - 11 * i;
-                var nH = sH - 11 * i;
-                if (nW == MapWidth / 2 && nH == MapHeight / 2)
+                for (int amountOfRobots = 0; amountOfRobots < MaxOfAmountRobots; amountOfRobots++)
                 {
-                    vectors.Add(new Vector2(nW, nH));
+                    for (int placeRobotAttempts = 0; placeRobotAttempts < 1000; placeRobotAttempts++)
+                    {
+                        //Create new random position of the robot, inside the initial position 
+                        float vH = SupportClasses.RandomNumber.GetRandomInt(minH, maxH);
+                        float vW = SupportClasses.RandomNumber.GetRandomInt(minW, maxW);
+                        Vector2 middle = new Vector2(vW, vH);
+                        ObstacleEntity e = new ObstacleEntity(middle, RobotMaxRadius);
+
+                        bool correct = true; 
+                        foreach (var p in placedEntities)
+                        {
+                            if (Map.Colides(e, p))
+                            {
+                                correct = false;
+                                break; 
+                            }
+                                
+                        }
+
+                        if (correct)
+                        {
+                            vectors.Add(e.Middle);
+                            placedEntities.Add(e);
+                            break;
+                        }
+                    }
                 }
-                else
-                {
-                    vectors.Add(new Vector2(nW, MapHeight / 2));
-                    vectors.Add(new Vector2(MapWidth / 2, nH));
-                }
+                if (placedEntities.Count == MaxOfAmountRobots)
+                    return vectors.ToArray();
             }
-            return vectors.ToArray();
+            throw new ArgumentOutOfRangeException("Unable to place initial position ");
         }
 
         public static Map MakeEmptyMap()
@@ -256,7 +303,7 @@ namespace SwarmSimFramework.Classes.Map
             RawMaterialEntity mineral = new RawMaterialEntity(new Vector2(0, 0), 5, 100, 3);
             ObstacleEntity obstacle = new ObstacleEntity(Vector2.Zero, 5);
 
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth / 2, MapHeight / 2), 50);
+            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(initWidth, initHeight), initRadius);
             //Generate randomly deployed minerals 
             Classes.Map.Map preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, new List<CircleEntity>() { initPosition });
             List<CircleEntity> minerals =
@@ -271,16 +318,20 @@ namespace SwarmSimFramework.Classes.Map
                 passive.Add(t);
             preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, passive.ToList());
             List<FuelEntity> fuels;
+
             if (AmountOfFreeFuel > 0)
                 fuels =
                     Classes.Map.Map.GenerateRandomPos<FuelEntity>(preparedMap, new FuelEntity(Vector2.Zero, 5, 1000),
                         AmountOfFreeFuel);
             else
                 fuels = null;
+
+            fuels = null;
                     
             return new Map(MapHeight, MapWidth, null, passive, fuels, null);
-
         }
+
+
         /// <summary>
         /// Create map with given models 
         /// </summary>

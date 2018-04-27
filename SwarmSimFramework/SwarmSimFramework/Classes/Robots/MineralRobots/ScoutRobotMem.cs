@@ -30,9 +30,9 @@ namespace SwarmSimFramework.Classes.Robots.MineralRobots
             //Type Line sensor
             sensors[7] =  new TypeCircleSensor(this,50);
             //Touch sensors
-            sensors[8] = new TouchSensor(this,0.1f,DegreesToRadians(90));
-            sensors[9] = new TouchSensor(this, 0.1f, DegreesToRadians(180));
-            sensors[10] = new TouchSensor(this,0.1f,DegreesToRadians(270));
+            sensors[8] = new TouchSensor(this,0.3f,DegreesToRadians(90));
+            sensors[9] = new TouchSensor(this, 0.3f, DegreesToRadians(180));
+            sensors[10] = new TouchSensor(this,0.3f,DegreesToRadians(270));
             //Radio sensor 
             sensors[11] = new RadioSensor(this,100);
             sensors[12] = mem;

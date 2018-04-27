@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
@@ -21,11 +22,25 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public double ValueOfStockedMineral = 0.0;
         public double ValueOfRefactoredFuel = 0.0;
         public double ValueOfRemainingFuel = 0.0;
+        public double ValueOfCollisions = 0.0;
 
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
 
-        protected override void Init(string[] nameOfInitialFile)
+        protected void ShowSettings()
         {
+            var bindingFlags = BindingFlags.Instance |
+                               BindingFlags.NonPublic |
+                               BindingFlags.Public;
+            var fieldValues = this.GetType()
+                .GetFields(bindingFlags);
+            foreach (var f in  fieldValues)
+                Console.WriteLine("{0} : {1}", f.Name, f.GetValue(this)); 
+        }
+
+    protected override void Init(string[] nameOfInitialFile)
+        {
+            Console.WriteLine("Experiment settings");
+            ShowSettings();
             Map.MineralScene.AmountOfMineral = AmountOfMineral;
             Map.MineralScene.AmountOfObstacles = AmountOfObstacle;
             Map.MineralScene.AmountOfFreeFuel = AmountOfFreeFuel;
@@ -161,7 +176,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             int discoveredMineral = 0;
             int fuelInMap = 0;
             int deadRobots = 0;
-
+            long collisions = 0; 
             //discovered minerals
             foreach (var p in map.PasiveEntities)
             {
@@ -179,6 +194,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             double fuelInTanks = 0;
             foreach (var r in map.Robots)
             {
+                collisions += r.CollisionDetected;
                 //Count dead robots
                 if (!r.Alive)
                 {
@@ -189,6 +205,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 //Count remaining fuel 
                 fuelInTanks += r.FuelAmount;
 
+
                 foreach (var item in r.ContainerList())
                 {
                     if (item.Color == Entity.EntityColor.FuelColor)
@@ -197,7 +214,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         mineralInContainer++;
                 }
             }
-            return discoveredMineral * ValueOfDiscoveredMineral + mineralInContainer * ValueOfStockedMineral +
+            return ValueOfCollisions * collisions  + discoveredMineral * ValueOfDiscoveredMineral + mineralInContainer * ValueOfStockedMineral +
                    (fuelInContainers + fuelInMap) * ValueOfRefactoredFuel + fuelInTanks * ValueOfRemainingFuel;
         } 
     }

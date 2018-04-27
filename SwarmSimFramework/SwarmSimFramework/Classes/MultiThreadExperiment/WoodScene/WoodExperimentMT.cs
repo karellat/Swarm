@@ -31,7 +31,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public double ValueOfStockedWood = 0;
         public double ValueOfContaineredWood = 0;
         public double ValueOfContaineredNoWood = 0;
-        public double ValueOfDistanceToMiddle = 1;
+        public double ValueOfDistanceToMiddle = 0;
 
         [JsonProperty]
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
@@ -231,9 +231,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             {
                 if (item.Color == Entity.EntityColor.WoodColor)
                     minedWood++;
-                if (ValueOfDistanceToMiddle != 0)
-                    distanceSum += ((stockSignal.Radius + stockSignal.Radius)
-                        - Intersection2D.Intersections.ManhattanDistance(stockSignal.Middle, item.Middle));
             }
 
             // Count wood in containers 
