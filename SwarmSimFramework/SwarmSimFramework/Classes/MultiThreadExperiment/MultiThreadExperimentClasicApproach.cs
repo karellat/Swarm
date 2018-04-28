@@ -141,7 +141,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                             ThreadPool.QueueUserWorkItem((state => SingleBrainEvaluationMt(threadIndex))); 
                         }
 
-                        while (!GenerationFinnished) Thread.Sleep(100);
+                        while (!GenerationFinnished)  Thread.Sleep(100);
                 }
                 //Change generation, clear buffer 
                 for (int j = 0; j < ActualGeneration.Length; j++)

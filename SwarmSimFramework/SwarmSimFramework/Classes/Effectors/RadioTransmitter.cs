@@ -83,7 +83,7 @@ namespace SwarmSimFramework.Classes.Effectors
         {
             //Create representation of radio signal 
             radioSignal = new RadioEntity(robot.Middle,radiusOfTransmitting,0);
-            Debug.Assert(availableSignals.All((x) => x >= -1 && x <= 1 ));
+            Debug.Assert(availableSignals.All((x) => x >= -1 && x <= 2 ));
             this.availableSignals = availableSignals; 
             //Create localBounds and normalization fncs
             Dimension = availableSignals.Length;
