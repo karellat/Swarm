@@ -85,6 +85,7 @@
     <Compile Include="Classes\Experiments\FitnessBenchmark.cs" />
     <Compile Include="Classes\Experiments\FitnessCounters\FitnessCounter.cs" />
     <Compile Include="Classes\Experiments\FitnessCounters\FitnessCounterReader.cs" />
+    <Compile Include="Classes\Experiments\FitnessCounters\MineralSceneFitnessCounter.cs" />
     <Compile Include="Classes\Experiments\FitnessCounters\WoodSceneFitnessCounter.cs" />
     <Compile Include="Classes\Experiments\MapReader.cs" />
     <Compile Include="Classes\Experiments\SettingsReader.cs" />

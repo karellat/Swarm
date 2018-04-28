@@ -243,6 +243,7 @@ namespace SwarmSimFramework.Classes.Experiments
                     else
                     {
                         var modelType = Type.GetType("SwarmSimFramework.Classes.Robots." + constructor[0]);
+                        
                         RobotEntity robot = (RobotEntity)Activator.CreateInstance(modelType);
                         int count = int.Parse(args[1]);
                         models.Add(new RobotModel() { model = robot, amount = count });
@@ -276,11 +277,23 @@ namespace SwarmSimFramework.Classes.Experiments
                         var r = robots[index];
                         RobotEntity Robot;
                         var parameters = r.Split(new[] {'-'});
-                        var robotConstructor = parameters[0].Split(new[] {'(', ')'},StringSplitOptions.RemoveEmptyEntries);
+                        var robotConstructor =
+                            parameters[0].Split(new[] {'(', ')'}, StringSplitOptions.RemoveEmptyEntries);
                         var robotType = Type.GetType("SwarmSimFramework.Classes.Robots." + robotConstructor[0]);
-                        models[i][index-1].Robot = (RobotEntity) Activator.CreateInstance(robotType);
+                        if (robotConstructor.Length > 1)
+                        {
+                            int argumentsCount = robotConstructor.Length - 1;
+                            Object[] arguments = new object[argumentsCount];
+                            for (int j = 0; j < argumentsCount; j++)
+                            {
+                                arguments[j] = int.Parse(robotConstructor[j+1]);
+                            }
+                            models[i][index-1].Robot = (RobotEntity) Activator.CreateInstance(robotType,arguments);
+                        }
+                        else
+                            models[i][index-1].Robot = (RobotEntity) Activator.CreateInstance(robotType);
 
-                        
+
 
 
                         if (parameters[1] == "G")
