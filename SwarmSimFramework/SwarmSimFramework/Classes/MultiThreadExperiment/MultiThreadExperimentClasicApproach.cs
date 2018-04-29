@@ -76,7 +76,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Graphs of brains
         /// </summary>
-        protected StreamWriter[] Graphs; 
+        protected StreamWriter[] Graphs;
+        /// <summary>
+        /// Elapsed time
+        /// </summary>
+        protected double ElapsedTime = 0;
+
 
         //GENERATION 
         /// <summary>
@@ -126,22 +131,22 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             }
 
             //Stop watch count 
-            var watch = new Stopwatch(); 
-            for (int generationIndex  = 0; generationIndex  < NumberOfGenerations; generationIndex ++)
+            var watch = new Stopwatch();
+            for (int generationIndex = 0; generationIndex < NumberOfGenerations; generationIndex++)
             {
-                watch.Reset(); 
+                watch.Reset();
                 watch.Start();
                 GenerationFinnished = false;
                 FreeBrainIndex = 0;
-                lock(ControlLock)
+                lock (ControlLock)
                 {
-                        for (int i = 0; i < PopulationSize; i++)
-                        {
-                            int threadIndex = i;
-                            ThreadPool.QueueUserWorkItem((state => SingleBrainEvaluationMt(threadIndex))); 
-                        }
+                    for (int i = 0; i < PopulationSize; i++)
+                    {
+                        int threadIndex = i;
+                        ThreadPool.QueueUserWorkItem((state => SingleBrainEvaluationMt(threadIndex)));
+                    }
 
-                        while (!GenerationFinnished)  Thread.Sleep(100);
+                    while (!GenerationFinnished) Thread.Sleep(100);
                 }
                 //Change generation, clear buffer 
                 for (int j = 0; j < ActualGeneration.Length; j++)
@@ -149,8 +154,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     ActualGeneration[j] = new List<T>(FollowingGeneration[j].ToArray());
                     FollowingGeneration[j].Clear();
                 }
-                watch.Stop(); 
-                Console.WriteLine(generationIndex +". Generation finnished, elapsed time " + watch.ElapsedMilliseconds + " miliseconds");
+                watch.Stop();
+                ElapsedTime += watch.ElapsedMilliseconds;
+                int remaining = NumberOfGenerations - generationIndex - 1;
+                double average = (ElapsedTime / (generationIndex + 1));
+                Console.WriteLine("{0}. gen. finnished, {1} gen. remaining , elapsed time {2}(average {3:##.00}), estimated end time: {4:t}",
+                    generationIndex, remaining, watch.ElapsedMilliseconds, average, DateTime.Now.AddMilliseconds(remaining*average));
                 //Log to console generation 
                 if (generationIndex % LogGenerationIndex == 0)
                 {

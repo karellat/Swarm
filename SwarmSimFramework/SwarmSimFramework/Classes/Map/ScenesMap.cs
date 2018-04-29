@@ -326,11 +326,8 @@ namespace SwarmSimFramework.Classes.Map
             else
                 fuels = null;
 
-            fuels = null;
-                    
             return new Map(MapHeight, MapWidth, null, passive, fuels, null);
         }
-
 
         /// <summary>
         /// Create map with given models 
