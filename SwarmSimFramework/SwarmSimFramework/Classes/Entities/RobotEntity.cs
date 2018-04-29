@@ -184,8 +184,17 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         public void PrepareMove(Map.Map map)
         {
+
+
            if(Brain == null)
                 throw  new NotImplementedException("Robot body without brain can not move");
+
+            //Check if the is alive
+            if (FuelAmount < 0 || Health < 0)
+            {
+                Alive = false;
+                return;
+            }
 
             //Read all sensors && return 
             float[] readValues = new float[SensorsDimension];

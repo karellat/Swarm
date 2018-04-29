@@ -44,7 +44,6 @@ namespace SwarmSimFramework.Classes.Effectors
             this.MoveTo(robot.Middle);
             radioSignal.MoveTo(robot.Middle);
 
-            lastSettings = settings;
             float max = settings[0];
             int index = 0;
             for (int i = 1; i < settings.Length; i++)
@@ -55,6 +54,7 @@ namespace SwarmSimFramework.Classes.Effectors
                     max = settings[i];
                 }
             }
+            LastSendSignal = availableSignals[index];
             //Change signal value & added it to the map 
             if (availableSignals[index] < 0)
                 return;
@@ -63,7 +63,7 @@ namespace SwarmSimFramework.Classes.Effectors
             map.RadioEntities.Add(radioSignal); 
         }
         /// <summary>
-        /// Local bounds of internvalues, transmitting Value
+        /// Local bounds of intern values, transmitting Value
         /// </summary>
         [JsonProperty]
         public Bounds[] LocalBounds { get; protected set; }
@@ -134,10 +134,8 @@ namespace SwarmSimFramework.Classes.Effectors
         {
             return (IEffector)DeepClone();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public float[] lastSettings = new float[4];
+
+        public int LastSendSignal = int.MaxValue;
         /// <summary>
         /// 
         /// </summary>
@@ -146,11 +144,13 @@ namespace SwarmSimFramework.Classes.Effectors
         {
             StringBuilder s = new StringBuilder("RadioTransmitter: ");
             s.AppendLine("\t" + base.Log());
-            s.Append("\t "); 
-            for (int i = 0; i < lastSettings.Length; i++)
-            {
-                s.Append(i + ": " + lastSettings[i] + "; ");
-            }
+            s.Append("\t ");
+            s.Append("LastSend: ");
+            if (int.MaxValue == LastSendSignal)
+                s.Append("Nothing was send so far.");
+            else
+                s.Append(LastSendSignal);
+
             s.AppendLine();
             return s;
         }
