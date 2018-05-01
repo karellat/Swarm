@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using Intersection2D;
 using Newtonsoft.Json;
 using SwarmSimFramework.Classes.Experiments.FitnessCounters;
+using SwarmSimFramework.Classes.Experiments.TestingMaps;
 using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.SupportClasses;
 
@@ -137,10 +138,10 @@ namespace SwarmSimFramework
                     }
                 case "debug":
                 {
-
-                    exp = null; 
-                    var  ex = ESReader.ReadFrom(args[1]);
-                    break; 
+                    Console.WriteLine(args[1]);    
+                    
+                  //TestingBrain experiment = new TestingBrain();
+                    return; 
                 }
                 case "D":
                 {

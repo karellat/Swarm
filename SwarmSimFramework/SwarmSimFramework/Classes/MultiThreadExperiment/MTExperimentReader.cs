@@ -9,7 +9,8 @@ using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Map;
 using System.IO;
 using System.Reflection;
-using SwarmSimFramework.Classes.Entities; 
+using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.SupportClasses;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
@@ -105,6 +106,46 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                     }
                 }
                 return models.ToArray();
+            }
+            else if (type == typeof(BrainModel<SingleLayerNeuronNetwork>[]))
+            {
+                var brainsTag = value.Split(new[] {';'});
+                var brainModels = new BrainModel<SingleLayerNeuronNetwork>[brainsTag.Length];
+                for (int i = 0; i < brainsTag.Length; i++)
+                {
+                    var brainTag = brainsTag[i].Split(new [] {'-'});
+                    var modelType = Type.GetType("SwarmSimFramework.Classes.Robots." + brainTag[0]);
+                    if (brainTag[1] == "G")
+                    {
+                        brainModels[i] = new BrainModel<SingleLayerNeuronNetwork>()
+                        {
+                            Robot = (RobotEntity)Activator.CreateInstance(modelType)
+                        };
+                        brainModels[i].Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension()
+                        {
+                            Input = brainModels[i].Robot.SensorsDimension,
+                            Output = brainModels[i].Robot.EffectorsDimension
+                        });
+                    }
+                    else
+                    {
+                        var brainJson = File.ReadAllText(brainTag[1]);
+                        brainModels[i] = new BrainModel<SingleLayerNeuronNetwork>()
+                        {
+                            Brain = (SingleLayerNeuronNetwork)BrainSerializer.DeserializeBrain(brainJson),
+                            Robot = (RobotEntity)Activator.CreateInstance(modelType)
+                        };
+                    }
+                    
+
+                    if(brainModels[i].Robot.SensorsDimension != brainModels[i].Brain.IoDimension.Input ||
+                        brainModels[i].Robot.EffectorsDimension != brainModels[i].Brain.IoDimension.Output)
+                        throw new Exception("Robot and Brain not compatible. \nRobot: " + 
+                            brainModels[i].Robot.Name +": SENSOR: " + brainModels[i].Robot.SensorsDimension +
+                            ", EFFECTOR: " + brainModels[i].Robot.EffectorsDimension
+                            + "\nBrain: " + brainModels[i].Brain.IoDimension ) ;
+                }
+                return brainModels;
             }
             else
             {

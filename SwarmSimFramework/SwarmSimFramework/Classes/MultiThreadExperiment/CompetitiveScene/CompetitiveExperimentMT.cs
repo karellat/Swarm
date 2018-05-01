@@ -15,22 +15,27 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
     {
         // Basic Evolution VARIABLE
         public static int AmountOfObstacle = 500;
-
+        // Fitness settings
         public static double ValueOfDiscoveredObstacle = 0;
         public static double ValueOfDeadRobot = 0;
         public static double ValueOfRemainingHealth = 0;
-
-        public static RobotModel[] enemyModels;
-        public static BrainModel<SingleLayerNeuronNetwork>[] EnemyBrainModels; 
+        public static double ValueOfColissions = 0;
+        // Enemy settings
+        public static RobotModel[] EnemyModels = null;
+        public static BrainModel<SingleLayerNeuronNetwork>[] EnemyBrainModels = null; 
 
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
 
         protected override void Init(string[] nameOfInitialFile)
         {
-            Map.CompetitiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles = AmountOfObstacle;
-            Map.CompetitiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels = EnemyBrainModels;
-            Map.CompetitiveScene<SingleLayerNeuronNetwork>.enemyModels = enemyModels;
+            if (EnemyBrainModels == null)
+                throw new NullReferenceException("EnemyBrainModels is not set");
+            if (EnemyModels == null)
+                throw new NullReferenceException("EnemyModels is not set");
 
+            Map.CompetitiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles = AmountOfObstacle;
+            Map.CompetitiveScene<SingleLayerNeuronNetwork>.SetUpEnemies(EnemyModels,EnemyBrainModels);
+                
             MapModel = Map.CompetitiveScene<SingleLayerNeuronNetwork>.MakeMapModel(Models);
 
             //Prepare model brains from models

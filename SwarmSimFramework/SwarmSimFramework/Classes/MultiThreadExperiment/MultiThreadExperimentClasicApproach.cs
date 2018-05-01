@@ -158,7 +158,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 ElapsedTime += watch.ElapsedMilliseconds;
                 int remaining = NumberOfGenerations - generationIndex - 1;
                 double average = (ElapsedTime / (generationIndex + 1));
-                Console.WriteLine("{0}. gen. finnished, {1} gen. remaining , elapsed time {2}(average {3:##.00}), estimated end time: {4:t}",
+                Console.WriteLine("{0}. gen. finnished, {1} gen. remaining , elapsed time {2}(average {3:##.00}), estimated end time: {4:HH:mm dd.MM}",
                     generationIndex, remaining, watch.ElapsedMilliseconds, average, DateTime.Now.AddMilliseconds(remaining*average));
                 //Log to console generation 
                 if (generationIndex % LogGenerationIndex == 0)
@@ -243,6 +243,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //For model choose suitable brain
             foreach (var r in map.Robots)
             {
+                //Jump over the enemies
+                if (r.TeamNumber != 1)
+                {
+                    Debug.Assert(r.Brain != null);
+                    continue; 
+                }
                 Debug.Assert(r.Brain == null && r.TeamNumber == 1);
                 
                 for (int i = 0; i < Models.Length; i++)

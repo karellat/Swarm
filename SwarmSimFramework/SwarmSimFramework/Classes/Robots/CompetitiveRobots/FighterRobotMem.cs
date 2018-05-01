@@ -2,7 +2,7 @@
 using SwarmSimFramework.Classes.Effectors;
 using SwarmSimFramework.Classes.Entities;
 
-namespace SwarmSimFramework.Classes.Robots.MineralRobots
+namespace SwarmSimFramework.Classes.Robots.CompetitiveRobots
 {
     /// <summary>
     /// FighterRobotMem for the 3.scenario

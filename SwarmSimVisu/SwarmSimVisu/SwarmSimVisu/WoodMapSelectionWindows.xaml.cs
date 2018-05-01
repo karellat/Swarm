@@ -28,8 +28,7 @@ namespace SwarmSimVisu
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string s = (string)value;
-            int i;
-            if (int.TryParse(s, out i))
+            if (int.TryParse(s, out var i))
             {
                 return i;
             }
@@ -51,15 +50,13 @@ namespace SwarmSimVisu
 
             AmountOfTreesTextBox.TextChanged += (sender, args) =>
             {
-                int i;
-                if (int.TryParse(AmountOfTreesTextBox.Text, out i))
+                if (int.TryParse(AmountOfTreesTextBox.Text, out var i))
                     WoodScene.AmountOfTrees = i;
             }; 
 
             AmountOfWoodsTextBox.TextChanged += (sender,args) =>
             {
-                int i;
-                if (int.TryParse(AmountOfWoodsTextBox.Text, out i))
+                if (int.TryParse(AmountOfWoodsTextBox.Text, out var i))
                     WoodScene.AmountOfWoods = i;
             };
         }

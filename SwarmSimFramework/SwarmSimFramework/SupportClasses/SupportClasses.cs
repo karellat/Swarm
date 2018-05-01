@@ -46,6 +46,11 @@ namespace SwarmSimFramework.SupportClasses
     {
         public int Input;
         public int Output;
+
+        public override string ToString()
+        {
+            return "IN: " + Input + "; OUT: " + Output;
+        }
     }
   
 }

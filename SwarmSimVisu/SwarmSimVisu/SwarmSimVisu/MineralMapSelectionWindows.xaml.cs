@@ -27,22 +27,19 @@ namespace SwarmSimVisu
 
             AmountOfFreeFuel.TextChanged += (sender, args) =>
             {
-                int i;
-                if (int.TryParse(AmountOfFreeFuel.Text, out i))
+                if (int.TryParse(AmountOfFreeFuel.Text, out int i))
                     MineralScene.AmountOfFreeFuel = i;
             };
 
             AmountOfMineralTextBox.TextChanged += (sender, args) =>
             {
-                int i;
-                if (int.TryParse(AmountOfMineralTextBox.Text, out i))
+                if (int.TryParse(AmountOfMineralTextBox.Text, out int i))
                     MineralScene.AmountOfMineral = i;
             };
 
             AmountOfObstaclesTextBox.TextChanged += (sender, args) =>
             {
-                int i;
-                if (int.TryParse(AmountOfObstaclesTextBox.Text, out i))
+                if (int.TryParse(AmountOfObstaclesTextBox.Text, out int i))
                     MineralScene.AmountOfObstacles = i;
             };
         }

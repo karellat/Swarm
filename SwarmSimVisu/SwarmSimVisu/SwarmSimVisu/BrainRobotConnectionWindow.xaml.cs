@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.Classes.Robots.CompetitiveRobots;
 using SwarmSimFramework.Classes.Robots.MineralRobots;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.Classes.Robots.WoodRobots;
@@ -26,6 +27,7 @@ namespace SwarmSimVisu
     /// </summary>
     public partial class BrainRobotConnectionWindow : Window
     {
+        private string lastPath = "";
         public struct PreparedRobot
         {
             public IRobotBrain brain;
@@ -61,6 +63,8 @@ namespace SwarmSimVisu
             modelCombox.Items.Add("Mineral Refactor MEM");
             modelCombox.Items.Add("Mineral Scout MEM");
             modelCombox.Items.Add("Mineral Worker MEM");
+            modelCombox.Items.Add("Fighter Scout MEM");
+            modelCombox.Items.Add("Fighter Robot MEM");
             preparedRobots = new List<PreparedRobot>();
             RobotModel = null;
             SelectedBrain = null;
@@ -76,9 +80,10 @@ namespace SwarmSimVisu
         {
             string t = "";
             Microsoft.Win32.OpenFileDialog openFileDialog =
-                new Microsoft.Win32.OpenFileDialog {InitialDirectory = System.Environment.CurrentDirectory};
+                new Microsoft.Win32.OpenFileDialog {InitialDirectory = lastPath == "" ? System.Environment.CurrentDirectory : System.IO.Path.GetDirectoryName(lastPath)};
             if (openFileDialog.ShowDialog() == true)
             {
+                lastPath = openFileDialog.FileName;
                 t = File.ReadAllText(openFileDialog.FileName);
                 SelectedBrain = BrainSerializer.DeserializeBrain(t);
             }
@@ -126,8 +131,19 @@ namespace SwarmSimVisu
                 }
                 case 4:
                 {
+                        //TODO Change to dynamic fuel
                         RobotModel = new WorkerRobotMem(Vector2.Zero,2000);
                         break;
+                }
+                case 5:
+                {
+                    RobotModel = new FightScoutRobotMem();
+                    break;
+                }
+                case 6:
+                {
+                    RobotModel = new FighterRobotMem();
+                    break;
                 }
                 default:
                 {

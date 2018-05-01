@@ -117,7 +117,7 @@
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\IRobotBrainComperer.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
-    <Compile Include="Classes\RobotBrains\SingleLayerNeuronNetwork.cs" />
+    <Compile Include="Classes\RobotBrains\SingleLayerNeuralNetwork.cs" />
     <Compile Include="Classes\Robots\CompetitiveRobots\FighterRobotMem.cs" />
     <Compile Include="Classes\Robots\CompetitiveRobots\FightScoutRobotMem.cs" />
     <Compile Include="Classes\Robots\CompetitiveRobots\FightScoutRobot.cs" />

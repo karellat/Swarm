@@ -8,6 +8,7 @@ using System.Net.WebSockets;
 using System.Numerics;
 using System.Text;
 using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimFramework.Classes.Map
@@ -34,7 +35,12 @@ namespace SwarmSimFramework.Classes.Map
             foreach (var r in RobotBodies)
                 rb.Add((RobotEntity) r.DeepClone());
             foreach (var ev in EnviromentRobots)
-                rb.Add(ev);
+            {
+                var b = ev.Brain.GetCleanCopy();
+                var nr = (RobotEntity) ev.DeepClone();
+                nr.Brain = b;
+                rb.Add(nr);               
+            }
             var pe = new List<CircleEntity>(PassiveEntities.Count);
             foreach (var p in PassiveEntities)
                 pe.Add((CircleEntity)p.DeepClone());
@@ -407,11 +413,40 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Max size of robot
         /// </summary>
-        public static float RobotMaxRadius = 5;
+        public static float RobotMaxRadius = 10;
+        /// <summary>
+        /// Robot models, null if not set
+        /// </summary>
+        private static RobotModel[] EnemyModels = null;
+        /// <summary>
+        /// Brain models, null if not set 
+        /// </summary>
+        private static BrainModel<T>[] EnemyBrainModels = null;
+        /// <summary>
+        /// Position for robot to start
+        /// </summary>
+        public static float initHeight = MapHeight * 0.25f;
+        /// <summary>
+        /// Position for robot to start 
+        /// </summary>
+        public static float initWidth = MapWidth * 0.25f;
+        /// <summary>
+        /// Radius for starting place of robots
+        /// </summary>
+        public static float initRadius = 95;
+        /// <summary>
+        /// Position for enemy robot to start
+        /// </summary>
+        public static float enemyInitHeight = MapHeight * 0.75f;
+        /// <summary>
+        /// Position for enemy robot to start
+        /// </summary>
+        public static float enemyInitWidth = MapWidth * 0.75f;
+        /// <summary>
+        /// Radius for starting place of enemy robots
+        /// </summary>
+        public static float enemyInitRadius = 95; 
 
-        public static RobotModel[] enemyModels = new RobotModel[0] { };
-
-        public static BrainModel<T>[] EnemyBrainModels = new BrainModel<T>[0];
 
         /// <summary>
         /// Init positions of vector 
@@ -419,24 +454,50 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public static Vector2[] InitPositionOfRobot()
         {
+            List<CircleEntity> placedEntities = new List<CircleEntity>();
             List<Vector2> vectors = new List<Vector2>();
-            float sW = MapWidth / 4 + 44;
-            float sH = MapHeight / 2 + 44;
-            for (int i = 0; i < 9; i++)
+
+            int maxH = (int)Math.Floor(initHeight + (initRadius - RobotMaxRadius));
+            int minH = (int)Math.Floor(initHeight - (initRadius - RobotMaxRadius));
+
+            int maxW = (int)Math.Floor(initWidth + (initRadius - RobotMaxRadius));
+            int minW = (int)Math.Floor(initWidth - (initRadius - RobotMaxRadius));
+
+            for (int attemps = 0; attemps < 1000; attemps++)
             {
-                var nW = sW - 11 * i;
-                var nH = sH - 11 * i;
-                if (nW == MapWidth / 4 && nH == MapHeight / 2)
+                for (int amountOfRobots = 0; amountOfRobots < MaxOfAmountRobots; amountOfRobots++)
                 {
-                    vectors.Add(new Vector2(nW, nH));
+                    for (int placeRobotAttempts = 0; placeRobotAttempts < 1000; placeRobotAttempts++)
+                    {
+                        //Create new random position of the robot, inside the initial position 
+                        float vH = SupportClasses.RandomNumber.GetRandomInt(minH, maxH);
+                        float vW = SupportClasses.RandomNumber.GetRandomInt(minW, maxW);
+                        Vector2 middle = new Vector2(vW, vH);
+                        ObstacleEntity e = new ObstacleEntity(middle, RobotMaxRadius);
+
+                        bool correct = true;
+                        foreach (var p in placedEntities)
+                        {
+                            if (Map.Colides(e, p))
+                            {
+                                correct = false;
+                                break;
+                            }
+
+                        }
+
+                        if (correct)
+                        {
+                            vectors.Add(e.Middle);
+                            placedEntities.Add(e);
+                            break;
+                        }
+                    }
                 }
-                else
-                {
-                    vectors.Add(new Vector2(nW, MapHeight / 2));
-                    vectors.Add(new Vector2(MapWidth / 4, nH));
-                }
+                if (placedEntities.Count == MaxOfAmountRobots)
+                    return vectors.ToArray();
             }
-            return vectors.ToArray();
+            throw new ArgumentOutOfRangeException("Unable to place initial position ");
         }
         /// <summary>
         /// Init position of non evolving group of robots 
@@ -444,40 +505,81 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public static Vector2[] InitPositionOfEnemy()
         {
+            List<CircleEntity> placedEntities = new List<CircleEntity>();
             List<Vector2> vectors = new List<Vector2>();
-            float tW = (MapWidth / 4) * 3;
-            float sW = tW + 44;
-            float sH = MapHeight / 2 + 44;
-            for (int i = 0; i < 9; i++)
+
+            int maxH = (int)Math.Floor(enemyInitHeight + (enemyInitRadius - RobotMaxRadius));
+            int minH = (int)Math.Floor(enemyInitHeight - (enemyInitRadius - RobotMaxRadius));
+
+            int maxW = (int)Math.Floor(enemyInitWidth + (enemyInitRadius - RobotMaxRadius));
+            int minW = (int)Math.Floor(enemyInitWidth - (enemyInitRadius - RobotMaxRadius));
+
+            for (int attemps = 0; attemps < 1000; attemps++)
             {
-                var nW = sW - 11 * i;
-                var nH = sH - 11 * i;
-                if (nW == tW && nH == MapHeight / 2)
+                for (int amountOfRobots = 0; amountOfRobots < MaxOfAmountRobots; amountOfRobots++)
                 {
-                    vectors.Add(new Vector2(nW, nH));
+                    for (int placeRobotAttempts = 0; placeRobotAttempts < 1000; placeRobotAttempts++)
+                    {
+                        //Create new random position of the robot, inside the initial position 
+                        float vH = SupportClasses.RandomNumber.GetRandomInt(minH, maxH);
+                        float vW = SupportClasses.RandomNumber.GetRandomInt(minW, maxW);
+                        Vector2 middle = new Vector2(vW, vH);
+                        ObstacleEntity e = new ObstacleEntity(middle, RobotMaxRadius);
+
+                        bool correct = true;
+                        foreach (var p in placedEntities)
+                        {
+                            if (Map.Colides(e, p))
+                            {
+                                correct = false;
+                                break;
+                            }
+
+                        }
+
+                        if (correct)
+                        {
+                            vectors.Add(e.Middle);
+                            placedEntities.Add(e);
+                            break;
+                        }
+                    }
                 }
-                else
-                {
-                    vectors.Add(new Vector2(nW, MapHeight / 2));
-                    vectors.Add(new Vector2(tW, nH));
-                }
+                if (placedEntities.Count == MaxOfAmountRobots)
+                    return vectors.ToArray();
             }
-            return vectors.ToArray();
+            throw new ArgumentOutOfRangeException("Unable to place initial position ");
         }
+        /// <summary>
+        /// Before using any methods of class
+        /// </summary>
+        public static void SetUpEnemies(RobotModel[] enemyModels, BrainModel<T>[] enemyBrains)
+        {
+            EnemyModels = enemyModels;
+            EnemyBrainModels = enemyBrains;
+        }
+        /// <summary>
+        /// Make empty map
+        /// </summary>
         public static Map MakeEmptyMap()
         {
+            if (EnemyBrainModels == null)
+                throw new NullReferenceException("EnemyBrainModels not set!");
+            if (EnemyModels == null)
+                throw new NullReferenceException("EnemyModels not set");
+
             //Prepare objects of map 
             ObstacleEntity obstacle = new ObstacleEntity(Vector2.Zero, 5);
             float tW = (MapWidth / 4) * 3;
 
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(MapWidth / 4, MapHeight / 2), 50);
-            ObstacleEntity enemyInitPosition = new ObstacleEntity(new Vector2(tW,MapHeight/2), 50);
+            ObstacleEntity initPosition = new ObstacleEntity(new Vector2(initWidth, initHeight), initRadius);
+            ObstacleEntity enemyInitPosition = new ObstacleEntity(new Vector2(enemyInitWidth,enemyInitHeight), enemyInitRadius);
             //Generate randomly deployed minerals 
             Classes.Map.Map preparedMap = new Classes.Map.Map(MapHeight, MapWidth, null, new List<CircleEntity>() { initPosition,enemyInitPosition });
             List<CircleEntity> obstacles = Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, obstacle, AmountOfObstacles);
-
-            return new Map(MapHeight, MapWidth, null, obstacles, null, null);
-
+           
+            var output = new Map(MapHeight, MapWidth, null, obstacles, null, null);
+            return output;
         }
         /// <summary>
         /// Create map with given models 
@@ -487,6 +589,11 @@ namespace SwarmSimFramework.Classes.Map
         /// <returns></returns>
         public static MapModel MakeMapModel(RobotModel[] models)
         {
+            if (EnemyBrainModels == null)
+                throw new NullReferenceException("EnemyBrainModels not set!");
+            if (EnemyModels == null)
+                throw new NullReferenceException("EnemyModels not set");
+
             //Check size & amount 
             int amountOfRobot = 0;
             foreach (var m in models)
@@ -517,7 +624,7 @@ namespace SwarmSimFramework.Classes.Map
             Vector2[] initEnemyPos = InitPositionOfEnemy();
             Map emptyMap = MakeEmptyMap();
             int freeIndex = 0;
-            foreach (var model in enemyModels)
+            foreach (var model in EnemyModels)
             {
                 IRobotBrain brain = null;
                 foreach (var b in EnemyBrainModels)
@@ -530,7 +637,7 @@ namespace SwarmSimFramework.Classes.Map
                 }
 
                 if(brain == null)
-                    throw new NotImplementedException("Unknown brain for this robot");
+                    throw new NotImplementedException("Unknown brain for this enemy robot");
 
                 for (int i = 0; i < model.amount; i++)
                 {
@@ -539,6 +646,7 @@ namespace SwarmSimFramework.Classes.Map
                     newEnemy.MoveTo(initEnemyPos[freeIndex]);
                     freeIndex++;
                     newEnemy.Brain = brain.GetCleanCopy();
+                    
                     enemies.Add(newEnemy);
                 }
 
@@ -556,9 +664,16 @@ namespace SwarmSimFramework.Classes.Map
                 EnviromentRobots = enemies
             };
         }
-
+        /// <summary>
+        /// Make map 
+        /// </summary>
         public static Map MakeMap(RobotModel[] models)
         {
+            if (EnemyBrainModels == null)
+                throw new NullReferenceException("EnemyBrainModels not set!");
+            if (EnemyModels == null)
+                throw new NullReferenceException("EnemyModels not set");
+
             return MakeMapModel(models).ConstructMap();
         }
 
@@ -567,4 +682,6 @@ namespace SwarmSimFramework.Classes.Map
             throw new NotImplementedException();
         }
     }
+    
+   
 }   

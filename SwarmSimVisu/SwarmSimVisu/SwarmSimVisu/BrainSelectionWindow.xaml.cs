@@ -81,18 +81,8 @@ namespace SwarmSimVisu
                     {
                         name = "Mineral map";
                         CompetitiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles = 500;
-                        var ScoutRobot = new ScoutCutterRobot();
-                        CompetitiveScene<SingleLayerNeuronNetwork>.enemyModels = new [] {new RobotModel()
-                        {
-                            amount = 5,
-                            model =(RobotEntity) ScoutRobot.DeepClone()
-                        }};
-
-                        CompetitiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels = new [] {new BrainModel<SingleLayerNeuronNetwork>()
-                        {
-                            Robot = (RobotEntity) ScoutRobot.DeepClone(),
-                            Brain = SingleLayerNeuronNetwork.GenerateNewRandomNetwork(new IODimension(){Input = ScoutRobot.SensorsDimension, Output = ScoutRobot.EffectorsDimension})
-                        }};
+                        var w = new CompetitiveMapSelectionWindows();
+                        w.ShowDialog();
                         StringBuilder mapInfo = new StringBuilder(name + "\n");
                         mapInfo.AppendLine("Max amount of robots: " + CompetitiveScene<SingleLayerNeuronNetwork>.MaxOfAmountRobots);
                         mapInfo.Append("Map heigth: ");
@@ -101,7 +91,6 @@ namespace SwarmSimVisu
                         mapInfo.AppendLine(CompetitiveScene<SingleLayerNeuronNetwork>.MapWidth.ToString());
                         mapInfo.Append("Obstacles in map: ");
                         mapInfo.Append(CompetitiveScene<SingleLayerNeuronNetwork>.AmountOfObstacles);
-                        
                         MapText.Text = mapInfo.ToString();
                         break;
                     }
