@@ -179,17 +179,16 @@ namespace SwarmSimVisu
         /// </summary>
         private void RunExperiment()
         {
-
-            
             while (!RunningExperiment.Finnished)
             {
                 //Check Controls
+
                 lock (ControlsLock)
                 {
                     if (Stopping)
                     {
                        MainGrid.Dispatcher.Invoke(StopExperiment);
-                        return;
+                       return;
                     }
                     else if (Pausing)
                     {
@@ -203,12 +202,10 @@ namespace SwarmSimVisu
                     }
                     //Make step of Experiment: 
                     RunningExperiment.MakeStep(DrawExperiment);
-
                     //Wait
                     if(ThreadWait > 0) Thread.Sleep(ThreadWait);
                 }
             }
- 
             MainGrid.Dispatcher.Invoke(StopExperiment);
         }
         /// <summary>
@@ -264,7 +261,6 @@ namespace SwarmSimVisu
                         return;
                     }
                 });
-
             }
             //If no visualization do not draw robots
             if (!Visualization) return;
@@ -284,9 +280,7 @@ namespace SwarmSimVisu
                         DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString()+'D');
                     else
                         DrawCanvas.AddCircle(passive.Middle, passive.Radius, passive.Color.ToString() + 'N');
-
                 }
-
             }
             //Draw fuel
             foreach (var fuel in RunningExperiment.Map.FuelEntities)
@@ -312,7 +306,6 @@ namespace SwarmSimVisu
                             DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLESENSOR");
                     }
                 }
-
                 foreach (var e in robot.Effectors)
                 {
                     if (e is LineEntity l)
@@ -324,13 +317,9 @@ namespace SwarmSimVisu
                         DrawCanvas.AddCircle(c.Middle, c.Radius, "CIRCLEEFFECTOR");
                     }
                 }
-
             }
-
             //Finish frame
             DrawCanvas.CompleteFrame();
-
-
         }
         private  delegate void DrawBasicInfo();
 
@@ -476,8 +465,6 @@ namespace SwarmSimVisu
                 infoWindows.Remove(info);
             }
         }
-
-        
     }
     /// <summary>
     /// Meta info about point

@@ -42,6 +42,11 @@ namespace SwarmSimFramework
             }
             switch (args[0])
             {
+                case "-stats":
+                {
+                    Console.WriteLine("Generating statistics reading map from: {0}", args[1]);
+                    return;
+                }
                 case "-de":
                     {
                         Console.WriteLine("Reading set up from: {0}",args[1]);

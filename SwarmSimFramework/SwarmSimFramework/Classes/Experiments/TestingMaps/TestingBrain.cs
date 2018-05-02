@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Resources;
@@ -147,6 +148,13 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
             Map.Reset();
             foreach (var r in Map.Robots)
             {
+                //do not give brains to enemy robots
+                if (r.Brain != null)
+                {
+                    Debug.Assert(r.TeamNumber == 2);
+                    continue;
+                }
+
                 foreach (var b in TestedBrains)
                 {
                     if(b.SuitableRobot(r))
