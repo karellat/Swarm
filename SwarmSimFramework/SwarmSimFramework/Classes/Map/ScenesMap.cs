@@ -417,11 +417,11 @@ namespace SwarmSimFramework.Classes.Map
         /// <summary>
         /// Robot models, null if not set
         /// </summary>
-        private static RobotModel[] EnemyModels = null;
+        public static RobotModel[] EnemyModels = null;
         /// <summary>
         /// Brain models, null if not set 
         /// </summary>
-        private static BrainModel<T>[] EnemyBrainModels = null;
+        public static BrainModel<T>[] EnemyBrainModels = null;
         /// <summary>
         /// Position for robot to start
         /// </summary>

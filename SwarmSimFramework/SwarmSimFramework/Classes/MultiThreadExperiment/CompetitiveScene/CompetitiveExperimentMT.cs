@@ -160,6 +160,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
         protected override double CountFitness(Map.Map map)
         {
+            long colisions = 0;
             int discoveredObstacle = 0;
             int deadRobots = 0;
             double remainingHealth = 0;
@@ -174,6 +175,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             
             foreach (var r in map.Robots)
             {
+                if(r.TeamNumber != 1) continue;
+                
                 //Count dead robots
                 if (!r.Alive)
                 {
@@ -183,10 +186,12 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
 
                 //Count remaining health 
                 remainingHealth += r.Health;
+                colisions += r.CollisionDetected;
+               
             }
 
             return discoveredObstacle * ValueOfDiscoveredObstacle + ValueOfDeadRobot * deadRobots +
-                   (ValueOfRemainingHealth + remainingHealth);
+                   (ValueOfRemainingHealth + remainingHealth) + colisions * ValueOfColissions;
         } 
     }
 }

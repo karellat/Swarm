@@ -12,6 +12,12 @@ namespace SwarmSimFramework.Classes.Experiments
 {
     public static class SettingsReader
     {
+        private enum ReaderState
+        {
+            Map,
+            Idle
+        }
+
         public static Dictionary<string, string> GetSettingsFromFile(string filePath)
         {
             StreamReader file = new StreamReader(filePath);

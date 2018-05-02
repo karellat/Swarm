@@ -45,6 +45,15 @@ namespace SwarmSimFramework
                 case "-stats":
                 {
                     Console.WriteLine("Generating statistics reading map from: {0}", args[1]);
+                    var s = TestingBrainReader.ReadTestingBrainFromFile(args[1]);
+                    s.Init();
+                    for (int i = 0; i < s.TestingCycle; i++)
+                    {
+                        //Add function
+                        s.MakeStep(()=> { return;  });
+                    }
+                    foreach (var item in s.Map.GetStatistics())
+                        Console.WriteLine("{0} : {1}",item.Key,item.Value);
                     return;
                 }
                 case "-de":

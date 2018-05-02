@@ -59,13 +59,11 @@ namespace SwarmSimFramework.Interfaces
         /// </summary>
         /// <returns></returns>
         string SerializeBrain();
-
         /// <summary>
         /// Return weights of all perceptron in a single copy  
         /// </summary>
         /// <returns></returns>
         float[] GetWeigths();
-
         /// <summary>
         /// Get clean copy of brain with changed weights 
         /// </summary>

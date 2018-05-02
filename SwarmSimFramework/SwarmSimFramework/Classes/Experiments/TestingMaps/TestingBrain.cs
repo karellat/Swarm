@@ -6,6 +6,8 @@ using System.Numerics;
 using System.Resources;
 using System.Text;
 using SwarmSimFramework.Classes.Entities;
+using SwarmSimFramework.Classes.Map;
+using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots.WoodRobots;
 using SwarmSimFramework.Interfaces;
 
@@ -111,11 +113,9 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
     }
     public class TestingBrain : IExperiment
     {
-
         ///Prepare testing map and brains to test
         public TestingBrain(Map.Map Map, BrainModel<IRobotBrain>[] brain, int lengthOfCycle)
         {
-
             TestedBrains = brain;
             this.Map = Map;
             TestingCycle = lengthOfCycle;
@@ -210,8 +210,154 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 }
             }
         }
-
         public StringBuilder GenerationInfo { get; protected set; }
         public bool FinnishedGeneration { get; protected set; }
     }
-}
+
+    public static class TestingBrainReader
+    {
+        private enum ReaderState
+        {
+            Robots, 
+            Stats, 
+            Map,
+            Idle
+        } 
+
+        public static TestingBrain ReadTestingBrainFromFile(string path)
+        {
+            try
+            {
+
+                StreamReader streamReader = new StreamReader(path);
+                string mapName = streamReader.ReadLine();
+
+                Dictionary<string, string> mapFields = new Dictionary<string, string>();
+                Dictionary<string, string> robotFields = new Dictionary<string, string>();
+                Dictionary<string, string> statsFields = new Dictionary<string, string>();
+
+                ReaderState state = ReaderState.Idle;
+                //Reading from file
+                while (!streamReader.EndOfStream)
+                {
+                    string line = streamReader.ReadLine();
+                    if (line == "")
+                        continue;
+                    else if (line.StartsWith("#"))
+                    {
+   
+                        if (line.StartsWith("#MAP SETTINGS"))
+                            state = ReaderState.Map;
+                        else if (line.StartsWith("#ROBOT SETTINGS"))
+                            state = ReaderState.Robots;
+                        else if (line.StartsWith("#STATS SETTINGS"))
+                            state = ReaderState.Stats;
+                        else
+                            throw new NotImplementedException("Reading unknown state");
+
+                        continue;
+                    }
+
+                    switch (state)
+                    {
+                        case ReaderState.Robots:
+                            {
+                                robotFields[line.Split(new[] { ':' })[0]] = line.Split(new[] { ':' })[1];
+                                break;
+                            }
+
+                        case ReaderState.Stats:
+                            {
+                                statsFields[line.Split(new[] { ':' })[0]] = line.Split(new[] { ':' })[1];
+                                break;
+                            }
+                        case ReaderState.Map:
+                            {
+                                mapFields[line.Split(new[] { ':' })[0]] = line.Split(new[] { ':' })[1];
+                                break;
+                            }
+                        default:
+                            {
+                                throw new NotImplementedException("Invalid state");
+
+                            }
+
+                    }
+                }
+                //Set map
+                switch (mapName)
+                {
+                    case "WoodScene":
+                    {
+                        MapReader.SetMapValues(MapReader.Scene.Wood,mapFields);
+                        break; 
+                    }
+                    case "CompetitiveScene":
+                    {
+                        MapReader.SetMapValues(MapReader.Scene.Competitive,mapFields);
+                        break;
+                    }
+                    case "MineralScene":
+                    {
+                        MapReader.SetMapValues(MapReader.Scene.Mineral,mapFields);
+                        break;
+                    }
+                    default:
+                    {
+                        throw new Exception("Unknown name of the map: " + mapName);
+                    }
+                }
+                //Set up stats
+                var lengthCycle = int.Parse(statsFields["lengthCycle"]);
+                //Prepare robots
+                BrainModel<SingleLayerNeuronNetwork>[] _brainModels = (BrainModel<SingleLayerNeuronNetwork>[])
+                    MapReader.ParseExperimentValue(robotFields["brainModels"],typeof(BrainModel<SingleLayerNeuronNetwork>[]));
+                //change brain model to interface
+                BrainModel<IRobotBrain>[] brainModels = new BrainModel<IRobotBrain>[_brainModels.Length];
+                for (int i = 0; i < brainModels.Length; i++)
+                {
+                    brainModels[i] = new BrainModel<IRobotBrain>()
+                    {
+                        Brain = _brainModels[i].Brain,
+                        Robot = _brainModels[i].Robot
+
+                    };
+                }
+
+                RobotModel[] robotModels =
+                    (RobotModel[]) MapReader.ParseExperimentValue(robotFields["robotModels"], typeof(RobotModel[]));
+                //Prepare map
+                Map.Map mapModel; 
+                switch (mapName)
+                {
+                    case "WoodScene":
+                    {
+                        mapModel = WoodScene.MakeMap(robotModels);
+                        break;
+                    }
+                    case "CompetitiveScene":
+                    {
+                        mapModel = CompetitiveScene<SingleLayerNeuronNetwork>.MakeMap(robotModels);
+                        break;
+                    }
+                    case "MineralScene":
+                    {
+                        mapModel = MineralScene.MakeMap(robotModels);
+                        break;
+                    }
+                    default:
+                    {
+                        throw new Exception("Unknown name of the map: " + mapName);
+                    }
+                }
+
+                return new TestingBrain(mapModel,brainModels, lengthCycle);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Reading testing brain from file failed: {0}",e.Message);
+                return null;
+            }
+        }
+    }
+} 

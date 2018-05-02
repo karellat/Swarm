@@ -719,5 +719,110 @@ namespace SwarmSimFramework.Classes.Map
         {
             return Intersection2D.Intersections.CircleCircleIntersection(c1.Middle, c1.Radius, c2.Middle, c2.Radius);
         }
+
+        /// <summary>
+        /// Get summary statics about the map
+        /// DO NOT use for fitness counting too slow
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, double> GetStatistics()
+        {
+            //Map info
+            Dictionary<string, double> output =
+                new Dictionary<string, double> {{"MapHeight", MaxHeight}, {"MapWidth", MaxWidth}, {"Cycle", Cycle}};
+
+            //Find discovered trees and cut woods
+            foreach (var p in PasiveEntities)
+            {
+                switch (p.Color)
+                {
+                    case Entity.EntityColor.RawMaterialColor:
+                    {
+                        output.SafeIncrement("RawMaterialsInMap");
+                        if (p.Discovered) output.SafeIncrement("DiscoveredRawMaterials");
+                        break;
+                    }
+                    case Entity.EntityColor.WoodColor:
+                    {
+                        output.SafeIncrement("WoodInMap");
+                        if (p.Discovered) output.SafeIncrement("Discovered/CutWood");
+                        break;
+                    }
+                    case Entity.EntityColor.ObstacleColor:
+                    {
+                        output.SafeIncrement("ObstaclesInMap");
+                        if (p.Discovered) output.SafeIncrement("DiscoveredObstacles");
+                        break;
+                    }
+                    case Entity.EntityColor.FuelColor:
+                    {
+                        output.SafeIncrement("FuelInMap");
+                        if (p.Discovered) output.SafeIncrement("DiscoveredFuel");
+                        break;
+                    }
+                    case Entity.EntityColor.RobotColor:
+                    {
+                        output.SafeIncrement("RobotsInMap");
+                        if (p.Discovered) output.SafeIncrement("DiscoveredRobot");
+                        break;
+                    }
+                }
+            }
+            //Find collision
+            foreach (var r in Robots)
+            {
+                output.SafeIncrement(r.Name + r.TeamNumber);
+                output.SafeIncrementBy("Health" + r.TeamNumber, r.Health);
+                output.SafeIncrementBy("Fuel" + r.TeamNumber, r.FuelAmount);
+                output.SafeIncrement("TeamColision" + r.TeamNumber);
+
+                //Containers not available for more teams
+                foreach (var item in r.ContainerList())
+                {
+                    switch (item.Color)
+                    {
+                        case Entity.EntityColor.WoodColor:
+                        {
+                            output.SafeIncrement("WoodInContainers");
+                            break;
+                        }
+                        case Entity.EntityColor.FuelColor:
+                        {
+                            output.SafeIncrement("FuelInContainers");
+                            break;
+                        }
+                        case Entity.EntityColor.ObstacleColor:
+                        {
+                            output.SafeIncrement("ObstaclesInContainers");
+                            break;
+                        }
+                        case Entity.EntityColor.RawMaterialColor:
+                        {
+                            output.SafeIncrement("RawMaterialsContainers");
+                            break;
+                        }
+                        case Entity.EntityColor.RobotColor:
+                        {
+                            output.SafeIncrement("RobotInContainers");
+                            break;
+                        }
+                    }
+                }
+            }
+            //Count wood on the stockPlace
+            if (constantRadioSignal.Count != 0)
+            {
+                var stockSignal = constantRadioSignal[0];
+                var stockItems = CollisionColor(stockSignal);
+                double MinedWood = stockItems.ContainsKey(Entity.EntityColor.WoodColor)
+                    ? stockItems[Entity.EntityColor.WoodColor].Amount
+                    : 0;
+
+                output.SafeIncrementBy("MinedWood", MinedWood);
+            }
+
+            return output;
+        }
+    }
 }
-}
+
