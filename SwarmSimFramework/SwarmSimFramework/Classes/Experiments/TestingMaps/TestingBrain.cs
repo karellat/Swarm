@@ -153,7 +153,7 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 {
                     Debug.Assert(r.TeamNumber == 2);
                     continue;
-                }
+                }   
 
                 foreach (var b in TestedBrains)
                 {

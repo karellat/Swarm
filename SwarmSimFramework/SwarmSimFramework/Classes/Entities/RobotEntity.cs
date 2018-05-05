@@ -377,6 +377,8 @@ namespace SwarmSimFramework.Classes.Entities
         /// </summary>
         public void AcceptDamage(float amountOfDamage, Map.Map map)
         {
+            if (Health < 0)
+                return;
             Health -= amountOfDamage;
             if (Health <= 0)
             {

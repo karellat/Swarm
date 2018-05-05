@@ -157,6 +157,21 @@ namespace SwarmSimFramework
                   //TestingBrain experiment = new TestingBrain();
                     return; 
                 }
+                case "-reader":
+                {
+                    if (args.Length != 3)
+                    {
+                        Console.WriteLine("Args failed, length: {0} ", args.Length);
+                        return;
+                    }
+                    var s = File.ReadAllText(args[1]);
+                    var brains = BrainSerializer.DeserializeArray(s);
+                    var brainMax = brains.Max((x) => x.Fitness);
+                    var bestBrain = brains.First(x => x.Fitness == brainMax);
+                    File.WriteAllText(args[2] + ".best.json",bestBrain.SerializeBrain());
+                    return;
+            }
+                   
                 case "D":
                 {
                     for (int i = 0; i < args.Length -1 ; i++)

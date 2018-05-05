@@ -141,7 +141,6 @@ namespace SwarmSimVisu
             Paused = false;
             Pausing = false;
         }
-
         /// <summary>
         /// Prepare Experiment Drawing stuff
         /// </summary>
