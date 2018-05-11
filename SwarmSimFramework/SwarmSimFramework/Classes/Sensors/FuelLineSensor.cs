@@ -86,7 +86,11 @@ namespace SwarmSimFramework.Classes.Entities
             if (output[0] > LocalBounds[0].Max)
                 output[0] = LocalBounds[0].Max;
             lastReadValues = output;
-            return output.Normalize(NormalizeFuncs);
+
+            //Float repairs
+            output.Normalize(NormalizeFuncs);
+
+            return output;
         }
         /// <summary>
         /// Connect to robot, prepare normalization fncs 

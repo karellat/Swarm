@@ -170,7 +170,7 @@ namespace SwarmSimFramework.Classes.Entities
             float rescale = (sizeTo / sizeFrom);
             float min = from.Min * rescale;
             float shift = to.Min - min;
-            return new NormalizeFunc() {Rescale = rescale, Shift = shift};
+            return new NormalizeFunc() {Rescale = rescale, Shift = shift,Max = to.Max,Min = to.Min};
         }
 
         /// <summary>

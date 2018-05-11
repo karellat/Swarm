@@ -76,6 +76,10 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             {
                 return long.Parse(value);
             }
+            else if (type == typeof(bool))
+            {
+                return bool.Parse(value);
+            }
             else if(type == typeof(RobotModel[]))
             {
                 var robots = value.Split(new[] { ';' });

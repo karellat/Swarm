@@ -225,7 +225,7 @@ namespace SwarmSimFramework.Classes.Experiments
                         }
                         else
                         {
-                            var s = File.ReadAllText(modelFields[i]);
+                            var s = File.ReadAllText(modelFields[1]);
                             brain = (SingleLayerNeuronNetwork) BrainSerializer.DeserializeBrain(s);
                         }
                         if (brain == null || robot == null)

@@ -74,7 +74,7 @@ namespace SwarmSimVisu
         /// <summary>
         /// All info windows of current  WPF Control
         /// </summary>
-        public List<InfoWindow> infoWindows = new List<InfoWindow>();
+         public List<InfoWindow> infoWindows = new List<InfoWindow>();
         /// <summary>
         /// Info lock 
         /// </summary>

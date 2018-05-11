@@ -23,6 +23,9 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public double ValueOfRefactoredFuel = 0.0;
         public double ValueOfRemainingFuel = 0.0;
         public double ValueOfCollisions = 0.0;
+        public double ValueOfMineralInMiddle = 0.0;
+
+        public bool ConstEnviromentalSignal = false;
 
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
 
@@ -44,6 +47,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             Map.MineralScene.AmountOfMineral = AmountOfMineral;
             Map.MineralScene.AmountOfObstacles = AmountOfObstacle;
             Map.MineralScene.AmountOfFreeFuel = AmountOfFreeFuel;
+            Map.MineralScene.ConstEnviromentalSignal = ConstEnviromentalSignal;
             MapModel = Map.MineralScene.MakeMapModel(Models);
 
             //Prepare model brains from models
@@ -187,7 +191,20 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             //count fuel 
             foreach (var f in map.FuelEntities)
                 fuelInMap++;
-
+            //fuel placed in the midle 
+            int mineralsInMiddle = 0;
+            if (ValueOfMineralInMiddle != 0)
+            {
+                if(map.constantRadioSignal.Count == 0)
+                    throw new Exception("The const signal has to be set if ValueOfMineral not zero. ");
+                var middleSignal = map.constantRadioSignal[0];
+                var middleItems = map.GetAllCollidingPassive(middleSignal);
+                foreach (var item in middleItems)
+                {
+                    if (item.Color == Entity.EntityColor.RawMaterialColor)
+                        mineralsInMiddle++;
+                }
+            }
             //stock fuels 
             int mineralInContainer = 0;
             int fuelInContainers = 0;
@@ -214,7 +231,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         mineralInContainer++;
                 }
             }
-            return ValueOfCollisions * collisions  + discoveredMineral * ValueOfDiscoveredMineral + mineralInContainer * ValueOfStockedMineral +
+            return  ValueOfMineralInMiddle * mineralsInMiddle + ValueOfCollisions * collisions  + discoveredMineral * ValueOfDiscoveredMineral + mineralInContainer * ValueOfStockedMineral +
                    (fuelInContainers + fuelInMap) * ValueOfRefactoredFuel + fuelInTanks * ValueOfRemainingFuel;
         } 
     }

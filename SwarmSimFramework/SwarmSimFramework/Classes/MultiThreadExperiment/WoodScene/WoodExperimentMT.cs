@@ -32,6 +32,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public double ValueOfContaineredWood = 0;
         public double ValueOfContaineredNoWood = 0;
         public double ValueOfDistanceToMiddle = 0;
+        public bool ConstRadioSignal = false;
 
         [JsonProperty]
         protected BrainModel<SingleLayerNeuronNetwork>[] BrainModels;
@@ -222,9 +223,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
          
             //Count wood on the stockPlace
             var stockSignal = map.constantRadioSignal[0];
-            var stockItems = map.CollisionColor(stockSignal);
-
             int minedWood = 0;
+
             double distanceSum = 0;
             var collidingItems = map.GetAllCollidingPassive(stockSignal);
             foreach (var item in collidingItems)

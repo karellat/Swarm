@@ -215,6 +215,10 @@ namespace SwarmSimFramework.Classes.Map
         /// </summary>
         public static int AmountOfFreeFuel;
         /// <summary>
+        /// Signal in the middle of map with code 2(same as the refactor robot) 
+        /// </summary>
+        public static bool ConstEnviromentalSignal = false;
+        /// <summary>
         /// Max amount of robots in map 
         /// </summary>
         public static int MaxOfAmountRobots = 15;
@@ -242,6 +246,7 @@ namespace SwarmSimFramework.Classes.Map
         /// Radius for starting place of robots
         /// </summary>
         public static float initRadius = 95;
+        
 
         /// <summary>
         /// Init positions of vector 
@@ -332,7 +337,12 @@ namespace SwarmSimFramework.Classes.Map
             else
                 fuels = null;
 
-            return new Map(MapHeight, MapWidth, null, passive, fuels, null);
+            List<RadioEntity> constSignals = null;
+            if (ConstEnviromentalSignal)
+                constSignals = new List<RadioEntity>() { new RadioEntity(new Vector2(initWidth,initHeight),initRadius,2)};
+                
+
+            return new Map(MapHeight, MapWidth, null, passive, fuels, constSignals);
         }
 
         /// <summary>
