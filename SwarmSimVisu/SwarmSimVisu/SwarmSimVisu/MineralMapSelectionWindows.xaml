@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SwarmSimVisu"
         xmlns:map="clr-namespace:SwarmSimFramework.Classes.Map;assembly=SwarmSimFramework"
         mc:Ignorable="d"
-        Title="MineralMapSelectionWindows" Height="260.982" Width="292.602">
+        Title="MineralMapSelectionWindows" Height="319.782" Width="292.602">
     <Grid>
         <Label Content="Map Height:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="34" Width="143"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="158,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
@@ -50,7 +50,13 @@
                 <Binding Source="{x:Static map:MineralScene.RobotMaxRadius}" Path="."></Binding>
             </TextBox.Text>
         </TextBox>
-        <Button Click="Close_Click" Content="OK" Margin="100,210,113,3.6"/>
+        <Button Click="Close_Click" Content="OK" Margin="100,267,113,3.4"/>
+        <CheckBox x:Name="ConstRadio"  Content="Middle Radio Signal" HorizontalAlignment="Left" Margin="17,210,0,0" VerticalAlignment="Top" Height="39" Width="143">
+            <CheckBox.IsChecked>
+                <Binding Source="{x:Static map:MineralScene.ConstEnviromentalSignal}" Mode="TwoWay" Path="."></Binding>
+                
+            </CheckBox.IsChecked>
+        </CheckBox>
 
     </Grid>
 </Window>

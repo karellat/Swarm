@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -42,11 +43,17 @@ namespace SwarmSimVisu
                 if (int.TryParse(AmountOfObstaclesTextBox.Text, out int i))
                     MineralScene.AmountOfObstacles = i;
             };
+            ConstRadio.Checked += (sender, args) =>
+            {
+                MineralScene.ConstEnviromentalSignal = ConstRadio.IsChecked??false;
+            };
         }
 
         public void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+
+
     }
 }

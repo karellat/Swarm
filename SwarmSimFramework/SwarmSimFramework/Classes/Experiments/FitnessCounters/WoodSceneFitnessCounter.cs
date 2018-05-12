@@ -6,7 +6,7 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
 {
     public class WoodSceneFitnessCounter : IFitnessCounter
     {
-        public double ValueOfDiscoveredTree = 10;
+        public double ValueOfDiscoveredTree = 0;
         public double ValueOfCollision = 0;
         public double ValueOfCutWood   = 0;
         public double ValueOfStockedWood = 0;
