@@ -57,7 +57,7 @@ namespace SwarmSimFramework.Classes.Entities
             return (Entity)this.MemberwiseClone();
         }
 
-        public StringBuilder Log()
+        public override StringBuilder Log()
         {
            return new StringBuilder("Container Sensor - max: " + _maxSizeOfContainer + "actual size: " + LastReadValues[0]);
         }

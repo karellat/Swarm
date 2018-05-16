@@ -97,41 +97,20 @@
     <Compile Include="Classes\Map\SpatialHash.cs" />
     <Compile Include="Classes\MultiThreadExperiment\CompetitiveScene\CompetitiveExperimentMT.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MineralScene\MineralExperimentMT.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\MineralScene\Basic\MineralScoutWalk.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\MineralScene\MEM\MineralScoutWalkMem.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\MineralScene\Basic\MineralWorkerWalk.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\MineralScene\MEM\MineralWorkerWalkMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MTExperimentReader.cs" />
     <Compile Include="Classes\MultiThreadExperiment\MultiThreadExperimentClasicApproach.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodCooperation.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\MEM\WoodCooperationMEM.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodCuttorCut.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\MEM\WoodCuttorCutMEM.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodCuttorWalk.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\MEM\WoodCuttorWalkWithMem.cs" />
     <Compile Include="Classes\MultiThreadExperiment\WoodScene\WoodExperimentMT.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodWorkerPickUp.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\MEM\WoodWorkerPickUpMem.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\Basic\WoodWorkerWalk.cs" />
-    <Compile Include="Classes\MultiThreadExperiment\WoodScene\MEM\WoodWorkerWalkMem.cs" />
     <Compile Include="Classes\RobotBrains\FixedBrain.cs" />
     <Compile Include="Classes\RobotBrains\IRobotBrainComperer.cs" />
     <Compile Include="Classes\RobotBrains\Perceptron.cs" />
     <Compile Include="Classes\RobotBrains\SingleLayerNeuralNetwork.cs" />
     <Compile Include="Classes\Robots\CompetitiveRobots\FighterRobotMem.cs" />
     <Compile Include="Classes\Robots\CompetitiveRobots\FightScoutRobotMem.cs" />
-    <Compile Include="Classes\Robots\CompetitiveRobots\FightScoutRobot.cs" />
-    <Compile Include="Classes\Robots\CompetitiveRobots\FighterRobot.cs" />
     <Compile Include="Classes\Robots\MineralRobots\RefactorRobotMem.cs" />
-    <Compile Include="Classes\Robots\MineralRobots\RefactorRobot.cs" />
     <Compile Include="Classes\Robots\MineralRobots\ScoutRobotMem.cs" />
     <Compile Include="Classes\Robots\MineralRobots\WorkerRobotMem.cs" />
-    <Compile Include="Classes\Robots\WoodRobots\ScoutCutterRobot.cs" />
     <Compile Include="Classes\Robots\WoodRobots\ScoutCutterRobotMem.cs" />
-    <Compile Include="Classes\Robots\MineralRobots\ScoutRobot.cs" />
     <Compile Include="Classes\Robots\WoodRobots\WoodWorkerRobotMem.cs" />
-    <Compile Include="Classes\Robots\WoodRobots\WoodWorkerRobot.cs" />
-    <Compile Include="Classes\Robots\MineralRobots\WorkerRobot.cs" />
     <Compile Include="Classes\Sensors\ContainerSensor.cs" />
     <Compile Include="Classes\Sensors\FuelLineSensor.cs" />
     <Compile Include="Classes\Sensors\LineTypeSensor.cs" />
@@ -156,32 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Experiments\MineralScene\MineralScoutWalk.expe" />
-    <None Include="Experiments\MineralScene\MineralScoutWalkMem.expe" />
-    <None Include="Experiments\MineralScene\MineralWorkerWalk.expe" />
-    <None Include="Experiments\MineralScene\MineralWorkerWalkMem.expe" />
-    <None Include="Experiments\WoodScene\DE\BASIC\WoodCuttorCut.expe" />
-    <None Include="Experiments\WoodScene\DE\MEM\WoodCooperatitiveFinalMem.expe" />
-    <None Include="Experiments\WoodScene\DE\MEM\WoodCuttorCutMem.expe" />
-    <None Include="Experiments\WoodScene\DE\BASIC\WoodCuttorWalk.expe" />
-    <None Include="Experiments\WoodScene\DE\MEM\WoodCuttorWalkMem.expe" />
-    <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerPickUp.expe" />
-    <None Include="Experiments\WoodScene\DE\BASIC\WoodCooperatitiveFinal.expe" />
-    <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerStockItemsMem.expe" />
-    <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerPickUpMem.expe" />
-    <None Include="Experiments\WoodScene\DE\BASIC\WoodWorkerWalk.expe" />
-    <None Include="Experiments\WoodScene\DE\MEM\WoodWorkerWalkMem.expe" />
-    <None Include="Experiments\WoodScene\ES\WoodStock.es" />
-    <None Include="Experiments\WoodScene\ES\WoodCollecting.es" />
-    <None Include="Experiments\WoodScene\ES\WoodCoop.es" />
-    <None Include="Experiments\WoodScene\ES\WoodWWalking.es" />
-    <None Include="Experiments\WoodScene\ES\WoodCutting.es" />
-    <None Include="Experiments\WoodScene\ES\WoodWalking.es" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Experiments\CompetitiveScene\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
       <Visible>False</Visible>

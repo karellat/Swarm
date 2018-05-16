@@ -522,7 +522,7 @@ namespace SwarmSimFramework.Classes.Map
             int minH = (int)Math.Floor(enemyInitHeight - (enemyInitRadius - RobotMaxRadius)+10);
 
             int maxW = (int)Math.Floor(enemyInitWidth + (enemyInitRadius - RobotMaxRadius)-10);
-            int minW = (int)Math.Floor(enemyInitWidth - (enemyInitRadius - RobotMaxRadius)+10);
+            int minW = (int)Math.Floor(enemyInitWidth - (enemyInitRadius - RobotMaxRadius)+10 );
 
             for (int attemps = 0; attemps < 1000; attemps++)
             {

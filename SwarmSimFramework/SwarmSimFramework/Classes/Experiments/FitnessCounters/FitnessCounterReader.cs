@@ -100,7 +100,6 @@ namespace SwarmSimFramework.Classes.Experiments.FitnessCounters
                     for (var index = 1; index < robots.Length; index++)
                     {
                         var r = robots[index];
-                        RobotEntity Robot;
                         var parameters = r.Split(new[] { '-' });
                         var robotConstructor = parameters[0].Split(new[] { '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
                         var robotType = Type.GetType("SwarmSimFramework.Classes.Robots." + robotConstructor[0]);

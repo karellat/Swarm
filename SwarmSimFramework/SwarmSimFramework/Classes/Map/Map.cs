@@ -234,7 +234,7 @@ namespace SwarmSimFramework.Classes.Map
 
             for (int i = 0; i < amount; i++)
             {
-                for (int j = 0; j < 10000000000; j++)
+                for (int j = 0; j < 10000; j++)
                 {
                     //Generate Random position
                     newX = RandomNumber.GetRandomFloat() * map.MaxWidth;
@@ -702,18 +702,6 @@ namespace SwarmSimFramework.Classes.Map
         /// Const radio signals
         /// </summary>
         public List<RadioEntity> constantRadioSignal;
-
-        public void RotateRobotsRandomly()
-        {
-            return;
-            if (Cycle != 0) throw new ArgumentException("Zero cycle expected");
-
-            foreach (var r in Robots)
-            {
-                var i = SupportClasses.RandomNumber.GetRandomInt(0, 359);
-                r.RotateDegrees(i);
-            }
-        }
 
         public static bool Colides(CircleEntity c1, CircleEntity c2)
         {

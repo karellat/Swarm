@@ -916,7 +916,7 @@ namespace UnitTests
     [TestClass]
     public class RadioSensorTests
     {
-        public static float[] NonCollidingOutput = new[] {-100.0f,0.0f,0.0f, -100.0f, 0.0f, 0.0f , -100.0f, 0.0f, 0.0f };
+        public static float[] NonCollidingOutput = new[] {-100.0f,-100.0f, -100.0f };
 
         [TestMethod]
         public void InitTest()
@@ -938,7 +938,7 @@ namespace UnitTests
             Map map = new Map(100, 100, new List<RobotEntity>(), new List<CircleEntity>(), new List<FuelEntity>());
             RadioSensor rs = new RadioSensor(r, 2);
             map.RadioEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, ((int) RadioEntity.SignalValueBounds.Max)-1));
-            float[] predOutput = new[] {-100.0f, 0, 0, -100.0f, 0, 0, 100.0f,0,100};
+            float[] predOutput = new[] {-100.0f,-100.0f,100.0f};
             TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 
@@ -950,7 +950,7 @@ namespace UnitTests
             RadioSensor rs = new RadioSensor(r, 2);
             map.RadioEntities.Add(new RadioEntity(new Vector2(3, 5), 0.1f, 0));
             map.RadioEntities.Add(new RadioEntity(new Vector2(3, 1), 0.1f, 1));
-            float[] predOutput = new[] {100.0f, 0, 100.0f, 100.0f, 0, -100.0f,-100.0f,0,0};
+            float[] predOutput = new[] {100.0f, 100.0f, -100.0f};
             TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 
@@ -964,7 +964,7 @@ namespace UnitTests
             map.RadioEntities.Add(new RadioEntity(new Vector2(3, 1), 0.1f, 1));
             map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
 
-            float[] predOutput = new[] {100.0f,0.5f * (float) Math.Sqrt(4.0f/17.0f) * 100.0f, 2.0f * (float)Math.Sqrt(4.0f / 17.0f) * 100.0f, 100.0f, 0, -100.0f,-100.0f,0.0f,0.0f};
+            float[] predOutput = new[] {100.0f, 100.0f,-100.0f};
             TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 
@@ -981,7 +981,7 @@ namespace UnitTests
             map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 0));
             map.RadioEntities.Add(new RadioEntity(new Vector2(4, 5), 0.5f, 2));
             float sqt5 = (float) Math.Sqrt(5);
-            float[] predOutput = new[] {100.0f, 1.0f/sqt5 * 100, 2.0f/sqt5 * 100, 100, 0, 100.0f,100.0f, 1.0f / sqt5 * 100, 2.0f / sqt5 * 100};
+            float[] predOutput = new[] {100.0f, 100.0f,100.0f};
             TestExtensions.AssertArrayEquality(predOutput, rs.Count(r, map));
         }
 

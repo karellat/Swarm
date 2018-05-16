@@ -14,7 +14,6 @@ using SwarmSimFramework.Classes.RobotBrains;
 using SwarmSimFramework.Classes.Robots;
 using SwarmSimFramework.Interfaces;
 using SwarmSimFramework.Classes.Robots.MineralRobots;
-using SwarmSimFramework.Classes.MultiThreadExperiment.MineralScene;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -264,7 +263,9 @@ namespace SwarmSimFramework
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine("Reading brain failed with: ", e.Message);
                         brain = null;
+
                     }
                     
                
@@ -302,57 +303,7 @@ namespace SwarmSimFramework
             return output;
         }
 
-        private static MultiThreadExperimentClasicApproach<SingleLayerNeuronNetwork> WoodSceneSelection(string index)
-        {
-            switch (index)
-            {
-                case "0":
-                {
-                    return new WoodCuttorWalk();
-                }
-                case "0M":
-                {
-                    return new WoodCuttorWalkWithMem();
-                }
-                case "1":
-                {
-                    return new WoodCuttorCut();
-                }
-                case "1M":
-                {
-                    return new WoodCuttorCutMEM();
-                }
-                case "2":
-                {
-                    return new WoodWorkerWalk();
-                }
-                case "2M":
-                {
-                    return new WoodWorkerWalkMem();
-                }
-                case "3":
-                {
-                    return new WoodWorkerPickUp();
-                }
-                case "3M":
-                {
-                    return new WoodWorkerPickUpMem();
-                }
-                case "4":
-                {
-                    return new WoodCooperation();
-                }
-                case "4M":
-                {
-                    return new WoodCooperationMEM();
-                }
-                default:
-                    return null;
-
-
-
-            }
-        }
+      
     }
 
     public static class HashSetsEx

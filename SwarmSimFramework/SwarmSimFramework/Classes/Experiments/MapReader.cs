@@ -164,7 +164,6 @@ namespace SwarmSimFramework.Classes.Experiments
                         for (var index = 1; index < robots.Length; index++)
                         {
                             var r = robots[index];
-                            RobotEntity Robot;
                             var parameters = r.Split(new[] {'-'});
                             var robotConstructor =
                                 parameters[0].Split(new[] {'(', ')'}, StringSplitOptions.RemoveEmptyEntries);

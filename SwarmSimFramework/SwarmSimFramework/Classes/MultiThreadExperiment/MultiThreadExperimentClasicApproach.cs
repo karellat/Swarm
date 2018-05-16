@@ -46,7 +46,7 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         /// <summary>
         /// Team of robots to change brains
         /// </summary>
-        private int numOfEvolvingTeam = 0;
+        private int numOfEvolvingTeam = 1;
 
 
         //SERIALIZATION 
@@ -257,8 +257,6 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                         r.Brain = evalBrains[i].Brain.GetCleanCopy();
                 }
             }
-            //Randomize initial position
-            map.RotateRobotsRandomly();
             for (int i = 0; i < MapIteration; i++)
             {
                 map.MakeStep();

@@ -14,104 +14,6 @@ using SwarmSimFramework.Interfaces;
 
 namespace SwarmSimFramework.Classes.Experiments.TestingMaps
 {
-    /// <summary>
-    /// Prepared maps for testing specific brains
-    /// </summary>
-    public static class TestingMaps
-    {
-        /// <summary>
-        /// Trees in wood experiment
-        /// </summary>
-        public const int WoodTreesAmount = 200;
-        /// <summary>
-        /// Number of wood
-        /// </summary>
-        public const int WoodWoodAmount = 100;
-        /// <summary>
-        /// Height of map
-        /// </summary>
-        public const float WoodMapHeight = 800;
-        /// <summary>
-        /// Width of map 
-        /// </summary>
-        public const float WoodMapWidth = 1200;
-        public static Map.Map GetWoodMapCuters()
-        {
-            //Prepare models and fix the initial position
-            RawMaterialEntity tree = new RawMaterialEntity(new Vector2(0,0),5,10,10);
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2((WoodMapWidth/2),(WoodMapHeight/2)),20);
-            //Generate radomly deployed tree
-            Map.Map preparedMap = new Map.Map(WoodMapHeight, WoodMapWidth, null, new List<CircleEntity>() { initPosition });
-            List<CircleEntity> trees =
-                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, WoodTreesAmount);
-            //set experiment
-            RobotEntity robotModel = new ScoutCutterRobot(new Vector2(0, 0));
-            List<RobotEntity> robots = new List<RobotEntity>();
-            for (int i = 0; i < 5; i++)
-            {
-               robots.Add((RobotEntity) robotModel.DeepClone());
-            }
-            //Initial position 
-            robots[0].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2));
-            robots[1].MoveTo(new Vector2(WoodMapWidth / 2 + 10, WoodMapHeight / 2));
-            robots[2].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 + 10));
-            robots[3].MoveTo(new Vector2(WoodMapWidth / 2 - 10, WoodMapHeight / 2));
-            robots[4].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 - 10));
-
-            return new Map.Map(WoodMapHeight,WoodMapWidth,robots,trees,null);
-        }
-        public static Map.Map GetWoodMapCutersWithMem()
-        {
-            //Prepare models and fix the initial position
-            RawMaterialEntity tree = new RawMaterialEntity(new Vector2(0, 0), 5, 10, 10);
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2((WoodMapWidth / 2), (WoodMapHeight / 2)), 20);
-            //Generate radomly deployed tree
-            Map.Map preparedMap = new Map.Map(WoodMapHeight, WoodMapWidth, null, new List<CircleEntity>() { initPosition });
-            List<CircleEntity> trees =
-                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, tree, WoodTreesAmount);
-            //set experiment
-            RobotEntity robotModel = new ScoutCutterRobotMem(new Vector2(0, 0));
-            List<RobotEntity> robots = new List<RobotEntity>();
-            for (int i = 0; i < 5; i++)
-            {
-                robots.Add((RobotEntity)robotModel.DeepClone());
-            }
-            //Initial position 
-            robots[0].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2));
-            robots[1].MoveTo(new Vector2(WoodMapWidth / 2 + 10, WoodMapHeight / 2));
-            robots[2].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 + 10));
-            robots[3].MoveTo(new Vector2(WoodMapWidth / 2 - 10, WoodMapHeight / 2));
-            robots[4].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 - 10));
-
-            return new Map.Map(WoodMapHeight, WoodMapWidth, robots, trees, null);
-        }
-
-        public static Map.Map GetWoodMapWorkers()
-        {
-            //Prepare models and fix the initial position
-            WoodEntity wood = new WoodEntity(new Vector2(0,0),5,10);
-            ObstacleEntity initPosition = new ObstacleEntity(new Vector2((WoodMapWidth / 2), (WoodMapHeight / 2)), 20);
-            //Generate radomly deployed tree
-            Map.Map preparedMap = new Map.Map(WoodMapHeight, WoodMapWidth, null, new List<CircleEntity>() { initPosition });
-            List<CircleEntity> trees =
-                Classes.Map.Map.GenerateRandomPos<CircleEntity>(preparedMap, wood, WoodTreesAmount);
-            //set experiment
-            RobotEntity robotModel = new WoodWorkerRobot(new Vector2(0, 0));
-            List<RobotEntity> robots = new List<RobotEntity>();
-            for (int i = 0; i < 5; i++)
-            {
-                robots.Add((RobotEntity)robotModel.DeepClone());
-            }
-            //Initial position 
-            robots[0].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2));
-            robots[1].MoveTo(new Vector2(WoodMapWidth / 2 + 10, WoodMapHeight / 2));
-            robots[2].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 + 10));
-            robots[3].MoveTo(new Vector2(WoodMapWidth / 2 - 10, WoodMapHeight / 2));
-            robots[4].MoveTo(new Vector2(WoodMapWidth / 2, WoodMapHeight / 2 - 10));
-
-            return new Map.Map(WoodMapHeight, WoodMapWidth, robots, trees, null);
-        }
-    }
     public class TestingBrain : IExperiment
     {
 
@@ -180,7 +82,6 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
 
             }
             MapIterationIndex = 0;
-            Map.RotateRobotsRandomly();
         }
         /// <summary>
         /// Repeat map simulation
