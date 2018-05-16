@@ -234,7 +234,7 @@ namespace SwarmSimFramework.Classes.Map
 
             for (int i = 0; i < amount; i++)
             {
-                for (int j = 0; j < 1000; j++)
+                for (int j = 0; j < 10000000000; j++)
                 {
                     //Generate Random position
                     newX = RandomNumber.GetRandomFloat() * map.MaxWidth;

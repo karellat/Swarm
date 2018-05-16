@@ -467,11 +467,11 @@ namespace SwarmSimFramework.Classes.Map
             List<CircleEntity> placedEntities = new List<CircleEntity>();
             List<Vector2> vectors = new List<Vector2>();
 
-            int maxH = (int)Math.Floor(initHeight + (initRadius - RobotMaxRadius));
-            int minH = (int)Math.Floor(initHeight - (initRadius - RobotMaxRadius));
+            int maxH = (int)Math.Floor(initHeight + (initRadius - RobotMaxRadius)-10);
+            int minH = (int)Math.Floor(initHeight - (initRadius - RobotMaxRadius)+10);
 
-            int maxW = (int)Math.Floor(initWidth + (initRadius - RobotMaxRadius));
-            int minW = (int)Math.Floor(initWidth - (initRadius - RobotMaxRadius));
+            int maxW = (int)Math.Floor(initWidth + (initRadius - RobotMaxRadius)-10);
+            int minW = (int)Math.Floor(initWidth - (initRadius - RobotMaxRadius)+10);
 
             for (int attemps = 0; attemps < 1000; attemps++)
             {
@@ -518,11 +518,11 @@ namespace SwarmSimFramework.Classes.Map
             List<CircleEntity> placedEntities = new List<CircleEntity>();
             List<Vector2> vectors = new List<Vector2>();
 
-            int maxH = (int)Math.Floor(enemyInitHeight + (enemyInitRadius - RobotMaxRadius));
-            int minH = (int)Math.Floor(enemyInitHeight - (enemyInitRadius - RobotMaxRadius));
+            int maxH = (int)Math.Floor(enemyInitHeight + (enemyInitRadius - RobotMaxRadius)-10);
+            int minH = (int)Math.Floor(enemyInitHeight - (enemyInitRadius - RobotMaxRadius)+10);
 
-            int maxW = (int)Math.Floor(enemyInitWidth + (enemyInitRadius - RobotMaxRadius));
-            int minW = (int)Math.Floor(enemyInitWidth - (enemyInitRadius - RobotMaxRadius));
+            int maxW = (int)Math.Floor(enemyInitWidth + (enemyInitRadius - RobotMaxRadius)-10);
+            int minW = (int)Math.Floor(enemyInitWidth - (enemyInitRadius - RobotMaxRadius)+10);
 
             for (int attemps = 0; attemps < 1000; attemps++)
             {

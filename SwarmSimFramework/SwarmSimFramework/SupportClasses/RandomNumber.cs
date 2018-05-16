@@ -6,7 +6,7 @@ namespace SwarmSimFramework.SupportClasses
 {
     public static class RandomNumber
     {
-        private static Random randomNumber = new Random(13051995);
+        private static Random randomNumber = new Random();
         private static object randomLock = new object();
         public static int GetRandomInt(int min, int max)
         {

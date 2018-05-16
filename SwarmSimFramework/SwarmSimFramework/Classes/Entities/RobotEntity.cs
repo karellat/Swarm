@@ -107,7 +107,7 @@ namespace SwarmSimFramework.Classes.Entities
         /// Health after creation
         /// </summary>
         [JsonProperty]
-        protected float InitialHealth;
+        public float InitialHealth;
         /// <summary>
         /// Last values from last invoke of PrepareMove
         /// </summary>
@@ -187,7 +187,7 @@ namespace SwarmSimFramework.Classes.Entities
 
 
            if(Brain == null)
-                throw  new NotImplementedException("Robot body without brain can not move");
+                throw  new NotImplementedException("Robot (name:" + this.Name + ", In: " + SensorsDimension + ", Out: "+ EffectorsDimension+")body without brain can not move, Team: " + TeamNumber);
 
             //Check if the is alive
             if (FuelAmount < 0 || Health < 0)

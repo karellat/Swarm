@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
@@ -20,6 +21,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
         public static double ValueOfDeadRobot = 0;
         public static double ValueOfRemainingHealth = 0;
         public static double ValueOfColissions = 0;
+        public static double ValueOfKill = 0;
+        public static double ValueOfGivenDamage = 0;
         // Enemy settings
         public static RobotModel[] EnemyModels = null;
         public static BrainModel<SingleLayerNeuronNetwork>[] EnemyBrainModels = null; 
@@ -115,11 +118,42 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 //Set all brains to Robots  
                 foreach (var r in map.Robots)
                 {
-                    for (int j = 0; j < BrainModels.Length; j++)
+                    if (r.Brain == null)
                     {
-                        if (BrainModels[j].SuitableRobot(r) && BrainModels[j].SuitableBrain(ActualGeneration[j][i]))
-                            r.Brain = ActualGeneration[j][i].GetCleanCopy();
+                        if (r.TeamNumber != 1)
+                            throw new Exception("Robot from team " + r.TeamNumber + " without brain.");
+
+                        for (int j = 0; j < BrainModels.Length; j++)
+                        {
+                            if (BrainModels[j].SuitableRobot(r))
+                                foreach (List<SingleLayerNeuronNetwork> t in ActualGeneration)
+                                {
+                                    if (BrainModels[j].SuitableBrain(t[i]))
+                                        r.Brain = t[i].GetCleanCopy();
+                                }
+                        }
+
+                        if (r.Brain == null)
+                        {
+                            StringBuilder s = new StringBuilder("Not suitable brain for Robot " + r.Name
+                                                                + " IN: " + r.SensorsDimension + " OUT: " + r.EffectorsDimension +
+                                                                "\n Size of generation: " + size);
+                            
+
+                            for (int j = 0; j < ActualGeneration.Length; j++)
+                            {
+                                s.AppendLine("\n " + nameOfInitialFile[j] +"(" + ActualGeneration[j].Count + ")" + " - "+ ActualGeneration[j].First().IoDimension);
+                            }
+                            throw new Exception(s.ToString());
+                        }
                     }
+                }
+
+
+                foreach (var r in map.Robots)
+                {
+                    if (r.Brain== null)
+                        throw new Exception("Some of robots does not have a brain");
                 }
 
                 //iterate map
@@ -164,6 +198,8 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             int discoveredObstacle = 0;
             int deadRobots = 0;
             double remainingHealth = 0;
+            double kills = 0;
+            double givenDamage = 0; 
 
 
             //discovered minerals
@@ -175,23 +211,30 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
             
             foreach (var r in map.Robots)
             {
-                if(r.TeamNumber != 1) continue;
-                
-                //Count dead robots
-                if (!r.Alive)
+                if (r.TeamNumber != 1)
                 {
-                    deadRobots++; 
-                    continue;
-                }
+                    if (!r.Alive)
+                        kills++;
 
-                //Count remaining health 
-                remainingHealth += r.Health;
-                colisions += r.CollisionDetected;
-               
+                    givenDamage += (r.InitialHealth - r.Health);
+                }
+                else
+                {
+                    //Count dead robots
+                    if (!r.Alive)
+                    {
+                        deadRobots++;
+                        continue;
+                    }
+
+                    //Count remaining health 
+                    remainingHealth += r.Health;
+                    colisions += r.CollisionDetected;
+                }
             }
 
-            return discoveredObstacle * ValueOfDiscoveredObstacle + ValueOfDeadRobot * deadRobots +
-                   (ValueOfRemainingHealth + remainingHealth) + colisions * ValueOfColissions;
+            return ValueOfGivenDamage * givenDamage + ValueOfKill * kills +   discoveredObstacle * ValueOfDiscoveredObstacle + ValueOfDeadRobot * deadRobots +
+                   (ValueOfRemainingHealth * remainingHealth) + colisions * ValueOfColissions;
         } 
     }
 }

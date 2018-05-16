@@ -50,7 +50,9 @@ namespace SwarmSimFramework.SupportClasses
                     o = Max;
                 }
                 else
-                    throw new ArgumentOutOfRangeException("Normalize Func gets bigger number than expected: " + x.ToString());
+                    throw new ArgumentOutOfRangeException("Normalize Func gets bigger number("  +
+                        x.ToString("##.0000000")  + ") than expected, max = "  +  Max + ", min = " +
+                        Min + "Rescaled number: " + o);
             }
             else if (o < Min)
             {
@@ -59,7 +61,9 @@ namespace SwarmSimFramework.SupportClasses
                     o = Min;
                 }
                 else
-                    throw new ArgumentOutOfRangeException("Normalize Func gets smaller number than expected: " + x.ToString());
+                    throw new ArgumentOutOfRangeException("Normalize Func gets smaller number(" +
+                                                          x.ToString("##.0000000") + ") than expected, max = " + Max +
+                                                          ", min = " + Min + "Rescaled number: " + o);
 
             }
 

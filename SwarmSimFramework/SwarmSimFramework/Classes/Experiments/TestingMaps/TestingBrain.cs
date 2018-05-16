@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Numerics;
 using System.Resources;
 using System.Text;
@@ -113,10 +114,12 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
     }
     public class TestingBrain : IExperiment
     {
+
         ///Prepare testing map and brains to test
-        public TestingBrain(Map.Map Map, BrainModel<IRobotBrain>[] brain, int lengthOfCycle)
+        public TestingBrain(Map.Map Map, BrainModel<IRobotBrain>[] brain, int lengthOfCycle,BrainModel<SingleLayerNeuronNetwork>[] enemyBrain = null)
         {
             TestedBrains = brain;
+            this.EnemyBrains = enemyBrain;
             this.Map = Map;
             TestingCycle = lengthOfCycle;
             Finnished = false;
@@ -125,6 +128,10 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
         /// Testing brain
         /// </summary>
         public BrainModel<IRobotBrain>[] TestedBrains;
+        /// <summary>
+        /// Enemy brains
+        /// </summary>
+        public BrainModel<SingleLayerNeuronNetwork>[] EnemyBrains; 
         /// <summary>
         /// Map where the brain is tested
         /// </summary>
@@ -148,19 +155,29 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
             Map.Reset();
             foreach (var r in Map.Robots)
             {
-                //do not give brains to enemy robots
-                if (r.Brain != null)
+                if (r.TeamNumber == 2)
                 {
-                    Debug.Assert(r.TeamNumber == 2);
-                    continue;
-                }   
-
-                foreach (var b in TestedBrains)
-                {
-                    if(b.SuitableRobot(r))
-                        r.Brain = b.Brain.GetCleanCopy();
+                    foreach (var b in EnemyBrains)
+                    {
+                        if (b.SuitableRobot(r))
+                        {
+                            r.Brain = b.Brain.GetCleanCopy();
+                            break;
+                        }
+                    }
                 }
-                
+                else
+                {
+                    foreach (var b in TestedBrains)
+                    {
+                        if (b.SuitableRobot(r))
+                        {
+                            r.Brain = b.Brain.GetCleanCopy();
+                            break;
+                        }
+                    }
+                }
+
             }
             MapIterationIndex = 0;
             Map.RotateRobotsRandomly();
@@ -175,6 +192,13 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                 Map.Reset();
                 foreach (var r in Map.Robots)
                 {
+                    //Do not change brains of enemy 
+                    if (r.Brain != null)
+                    {
+                        if(r.TeamNumber != 2)
+                            throw new Exception("Robot with prepared brain and not enemy robot ");
+                        continue;
+                    }
                     foreach (var b in TestedBrains)
                     {
                         if (b.SuitableRobot(r))
@@ -351,7 +375,11 @@ namespace SwarmSimFramework.Classes.Experiments.TestingMaps
                     }
                 }
 
-                return new TestingBrain(mapModel,brainModels, lengthCycle);
+                if (mapName == "CompetitiveScene")
+                    return new TestingBrain(mapModel, brainModels, lengthCycle,
+                        CompetitiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels);
+                else
+                    return new TestingBrain(mapModel, brainModels, lengthCycle);
             }
             catch (Exception e)
             {

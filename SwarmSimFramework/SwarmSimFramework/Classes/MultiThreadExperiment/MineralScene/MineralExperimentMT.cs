@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace SwarmSimFramework.Classes.MultiThreadExperiment
 {
@@ -128,15 +129,29 @@ namespace SwarmSimFramework.Classes.MultiThreadExperiment
                 //Set all brains to Robots  
                 foreach (var r in map.Robots)
                 {
-                    for (int j = 0; j < BrainModels.Length; j++)
-                    {
-                        if (BrainModels[j].SuitableRobot(r))
-                            foreach (List<SingleLayerNeuronNetwork> t in ActualGeneration)
+                        for (int j = 0; j < BrainModels.Length; j++)
+                        {
+                            if (BrainModels[j].SuitableRobot(r))
+                                foreach (List<SingleLayerNeuronNetwork> t in ActualGeneration)
+                                {
+                                    if (BrainModels[j].SuitableBrain(t[i]))
+                                        r.Brain = t[i].GetCleanCopy();
+                                }
+                        }
+
+                        if (r.Brain == null)
+                        {
+                            StringBuilder s = new StringBuilder("Not suitable brain for Robot " + r.Name
+                                                                + " IN: " + r.SensorsDimension + " OUT: " + r.EffectorsDimension +
+                                                                "\n Size of generation: " + size);
+
+
+                            for (int j = 0; j < ActualGeneration.Length; j++)
                             {
-                                if (BrainModels[j].SuitableBrain(t[i]))
-                                    r.Brain = t[i].GetCleanCopy();
+                                s.AppendLine("\n " + nameOfInitialFile[j] + "(" + ActualGeneration[j].Count + ")" + " - " + ActualGeneration[j].First().IoDimension);
                             }
-                    }
+                            throw new Exception(s.ToString());
+                        }
                 }
 
                 //iterate map

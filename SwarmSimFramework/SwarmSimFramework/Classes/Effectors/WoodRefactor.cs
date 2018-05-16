@@ -79,7 +79,7 @@ namespace SwarmSimFramework.Classes.Effectors
             this.RotateRadians((robot.Orientation + OrientationToRobotFPoint) - Orientation);
             this.MoveTo(robot.Middle);
             //Count normalization 
-            NormalizeFuncs = MakeNormalizeFuncs(LocalBounds, robot.NormalizedBound);
+            NormalizeFuncs = MakeNormalizeFuncs(robot.NormalizedBound,LocalBounds);
         }
         /// <summary>
         /// [0] - if more than zero make refactor wood if posible

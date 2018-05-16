@@ -215,8 +215,14 @@ namespace SwarmSimFramework.Classes.Experiments
                     for (int i = 0; i < models.Length; i++)
                     {
                         var modelFields = models[i].Split('-');
-                        var robotType = Type.GetType("SwarmSimFramework.Classes.Robots." + modelFields[0]);
-                        var robot = (RobotEntity) Activator.CreateInstance(robotType);
+                        var robotConstructor = modelFields[0].Split(new[] {'(', ')'},StringSplitOptions.RemoveEmptyEntries);
+                        var robotType = Type.GetType("SwarmSimFramework.Classes.Robots." + robotConstructor[0] );
+                        RobotEntity robot;
+                        if (robotConstructor.Length == 1)
+                            robot = (RobotEntity) Activator.CreateInstance(robotType);
+                        else
+                            robot = (RobotEntity) Activator.CreateInstance(robotType,
+                                new object[] {int.Parse(robotConstructor[1])});
                         SingleLayerNeuronNetwork brain = null;
                         if (modelFields[1] == "G")
                         {

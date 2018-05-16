@@ -17,6 +17,9 @@ namespace SwarmSimFramework.Classes.Map
             {
                 foreach (var b in models)
                 {
+                    if(r.Brain != null)
+                        if (r.TeamNumber != 1)
+                            throw new Exception("Not enemy robot without brain");
                     if (b.SuitableRobot(r))
                         r.Brain = b.Brain.GetCleanCopy();
                 }

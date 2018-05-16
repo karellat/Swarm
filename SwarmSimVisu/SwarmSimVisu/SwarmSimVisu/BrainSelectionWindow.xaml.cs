@@ -168,8 +168,10 @@ namespace SwarmSimVisu
                 return;
             }
 
-
-            Experiment = new TestingBrain(SelectedMap,preparedBrains.ToArray(),LengthOfCycle);
+            if(MapComboBox.SelectedIndex == 2)
+                Experiment = new TestingBrain(SelectedMap,preparedBrains.ToArray(), LengthOfCycle, CompetitiveScene<SingleLayerNeuronNetwork>.EnemyBrainModels);
+            else
+                Experiment = new TestingBrain(SelectedMap,preparedBrains.ToArray(),LengthOfCycle);
             this.Close();
         }
     }
