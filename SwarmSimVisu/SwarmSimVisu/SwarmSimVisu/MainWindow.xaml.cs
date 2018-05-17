@@ -21,43 +21,6 @@ namespace SwarmSimVisu
         public MainWindow()
         {
             InitializeComponent();
-
-            //wait after draw
-            ThreadWaitComboBox.SelectedIndex = 0;
-            ThreadWaitComboBox.Items.Add("0");
-            ThreadWaitComboBox.Items.Add("100");
-            ThreadWaitComboBox.SelectionChanged += ((sender, args) =>
-            {
-                if ((sender as ComboBox).SelectedIndex == 0)
-                    ThreadWait = 0;
-                else if ((sender as ComboBox).SelectedIndex == 1)
-                    ThreadWait = 100;
-            });
-            //Drawing state, if draw or not
-            VisualCombox.SelectedIndex = 1;
-            VisualCombox.Items.Add("On");
-            VisualCombox.Items.Add("Off");
-            VisualCombox.SelectionChanged += ((sender, args) =>
-            {
-                if ((sender as ComboBox).SelectedIndex == 0)
-                    Visualization = true;
-                else
-                    Visualization = false;
-            });
-
-            //Drawing state, if draw or not
-            InfoCombox.SelectedIndex = 0;
-            InfoCombox.Items.Add("On");
-            InfoCombox.Items.Add("Off");
-            InfoCombox.SelectionChanged += ((sender, args) =>
-            {
-                if ((sender as ComboBox).SelectedIndex == 0)
-                    ShowInfo = true;
-                else
-                    ShowInfo = false;
-            });
-
-
         }
         /// <summary>
         /// Currently running Experiment
@@ -84,8 +47,8 @@ namespace SwarmSimVisu
         public bool Pausing;
         public bool Stopping;
         public bool Paused;
-        public int ThreadWait = 0;
-        public bool Visualization = false;
+        public int ThreadWait = 50;
+        public bool Visualization = true;
         public bool ShowInfo = true;
 
         /// <summary>

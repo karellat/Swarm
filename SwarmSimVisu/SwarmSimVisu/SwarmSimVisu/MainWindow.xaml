@@ -16,11 +16,5 @@
         <Button x:Name="StartB"  Click="StartClick" Content="Start" Visibility="Hidden" HorizontalAlignment="Left" Margin="0,-50,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="PauseB" Click="PauseClick"  Content="Pause" Visibility="Hidden" HorizontalAlignment="Left" Margin="80,-50,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="StopB" Click="StopClick" Content="Stop" Visibility="Hidden" HorizontalAlignment="Left" Margin="160,-50,0,0" VerticalAlignment="Top" Width="75"/>
-        <Label Content="ThreadWait:" Margin="0,-60,235,0" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Width="75"/>
-        <ComboBox x:Name="ThreadWaitComboBox"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="52" Margin="0,-57,190,0"/>
-        <Label Content="Visual:" Margin="0,-60,359,0" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Width="43"/>
-        <ComboBox x:Name="VisualCombox"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="57" Margin="0,-57,306,0"/>
-        <Label Content="InfoBox:" Margin="-14,-60,452,0" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Width="52" RenderTransformOrigin="-1.026,0.507"/>
-        <ComboBox x:Name="InfoCombox"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="57" Margin="0,-57,399,0"/>
     </Grid>
 </Window>
